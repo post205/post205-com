@@ -143,10 +143,37 @@
     }
     .theme-toggle:hover { border-color: var(--text-3); color: var(--text-2); }
     .theme-toggle svg { width: 14px; height: 14px; }
-    .theme-toggle .icon-dark  { display: block; }
-    .theme-toggle .icon-light { display: none; }
-    [data-theme="light"] .theme-toggle .icon-dark  { display: none; }
-    [data-theme="light"] .theme-toggle .icon-light { display: block; }
+    .theme-toggle .icon-dark   { display: none; }
+    .theme-toggle .icon-light  { display: none; }
+    .theme-toggle .icon-system { display: block; }
+    [data-theme="dark"]   .theme-toggle .icon-dark   { display: block; }
+    [data-theme="dark"]   .theme-toggle .icon-light  { display: none; }
+    [data-theme="dark"]   .theme-toggle .icon-system { display: none; }
+    [data-theme="light"]  .theme-toggle .icon-dark   { display: none; }
+    [data-theme="light"]  .theme-toggle .icon-light  { display: block; }
+    [data-theme="light"]  .theme-toggle .icon-system { display: none; }
+    [data-theme="system"] .theme-toggle .icon-dark   { display: none; }
+    [data-theme="system"] .theme-toggle .icon-light  { display: none; }
+    [data-theme="system"] .theme-toggle .icon-system { display: block; }
+
+    @media (prefers-color-scheme: light) {
+      [data-theme="system"] {
+        --black:      #faf9f4;
+        --surface:    #f0ede4;
+        --surface-2:  #e5e2d9;
+        --border:     #d0cdc4;
+        --border-2:   #c0bdb4;
+        --text:       #13120f;
+        --text-2:     #5a5850;
+        --text-3:     #9a9890;
+        --accent:     #2babac;
+        --accent-dim: rgba(43, 171, 172, 0.12);
+        --nav-bg:     rgba(250, 249, 244, 0.96);
+        --logo-filter: none;
+        --logo-blend: darken;
+        --promise-bg: #e5e2d9;
+      }
+    }
 
     /* ── TRUST BAND ── */
     .trust-band {
@@ -955,7 +982,7 @@
     }
   </style>
 <script>
-  (function(){var t=localStorage.getItem('post205-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();
+  (function(){var t=localStorage.getItem('post205-theme')||'system';document.documentElement.setAttribute('data-theme',t);})();
 </script>
 </head>
 <body>
@@ -969,11 +996,14 @@
     <a href="/systems/inventory" class="nav-link">Systems</a>
     <a href="/fix" class="nav-link">Find your fix</a>
     <button class="theme-toggle" id="themeToggle" title="Toggle theme">
-      <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
         <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
       </svg>
-      <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      <svg class="icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
       </svg>
     </button>
     <a href="mailto:toffer@post205.com" class="nav-cta">Get in touch</a>
@@ -1378,10 +1408,13 @@
   }
 
   document.getElementById('themeToggle').addEventListener('click', function() {
-    const current = document.documentElement.getAttribute('data-theme');
-    const next = current === 'light' ? 'dark' : 'light';
+    const cycle = { dark: 'light', light: 'system', system: 'dark' };
+    const current = document.documentElement.getAttribute('data-theme') || 'system';
+    const next = cycle[current] || 'system';
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('post205-theme', next);
+    const labels = { dark: 'Dark', light: 'Light', system: 'System' };
+    this.title = 'Theme: ' + labels[next] + ' — click to change';
   });
 </script>
 
