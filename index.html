@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>POST 205 — We fix your OS</title>
   <meta name="description" content="POST 205 builds systems and dashboards that handle the repeatable work so your business runs without pulling you back into every little thing.">
+  <meta property="og:title" content="Post205 | We Fix the Operating System of Your Business">
+  <meta property="og:description" content="Post205 builds functional websites, learning platforms, and operations dashboards for founder-led businesses. We build with technology. We think like owners.">
+  <meta property="og:image" content="/images/logo.png">
+  <meta property="og:url" content="https://post205.com/">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,21 +51,24 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 48px;
+      padding: 16px 48px;
       background: rgba(10,10,10,0.95);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
     }
 
     .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 15px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: var(--text);
+      display: flex;
+      align-items: center;
       text-decoration: none;
     }
-    .nav-logo span { color: var(--accent); }
+    .nav-logo img {
+      height: 28px;
+      width: auto;
+      mix-blend-mode: screen;
+      filter: saturate(0) brightness(10);
+      opacity: 0.9;
+    }
 
     .nav-right {
       display: flex;
@@ -97,6 +104,7 @@
 
     /* ── HERO ── */
     .hero {
+      position: relative;
       padding: 100px 48px 72px;
       max-width: 1200px;
       margin: 0 auto;
@@ -121,11 +129,27 @@
       margin-bottom: 36px;
     }
 
-    .hero-sub {
-      font-size: 17px;
+    .hero-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 36px;
+    }
+    .hero-bullet {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
       color: var(--text-2);
-      max-width: 520px;
+      letter-spacing: -0.01em;
+    }
+    .hero-bullet .plus { color: var(--accent); margin-right: 6px; }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--text-3);
+      max-width: 440px;
       line-height: 1.65;
+      font-style: italic;
     }
 
     /* ── CASE STUDIES ── */
@@ -474,16 +498,28 @@
 
     .svc-card {
       background: var(--black);
-      padding: 32px;
       transition: background 0.2s;
+      overflow: hidden;
     }
     .svc-card:hover { background: var(--surface); }
+
+    .svc-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(30%) brightness(0.85);
+      transition: filter 0.3s;
+    }
+    .svc-card:hover .svc-img { filter: grayscale(0%) brightness(0.95); }
+
+    .svc-body { padding: 28px; }
 
     .svc-num {
       font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
       color: var(--text-3);
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     .svc-card h3 {
@@ -492,7 +528,7 @@
       font-weight: 700;
       letter-spacing: -0.01em;
       color: var(--text);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       line-height: 1.2;
     }
 
@@ -500,6 +536,65 @@
       font-size: 14px;
       color: var(--text-2);
       line-height: 1.65;
+    }
+
+    /* ── BENEFITS ── */
+    .benefits {
+      padding: 80px 48px;
+      border-top: 1px solid var(--border);
+    }
+    .benefits-inner { max-width: 1200px; margin: 0 auto; }
+
+    .benefits-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .benefits h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--text);
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .benefit-item {
+      background: var(--black);
+      padding: 32px;
+    }
+
+    .benefit-outcome {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 10px;
+    }
+
+    .benefit-item h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      line-height: 1.15;
+    }
+    .benefit-item h3 span {
+      color: var(--accent);
     }
 
     /* ── PROMISES ── */
@@ -531,7 +626,7 @@
 
     .promise {
       display: grid;
-      grid-template-columns: 110px 1fr;
+      grid-template-columns: 80px 1fr;
       gap: 24px;
       padding: 28px 0;
       border-bottom: 1px solid var(--border);
@@ -539,13 +634,12 @@
     }
     .promise:first-child { border-top: 1px solid var(--border); }
 
-    .promise-key {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--accent);
-      padding-top: 3px;
+    .promise-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      object-fit: cover;
+      filter: grayscale(20%) brightness(0.8);
     }
 
     .promise h4 {
@@ -555,6 +649,15 @@
       color: var(--text);
       margin-bottom: 8px;
       letter-spacing: -0.01em;
+    }
+
+    .promise-key {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
     }
 
     .promise p {
@@ -572,7 +675,7 @@
       max-width: 1200px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr 340px;
+      grid-template-columns: 1fr 360px;
       gap: 64px;
       align-items: start;
     }
@@ -625,7 +728,25 @@
     .social-link:hover { color: var(--text); border-color: var(--text-3); }
 
     .about-aside {
-      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .about-photo {
+      width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .about-photo img {
+      width: 100%;
+      display: block;
+      filter: grayscale(10%) brightness(0.9);
+    }
+
+    .about-mission {
+      padding: 24px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -636,16 +757,16 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-3);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
-    .about-aside p {
+    .about-mission p {
       font-size: 14px;
       color: var(--text-2);
       line-height: 1.7;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
-    .about-aside p:last-child { margin-bottom: 0; }
-    .about-aside p strong { color: var(--text); font-weight: 500; }
+    .about-mission p:last-child { margin-bottom: 0; }
+    .about-mission p strong { color: var(--text); font-weight: 500; }
 
     /* ── CTA ── */
     .cta {
@@ -709,12 +830,12 @@
       justify-content: space-between;
     }
 
-    .footer-brand {
-      font-family: 'Syne', sans-serif;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      color: var(--text-3);
+    .footer-logo img {
+      height: 20px;
+      width: auto;
+      mix-blend-mode: screen;
+      filter: saturate(0) brightness(10);
+      opacity: 0.5;
     }
 
     .footer-right {
@@ -738,6 +859,8 @@
       .cs-mockup { display: none; }
       .services { padding: 56px 24px; }
       .services-grid { grid-template-columns: 1fr 1fr; }
+      .benefits { padding: 56px 24px; }
+      .benefits-grid { grid-template-columns: 1fr 1fr; }
       .promises { padding: 56px 24px; }
       .promises-inner { grid-template-columns: 1fr; gap: 32px; }
       .promises h2 { position: static; }
@@ -752,6 +875,7 @@
 
     @media (max-width: 600px) {
       .services-grid { grid-template-columns: 1fr; }
+      .benefits-grid { grid-template-columns: 1fr; }
       .promise { grid-template-columns: 1fr; gap: 8px; }
     }
   </style>
@@ -760,7 +884,9 @@
 
 <!-- ── NAV ── -->
 <nav>
-  <a href="/" class="nav-logo">POST<span>205</span></a>
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png" alt="POST 205">
+  </a>
   <div class="nav-right">
     <a href="/systems/inventory" class="nav-link">Systems</a>
     <a href="/fix" class="nav-link">Find your fix</a>
@@ -770,9 +896,14 @@
 
 <!-- ── HERO ── -->
 <section class="hero">
-  <div class="hero-eyebrow">Systems built for Philippine SMEs</div>
+  <div class="hero-eyebrow">Systems built for founder-led businesses</div>
   <h1>We fix<br>your OS.</h1>
-  <p class="hero-sub">The system behind your daily operations — not the product you sell, but the way work moves, decisions get made, and information reaches the right person.</p>
+  <div class="hero-bullets">
+    <div class="hero-bullet"><span class="plus">+</span>fewer approvals</div>
+    <div class="hero-bullet"><span class="plus">+</span>faster decisions</div>
+    <div class="hero-bullet"><span class="plus">+</span>less time in the middle</div>
+  </div>
+  <p class="hero-sub">*The system behind your daily operations.</p>
 </section>
 
 <!-- ── CASE STUDIES ── -->
@@ -788,8 +919,8 @@
     <div class="cs-content">
       <div class="cs-num">01 / Inventory</div>
       <h2>When numbers don't match stock</h2>
-      <p>A salon was tracking everything — product usage per service, deliveries, stock counts. The data existed. It lived in a logbook, a Google Sheet, and someone's memory. At reorder time, no one could say what was actually on the shelf.</p>
-      <p>We connected usage to stock to orders. Log a service, the stock updates. Stock dips below threshold, the purchase order draft is ready. One flow, one source.</p>
+      <p>They were tracking everything, but still couldn't say what was actually in stock. The same data was being entered in different places, and it showed up when it was time to order.</p>
+      <p>We fixed the flow so usage, stock, and orders come from the same source.</p>
       <a href="/systems/inventory" class="cs-link">See the setup →</a>
     </div>
     <div class="cs-mockup">
@@ -844,8 +975,8 @@
     <div class="cs-content">
       <div class="cs-num">02 / Billing</div>
       <h2>When control limits access</h2>
-      <p>An accounting firm managing 100 retainer clients across five billing companies. Proposals went by email. Contracts lived in folders. Invoices depended on who handled the service. A simple question — who's overdue? — meant checking four places.</p>
-      <p>We built one system with role-based access. The team sees their clients. The owner sees everything. A proposal becomes a contract becomes an invoice without anyone copying and pasting.</p>
+      <p>They were managing 100 clients across multiple companies, and the numbers lived in different Excel files. Answering a simple question meant checking multiple places.</p>
+      <p>We moved everything into one flow where people see what they need, without exposing everything.</p>
       <a href="/systems/billing" class="cs-link">See the setup →</a>
     </div>
     <div class="cs-mockup">
@@ -895,8 +1026,8 @@
     <div class="cs-content">
       <div class="cs-num">03 / Events</div>
       <h2>When everything comes in late</h2>
-      <p>They were running talks and conferences across provinces. Final speaker details, venue confirmations, attendance lists — everything arrived close to the date. The registration page, quiz, certificates, and submissions all had to come together fast, sometimes while already on-site.</p>
-      <p>We moved it into one flow. Everything is built and waiting before the rush starts.</p>
+      <p>They were running talks and conferences in different provinces, and the final details often came in close to the event. The page, registration, quiz, certificates, and submission all had to be pulled together quickly, sometimes while already on-site.</p>
+      <p>We moved it into one flow so everything is already set up before the rush.</p>
       <a href="/systems/events" class="cs-link">See the setup →</a>
     </div>
     <div class="cs-mockup">
@@ -946,34 +1077,85 @@
     <div class="section-label">What we build</div>
     <div class="services-grid">
       <div class="svc-card">
-        <div class="svc-num">01</div>
-        <h3>Inventory Systems</h3>
-        <p>Usage to order, automated. One log entry updates stock, flags shortfalls, and drafts the purchase order.</p>
+        <img src="/images/svc-web.png" alt="Web Presence" class="svc-img">
+        <div class="svc-body">
+          <div class="svc-num">01</div>
+          <h3>Web Presence</h3>
+          <p>Most clients have already decided by the time they reach out. Your site is where that decision gets made.</p>
+        </div>
       </div>
       <div class="svc-card">
-        <div class="svc-num">02</div>
-        <h3>Booking &amp; Client Management</h3>
-        <p>Receptionists log clients and bookings. Branch managers see across locations. Clients get their own profile.</p>
+        <img src="/images/svc-events.png" alt="Events and Ticketing" class="svc-img">
+        <div class="svc-body">
+          <div class="svc-num">02</div>
+          <h3>Events &amp; Ticketing</h3>
+          <p>Every event has one moment where it almost falls apart. Signups, payments, attendee tracking, check-in — all handled.</p>
+        </div>
       </div>
       <div class="svc-card">
-        <div class="svc-num">03</div>
-        <h3>Billing Systems</h3>
-        <p>Proposal to invoice in one flow. Role-based access so the right people see the right numbers.</p>
+        <img src="/images/svc-learning.png" alt="Learning Platforms" class="svc-img">
+        <div class="svc-body">
+          <div class="svc-num">03</div>
+          <h3>Learning Platforms</h3>
+          <p>Your team keeps asking questions you've already answered. Courses, SOPs, onboarding — built once so the knowledge lives in the platform.</p>
+        </div>
       </div>
       <div class="svc-card">
-        <div class="svc-num">04</div>
-        <h3>Events &amp; Registration</h3>
-        <p>Registration, quizzes, certificates, and submissions. Set up once, ready before the rush.</p>
+        <img src="/images/svc-crm.png" alt="CRM and Sales Pipeline" class="svc-img">
+        <div class="svc-body">
+          <div class="svc-num">04</div>
+          <h3>CRM &amp; Sales Pipeline</h3>
+          <p>You closed the deal. Someone else kept it. Every contact, conversation, and deal stage in one place.</p>
+        </div>
       </div>
       <div class="svc-card">
-        <div class="svc-num">05</div>
-        <h3>E-commerce &amp; Fan Shops</h3>
-        <p>Custom storefronts for clubs and businesses that need real product management, not a template.</p>
+        <img src="/images/svc-inventory.png" alt="Inventory System" class="svc-img">
+        <div class="svc-body">
+          <div class="svc-num">05</div>
+          <h3>Inventory System</h3>
+          <p>You find out you've run out after you've already sold it. Stock levels, reorder points, supplier tracking — know before it's a problem.</p>
+        </div>
       </div>
       <div class="svc-card">
-        <div class="svc-num">06</div>
-        <h3>Web Presence</h3>
-        <p>Sites built from code, not builders. Fast, searchable, and yours to own — not rented from a platform.</p>
+        <img src="/images/svc-backoffice.png" alt="Back Office" class="svc-img">
+        <div class="svc-body">
+          <div class="svc-num">06</div>
+          <h3>Back Office</h3>
+          <p>The business runs. It just runs through you more than it should. HR, finance, compliance, admin — one dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BENEFITS ── -->
+<section class="benefits">
+  <div class="benefits-inner">
+    <div class="section-label">What changes when the system works</div>
+    <div class="benefits-grid">
+      <div class="benefit-item">
+        <div class="benefit-outcome">less stress</div>
+        <h3>Calm <span>days</span></h3>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-outcome">mental space</div>
+        <h3>Clear <span>thinking</span></h3>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-outcome">team decides</div>
+        <h3>No <span>bottleneck</span></h3>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-outcome">family first</div>
+        <h3>Time at <span>home</span></h3>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-outcome">systems scale</div>
+        <h3>Scalable <span>growth</span></h3>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-outcome">owner optional</div>
+        <h3>Freedom from the <span>business</span></h3>
       </div>
     </div>
   </div>
@@ -985,22 +1167,25 @@
     <h2>Three things that don't change.</h2>
     <div class="promise-list">
       <div class="promise">
-        <div class="promise-key">Your data</div>
+        <img src="/images/promise-data.png" alt="Your data" class="promise-icon">
         <div>
+          <div class="promise-key">Your data</div>
           <h4>You own it. We keep it organised.</h4>
-          <p>Every record in your system belongs to your business. Request a full export at any time — CSV or full database dump. We send it over.</p>
+          <p>Every record in your system belongs to your business. Download CSV or request a full export at any time and we send it over.</p>
         </div>
       </div>
       <div class="promise">
-        <div class="promise-key">Your code</div>
+        <img src="/images/promise-code.png" alt="Your code" class="promise-icon">
         <div>
+          <div class="promise-key">Your code</div>
           <h4>If we close tomorrow, your system keeps running.</h4>
           <p>Post205 has been building software since 2015. If we ever close, you get your full data export and the complete codebase. You're not stuck.</p>
         </div>
       </div>
       <div class="promise">
-        <div class="promise-key">Your AI</div>
+        <img src="/images/promise-ai.png" alt="Your AI" class="promise-icon">
         <div>
+          <div class="promise-key">Your AI</div>
           <h4>Ask Claude anything about your business.</h4>
           <p>Every system we build connects to your AI. Ask it about your stock, your pipeline, your customers — the answer comes from your live data.</p>
         </div>
@@ -1014,7 +1199,8 @@
   <div class="about-inner">
     <div>
       <h2>Hey —<br>It's Toffer.</h2>
-      <p>Over a decade in tech, building websites, systems, and automations. Running my own business taught me this: when you're too big to wing it but too small to have layers of management, the right tools should keep the business running without pulling you back into every little thing.</p>
+      <p>I spent over a decade in tech, building websites, systems, and automations.</p>
+      <p>Running my own business taught me this: when you're too big to wing it but too small to have layers of management, the right tools should keep the business running without pulling you back into every little thing.</p>
       <p>Post205 builds systems and dashboards that handle the repeatable work so the business grows without everything depending on you.</p>
       <div class="byline">
         <strong>Toffer Lorenzana</strong>
@@ -1025,12 +1211,15 @@
         </div>
       </div>
     </div>
-    <div>
-      <div class="about-aside">
+    <div class="about-aside">
+      <div class="about-photo">
+        <img src="/images/toffer.png" alt="Toffer Lorenzana — POST 205">
+      </div>
+      <div class="about-mission">
         <div class="aside-label">Why it matters</div>
         <p>A business that needs its founder to survive isn't a business yet.</p>
         <p>We're building toward a version of the Philippines where founder-led SMEs outlast their founders' involvement. One business at a time.</p>
-        <p style="margin-top:20px;"><strong>Who we are</strong></p>
+        <p style="margin-top:16px;"><strong>Who we are</strong></p>
         <p>We're a tech company run by business owners. We built Post205 because we needed it ourselves. We treat every client's business the way we treat our own.</p>
       </div>
     </div>
@@ -1050,7 +1239,9 @@
 
 <!-- ── FOOTER ── -->
 <footer>
-  <div class="footer-brand">POST205, INC.</div>
+  <a href="/" class="footer-logo">
+    <img src="/images/logo.png" alt="POST 205">
+  </a>
   <div class="footer-right">
     <a href="mailto:toffer@post205.com">toffer@post205.com</a><br>
     © 2026 · Digitally driven, wonderfully human.
