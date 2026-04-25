@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposal — POST 205</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #fff;
+      color: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 24px;
+    }
+    .loading {
+      text-align: center;
+      max-width: 400px;
+    }
+    .loading-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #0a0a0a;
+      margin-bottom: 32px;
+    }
+    .loading-logo span { color: #e8ff00; background: #0a0a0a; padding: 0 4px; }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #0a0a0a;
+      margin-bottom: 12px;
+    }
+    p {
+      font-size: 15px;
+      color: #777;
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+    .back {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #999;
+      text-decoration: none;
+    }
+    .back:hover { color: #0a0a0a; }
+  </style>
+</head>
+<body>
+  <div class="loading">
+    <div class="loading-logo">POST<span>205</span></div>
+    <h1 id="proposal-title">Loading proposal…</h1>
+    <p id="proposal-message">Retrieving your document.</p>
+    <a href="/" class="back">← Back to post205.com</a>
+  </div>
+
+  <script>
+    const slug = window.location.pathname.replace('/p/', '').replace(/\/$/, '');
+    if (!slug) {
+      document.getElementById('proposal-title').textContent = 'No proposal specified.';
+      document.getElementById('proposal-message').textContent = 'Check the link you were sent and try again.';
+    } else {
+      document.getElementById('proposal-title').textContent = 'Proposal not found.';
+      document.getElementById('proposal-message').textContent = 'This proposal isn\'t available yet. If you received a link, check with toffer@post205.com.';
+    }
+  </script>
+</body>
+</html>

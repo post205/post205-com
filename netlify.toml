@@ -1,0 +1,19 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "/p/:slug"
+  to = "/p/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/systems/:page"
+  to = "/systems/:page.html"
+  status = 200
