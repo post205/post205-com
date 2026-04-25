@@ -12,7 +12,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -102,6 +102,42 @@
     }
     .nav-cta:hover { opacity: 0.85; }
 
+    /* ── TRUST BAND ── */
+    .trust-band {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .trust-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 48px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .trust-lbl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      flex-shrink: 0;
+    }
+    .trust-names {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .trust-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-2);
+    }
+    .trust-sep {
+      color: var(--text-3);
+      font-weight: 400;
+    }
+
     /* ── HERO ── */
     .hero {
       position: relative;
@@ -115,16 +151,17 @@
       font-size: 11px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--accent);
+      color: var(--text-3);
       margin-bottom: 28px;
     }
 
     .hero h1 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
       font-size: clamp(68px, 10vw, 128px);
-      font-weight: 800;
+      font-weight: 400;
       line-height: 0.92;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.01em;
       color: var(--text);
       margin-bottom: 36px;
     }
@@ -136,21 +173,13 @@
       margin-bottom: 36px;
     }
     .hero-bullet {
-      font-family: 'Syne', sans-serif;
-      font-size: 22px;
-      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(16px, 2.2vw, 22px);
+      font-weight: 500;
       color: var(--text-2);
       letter-spacing: -0.01em;
     }
     .hero-bullet .plus { color: var(--accent); margin-right: 6px; }
-
-    .hero-sub {
-      font-size: 15px;
-      color: var(--text-3);
-      max-width: 440px;
-      line-height: 1.65;
-      font-style: italic;
-    }
 
     /* ── CASE STUDIES ── */
     .case-studies {
@@ -206,12 +235,12 @@
       font-size: 10px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--accent);
+      color: var(--text-3);
       margin-bottom: 20px;
     }
 
     .cs-content h2 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 30px;
       font-weight: 700;
       letter-spacing: -0.02em;
@@ -233,10 +262,11 @@
       font-size: 10px;
       letter-spacing: 0.09em;
       text-transform: uppercase;
-      color: var(--accent);
+      color: var(--text-2);
       text-decoration: none;
+      transition: color 0.15s;
     }
-    .cs-link:hover { text-decoration: underline; }
+    .cs-link:hover { color: var(--text); }
 
     .cs-mockup {
       padding: 28px;
@@ -353,9 +383,9 @@
       justify-content: space-between;
     }
     .bill-logo-txt {
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 700;
       color: var(--black);
     }
     .bill-tag-lbl {
@@ -417,7 +447,7 @@
       margin-bottom: 3px;
     }
     .evt-title {
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 14px;
       font-weight: 700;
       color: var(--text);
@@ -445,7 +475,7 @@
       margin-bottom: 3px;
     }
     .evt-stat-val {
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 20px;
       font-weight: 700;
       color: var(--text);
@@ -523,7 +553,7 @@
     }
 
     .svc-card h3 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 17px;
       font-weight: 700;
       letter-spacing: -0.01em;
@@ -553,7 +583,7 @@
     }
 
     .benefits h2 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: clamp(28px, 4vw, 40px);
       font-weight: 700;
       letter-spacing: -0.02em;
@@ -586,7 +616,7 @@
     }
 
     .benefit-item h3 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 22px;
       font-weight: 700;
       letter-spacing: -0.01em;
@@ -605,7 +635,7 @@
     .promises-inner { max-width: 1200px; margin: 0 auto; }
 
     .promises h2 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: clamp(28px, 4vw, 40px);
       font-weight: 700;
       letter-spacing: -0.02em;
@@ -638,12 +668,6 @@
       justify-content: center;
       padding: 32px;
     }
-    .promise-img-wrap img {
-      height: 130px;
-      width: auto;
-      object-fit: contain;
-    }
-
     .promise-card-body { padding: 32px; }
 
     .promise-key {
@@ -656,7 +680,7 @@
     }
 
     .promise-card h4 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 18px;
       font-weight: 700;
       color: var(--text);
@@ -686,7 +710,7 @@
     }
 
     .about h2 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 44px;
       font-weight: 700;
       letter-spacing: -0.02em;
@@ -705,7 +729,7 @@
     .byline { margin-top: 36px; }
     .byline strong {
       display: block;
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 15px;
       font-weight: 700;
       color: var(--text);
@@ -788,7 +812,7 @@
     }
 
     .cta h2 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: clamp(36px, 5vw, 56px);
       font-weight: 700;
       letter-spacing: -0.02em;
@@ -808,7 +832,7 @@
       display: inline-block;
       background: var(--accent);
       color: var(--black);
-      font-family: 'Syne', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 15px;
       font-weight: 700;
       padding: 14px 28px;
@@ -870,6 +894,7 @@
       .promises-cards { grid-template-columns: 1fr; }
       .about { padding: 56px 24px; }
       .about-inner { grid-template-columns: 1fr; gap: 40px; }
+      .trust-inner { padding: 14px 24px; }
       .cta { padding: 56px 24px; }
       .cta-inner { flex-direction: column; align-items: flex-start; gap: 32px; }
       .cta-block { align-items: flex-start; }
@@ -907,8 +932,19 @@
     <div class="hero-bullet"><span class="plus">+</span>faster decisions</div>
     <div class="hero-bullet"><span class="plus">+</span>less time in the middle</div>
   </div>
-  <p class="hero-sub">*The system behind your daily operations.</p>
 </section>
+
+<!-- ── TRUST BAND ── -->
+<div class="trust-band">
+  <div class="trust-inner">
+    <span class="trust-lbl">Working with</span>
+    <div class="trust-names">
+      <span class="trust-name">Piandré</span>
+      <span class="trust-sep">·</span>
+      <span class="trust-name">Mashtag</span>
+    </div>
+  </div>
+</div>
 
 <!-- ── CASE STUDIES ── -->
 <section class="case-studies">
@@ -1172,7 +1208,12 @@
     <div class="promises-cards">
       <div class="promise-card">
         <div class="promise-img-wrap">
-          <img src="/images/promise-data.png" alt="Your data">
+          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30 44V32C30 23.2 36.7 16 45 16C53.3 16 60 23.2 60 32V44" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+            <rect x="18" y="44" width="54" height="38" rx="5" stroke="#1a1a1a" stroke-width="2"/>
+            <circle cx="45" cy="60" r="5" stroke="#1a1a1a" stroke-width="2"/>
+            <line x1="45" y1="65" x2="45" y2="73" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+          </svg>
         </div>
         <div class="promise-card-body">
           <div class="promise-key">Your data</div>
@@ -1182,7 +1223,15 @@
       </div>
       <div class="promise-card">
         <div class="promise-img-wrap">
-          <img src="/images/promise-code.png" alt="Your code">
+          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="14" width="74" height="62" rx="5" stroke="#1a1a1a" stroke-width="2"/>
+            <line x1="8" y1="28" x2="82" y2="28" stroke="#1a1a1a" stroke-width="2"/>
+            <circle cx="19" cy="21" r="3" fill="#1a1a1a"/>
+            <circle cx="29" cy="21" r="3" fill="#1a1a1a"/>
+            <circle cx="39" cy="21" r="3" fill="#1a1a1a"/>
+            <path d="M20 42L30 50L20 58" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="36" y1="58" x2="54" y2="58" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+          </svg>
         </div>
         <div class="promise-card-body">
           <div class="promise-key">Your code</div>
@@ -1192,7 +1241,12 @@
       </div>
       <div class="promise-card">
         <div class="promise-img-wrap">
-          <img src="/images/promise-ai.png" alt="Your AI">
+          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 14H76C77.1 14 78 14.9 78 16V56C78 57.1 77.1 58 76 58H30L12 74V16C12 14.9 12.9 14 14 14Z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/>
+            <line x1="24" y1="30" x2="66" y2="30" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+            <line x1="24" y1="40" x2="56" y2="40" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+            <line x1="24" y1="50" x2="44" y2="50" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+          </svg>
         </div>
         <div class="promise-card-body">
           <div class="promise-key">Your AI</div>
