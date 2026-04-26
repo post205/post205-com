@@ -18,4 +18,5 @@ jobs:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
           git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/post205/post205-com.git
-          git push gitlab --mirror
+          git push gitlab --force --all
+          git push gitlab --force --tags
