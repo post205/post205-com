@@ -27,7 +27,7 @@ jobs:
         run: |
           mkdir -p backup-repo/post205
           pg_dump \
-            --host=aws-0-ap-southeast-1.pooler.supabase.com \
+            --host=aws-1-ap-southeast-1.pooler.supabase.com \
             --port=5432 \
             --username=postgres.dikuhcaaxxsadlwepblf \
             --dbname=postgres \
