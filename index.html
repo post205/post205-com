@@ -252,7 +252,7 @@
 
     .hero h1 {
       font-family: system-ui, -apple-system, sans-serif;
-      font-size: clamp(68px, 10vw, 128px);
+      font-size: clamp(44px, 10vw, 128px);
       font-weight: 800;
       line-height: 0.92;
       letter-spacing: -0.01em;
@@ -824,6 +824,31 @@
       align-items: start;
     }
 
+    .chapter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px 24px;
+      margin-bottom: 32px;
+    }
+    .chapter-item {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .chapter-item svg { color: var(--text-3); }
+    .chapter-item-label {
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+    .chapter-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 32px;
+    }
+
     .about-main .section-label { margin-bottom: 24px; }
 
     .about h2 {
@@ -922,41 +947,148 @@
       color: var(--text);
     }
 
-    .cta-form {
+    .chat-widget {
       flex-shrink: 0;
+      width: 420px;
+      height: 480px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      width: 420px;
+      background: var(--surface);
     }
-    .cta-form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    .chat-log {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scroll-behavior: smooth;
     }
-    .cta-form input,
-    .cta-form textarea {
+    .chat-log::-webkit-scrollbar { width: 3px; }
+    .chat-log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .chat-msg { display: flex; flex-direction: column; gap: 3px; }
+    .chat-msg.bot { align-items: flex-start; }
+    .chat-msg.user { align-items: flex-end; }
+    .chat-sender {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      padding: 0 4px;
+    }
+    .chat-bubble {
+      max-width: 82%;
+      padding: 10px 14px;
+      font-size: 14px;
+      line-height: 1.55;
+      border-radius: 4px 12px 12px 12px;
+    }
+    .chat-msg.bot .chat-bubble {
+      background: var(--black);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .chat-msg.user .chat-bubble {
+      background: var(--accent);
+      color: var(--on-accent);
+      border-radius: 12px 4px 12px 12px;
+      font-weight: 500;
+    }
+    .chat-typing .chat-bubble {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      padding: 12px 16px;
+    }
+    .chat-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--text-3);
+      animation: chatDot 1.2s infinite;
+    }
+    .chat-dot:nth-child(2) { animation-delay: 0.2s; }
+    .chat-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes chatDot {
+      0%,60%,100% { opacity: 0.25; transform: scale(0.8); }
+      30% { opacity: 1; transform: scale(1); }
+    }
+    .chat-input-area {
+      border-top: 1px solid var(--border);
+      padding: 12px;
+      background: var(--black);
+    }
+    .chat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chat-chip {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 7px 14px;
+      font-size: 13px;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .chat-chip:hover { border-color: var(--accent); color: var(--text); }
+    .chat-text-wrap { display: flex; gap: 8px; align-items: flex-end; }
+    .chat-text-wrap textarea {
+      flex: 1;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 12px 14px;
-      font-family: system-ui, -apple-system, sans-serif;
+      border-radius: 8px;
+      padding: 10px 12px;
       font-size: 14px;
       color: var(--text);
-      width: 100%;
+      resize: none;
       outline: none;
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.5;
       transition: border-color 0.15s;
     }
-    .cta-form input::placeholder,
-    .cta-form textarea::placeholder { color: var(--text-3); }
-    .cta-form input:focus,
-    .cta-form textarea:focus { border-color: var(--accent); }
-    .cta-form textarea { resize: vertical; min-height: 100px; }
-    .cta-form .btn-primary { align-self: flex-start; cursor: pointer; border: none; }
-    .cta-form-success {
-      font-size: 15px;
-      color: var(--text-2);
-      padding: 16px 0;
+    .chat-text-wrap textarea:focus { border-color: var(--accent); }
+    .chat-send {
+      background: var(--accent);
+      color: var(--on-accent);
+      border: none;
+      border-radius: 8px;
+      width: 38px;
+      height: 38px;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .chat-contact-wrap { display: flex; flex-direction: column; gap: 8px; }
+    .chat-contact-wrap input {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      font-family: system-ui, -apple-system, sans-serif;
+      transition: border-color 0.15s;
+    }
+    .chat-contact-wrap input:focus { border-color: var(--accent); }
+    .chat-contact-wrap input::placeholder { color: var(--text-3); }
+    .chat-submit {
+      background: var(--accent);
+      color: var(--on-accent);
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: system-ui, -apple-system, sans-serif;
+      letter-spacing: 0.02em;
     }
 
     .btn-primary {
@@ -1008,7 +1140,7 @@
       nav { padding: 16px 24px; }
       .nav-link { display: none; }
       .hero-inner { padding: 72px 24px 48px; }
-      .case-studies { padding: 0 24px 56px; }
+      .case-studies { padding: 32px 24px 56px; }
       .cs-tabs { margin-bottom: 0; }
       .cs-panel.active { grid-template-columns: 1fr; }
       .cs-panel { border-radius: 0 0 6px 6px; }
@@ -1018,15 +1150,21 @@
       .promises-cards { grid-template-columns: 1fr; }
       .about { padding: 56px 24px; }
       .about-inner { grid-template-columns: 1fr; gap: 40px; }
+      .chapter-grid { grid-template-columns: repeat(4, 1fr); gap: 0; margin-bottom: 24px; }
+      .chapter-item { align-items: center; text-align: center; gap: 8px; }
       .cta { padding: 56px 24px; }
       .cta-inner { flex-direction: column; align-items: flex-start; gap: 32px; }
-      .cta-form { width: 100%; }
+      .chat-widget { width: 100%; height: 460px; }
       footer { padding: 28px 24px; flex-direction: column; gap: 12px; align-items: flex-start; }
       .footer-right { text-align: left; }
     }
 
     @media (max-width: 600px) {
       .promise { grid-template-columns: 1fr; gap: 8px; }
+    }
+
+    @media (min-width: 421px) and (max-width: 960px) {
+      .hero h1 { font-size: clamp(52px, 10vw, 128px); }
     }
   </style>
 <script>
@@ -1041,8 +1179,6 @@
     <img src="/images/logo.png" alt="POST 205">
   </a>
   <div class="nav-right">
-    <a href="/#work" class="nav-link">Work</a>
-    <a href="/#about" class="nav-link">About</a>
     <button class="theme-toggle" id="themeToggle" title="Toggle theme">
       <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
@@ -1054,7 +1190,7 @@
         <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
       </svg>
     </button>
-    <a href="#contact" class="nav-cta">Contact</a>
+    <a href="#contact" class="nav-cta">Let's talk</a>
   </div>
 </nav>
 
@@ -1070,7 +1206,7 @@
 </section>
 
 <!-- ── CASE STUDIES ── -->
-<section class="case-studies">
+<section class="case-studies" id="work">
   <div class="case-studies-inner">
   <div class="cs-tabs" role="tablist">
     <button class="cs-tab active" onclick="switchCase(this,'information')" role="tab">Right information</button>
@@ -1082,7 +1218,7 @@
   <div class="cs-panel active" id="cs-information" role="tabpanel">
     <div class="cs-content">
       <div class="cs-num">Right information</div>
-      <div class="cs-industry">Salon</div>
+      <div class="cs-industry">Salon · Spa · Skin clinic</div>
       <h2>Before they walk in</h2>
       <p>Regulars got good service when the right staff was in. Nobody else knew what they liked.</p>
       <p>The receptionist opens a name and already knows before saying hello.</p>
@@ -1136,7 +1272,7 @@
   <div class="cs-panel" id="cs-person" role="tabpanel">
     <div class="cs-content">
       <div class="cs-num">Right person</div>
-      <div class="cs-industry">Accounting firm</div>
+      <div class="cs-industry">Accounting · Law office · Consulting</div>
       <h2>Everyone sees their part</h2>
       <p>They had four companies in one spreadsheet. To share one number, you shared all of them.</p>
       <p>We built a portal where the role controls what you see. Your accountant sees every company. A client logs in and sees only their invoices.</p>
@@ -1192,7 +1328,7 @@
   <div class="cs-panel" id="cs-time" role="tabpanel">
     <div class="cs-content">
       <div class="cs-num">Right time</div>
-      <div class="cs-industry">Events venue</div>
+      <div class="cs-industry">Theme park · Events venue · Resort</div>
       <h2>The flag fires before the complaint</h2>
       <p>They were selling tickets in advance. At the gate, a child was too short for the ride. Staff had no protocol — the family waited while someone figured it out.</p>
       <p>We built the check into the scan. The moment you read the code, it flags the problem and shows the options. Nobody improvises.</p>
@@ -1243,38 +1379,6 @@
       <div class="promise-card">
         <div class="promise-img-wrap">
           <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M30 44V32C30 23.2 36.7 16 45 16C53.3 16 60 23.2 60 32V44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <rect x="18" y="44" width="54" height="38" rx="5" stroke="currentColor" stroke-width="2"/>
-            <circle cx="45" cy="60" r="5" stroke="currentColor" stroke-width="2"/>
-            <line x1="45" y1="65" x2="45" y2="73" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="promise-card-body">
-          <div class="promise-key">Your data</div>
-          <h4>No one else reads it.</h4>
-          <p>Your data lives in a database we set up for your business. You can export the whole thing any time.</p>
-          <div class="promise-badge" data-tip="Philippine Data Privacy Act. Your records are processed within your system only.">RA 10173</div>
-          <div class="promise-badge" data-tip="Your database is backed up every day to a private repository. Full export available on request.">Daily backup</div>
-        </div>
-      </div>
-      <div class="promise-card">
-        <div class="promise-img-wrap">
-          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="45" cy="30" r="12" stroke="currentColor" stroke-width="2"/>
-            <path d="M20 74C20 60 30 50 45 50C60 50 70 60 70 74" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M54 26L59 32L69 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="promise-card-body">
-          <div class="promise-key">Your call</div>
-          <h4>It suggests. You decide.</h4>
-          <p>The system handles the rules. When something needs judgment, it puts a flag in front of your team. They read it and choose.</p>
-          <div class="promise-badge" data-tip="AI by Anthropic. The model reads your data — Anthropic does not.">Anthropic</div>
-        </div>
-      </div>
-      <div class="promise-card">
-        <div class="promise-img-wrap">
-          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="8" y="14" width="74" height="62" rx="5" stroke="currentColor" stroke-width="2"/>
             <line x1="8" y1="28" x2="82" y2="28" stroke="currentColor" stroke-width="2"/>
             <circle cx="19" cy="21" r="3" fill="currentColor"/>
@@ -1286,10 +1390,47 @@
         </div>
         <div class="promise-card-body">
           <div class="promise-key">Your system</div>
-          <h4>Remove the AI. It still works.</h4>
-          <p>The rules, the routing, the records — that's plain code. The AI handles the judgment calls. Take it out and the system keeps running.</p>
-          <p>Every system is reviewed by someone who didn't build it, before it touches your business.</p>
-          <div class="promise-badge" data-tip="Building business systems since 2015 — before AI was part of the toolkit. We added it as a layer. The structure underneath was already working.">Since 2015</div>
+          <h4>Built before AI. Better with it.</h4>
+          <p>We've been building business systems since 2015. Take what repeats. Write it down. Make it run. AI speeds parts of that up. The foundation underneath was already working.</p>
+          <div class="promise-badge" data-tip="A second developer reads every line of code before your system goes live. Not the same person who built it.">Code reviewed</div>
+          <div class="promise-badge" data-tip="Building business systems since 2015 — before AI was part of the toolkit. We added it as a layer. The structure underneath was already working.">10 years</div>
+        </div>
+      </div>
+      <div class="promise-card">
+        <div class="promise-img-wrap">
+          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="45" cy="16" r="4" fill="currentColor"/>
+            <line x1="45" y1="16" x2="45" y2="70" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="32" y1="70" x2="58" y2="70" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="18" y1="28" x2="72" y2="28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="18" y1="28" x2="18" y2="48" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="72" y1="28" x2="72" y2="48" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M8 48 Q18 58 28 48" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M62 48 Q72 58 82 48" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="promise-card-body">
+          <div class="promise-key">Your call</div>
+          <h4>It suggests. You decide.</h4>
+          <p>Routine tasks run on their own. When something needs a judgment call, the system surfaces it and waits. Your team sees the context and chooses. Nothing significant moves without a yes from someone.</p>
+          <div class="promise-badge" data-tip="AI by Anthropic. The model reads your data — Anthropic does not.">Anthropic</div>
+        </div>
+      </div>
+      <div class="promise-card">
+        <div class="promise-img-wrap">
+          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30 44V32C30 23.2 36.7 16 45 16C53.3 16 60 23.2 60 32V44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <rect x="18" y="44" width="54" height="38" rx="5" stroke="currentColor" stroke-width="2"/>
+            <circle cx="45" cy="60" r="5" stroke="currentColor" stroke-width="2"/>
+            <line x1="45" y1="65" x2="45" y2="73" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="promise-card-body">
+          <div class="promise-key">Your data</div>
+          <h4>No one else reads it.</h4>
+          <p>Your data lives in a database we set up for your business. Not shared with other clients. Not used to train anything. You can export the whole thing any time.</p>
+          <div class="promise-badge" data-tip="Philippine Data Privacy Act. Your records are processed within your system only.">RA 10173</div>
+          <div class="promise-badge" data-tip="Your database is backed up every day to a private repository. Full export available on request.">Daily backup</div>
         </div>
       </div>
     </div>
@@ -1297,7 +1438,7 @@
 </section>
 
 <!-- ── ABOUT ── -->
-<section class="about">
+<section class="about" id="about">
   <div class="about-inner">
     <div class="about-main">
       <div class="section-label">About</div>
@@ -1315,16 +1456,53 @@
       </div>
     </div>
     <div class="about-side">
+      <div class="chapter-grid">
+        <div class="chapter-item">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="4" width="28" height="24" rx="3" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="2" y1="12" x2="30" y2="12" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="7" cy="8" r="1.5" fill="currentColor"/>
+            <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
+            <rect x="17" y="6" width="9" height="4" rx="1" stroke="currentColor" stroke-width="1"/>
+          </svg>
+          <span class="chapter-item-label">Websites</span>
+        </div>
+        <div class="chapter-item">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 11 L6 27 L26 27 L24 11 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M11 11 C11 5 21 5 21 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span class="chapter-item-label">Stores</span>
+        </div>
+        <div class="chapter-item">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="6" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="5" cy="26" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="27" cy="26" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="13.1" y1="9" x2="7.9" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="18.9" y1="9" x2="24.1" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="8.5" y1="26" x2="23.5" y2="26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span class="chapter-item-label">Systems</span>
+        </div>
+        <div class="chapter-item">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="12" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="16" y1="8" x2="16" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="16" y1="16" x2="22" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="16" cy="16" r="1.5" fill="currentColor"/>
+          </svg>
+          <span class="chapter-item-label">Time</span>
+        </div>
+      </div>
+      <div class="chapter-divider"></div>
       <div class="about-value">
         <div class="about-value-icon">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- 3 five-pointed stars: top-left, top-right, bottom-center -->
             <polygon points="6,2.5 6.59,4.19 8.38,4.23 6.95,5.31 7.47,7.02 6,6 4.53,7.02 5.05,5.31 3.62,4.23 5.41,4.19" fill="currentColor"/>
             <polygon points="26,2.5 26.59,4.19 28.38,4.23 26.95,5.31 27.47,7.02 26,6 24.53,7.02 25.05,5.31 23.62,4.23 25.41,4.19" fill="currentColor"/>
             <polygon points="16,25.5 16.59,27.19 18.38,27.23 16.95,28.31 17.47,30.02 16,29 14.53,30.02 15.05,28.31 13.62,27.23 15.41,27.19" fill="currentColor"/>
-            <!-- Sun: center circle -->
             <circle cx="16" cy="16" r="3.5" stroke="currentColor" stroke-width="1.5"/>
-            <!-- 8 primary rays -->
             <line x1="20.5" y1="16" x2="23.5" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             <line x1="19.18" y1="19.18" x2="21.3" y2="21.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             <line x1="16" y1="20.5" x2="16" y2="23.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -1333,7 +1511,6 @@
             <line x1="12.82" y1="12.82" x2="10.7" y2="10.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             <line x1="16" y1="11.5" x2="16" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             <line x1="19.18" y1="12.82" x2="21.3" y2="10.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <!-- 8 secondary rays -->
             <line x1="20.16" y1="17.72" x2="22.01" y2="18.49" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
             <line x1="17.72" y1="20.16" x2="18.49" y2="22.01" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
             <line x1="14.28" y1="20.16" x2="13.51" y2="22.01" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
@@ -1358,14 +1535,17 @@
 <section class="cta" id="contact">
   <div class="cta-inner">
     <h2>Tell us<br>what's not<br>working.</h2>
-    <form class="cta-form" name="contact" netlify data-netlify="true">
+    <div class="chat-widget">
+      <div class="chat-log" id="chatLog"></div>
+      <div class="chat-input-area" id="chatInput"></div>
+    </div>
+    <form id="nlForm" name="contact" netlify data-netlify="true" hidden>
       <input type="hidden" name="form-name" value="contact">
-      <div class="cta-form-row">
-        <input type="text" name="name" placeholder="Your name" required>
-        <input type="email" name="email" placeholder="Your email" required>
-      </div>
-      <textarea name="message" placeholder="What's not working?" rows="4" required></textarea>
-      <button type="submit" class="btn-primary">Send it</button>
+      <input type="hidden" name="business" id="nl_business">
+      <input type="hidden" name="pain_point" id="nl_pain">
+      <input type="hidden" name="timeline" id="nl_timeline">
+      <input type="text"  name="name"  id="nl_name">
+      <input type="email" name="email" id="nl_email">
     </form>
   </div>
 </section>
@@ -1388,20 +1568,134 @@
     tab.classList.add('active');
   }
 
-  const ctaForm = document.querySelector('.cta-form');
-  if (ctaForm) {
-    ctaForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const data = new FormData(ctaForm);
-      fetch('/', { method: 'POST', body: data })
-        .then(() => {
-          ctaForm.innerHTML = '<p class="cta-form-success">Got it. Toffer will be in touch.</p>';
-        })
-        .catch(() => {
-          ctaForm.innerHTML = '<p class="cta-form-success">Something went wrong. Try again in a moment.</p>';
+  // ── CHAT WIDGET ──
+  (function() {
+    const log   = document.getElementById('chatLog');
+    const input = document.getElementById('chatInput');
+    if (!log) return;
+
+    function scrollDown() { log.scrollTop = log.scrollHeight; }
+
+    function addMsg(side, html) {
+      const wrap = document.createElement('div');
+      wrap.className = 'chat-msg ' + side;
+      if (side === 'bot') wrap.innerHTML = '<span class="chat-sender">205</span><span class="chat-bubble">' + html + '</span>';
+      else                wrap.innerHTML = '<span class="chat-bubble">' + html + '</span>';
+      log.appendChild(wrap);
+      scrollDown();
+      return wrap;
+    }
+
+    function showTyping() {
+      const w = addMsg('bot chat-typing', '<span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span>');
+      w.id = 'typing';
+    }
+    function hideTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
+
+    function botSay(text, delay) {
+      return new Promise(function(resolve) {
+        showTyping();
+        setTimeout(function() { hideTyping(); addMsg('bot', text); resolve(); }, delay || 700);
+      });
+    }
+
+    function chips(options, cb) {
+      input.innerHTML = '';
+      const wrap = document.createElement('div');
+      wrap.className = 'chat-chips';
+      options.forEach(function(opt) {
+        const btn = document.createElement('button');
+        btn.className = 'chat-chip';
+        btn.textContent = opt;
+        btn.onclick = function() { addMsg('user', opt); wrap.remove(); cb(opt); };
+        wrap.appendChild(btn);
+      });
+      input.appendChild(wrap);
+    }
+
+    function textInput(placeholder, cb) {
+      input.innerHTML = '';
+      const wrap = document.createElement('div');
+      wrap.className = 'chat-text-wrap';
+      const ta = document.createElement('textarea');
+      ta.placeholder = placeholder;
+      ta.rows = 2;
+      const send = document.createElement('button');
+      send.className = 'chat-send';
+      send.innerHTML = '&#8594;';
+      function submit() {
+        const v = ta.value.trim();
+        if (!v) return;
+        addMsg('user', v);
+        wrap.remove();
+        cb(v);
+      }
+      send.onclick = submit;
+      ta.addEventListener('keydown', function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } });
+      wrap.appendChild(ta);
+      wrap.appendChild(send);
+      input.appendChild(wrap);
+      ta.focus();
+    }
+
+    function contactInput(cb) {
+      input.innerHTML = '';
+      const wrap = document.createElement('div');
+      wrap.className = 'chat-contact-wrap';
+      const name  = document.createElement('input');
+      name.type = 'text';  name.placeholder = 'Your name';
+      const email = document.createElement('input');
+      email.type = 'email'; email.placeholder = 'Your email';
+      const btn = document.createElement('button');
+      btn.className = 'chat-submit';
+      btn.textContent = 'Send it';
+      btn.onclick = function() {
+        if (!name.value.trim() || !email.value.trim()) return;
+        addMsg('user', name.value.trim() + ' · ' + email.value.trim());
+        wrap.remove();
+        cb(name.value.trim(), email.value.trim());
+      };
+      wrap.appendChild(name);
+      wrap.appendChild(email);
+      wrap.appendChild(btn);
+      input.appendChild(wrap);
+      name.focus();
+    }
+
+    var answers = {};
+
+    botSay('Hey. What kind of business do you run?', 500).then(function() {
+      chips(['Clinic · Spa', 'Retail · Store', 'Events · Venue', 'Professional firm', 'Something else'], function(v) {
+        answers.business = v;
+        botSay("Got it. What's taking up the most time right now?").then(function() {
+          textInput('e.g. we re-enter every booking manually…', function(v) {
+            answers.pain = v;
+            botSay('When do you need this sorted?').then(function() {
+              chips(['We need it now', 'Next few months', 'Still exploring'], function(v) {
+                answers.timeline = v;
+                botSay('Last thing — name and email so we can reach you.').then(function() {
+                  contactInput(function(name, email) {
+                    answers.name  = name;
+                    answers.email = email;
+                    document.getElementById('nl_business').value = answers.business;
+                    document.getElementById('nl_pain').value     = answers.pain;
+                    document.getElementById('nl_timeline').value = answers.timeline;
+                    document.getElementById('nl_name').value     = answers.name;
+                    document.getElementById('nl_email').value    = answers.email;
+                    var fd = new FormData(document.getElementById('nlForm'));
+                    fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(fd).toString() })
+                      .catch(function(){});
+                    input.innerHTML = '';
+                    botSay("Got it. We'll take a look and reach out if it's a good fit. Usually within a day.", 800);
+                  });
+                });
+              });
+            });
+          });
         });
+      });
     });
-  }
+  })();
 
   document.getElementById('themeToggle').addEventListener('click', function() {
     const cycle = { dark: 'light', light: 'system', system: 'dark' };
