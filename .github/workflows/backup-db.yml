@@ -1,0 +1,50 @@
+name: Database Backup
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # daily at 2am UTC (10am Manila)
+  workflow_dispatch:      # allow manual trigger from GitHub UI
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout backup repo
+        uses: actions/checkout@v4
+        with:
+          repository: post205/post205-backups
+          token: ${{ secrets.BACKUP_REPO_TOKEN }}
+          path: backup-repo
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get install -y postgresql-client
+
+      - name: Dump post205 database
+        env:
+          PGPASSWORD: ${{ secrets.SUPABASE_DB_PASS }}
+        run: |
+          mkdir -p backup-repo/post205
+          pg_dump \
+            --host=db.dikuhcaaxxsadlwepblf.supabase.co \
+            --port=5432 \
+            --username=postgres \
+            --dbname=postgres \
+            --format=plain \
+            --no-owner \
+            --no-acl \
+            > backup-repo/post205/$(date +%Y-%m-%d).sql
+
+      - name: Remove backups older than 30 days
+        run: |
+          cd backup-repo/post205
+          ls -t *.sql 2>/dev/null | tail -n +31 | xargs -r rm
+
+      - name: Commit and push
+        run: |
+          cd backup-repo
+          git config user.email "backup@post205.com"
+          git config user.name "POST 205 Backup"
+          git add .
+          git diff --staged --quiet || git commit -m "backup: post205 $(date +%Y-%m-%d)"
+          git push
