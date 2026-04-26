@@ -1049,16 +1049,16 @@
     .chat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
     .chat-chip {
       background: none;
-      border: 1px solid var(--border);
+      border: 1px solid var(--text-3);
       border-radius: 20px;
       padding: 7px 14px;
       font-size: 13px;
-      color: var(--text-2);
+      color: var(--text);
       cursor: pointer;
-      transition: border-color 0.15s, color 0.15s;
+      transition: border-color 0.15s, background 0.15s;
       font-family: system-ui, -apple-system, sans-serif;
     }
-    .chat-chip:hover { border-color: var(--accent); color: var(--text); }
+    .chat-chip:hover { border-color: var(--accent); background: var(--surface); }
     .chat-text-wrap { display: flex; gap: 8px; align-items: flex-end; }
     .chat-text-wrap textarea {
       flex: 1;
@@ -1462,106 +1462,13 @@
   </div>
 </section>
 
-<!-- ── ABOUT ── -->
-<section class="about" id="about">
-  <div class="about-inner">
-    <div class="about-main">
-      <div class="section-label">About</div>
-      <h2>Hey, It's Toffer.</h2>
-      <p>I spent over a decade in tech, building websites, systems, and automations.</p>
-      <p>We built Post205 because we needed it ourselves and nobody built it for us.</p>
-      <p>We treat your business the way we treat ours. Which means we know what's at stake when it breaks.</p>
-      <div class="byline">
-        <strong>Toffer Lorenzana</strong>
-        <div class="byline-role">Founder, Post205</div>
-        <div class="social-links">
-          <a href="https://www.linkedin.com/in/tofferlorenzana/" target="_blank" rel="noopener" class="social-link">LinkedIn</a>
-          <a href="http://instagram.com/toffspot" target="_blank" rel="noopener" class="social-link">Instagram</a>
-        </div>
-      </div>
-    </div>
-    <div class="about-side">
-      <div class="chapter-grid">
-        <div class="chapter-item">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="2" y="4" width="28" height="24" rx="3" stroke="currentColor" stroke-width="1.5"/>
-            <line x1="2" y1="12" x2="30" y2="12" stroke="currentColor" stroke-width="1.5"/>
-            <circle cx="7" cy="8" r="1.5" fill="currentColor"/>
-            <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
-            <rect x="17" y="6" width="9" height="4" rx="1" stroke="currentColor" stroke-width="1"/>
-          </svg>
-          <span class="chapter-item-label">Websites</span>
-        </div>
-        <div class="chapter-item">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 11 L6 27 L26 27 L24 11 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M11 11 C11 5 21 5 21 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-          <span class="chapter-item-label">Stores</span>
-        </div>
-        <div class="chapter-item">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="6" r="3.5" stroke="currentColor" stroke-width="1.5"/>
-            <circle cx="5" cy="26" r="3.5" stroke="currentColor" stroke-width="1.5"/>
-            <circle cx="27" cy="26" r="3.5" stroke="currentColor" stroke-width="1.5"/>
-            <line x1="13.1" y1="9" x2="7.9" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="18.9" y1="9" x2="24.1" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="8.5" y1="26" x2="23.5" y2="26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-          <span class="chapter-item-label">Systems</span>
-        </div>
-        <div class="chapter-item">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="12" stroke="currentColor" stroke-width="1.5"/>
-            <line x1="16" y1="8" x2="16" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <line x1="16" y1="16" x2="22" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="16" cy="16" r="1.5" fill="currentColor"/>
-          </svg>
-          <span class="chapter-item-label">Time</span>
-        </div>
-      </div>
-      <div class="chapter-divider"></div>
-      <div class="about-value">
-        <div class="about-value-icon">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <polygon points="6,2.5 6.59,4.19 8.38,4.23 6.95,5.31 7.47,7.02 6,6 4.53,7.02 5.05,5.31 3.62,4.23 5.41,4.19" fill="currentColor"/>
-            <polygon points="26,2.5 26.59,4.19 28.38,4.23 26.95,5.31 27.47,7.02 26,6 24.53,7.02 25.05,5.31 23.62,4.23 25.41,4.19" fill="currentColor"/>
-            <polygon points="16,25.5 16.59,27.19 18.38,27.23 16.95,28.31 17.47,30.02 16,29 14.53,30.02 15.05,28.31 13.62,27.23 15.41,27.19" fill="currentColor"/>
-            <circle cx="16" cy="16" r="3.5" stroke="currentColor" stroke-width="1.5"/>
-            <line x1="20.5" y1="16" x2="23.5" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="19.18" y1="19.18" x2="21.3" y2="21.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="16" y1="20.5" x2="16" y2="23.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="12.82" y1="19.18" x2="10.7" y2="21.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="11.5" y1="16" x2="8.5" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="12.82" y1="12.82" x2="10.7" y2="10.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="16" y1="11.5" x2="16" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="19.18" y1="12.82" x2="21.3" y2="10.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="20.16" y1="17.72" x2="22.01" y2="18.49" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
-            <line x1="17.72" y1="20.16" x2="18.49" y2="22.01" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
-            <line x1="14.28" y1="20.16" x2="13.51" y2="22.01" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
-            <line x1="11.84" y1="17.72" x2="9.99" y2="18.49" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
-            <line x1="11.84" y1="14.28" x2="9.99" y2="13.51" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
-            <line x1="14.28" y1="11.84" x2="13.51" y2="9.99" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
-            <line x1="17.72" y1="11.84" x2="18.49" y2="9.99" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
-            <line x1="20.16" y1="14.28" x2="22.01" y2="13.51" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div>
-          <p>A business that needs its founder to survive isn't a business yet.</p>
-          <p>We're building toward a Philippines where the business keeps going when the founder steps out.</p>
-          <p style="margin-top: 8px;">One business at a time.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ── CTA ── -->
 <section class="cta" id="contact">
   <div class="cta-inner">
     <div class="cta-left">
       <h2>Tell us<br>what's not<br>working.</h2>
-      <p class="cta-sub">Four questions. We follow up within a day if it's a good fit.</p>
+      <p class="cta-sub">We reply within a day.</p>
     </div>
     <div class="chat-widget">
       <div class="chat-log" id="chatLog"></div>
@@ -1693,16 +1600,16 @@
 
     var answers = {};
 
-    botSay('Hey. What kind of business do you run?', 500).then(function() {
+    botSay('Hey. What kind of business?', 500).then(function() {
       chips(['Clinic · Spa', 'Retail · Store', 'Events · Venue', 'Professional firm', 'Something else'], function(v) {
         answers.business = v;
-        botSay("Got it. What's taking up the most time right now?").then(function() {
+        botSay("What's taking the most time right now?").then(function() {
           textInput('e.g. we re-enter every booking manually…', function(v) {
             answers.pain = v;
-            botSay('When do you need this sorted?').then(function() {
-              chips(['We need it now', 'Next few months', 'Still exploring'], function(v) {
+            botSay('When do you need to sort this out?').then(function() {
+              chips(['Now', 'Next few months', 'Still figuring it out'], function(v) {
                 answers.timeline = v;
-                botSay('Last thing — name and email so we can reach you.').then(function() {
+                botSay('Name and email.').then(function() {
                   contactInput(function(name, email) {
                     answers.name  = name;
                     answers.email = email;
@@ -1715,7 +1622,7 @@
                     fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(fd).toString() })
                       .catch(function(){});
                     input.innerHTML = '';
-                    botSay("Got it. We'll take a look and reach out if it's a good fit. Usually within a day.", 800);
+                    botSay("We'll be in touch within a day.", 800);
                   });
                 });
               });
