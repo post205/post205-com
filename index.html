@@ -15,6 +15,29 @@
   <meta name="twitter:description" content="POST 205 builds the repeatable systems that keep your business moving. Without you managing every step.">
   <link rel="canonical" href="https://post205.com/">
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Post 205, Inc.",
+    "url": "https://post205.com",
+    "logo": "https://post205.com/images/logo.png",
+    "description": "POST 205 builds the repeatable systems that keep your business moving. Without you managing every step. For founder-led SMEs in the Philippines.",
+    "email": "toffer@post205.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "3/F LZF Building, 25A Timog Avenue",
+      "addressLocality": "Quezon City",
+      "addressRegion": "Metro Manila",
+      "postalCode": "1103",
+      "addressCountry": "PH"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "Philippines"
+    }
+  }
+  </script>
 
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -950,7 +973,6 @@
     .chat-widget {
       flex-shrink: 0;
       width: 420px;
-      height: 480px;
       border: 1px solid var(--border);
       border-radius: 10px;
       overflow: hidden;
@@ -959,8 +981,8 @@
       background: var(--surface);
     }
     .chat-log {
-      flex: 1;
       overflow-y: auto;
+      max-height: 420px;
       padding: 20px;
       display: flex;
       flex-direction: column;
@@ -1021,6 +1043,9 @@
       padding: 12px;
       background: var(--black);
     }
+    .chat-input-area:empty { display: none; }
+    .cta-left { display: flex; flex-direction: column; gap: 16px; }
+    .cta-sub { font-size: 16px; color: var(--text-2); line-height: 1.6; max-width: 300px; }
     .chat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
     .chat-chip {
       background: none;
@@ -1154,7 +1179,7 @@
       .chapter-item { align-items: center; text-align: center; gap: 8px; }
       .cta { padding: 56px 24px; }
       .cta-inner { flex-direction: column; align-items: flex-start; gap: 32px; }
-      .chat-widget { width: 100%; height: 460px; }
+      .chat-widget { width: 100%; }
       footer { padding: 28px 24px; flex-direction: column; gap: 12px; align-items: flex-start; }
       .footer-right { text-align: left; }
     }
@@ -1534,7 +1559,10 @@
 <!-- ── CTA ── -->
 <section class="cta" id="contact">
   <div class="cta-inner">
-    <h2>Tell us<br>what's not<br>working.</h2>
+    <div class="cta-left">
+      <h2>Tell us<br>what's not<br>working.</h2>
+      <p class="cta-sub">Four questions. We follow up within a day if it's a good fit.</p>
+    </div>
     <div class="chat-widget">
       <div class="chat-log" id="chatLog"></div>
       <div class="chat-input-area" id="chatInput"></div>
@@ -1556,7 +1584,7 @@
     <img src="/images/logo.png" alt="POST 205">
   </a>
   <div class="footer-right">
-    © 2026 · Metro Manila, Philippines.
+    © 2026 · Post 205, Inc.<br>3/F LZF Building, 25A Timog Avenue<br>South Triangle, Quezon City 1103
   </div>
 </footer>
 
@@ -1607,10 +1635,11 @@
         const btn = document.createElement('button');
         btn.className = 'chat-chip';
         btn.textContent = opt;
-        btn.onclick = function() { addMsg('user', opt); wrap.remove(); cb(opt); };
+        btn.onclick = function() { wrap.remove(); addMsg('user', opt); cb(opt); };
         wrap.appendChild(btn);
       });
-      input.appendChild(wrap);
+      log.appendChild(wrap);
+      scrollDown();
     }
 
     function textInput(placeholder, cb) {
