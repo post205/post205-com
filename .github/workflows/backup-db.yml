@@ -26,11 +26,10 @@ jobs:
           PGSSLMODE: require
         run: |
           mkdir -p backup-repo/post205
-          DB_IP=$(python3 -c "import socket; print(socket.getaddrinfo('db.dikuhcaaxxsadlwepblf.supabase.co', 5432, socket.AF_INET)[0][4][0])")
           pg_dump \
-            --host=$DB_IP \
+            --host=aws-0-ap-southeast-1.pooler.supabase.com \
             --port=5432 \
-            --username=postgres \
+            --username=postgres.dikuhcaaxxsadlwepblf \
             --dbname=postgres \
             --format=plain \
             --no-owner \
