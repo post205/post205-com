@@ -7,12 +7,18 @@
   <meta name="description" content="POST 205 builds the repeatable systems that keep your business moving. Without you managing every step. For founder-led SMEs in the Philippines.">
   <meta property="og:title" content="POST 205 — We Build Your Business OS.">
   <meta property="og:description" content="POST 205 builds the repeatable systems that keep your business moving. Without you managing every step. For founder-led SMEs in the Philippines.">
-  <meta property="og:image" content="/images/logo.png">
+  <meta property="og:image" content="https://post205.com/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://post205.com/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="POST 205 — We Build Your Business OS.">
   <meta name="twitter:description" content="POST 205 builds the repeatable systems that keep your business moving. Without you managing every step.">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
   <link rel="canonical" href="https://post205.com/">
 
   <script type="application/ld+json">
@@ -841,111 +847,49 @@
     .about-inner {
       max-width: 1200px;
       margin: 0 auto;
-      display: grid;
-      grid-template-columns: 5fr 4fr;
-      gap: 96px;
-      align-items: start;
     }
-
-    .chapter-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px 24px;
-      margin-bottom: 32px;
+    .about-mission { max-width: 760px; }
+    .about-mission-hl {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 28px;
     }
-    .chapter-item {
+    .about-mission-body {
+      font-size: 17px;
+      color: var(--text-2);
+      line-height: 1.7;
+      max-width: 560px;
+    }
+    .about-mission-close {
+      font-size: 17px;
+      color: var(--text);
+      line-height: 1.7;
+      margin-top: 32px;
+      font-weight: 500;
+    }
+    .about-caps {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
+      gap: 6px;
+      margin-top: 56px;
+      flex-wrap: wrap;
+      align-items: center;
     }
-    .chapter-item svg { color: var(--text-3); }
-    .chapter-item-label {
+    .about-cap-label {
       font-family: ui-monospace, monospace;
-      font-size: 9px;
+      font-size: 10px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-3);
     }
-    .chapter-divider {
-      height: 1px;
-      background: var(--border);
-      margin-bottom: 32px;
+    .about-cap-dot {
+      font-size: 10px;
+      color: var(--border);
+      padding: 0 6px;
     }
-
-    .about-main .section-label { margin-bottom: 24px; }
-
-    .about h2 {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: clamp(36px, 5vw, 56px);
-      font-weight: 800;
-      letter-spacing: -0.01em;
-      line-height: 1.05;
-      color: var(--text);
-      margin-bottom: 32px;
-    }
-
-    .about-main p {
-      font-size: 16px;
-      color: var(--text-2);
-      line-height: 1.8;
-      margin-bottom: 16px;
-    }
-
-    .about-side {
-      padding-top: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
-
-    .about-value {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-    }
-    .about-value-icon {
-      flex-shrink: 0;
-      width: 32px;
-      height: 32px;
-      color: var(--accent);
-      margin-top: 2px;
-    }
-    .about-side p {
-      font-size: 15px;
-      color: var(--text-2);
-      line-height: 1.8;
-      margin: 0;
-    }
-
-    .byline { margin-top: 40px; }
-    .byline strong {
-      display: block;
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 2px;
-    }
-    .byline-role {
-      font-size: 13px;
-      color: var(--text-3);
-      margin-bottom: 14px;
-    }
-
-    .social-links { display: flex; gap: 8px; }
-    .social-link {
-      font-family: ui-monospace, monospace;
-      font-size: 9px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      text-decoration: none;
-      padding: 5px 10px;
-      border: 1px solid var(--border-2);
-      border-radius: 3px;
-      transition: all 0.15s;
-    }
-    .social-link:hover { color: var(--text); border-color: var(--text-3); }
 
     /* ── CTA ── */
     .cta {
@@ -1174,9 +1118,7 @@
       .promises { padding: 56px 24px; }
       .promises-cards { grid-template-columns: 1fr; }
       .about { padding: 56px 24px; }
-      .about-inner { grid-template-columns: 1fr; gap: 40px; }
-      .chapter-grid { grid-template-columns: repeat(4, 1fr); gap: 0; margin-bottom: 24px; }
-      .chapter-item { align-items: center; text-align: center; gap: 8px; }
+      .about-caps { margin-top: 40px; }
       .cta { padding: 56px 24px; }
       .cta-inner { flex-direction: column; align-items: flex-start; gap: 32px; }
       .chat-widget { width: 100%; }
@@ -1462,6 +1404,26 @@
   </div>
 </section>
 
+
+<!-- ── ABOUT ── -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-mission">
+      <p class="about-mission-hl">A business that needs its founder to survive isn't a business yet.</p>
+      <p class="about-mission-body">We're building toward a Philippines where the business keeps going when the founder steps out.</p>
+      <p class="about-mission-close">One business at a time.</p>
+      <div class="about-caps">
+        <span class="about-cap-label">Websites</span>
+        <span class="about-cap-dot">·</span>
+        <span class="about-cap-label">Stores</span>
+        <span class="about-cap-dot">·</span>
+        <span class="about-cap-label">Systems</span>
+        <span class="about-cap-dot">·</span>
+        <span class="about-cap-label">Time saved</span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ── CTA ── -->
 <section class="cta" id="contact">
