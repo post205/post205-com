@@ -3,12 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>POST 205 — We Build What Works</title>
-  <meta name="description" content="POST 205 builds systems and dashboards that handle the repeatable work so your business runs without pulling you back into every little thing.">
-  <meta property="og:title" content="Post205 | We Fix the Operating System of Your Business">
-  <meta property="og:description" content="Post205 builds functional websites, learning platforms, and operations dashboards for founder-led businesses. We build with technology. We think like owners.">
+  <title>POST 205 — We Build Your Business OS.</title>
+  <meta name="description" content="POST 205 builds the repeatable systems that keep your business moving. Without you managing every step. For founder-led SMEs in the Philippines.">
+  <meta property="og:title" content="POST 205 — We Build Your Business OS.">
+  <meta property="og:description" content="POST 205 builds the repeatable systems that keep your business moving. Without you managing every step. For founder-led SMEs in the Philippines.">
   <meta property="og:image" content="/images/logo.png">
   <meta property="og:url" content="https://post205.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="POST 205 — We Build Your Business OS.">
+  <meta name="twitter:description" content="POST 205 builds the repeatable systems that keep your business moving. Without you managing every step.">
+  <link rel="canonical" href="https://post205.com/">
 
 
   <style>
@@ -31,14 +36,14 @@
       --green:        #2ecc71;
       --red:          #ff4d4d;
       --nav-bg:       rgba(24, 24, 26, 0.96);
-      --logo-filter:  saturate(0) brightness(8);
+      --logo-filter:  none;
       --logo-blend:   screen;
       --promise-bg:   #1a2424;
     }
 
     [data-theme="light"] {
-      /* light theme — cool white + teal tints */
-      --black:        #ffffff;
+      /* light theme — cool off-white + teal tints */
+      --black:        #f2f8f8;
       --surface:      #f4fefe;
       --surface-2:    #e0fffe;
       --surface-deep: #024A4B;
@@ -50,7 +55,7 @@
       --accent:       #2db8ba;
       --accent-dim:   rgba(45, 184, 186, 0.12);
       --on-accent:    #021616;
-      --nav-bg:       rgba(255, 255, 255, 0.96);
+      --nav-bg:       rgba(242, 248, 248, 0.96);
       --logo-filter:  none;
       --logo-blend:   darken;
       --promise-bg:   #e0fffe;
@@ -157,7 +162,7 @@
 
     @media (prefers-color-scheme: light) {
       [data-theme="system"] {
-        --black:        #ffffff;
+        --black:        #f2f8f8;
         --surface:      #f4fefe;
         --surface-2:    #e0fffe;
         --surface-deep: #024A4B;
@@ -169,47 +174,11 @@
         --accent:       #2db8ba;
         --accent-dim:   rgba(45, 184, 186, 0.12);
         --on-accent:    #021616;
-        --nav-bg:       rgba(255, 255, 255, 0.96);
+        --nav-bg:       rgba(242, 248, 248, 0.96);
         --logo-filter:  none;
         --logo-blend:   darken;
         --promise-bg:   #e0fffe;
       }
-    }
-
-    /* ── TRUST BAND ── */
-    .trust-band {
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .trust-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 16px 48px;
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-    .trust-lbl {
-      font-family: ui-monospace, monospace;
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      flex-shrink: 0;
-    }
-    .trust-names {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .trust-name {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-2);
-    }
-    .trust-sep {
-      color: var(--text-3);
-      font-weight: 400;
     }
 
     /* ── HERO ── */
@@ -218,38 +187,50 @@
       overflow: hidden;
     }
 
-    .hero-video {
+    .hero-binary {
       position: absolute;
       inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      overflow: hidden;
+      pointer-events: none;
       z-index: 0;
-      opacity: 0.35;
     }
-
-    /* show correct video per theme */
-    .hero-video-dark  { display: block; }
-    .hero-video-light { display: none; }
-    [data-theme="light"] .hero-video-dark  { display: none; }
-    [data-theme="light"] .hero-video-light { display: block; }
+    .bin-col {
+      position: absolute;
+      font-family: ui-monospace, monospace;
+      line-height: 1.8;
+      color: var(--accent);
+      white-space: pre;
+      will-change: transform;
+      user-select: none;
+      animation: binfall linear infinite;
+      opacity: var(--op-d, 0.1);
+    }
+    [data-theme="light"] .bin-col { opacity: var(--op-l, 0.28); }
     @media (prefers-color-scheme: light) {
-      [data-theme="system"] .hero-video-dark  { display: none; }
-      [data-theme="system"] .hero-video-light { display: block; }
+      [data-theme="system"] .bin-col { opacity: var(--op-l, 0.28); }
+    }
+    @keyframes binfall {
+      from { transform: translateY(-100%); }
+      to   { transform: translateY(100vh); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bin-col { animation-play-state: paused; }
     }
 
-    .hero-overlay {
+    .hero-fade {
       position: absolute;
       inset: 0;
       z-index: 1;
-      background: linear-gradient(
-        to bottom,
-        var(--black) 0%,
-        transparent 28%,
-        transparent 72%,
-        var(--black) 100%
-      );
       pointer-events: none;
+      opacity: 0.88;
+      background:
+        linear-gradient(to right, transparent 25%, var(--black) 72%),
+        radial-gradient(
+          ellipse 70% 80% at 38% 50%,
+          transparent 0%,
+          transparent 40%,
+          var(--black) 92%
+        );
     }
 
     .hero-inner {
@@ -258,10 +239,6 @@
       padding: 100px 48px 72px;
       max-width: 1200px;
       margin: 0 auto;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .hero-video { display: none; }
     }
 
     .hero-eyebrow {
@@ -283,6 +260,15 @@
       margin-bottom: 36px;
     }
 
+    .hero-descriptor {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: clamp(16px, 2.2vw, 22px);
+      font-weight: 500;
+      color: var(--text-2);
+      letter-spacing: -0.01em;
+      margin-bottom: 32px;
+    }
+
     .hero-bullets {
       display: flex;
       flex-direction: column;
@@ -300,7 +286,10 @@
 
     /* ── CASE STUDIES ── */
     .case-studies {
-      padding: 0 48px 80px;
+      padding: 80px 48px;
+      border-top: 1px solid var(--border);
+    }
+    .case-studies-inner {
       max-width: 1200px;
       margin: 0 auto;
     }
@@ -323,6 +312,20 @@
       cursor: pointer;
       transition: color 0.15s, background 0.15s, border-color 0.15s;
       user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+    }
+    .cs-industry {
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: -14px;
+      margin-bottom: 20px;
+      opacity: 0.8;
     }
     .cs-tab:first-child { border-radius: 6px 0 0 0; }
     .cs-tab:last-child  { border-radius: 0 6px 0 0; }
@@ -372,7 +375,37 @@
       line-height: 1.75;
       margin-bottom: 16px;
     }
-    .cs-content p:last-of-type { margin-bottom: 28px; }
+    .cs-content p:last-of-type { margin-bottom: 24px; }
+
+    .cs-ai {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .cs-ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--accent);
+      border-radius: 4px;
+      padding: 3px 7px 3px 5px;
+      flex-shrink: 0;
+      color: var(--on-accent);
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 1px;
+    }
+    .cs-ai-text {
+      font-size: 13px;
+      color: var(--text-3);
+      line-height: 1.65;
+    }
 
     .cs-link {
       font-family: ui-monospace, monospace;
@@ -424,205 +457,219 @@
       margin: 0 6px;
     }
 
-    /* inventory mockup */
-    .inv-nav {
-      display: flex;
-      background: #0d0d0d;
+    /* booking / right information mockup */
+    .book-search {
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
-    }
-    .inv-ntab {
-      padding: 9px 14px;
-      font-family: ui-monospace, monospace;
-      font-size: 9px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      border-right: 1px solid var(--border);
-    }
-    .inv-ntab.on { color: var(--accent); box-shadow: inset 0 -2px 0 var(--accent); }
-    .inv-body { padding: 12px 14px; }
-    .inv-row {
-      display: grid;
-      grid-template-columns: 1fr 36px 36px 80px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
       gap: 6px;
-      padding: 7px 0;
-      border-bottom: 1px solid var(--border);
-      align-items: center;
-    }
-    .inv-row.hd {
       font-family: ui-monospace, monospace;
-      font-size: 8px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-3);
+      font-size: 10px;
+      color: var(--text-2);
     }
-    .inv-product { font-size: 11px; color: var(--text); font-weight: 500; }
-    .inv-n { font-size: 11px; color: var(--text-2); text-align: right; }
-    .inv-badge {
-      display: inline-block;
-      padding: 2px 7px;
-      border-radius: 3px;
-      font-family: ui-monospace, monospace;
-      font-size: 8px;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-    .b-ok     { background: rgba(46,204,113,0.12); color: var(--green); }
-    .b-low    { background: rgba(255,77,77,0.12);  color: var(--red);   }
-    .b-order  { background: var(--accent-dim);     color: var(--accent);}
-    .inv-footer {
-      padding: 9px 14px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .inv-note { font-family: ui-monospace, monospace; font-size: 9px; color: var(--text-3); }
-    .inv-btn {
-      background: var(--accent);
-      color: var(--black);
-      padding: 5px 12px;
-      border-radius: 3px;
-      font-family: ui-monospace, monospace;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-
-    /* billing mockup */
-    .bill-head {
-      background: var(--text);
-      padding: 10px 14px;
+    .book-search-icon { color: var(--text-2); font-size: 16px; }
+    .book-client-card { padding: 12px 14px; }
+    .book-client-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-bottom: 10px;
     }
-    .bill-logo-txt {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--black);
-    }
-    .bill-tag-lbl {
-      background: var(--black);
-      color: var(--text);
-      font-family: ui-monospace, monospace;
-      font-size: 8px;
-      padding: 2px 6px;
-      border-radius: 2px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-    .bill-body { padding: 12px 14px; }
-    .bill-step {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .bill-step:last-child { border-bottom: none; }
-    .bill-num {
-      width: 20px; height: 20px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-family: ui-monospace, monospace;
-      font-size: 9px;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-    .bill-num.done  { background: rgba(46,204,113,0.15); color: var(--green); }
-    .bill-num.now   { background: var(--accent-dim);     color: var(--accent); }
-    .bill-title { font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 1px; }
-    .bill-sub   { font-size: 9px; color: var(--text-3); }
-    .bill-pill  {
-      display: inline-block;
-      margin-top: 4px;
-      padding: 1px 6px;
-      border-radius: 2px;
+    .book-client-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .book-tag {
       font-family: ui-monospace, monospace;
       font-size: 8px;
       font-weight: 600;
-    }
-    .pill-done { background: rgba(46,204,113,0.12); color: var(--green); }
-    .pill-now  { background: var(--accent-dim); color: var(--accent); }
-
-    /* events mockup */
-    .evt-head {
-      background: #0d0d0d;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-    }
-    .evt-eyebrow {
-      font-family: ui-monospace, monospace;
-      font-size: 9px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: var(--accent-dim);
       color: var(--accent);
-      margin-bottom: 3px;
+      letter-spacing: 0.04em;
     }
-    .evt-title {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.01em;
-    }
-    .evt-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-    }
-    .evt-stat {
-      background: var(--surface-2);
+    .book-detail {
       border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 9px 11px;
+      overflow: hidden;
+      margin-bottom: 10px;
     }
-    .evt-stat-lbl {
-      font-family: ui-monospace, monospace;
-      font-size: 8px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 3px;
-    }
-    .evt-stat-val {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .evt-checks { padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
-    .evt-check {
+    .book-detail-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 7px 10px;
-      border-radius: 3px;
-      border: 1px solid;
+      border-bottom: 1px solid var(--border);
+      font-size: 10px;
     }
-    .evt-check.live   { background: rgba(46,204,113,0.07); border-color: rgba(46,204,113,0.2); }
-    .evt-check.active { background: var(--accent-dim);     border-color: rgba(232,255,0,0.2);  }
-    .evt-check-name { font-size: 10px; color: var(--text); }
-    .evt-check-status {
+    .book-detail-row:last-child { border-bottom: none; }
+    .book-key {
+      color: var(--text-3);
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.04em;
+    }
+    .book-val { color: var(--text); font-size: 10px; }
+    .book-slot {
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* access / right person mockup */
+    .acc-head {
+      background: var(--surface);
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .acc-head-title { font-size: 11px; font-weight: 700; color: var(--text); }
+    .acc-role-badge {
       font-family: ui-monospace, monospace;
       font-size: 8px;
-      font-weight: 500;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: rgba(46,204,113,0.12);
+      color: var(--green);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
-    .evt-check.live   .evt-check-status { color: var(--green); }
-    .evt-check.active .evt-check-status { color: var(--accent); }
-
-    /* ── SERVICES ── */
-    .services {
-      padding: 80px 48px;
+    .acc-table { padding: 0 14px; }
+    .acc-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.2fr;
+      gap: 6px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      font-size: 10px;
+    }
+    .acc-row:last-child { border-bottom: none; }
+    .acc-row-hd {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+    .acc-entity { font-weight: 500; color: var(--text); }
+    .acc-amount { color: var(--text-2); font-family: ui-monospace, monospace; font-size: 10px; }
+    .acc-vis {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      color: var(--text-3);
+      background: var(--surface);
+      padding: 2px 5px;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    .acc-admin-only { opacity: 0.5; }
+    .acc-footer {
+      padding: 8px 14px;
       border-top: 1px solid var(--border);
+      background: var(--surface);
     }
-    .services-inner { max-width: 1200px; margin: 0 auto; }
+    .acc-note {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    /* ticketing / right time mockup */
+    .tkt-valid {
+      padding: 10px 14px;
+      background: rgba(46,204,113,0.07);
+      border-bottom: 1px solid rgba(46,204,113,0.15);
+    }
+    .tkt-valid-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+    .tkt-valid-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      flex-shrink: 0;
+    }
+    .tkt-valid-text { font-size: 11px; font-weight: 600; color: var(--text); }
+    .tkt-type {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+      padding-left: 12px;
+    }
+    .tkt-flag {
+      padding: 10px 14px;
+      background: rgba(255,77,77,0.07);
+      border-bottom: 1px solid rgba(255,77,77,0.15);
+    }
+    .tkt-flag-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--red);
+      margin-bottom: 3px;
+    }
+    .tkt-flag-sub {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+    }
+    .tkt-actions {
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .tkt-btn {
+      padding: 7px 12px;
+      border-radius: 3px;
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      background: var(--surface);
+    }
+    .tkt-primary {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border-color: rgba(59,209,211,0.3);
+    }
+
+    /* AI output card inside mockup */
+    .mock-ai {
+      margin: 0 14px 12px;
+      padding: 9px 11px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(59,209,211,0.2);
+      border-radius: 4px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .mock-ai-icon {
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .mock-ai-text {
+      font-size: 10px;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
 
     .section-label {
       font-family: ui-monospace, monospace;
@@ -630,118 +677,7 @@
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--text-3);
-      margin-bottom: 40px;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .svc-card {
-      background: var(--black);
-      transition: background 0.2s;
-      overflow: hidden;
-    }
-    .svc-card:hover { background: var(--surface); }
-
-    .svc-img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      display: block;
-      filter: grayscale(30%) brightness(0.85);
-      transition: filter 0.3s;
-    }
-    .svc-card:hover .svc-img { filter: grayscale(0%) brightness(0.95); }
-
-    .svc-body { padding: 28px; }
-
-    .svc-num {
-      font-family: ui-monospace, monospace;
-      font-size: 10px;
-      color: var(--text-3);
-      margin-bottom: 12px;
-    }
-
-    .svc-card h3 {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      color: var(--text);
-      margin-bottom: 8px;
-      line-height: 1.2;
-    }
-
-    .svc-card p {
-      font-size: 14px;
-      color: var(--text-2);
-      line-height: 1.65;
-    }
-
-    /* ── BENEFITS ── */
-    .benefits {
-      padding: 80px 48px;
-      border-top: 1px solid var(--border);
-    }
-    .benefits-inner { max-width: 1200px; margin: 0 auto; }
-
-    .benefits-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 48px;
-    }
-
-    .benefits h2 {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: clamp(28px, 4vw, 40px);
-      font-weight: 800;
-      letter-spacing: -0.01em;
-      line-height: 1.1;
-      color: var(--text);
-    }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .benefit-item {
-      background: var(--black);
-      padding: 32px;
-    }
-
-    .benefit-outcome {
-      font-family: ui-monospace, monospace;
-      font-size: 9px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 10px;
-    }
-
-    .benefit-item h3 {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      color: var(--text);
-      line-height: 1.15;
-    }
-    .benefit-item h3 span {
-      color: var(--accent);
+      margin-bottom: 24px;
     }
 
     /* ── PROMISES ── */
@@ -758,6 +694,29 @@
       letter-spacing: -0.01em;
       line-height: 1.1;
       color: var(--text);
+      margin-bottom: 48px;
+    }
+
+    .promises-trust {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .promises-trust-sep {
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      color: var(--border-2);
+    }
+
+    .promises-intro {
+      font-size: 15px;
+      color: var(--text-2);
+      line-height: 1.7;
+      max-width: 480px;
       margin-bottom: 40px;
     }
 
@@ -779,7 +738,7 @@
 
     .promise-img-wrap {
       background: var(--promise-bg);
-      height: 220px;
+      height: 160px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -810,6 +769,45 @@
       font-size: 14px;
       color: var(--text-2);
       line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .promise-card p:last-of-type { margin-bottom: 0; }
+
+    .promise-badge {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 16px;
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 3px 7px;
+      position: relative;
+      cursor: default;
+    }
+
+    .promise-badge[data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 0;
+      background: var(--surface-2);
+      border: 1px solid var(--border-2);
+      border-radius: 4px;
+      padding: 7px 10px;
+      font-size: 10px;
+      line-height: 1.6;
+      color: var(--text-2);
+      text-transform: none;
+      letter-spacing: 0.02em;
+      font-weight: 400;
+      width: 210px;
+      white-space: normal;
+      z-index: 10;
+      pointer-events: none;
     }
 
     /* ── ABOUT ── */
@@ -821,29 +819,57 @@
       max-width: 1200px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: 64px;
+      grid-template-columns: 5fr 4fr;
+      gap: 96px;
       align-items: start;
     }
 
+    .about-main .section-label { margin-bottom: 24px; }
+
     .about h2 {
       font-family: system-ui, -apple-system, sans-serif;
-      font-size: 44px;
+      font-size: clamp(36px, 5vw, 56px);
       font-weight: 800;
       letter-spacing: -0.01em;
       line-height: 1.05;
       color: var(--text);
-      margin-bottom: 28px;
+      margin-bottom: 32px;
     }
 
-    .about p {
+    .about-main p {
       font-size: 16px;
       color: var(--text-2);
-      line-height: 1.75;
+      line-height: 1.8;
       margin-bottom: 16px;
     }
 
-    .byline { margin-top: 36px; }
+    .about-side {
+      padding-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .about-value {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .about-value-icon {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+    .about-side p {
+      font-size: 15px;
+      color: var(--text-2);
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .byline { margin-top: 40px; }
     .byline strong {
       display: block;
       font-family: system-ui, -apple-system, sans-serif;
@@ -873,47 +899,6 @@
     }
     .social-link:hover { color: var(--text); border-color: var(--text-3); }
 
-    .about-aside {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .about-photo {
-      width: 100%;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
-    .about-photo img {
-      width: 100%;
-      display: block;
-      filter: grayscale(10%) brightness(0.9);
-    }
-
-    .about-mission {
-      padding: 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-    }
-    .aside-label {
-      font-family: ui-monospace, monospace;
-      font-size: 9px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 12px;
-    }
-    .about-mission p {
-      font-size: 14px;
-      color: var(--text-2);
-      line-height: 1.7;
-      margin-bottom: 16px;
-    }
-    .about-mission p:last-child { margin-bottom: 0; }
-    .about-mission p strong { color: var(--text); font-weight: 500; }
-
     /* ── CTA ── */
     .cta {
       padding: 80px 48px;
@@ -923,7 +908,7 @@
       max-width: 1200px;
       margin: 0 auto;
       display: flex;
-      align-items: flex-end;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 48px;
     }
@@ -937,12 +922,41 @@
       color: var(--text);
     }
 
-    .cta-block {
+    .cta-form {
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
       gap: 10px;
+      width: 420px;
+    }
+    .cta-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .cta-form input,
+    .cta-form textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      width: 100%;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .cta-form input::placeholder,
+    .cta-form textarea::placeholder { color: var(--text-3); }
+    .cta-form input:focus,
+    .cta-form textarea:focus { border-color: var(--accent); }
+    .cta-form textarea { resize: vertical; min-height: 100px; }
+    .cta-form .btn-primary { align-self: flex-start; cursor: pointer; border: none; }
+    .cta-form-success {
+      font-size: 15px;
+      color: var(--text-2);
+      padding: 16px 0;
     }
 
     .btn-primary {
@@ -960,12 +974,6 @@
     }
     .btn-primary:hover { opacity: 0.88; }
 
-    .cta-email {
-      font-family: ui-monospace, monospace;
-      font-size: 10px;
-      letter-spacing: 0.06em;
-      color: var(--text-3);
-    }
 
     /* ── FOOTER ── */
     footer {
@@ -1001,27 +1009,23 @@
       .nav-link { display: none; }
       .hero-inner { padding: 72px 24px 48px; }
       .case-studies { padding: 0 24px 56px; }
+      .cs-tabs { margin-bottom: 0; }
       .cs-panel.active { grid-template-columns: 1fr; }
-      .cs-mockup { display: none; }
-      .services { padding: 56px 24px; }
-      .services-grid { grid-template-columns: 1fr 1fr; }
-      .benefits { padding: 56px 24px; }
-      .benefits-grid { grid-template-columns: 1fr 1fr; }
+      .cs-panel { border-radius: 0 0 6px 6px; }
+      .cs-content { padding: 28px; border-right: none; border-bottom: 1px solid var(--border); }
+      .cs-mockup { padding: 20px; }
       .promises { padding: 56px 24px; }
       .promises-cards { grid-template-columns: 1fr; }
       .about { padding: 56px 24px; }
       .about-inner { grid-template-columns: 1fr; gap: 40px; }
-      .trust-inner { padding: 14px 24px; }
       .cta { padding: 56px 24px; }
       .cta-inner { flex-direction: column; align-items: flex-start; gap: 32px; }
-      .cta-block { align-items: flex-start; }
+      .cta-form { width: 100%; }
       footer { padding: 28px 24px; flex-direction: column; gap: 12px; align-items: flex-start; }
       .footer-right { text-align: left; }
     }
 
     @media (max-width: 600px) {
-      .services-grid { grid-template-columns: 1fr; }
-      .benefits-grid { grid-template-columns: 1fr; }
       .promise { grid-template-columns: 1fr; gap: 8px; }
     }
   </style>
@@ -1050,58 +1054,42 @@
         <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
       </svg>
     </button>
-    <a href="mailto:toffer@post205.com" class="nav-cta">Contact</a>
+    <a href="#contact" class="nav-cta">Contact</a>
   </div>
 </nav>
 
 <!-- ── HERO ── -->
 <section class="hero">
-  <video class="hero-video hero-video-dark" autoplay muted loop playsinline>
-    <source src="/video/hero-bg.mp4" type="video/mp4">
-  </video>
-  <video class="hero-video hero-video-light" autoplay muted loop playsinline>
-    <source src="/video/hero-bg-light.mp4" type="video/mp4">
-  </video>
-  <div class="hero-overlay"></div>
+  <div class="hero-binary"></div>
+  <div class="hero-fade"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow">Digital Systems for SMEs</div>
-    <h1>We Build<br>What Works</h1>
-    <div class="hero-bullets">
-      <div class="hero-bullet"><span class="plus">+</span>fewer approvals</div>
-      <div class="hero-bullet"><span class="plus">+</span>faster decisions</div>
-      <div class="hero-bullet"><span class="plus">+</span>less time in the middle</div>
-    </div>
+    <div class="hero-eyebrow">For founders doing it all.</div>
+    <h1>We Build Your<br>Business OS.</h1>
+    <div class="hero-descriptor">The repeatable systems that keep your business moving. Without you managing every step.</div>
   </div>
 </section>
-
-<!-- ── TRUST BAND ── -->
-<div class="trust-band">
-  <div class="trust-inner">
-    <span class="trust-lbl">Working with</span>
-    <div class="trust-names">
-      <span class="trust-name">Piandré</span>
-      <span class="trust-sep">·</span>
-      <span class="trust-name">Mashtag</span>
-    </div>
-  </div>
-</div>
 
 <!-- ── CASE STUDIES ── -->
 <section class="case-studies">
+  <div class="case-studies-inner">
   <div class="cs-tabs" role="tablist">
-    <button class="cs-tab active" onclick="switchCase(this,'inventory')" role="tab">01 — Inventory</button>
-    <button class="cs-tab" onclick="switchCase(this,'billing')"   role="tab">02 — Billing</button>
-    <button class="cs-tab" onclick="switchCase(this,'events')"    role="tab">03 — Events</button>
+    <button class="cs-tab active" onclick="switchCase(this,'information')" role="tab">Right information</button>
+    <button class="cs-tab" onclick="switchCase(this,'person')" role="tab">Right person</button>
+    <button class="cs-tab" onclick="switchCase(this,'time')" role="tab">Right time</button>
   </div>
 
-  <!-- INVENTORY -->
-  <div class="cs-panel active" id="cs-inventory" role="tabpanel">
+  <!-- RIGHT INFORMATION -->
+  <div class="cs-panel active" id="cs-information" role="tabpanel">
     <div class="cs-content">
-      <div class="cs-num">01 / Inventory</div>
-      <h2>When numbers don't match stock</h2>
-      <p>They were tracking everything, but still couldn't say what was actually in stock. The same data was being entered in different places, and it showed up when it was time to order.</p>
-      <p>We fixed the flow so usage, stock, and orders come from the same source.</p>
-      <a href="/systems/inventory" class="cs-link">See the setup →</a>
+      <div class="cs-num">Right information</div>
+      <div class="cs-industry">Salon</div>
+      <h2>Before they walk in</h2>
+      <p>Regulars got good service when the right staff was in. Nobody else knew what they liked.</p>
+      <p>The receptionist opens a name and already knows before saying hello.</p>
+      <div class="cs-ai">
+        <span class="cs-ai-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0.5L7.4 4.6L11.5 6L7.4 7.4L6 11.5L4.6 7.4L0.5 6L4.6 4.6Z"/></svg>AI</span>
+        <p class="cs-ai-text">It reads visit patterns and tells the team what to offer next — without being asked.</p>
+      </div>
     </div>
     <div class="cs-mockup">
       <div class="mock-win">
@@ -1109,55 +1097,53 @@
           <div class="m-dot m-r"></div>
           <div class="m-dot m-y"></div>
           <div class="m-dot m-g"></div>
-          <div class="mock-url">inventory.piandre.com</div>
+          <div class="mock-url">reception · today</div>
         </div>
-        <div class="inv-nav">
-          <div class="inv-ntab">Dashboard</div>
-          <div class="inv-ntab on">Inventory</div>
-          <div class="inv-ntab">Usage Log</div>
-          <div class="inv-ntab">Deliveries</div>
+        <div class="book-search">
+          <span class="book-search-icon">⌕</span>
+          <span>Sarah M.</span>
         </div>
-        <div class="inv-body">
-          <div class="inv-row hd">
-            <div>Product</div><div>Stock</div><div>Min</div><div>Status</div>
+        <div class="book-client-card">
+          <div class="book-client-top">
+            <div class="book-client-name">Sarah Mendoza</div>
+            <span class="book-tag">VIP · 14 visits</span>
           </div>
-          <div class="inv-row">
-            <div class="inv-product">Keratin Serum 250ml</div>
-            <div class="inv-n">0</div><div class="inv-n">10</div>
-            <div><span class="inv-badge b-order">Order now</span></div>
+          <div class="book-detail">
+            <div class="book-detail-row">
+              <span class="book-key">Stylist</span>
+              <span class="book-val">Marco C.</span>
+            </div>
+            <div class="book-detail-row">
+              <span class="book-key">Drink</span>
+              <span class="book-val">Oat latte, no sugar</span>
+            </div>
+            <div class="book-detail-row">
+              <span class="book-key">Last visit</span>
+              <span class="book-val">Apr 15 — Balayage</span>
+            </div>
           </div>
-          <div class="inv-row">
-            <div class="inv-product">Color Base 07</div>
-            <div class="inv-n">2</div><div class="inv-n">8</div>
-            <div><span class="inv-badge b-low">Low</span></div>
-          </div>
-          <div class="inv-row">
-            <div class="inv-product">Thermal Brush #35</div>
-            <div class="inv-n">6</div><div class="inv-n">10</div>
-            <div><span class="inv-badge b-ok">OK</span></div>
-          </div>
-          <div class="inv-row">
-            <div class="inv-product">Face Base Deep 05</div>
-            <div class="inv-n">14</div><div class="inv-n">5</div>
-            <div><span class="inv-badge b-ok">OK</span></div>
-          </div>
+          <div class="book-slot">11:00 AM · Booked</div>
         </div>
-        <div class="inv-footer">
-          <div class="inv-note">2 items need attention</div>
-          <div class="inv-btn">Create PO</div>
+        <div class="mock-ai">
+          <div class="mock-ai-icon"><svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0.5L7.4 4.6L11.5 6L7.4 7.4L6 11.5L4.6 7.4L0.5 6L4.6 4.6Z"/></svg></div>
+          <div class="mock-ai-text">Hasn't tried a color treatment in 3 visits. Mentioned a tint refresh in March — consider recommending today.</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- BILLING -->
-  <div class="cs-panel" id="cs-billing" role="tabpanel">
+  <!-- RIGHT PERSON -->
+  <div class="cs-panel" id="cs-person" role="tabpanel">
     <div class="cs-content">
-      <div class="cs-num">02 / Billing</div>
-      <h2>When control limits access</h2>
-      <p>They were managing 100 clients across multiple companies, and the numbers lived in different Excel files. Answering a simple question meant checking multiple places.</p>
-      <p>We moved everything into one flow where people see what they need, without exposing everything.</p>
-      <a href="/systems/billing" class="cs-link">See the setup →</a>
+      <div class="cs-num">Right person</div>
+      <div class="cs-industry">Accounting firm</div>
+      <h2>Everyone sees their part</h2>
+      <p>They had four companies in one spreadsheet. To share one number, you shared all of them.</p>
+      <p>We built a portal where the role controls what you see. Your accountant sees every company. A client logs in and sees only their invoices.</p>
+      <div class="cs-ai">
+        <span class="cs-ai-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0.5L7.4 4.6L11.5 6L7.4 7.4L6 11.5L4.6 7.4L0.5 6L4.6 4.6Z"/></svg>AI</span>
+        <p class="cs-ai-text">Eventually the system routes situations to the right person — not just who can see it, but who should act on it.</p>
+      </div>
     </div>
     <div class="cs-mockup">
       <div class="mock-win">
@@ -1165,50 +1151,55 @@
           <div class="m-dot m-r"></div>
           <div class="m-dot m-y"></div>
           <div class="m-dot m-g"></div>
-          <div class="mock-url">billing.firmname.com</div>
+          <div class="mock-url">firm portal</div>
         </div>
-        <div class="bill-head">
-          <div class="bill-logo-txt">Firm Portal</div>
-          <div class="bill-tag-lbl">Admin view</div>
+        <div class="acc-head">
+          <div class="acc-head-title">Clients</div>
+          <span class="acc-role-badge">Admin</span>
         </div>
-        <div class="bill-body">
-          <div class="bill-step">
-            <div class="bill-num done">✓</div>
-            <div>
-              <div class="bill-title">Proposal sent — Cruz Holdings</div>
-              <div class="bill-sub">₱28,000/month · Apr 1, 2026</div>
-              <span class="bill-pill pill-done">Accepted</span>
-            </div>
+        <div class="acc-table">
+          <div class="acc-row acc-row-hd">
+            <span>Entity</span><span>Monthly</span><span>Access</span>
           </div>
-          <div class="bill-step">
-            <div class="bill-num done">✓</div>
-            <div>
-              <div class="bill-title">Contract generated</div>
-              <div class="bill-sub">Auto-generated from accepted proposal</div>
-              <span class="bill-pill pill-done">Signed</span>
-            </div>
+          <div class="acc-row">
+            <span class="acc-entity">Cruz Holdings</span>
+            <span class="acc-amount">₱28,000</span>
+            <span class="acc-vis">Admin · Cruz</span>
           </div>
-          <div class="bill-step">
-            <div class="bill-num now">3</div>
-            <div>
-              <div class="bill-title">First invoice — May 1</div>
-              <div class="bill-sub">Assigned to R. Santos · Entity 3</div>
-              <span class="bill-pill pill-now">Ready to send</span>
-            </div>
+          <div class="acc-row">
+            <span class="acc-entity">Reyes & Partners</span>
+            <span class="acc-amount">₱15,500</span>
+            <span class="acc-vis acc-admin-only">Admin only</span>
           </div>
+          <div class="acc-row">
+            <span class="acc-entity">Santos Group</span>
+            <span class="acc-amount">₱42,000</span>
+            <span class="acc-vis">Admin · Santos</span>
+          </div>
+        </div>
+        <div class="acc-footer">
+          <span class="acc-note">Cruz Holdings logs in → sees 1 entity</span>
+        </div>
+        <div class="mock-ai">
+          <div class="mock-ai-icon"><svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0.5L7.4 4.6L11.5 6L7.4 7.4L6 11.5L4.6 7.4L0.5 6L4.6 4.6Z"/></svg></div>
+          <div class="mock-ai-text">Cruz Holdings raised a billing concern. Routing to R. Santos — handled their account in Q1.</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- EVENTS -->
-  <div class="cs-panel" id="cs-events" role="tabpanel">
+  <!-- RIGHT TIME -->
+  <div class="cs-panel" id="cs-time" role="tabpanel">
     <div class="cs-content">
-      <div class="cs-num">03 / Events</div>
-      <h2>When everything comes in late</h2>
-      <p>They were running talks and conferences in different provinces, and the final details often came in close to the event. The page, registration, quiz, certificates, and submission all had to be pulled together quickly, sometimes while already on-site.</p>
-      <p>We moved it into one flow so everything is already set up before the rush.</p>
-      <a href="/systems/events" class="cs-link">See the setup →</a>
+      <div class="cs-num">Right time</div>
+      <div class="cs-industry">Events venue</div>
+      <h2>The flag fires before the complaint</h2>
+      <p>They were selling tickets in advance. At the gate, a child was too short for the ride. Staff had no protocol — the family waited while someone figured it out.</p>
+      <p>We built the check into the scan. The moment you read the code, it flags the problem and shows the options. Nobody improvises.</p>
+      <div class="cs-ai">
+        <span class="cs-ai-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0.5L7.4 4.6L11.5 6L7.4 7.4L6 11.5L4.6 7.4L0.5 6L4.6 4.6Z"/></svg>AI</span>
+        <p class="cs-ai-text">As more exceptions come through, the system learns which bookings to flag before the buyer leaves home.</p>
+      </div>
     </div>
     <div class="cs-mockup">
       <div class="mock-win">
@@ -1216,135 +1207,38 @@
           <div class="m-dot m-r"></div>
           <div class="m-dot m-y"></div>
           <div class="m-dot m-g"></div>
-          <div class="mock-url">events.mashtag.org</div>
+          <div class="mock-url">gate scanner</div>
         </div>
-        <div class="evt-head">
-          <div class="evt-eyebrow">HR Kapasidad Conference 2026</div>
-          <div class="evt-title">Cebu · May 14, 2026</div>
+        <div class="tkt-valid">
+          <div class="tkt-valid-row">
+            <div class="tkt-valid-dot"></div>
+            <span class="tkt-valid-text">Ticket valid · #4821</span>
+          </div>
+          <div class="tkt-type">General · 2 adults · 1 child</div>
         </div>
-        <div class="evt-stats">
-          <div class="evt-stat">
-            <div class="evt-stat-lbl">Registered</div>
-            <div class="evt-stat-val">247</div>
-          </div>
-          <div class="evt-stat">
-            <div class="evt-stat-lbl">CPD Hours</div>
-            <div class="evt-stat-val">8</div>
-          </div>
+        <div class="tkt-flag">
+          <div class="tkt-flag-label">⚠ Height requirement</div>
+          <div class="tkt-flag-sub">Child (1) · Required: 120cm · Not confirmed</div>
         </div>
-        <div class="evt-checks">
-          <div class="evt-check live">
-            <span class="evt-check-name">Registration page</span>
-            <span class="evt-check-status">Live</span>
-          </div>
-          <div class="evt-check live">
-            <span class="evt-check-name">Post-event quiz</span>
-            <span class="evt-check-status">Live</span>
-          </div>
-          <div class="evt-check active">
-            <span class="evt-check-name">Certificates</span>
-            <span class="evt-check-status">Generating</span>
-          </div>
+        <div class="tkt-actions">
+          <div class="tkt-btn tkt-primary">Issue junior pass</div>
+          <div class="tkt-btn">Apply ₱200 credit</div>
+          <div class="tkt-btn">Escalate</div>
+        </div>
+        <div class="mock-ai">
+          <div class="mock-ai-icon"><svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0.5L7.4 4.6L11.5 6L7.4 7.4L6 11.5L4.6 7.4L0.5 6L4.6 4.6Z"/></svg></div>
+          <div class="mock-ai-text">Similar booking tomorrow at 3 PM. Height reminder SMS queued for pre-arrival.</div>
         </div>
       </div>
     </div>
   </div>
-</section>
-
-<!-- ── SERVICES ── -->
-<section class="services" style="display:none">
-  <div class="services-inner">
-    <div class="section-label">What we build</div>
-    <div class="services-grid">
-      <div class="svc-card">
-        <img src="/images/svc-web.png" alt="Web Presence" class="svc-img">
-        <div class="svc-body">
-          <div class="svc-num">01</div>
-          <h3>Web Presence</h3>
-          <p>Most clients have already decided by the time they reach out. Your site is where that decision gets made.</p>
-        </div>
-      </div>
-      <div class="svc-card">
-        <img src="/images/svc-events.png" alt="Events and Ticketing" class="svc-img">
-        <div class="svc-body">
-          <div class="svc-num">02</div>
-          <h3>Events &amp; Ticketing</h3>
-          <p>Every event has one moment where it almost falls apart. Signups, payments, attendee tracking, check-in — all handled.</p>
-        </div>
-      </div>
-      <div class="svc-card">
-        <img src="/images/svc-learning.png" alt="Learning Platforms" class="svc-img">
-        <div class="svc-body">
-          <div class="svc-num">03</div>
-          <h3>Learning Platforms</h3>
-          <p>Your team keeps asking questions you've already answered. Courses, SOPs, onboarding — built once so the knowledge lives in the platform.</p>
-        </div>
-      </div>
-      <div class="svc-card">
-        <img src="/images/svc-crm.png" alt="CRM and Sales Pipeline" class="svc-img">
-        <div class="svc-body">
-          <div class="svc-num">04</div>
-          <h3>CRM &amp; Sales Pipeline</h3>
-          <p>You closed the deal. Someone else kept it. Every contact, conversation, and deal stage in one place.</p>
-        </div>
-      </div>
-      <div class="svc-card">
-        <img src="/images/svc-inventory.png" alt="Inventory System" class="svc-img">
-        <div class="svc-body">
-          <div class="svc-num">05</div>
-          <h3>Inventory System</h3>
-          <p>You find out you've run out after you've already sold it. Stock levels, reorder points, supplier tracking — know before it's a problem.</p>
-        </div>
-      </div>
-      <div class="svc-card">
-        <img src="/images/svc-backoffice.png" alt="Back Office" class="svc-img">
-        <div class="svc-body">
-          <div class="svc-num">06</div>
-          <h3>Back Office</h3>
-          <p>The business runs. It just runs through you more than it should. HR, finance, compliance, admin — one dashboard.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── BENEFITS ── -->
-<section class="benefits" style="display:none">
-  <div class="benefits-inner">
-    <div class="section-label">What changes when the system works</div>
-    <div class="benefits-grid">
-      <div class="benefit-item">
-        <div class="benefit-outcome">less stress</div>
-        <h3>Calm <span>days</span></h3>
-      </div>
-      <div class="benefit-item">
-        <div class="benefit-outcome">mental space</div>
-        <h3>Clear <span>thinking</span></h3>
-      </div>
-      <div class="benefit-item">
-        <div class="benefit-outcome">team decides</div>
-        <h3>No <span>bottleneck</span></h3>
-      </div>
-      <div class="benefit-item">
-        <div class="benefit-outcome">family first</div>
-        <h3>Time at <span>home</span></h3>
-      </div>
-      <div class="benefit-item">
-        <div class="benefit-outcome">systems scale</div>
-        <h3>Scalable <span>growth</span></h3>
-      </div>
-      <div class="benefit-item">
-        <div class="benefit-outcome">owner optional</div>
-        <h3>Freedom from the <span>business</span></h3>
-      </div>
-    </div>
   </div>
 </section>
 
 <!-- ── PROMISES ── -->
 <section class="promises">
   <div class="promises-inner">
-    <h2>Three things that don't change.</h2>
+    <h2>Yes, we use AI.</h2>
     <div class="promises-cards">
       <div class="promise-card">
         <div class="promise-img-wrap">
@@ -1357,8 +1251,25 @@
         </div>
         <div class="promise-card-body">
           <div class="promise-key">Your data</div>
-          <h4>You own it. We keep it organised.</h4>
-          <p>Every record in your system belongs to your business. Download CSV or request a full export at any time and we send it over.</p>
+          <h4>No one else reads it.</h4>
+          <p>Your data lives in a database we set up for your business. You can export the whole thing any time.</p>
+          <div class="promise-badge" data-tip="Philippine Data Privacy Act. Your records are processed within your system only.">RA 10173</div>
+          <div class="promise-badge" data-tip="Your database is backed up every day to a private repository. Full export available on request.">Daily backup</div>
+        </div>
+      </div>
+      <div class="promise-card">
+        <div class="promise-img-wrap">
+          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="45" cy="30" r="12" stroke="currentColor" stroke-width="2"/>
+            <path d="M20 74C20 60 30 50 45 50C60 50 70 60 70 74" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M54 26L59 32L69 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="promise-card-body">
+          <div class="promise-key">Your call</div>
+          <h4>It suggests. You decide.</h4>
+          <p>The system handles the rules. When something needs judgment, it puts a flag in front of your team. They read it and choose.</p>
+          <div class="promise-badge" data-tip="AI by Anthropic. The model reads your data — Anthropic does not.">Anthropic</div>
         </div>
       </div>
       <div class="promise-card">
@@ -1374,24 +1285,11 @@
           </svg>
         </div>
         <div class="promise-card-body">
-          <div class="promise-key">Your code</div>
-          <h4>If we close tomorrow, your system keeps running.</h4>
-          <p>Post205 has been building software since 2015. If we ever close, you get your full data export and the complete codebase. You're not stuck.</p>
-        </div>
-      </div>
-      <div class="promise-card">
-        <div class="promise-img-wrap">
-          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 14H76C77.1 14 78 14.9 78 16V56C78 57.1 77.1 58 76 58H30L12 74V16C12 14.9 12.9 14 14 14Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-            <line x1="24" y1="30" x2="66" y2="30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <line x1="24" y1="40" x2="56" y2="40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <line x1="24" y1="50" x2="44" y2="50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="promise-card-body">
-          <div class="promise-key">Your AI</div>
-          <h4>Ask Claude anything about your business.</h4>
-          <p>Every system we build connects to your AI. Ask it about your stock, your pipeline, your customers — the answer comes from your live data.</p>
+          <div class="promise-key">Your system</div>
+          <h4>Remove the AI. It still works.</h4>
+          <p>The rules, the routing, the records — that's plain code. The AI handles the judgment calls. Take it out and the system keeps running.</p>
+          <p>Every system is reviewed by someone who didn't build it, before it touches your business.</p>
+          <div class="promise-badge" data-tip="Building business systems since 2015 — before AI was part of the toolkit. We added it as a layer. The structure underneath was already working.">Since 2015</div>
         </div>
       </div>
     </div>
@@ -1401,43 +1299,74 @@
 <!-- ── ABOUT ── -->
 <section class="about">
   <div class="about-inner">
-    <div>
-      <h2>Hey —<br>It's Toffer.</h2>
+    <div class="about-main">
+      <div class="section-label">About</div>
+      <h2>Hey, It's Toffer.</h2>
       <p>I spent over a decade in tech, building websites, systems, and automations.</p>
-      <p>Running my own business taught me this: when you're too big to wing it but too small to have layers of management, the right tools should keep the business running without pulling you back into every little thing.</p>
-      <p>Post205 builds systems and dashboards that handle the repeatable work so the business grows without everything depending on you.</p>
+      <p>We built Post205 because we needed it ourselves and nobody built it for us.</p>
+      <p>We treat your business the way we treat ours. Which means we know what's at stake when it breaks.</p>
       <div class="byline">
         <strong>Toffer Lorenzana</strong>
-        <div class="byline-role">Founder — Post205</div>
+        <div class="byline-role">Founder, Post205</div>
         <div class="social-links">
           <a href="https://www.linkedin.com/in/tofferlorenzana/" target="_blank" rel="noopener" class="social-link">LinkedIn</a>
           <a href="http://instagram.com/toffspot" target="_blank" rel="noopener" class="social-link">Instagram</a>
         </div>
       </div>
     </div>
-    <div class="about-aside">
-      <div class="about-photo">
-        <img src="/images/toffer.png" alt="Toffer Lorenzana — POST 205">
-      </div>
-      <div class="about-mission">
-        <div class="aside-label">Why it matters</div>
-        <p>A business that needs its founder to survive isn't a business yet.</p>
-        <p>We're building toward a version of the Philippines where founder-led SMEs outlast their founders' involvement. One business at a time.</p>
-        <p style="margin-top:16px;"><strong>Who we are</strong></p>
-        <p>We're a tech company run by business owners. We built Post205 because we needed it ourselves. We treat every client's business the way we treat our own.</p>
+    <div class="about-side">
+      <div class="about-value">
+        <div class="about-value-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 3 five-pointed stars: top-left, top-right, bottom-center -->
+            <polygon points="6,2.5 6.59,4.19 8.38,4.23 6.95,5.31 7.47,7.02 6,6 4.53,7.02 5.05,5.31 3.62,4.23 5.41,4.19" fill="currentColor"/>
+            <polygon points="26,2.5 26.59,4.19 28.38,4.23 26.95,5.31 27.47,7.02 26,6 24.53,7.02 25.05,5.31 23.62,4.23 25.41,4.19" fill="currentColor"/>
+            <polygon points="16,25.5 16.59,27.19 18.38,27.23 16.95,28.31 17.47,30.02 16,29 14.53,30.02 15.05,28.31 13.62,27.23 15.41,27.19" fill="currentColor"/>
+            <!-- Sun: center circle -->
+            <circle cx="16" cy="16" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+            <!-- 8 primary rays -->
+            <line x1="20.5" y1="16" x2="23.5" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="19.18" y1="19.18" x2="21.3" y2="21.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="16" y1="20.5" x2="16" y2="23.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="12.82" y1="19.18" x2="10.7" y2="21.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="11.5" y1="16" x2="8.5" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="12.82" y1="12.82" x2="10.7" y2="10.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="16" y1="11.5" x2="16" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="19.18" y1="12.82" x2="21.3" y2="10.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- 8 secondary rays -->
+            <line x1="20.16" y1="17.72" x2="22.01" y2="18.49" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
+            <line x1="17.72" y1="20.16" x2="18.49" y2="22.01" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
+            <line x1="14.28" y1="20.16" x2="13.51" y2="22.01" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
+            <line x1="11.84" y1="17.72" x2="9.99" y2="18.49" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
+            <line x1="11.84" y1="14.28" x2="9.99" y2="13.51" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
+            <line x1="14.28" y1="11.84" x2="13.51" y2="9.99" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
+            <line x1="17.72" y1="11.84" x2="18.49" y2="9.99" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
+            <line x1="20.16" y1="14.28" x2="22.01" y2="13.51" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <p>A business that needs its founder to survive isn't a business yet.</p>
+          <p>We're building toward a Philippines where the business keeps going when the founder steps out.</p>
+          <p style="margin-top: 8px;">One business at a time.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ── CTA ── -->
-<section class="cta">
+<section class="cta" id="contact">
   <div class="cta-inner">
     <h2>Tell us<br>what's not<br>working.</h2>
-    <div class="cta-block">
-      <a href="mailto:toffer@post205.com" class="btn-primary">Send a message</a>
-      <div class="cta-email">toffer@post205.com</div>
-    </div>
+    <form class="cta-form" name="contact" netlify data-netlify="true">
+      <input type="hidden" name="form-name" value="contact">
+      <div class="cta-form-row">
+        <input type="text" name="name" placeholder="Your name" required>
+        <input type="email" name="email" placeholder="Your email" required>
+      </div>
+      <textarea name="message" placeholder="What's not working?" rows="4" required></textarea>
+      <button type="submit" class="btn-primary">Send it</button>
+    </form>
   </div>
 </section>
 
@@ -1447,8 +1376,7 @@
     <img src="/images/logo.png" alt="POST 205">
   </a>
   <div class="footer-right">
-    <a href="mailto:toffer@post205.com">toffer@post205.com</a><br>
-    © 2026 · Digitally driven, wonderfully human.
+    © 2026 · Metro Manila, Philippines.
   </div>
 </footer>
 
@@ -1460,6 +1388,21 @@
     tab.classList.add('active');
   }
 
+  const ctaForm = document.querySelector('.cta-form');
+  if (ctaForm) {
+    ctaForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const data = new FormData(ctaForm);
+      fetch('/', { method: 'POST', body: data })
+        .then(() => {
+          ctaForm.innerHTML = '<p class="cta-form-success">Got it. Toffer will be in touch.</p>';
+        })
+        .catch(() => {
+          ctaForm.innerHTML = '<p class="cta-form-success">Something went wrong. Try again in a moment.</p>';
+        });
+    });
+  }
+
   document.getElementById('themeToggle').addEventListener('click', function() {
     const cycle = { dark: 'light', light: 'system', system: 'dark' };
     const current = document.documentElement.getAttribute('data-theme') || 'system';
@@ -1469,6 +1412,40 @@
     const labels = { dark: 'Dark', light: 'Light', system: 'System' };
     this.title = 'Theme: ' + labels[next] + ' — click to change';
   });
+</script>
+
+<script>
+(function() {
+  var container = document.querySelector('.hero-binary');
+  if (!container) return;
+  var COUNT = 150;
+  for (var i = 0; i < COUNT; i++) {
+    var col = document.createElement('div');
+    col.className = 'bin-col';
+    var text = '';
+    for (var r = 0; r < 55; r++) {
+      text += (Math.random() > 0.5 ? '1' : '0') + '\n';
+    }
+    col.textContent = text;
+
+    // t = 0 at left (near/large), t = 1 at right (far/small)
+    var leftPct  = (i / COUNT) * 99 + Math.random() * 0.5;
+    var t        = leftPct / 100;
+
+    // t=0 at left (far/small), t=1 at right (near/large)
+    var fontSize = Math.max(6,  7  + t * 11  + (Math.random() - 0.5) * 1.5).toFixed(1);
+    var dur      = 16 + Math.random() * 6;
+    var opD      = Math.max(0.02, 0.04 + t * 0.12 + (Math.random() - 0.5) * 0.02).toFixed(2);
+    var opL      = Math.max(0.05, 0.12 + t * 0.28 + (Math.random() - 0.5) * 0.03).toFixed(2);
+    var delay    = (-(Math.random() * dur)).toFixed(1);
+    var blur     = t < 0.40 ? ((0.40 - t) / 0.40 * 1.0).toFixed(1) : '0';
+
+    var style = 'left:' + leftPct.toFixed(1) + '%;font-size:' + fontSize + 'px;animation-duration:' + dur.toFixed(1) + 's;animation-delay:' + delay + 's;--op-d:' + opD + ';--op-l:' + opL;
+    if (blur !== '0') style += ';filter:blur(' + blur + 'px)';
+    col.style.cssText = style;
+    container.appendChild(col);
+  }
+})();
 </script>
 
 </body>
