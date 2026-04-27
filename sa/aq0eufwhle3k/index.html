@@ -286,7 +286,9 @@
     .example-block p:last-child { margin-bottom: 0; }
     .example-block strong { color: var(--black); font-weight: 600; }
 
-    /* ── SIGNATURES ── */
+    /* ── SIGNATURES (print only) ── */
+    .signature-block { display: none; }
+
     .signature-block {
       background: white;
       border-radius: 6px;
@@ -367,7 +369,9 @@
       margin-top: 14px;
     }
 
-    /* ── NOTARIZATION BLOCK ── */
+    /* ── NOTARIZATION BLOCK (print only) ── */
+    .notarization { display: none; }
+
     .notarization {
       background: white;
       border-top: 3px double var(--black);
@@ -594,6 +598,7 @@
 
       /* ── SIGNATURE BLOCK ── */
       .signature-block {
+        display: block;
         break-before: page;
         padding: 0;
         margin: 0;
@@ -641,6 +646,7 @@
 
       /* ── NOTARIZATION ── */
       .notarization {
+        display: block;
         break-before: page;
         padding: 0;
         margin: 0;
