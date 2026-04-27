@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoomanity Group — Digital Platform Proposal</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta property="og:title" content="Zoomanity Group — Digital Platform Proposal">
+  <meta property="og:description" content="A complete ticketing platform, admin portal, and unified guest system for all six Zoomanity parks.">
+  <meta property="og:image" content="https://post205.com/p/5f0IvK-D8vR1/assets/og.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://post205.com/p/5f0IvK-D8vR1/assets/og.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black:     #0a0a0a;
+      --teal:      #3BD1D3;
+      --teal-soft: #f0fbfb;
+      --white:     #ffffff;
+      --grey-100:  #f5f5f5;
+      --grey-200:  #e8e8e8;
+      --grey-400:  #999;
+      --grey-600:  #555;
+      --grey-800:  #222;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--white);
+      color: var(--grey-800);
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    /* HEADER */
+    .proposal-header {
+      background: var(--black);
+      padding: 56px 64px 48px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .proposal-header img {
+      width: 120px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .header-text h1 {
+      color: var(--white);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .header-text h1 span { color: var(--teal); }
+
+    .header-meta {
+      margin-top: 16px;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .header-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .header-meta-item .label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--grey-400);
+      font-weight: 600;
+    }
+
+    .header-meta-item .value {
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    /* LAYOUT */
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 52px 0;
+      border-bottom: 1px solid var(--grey-200);
+    }
+
+    .section:last-child { border-bottom: none; }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--grey-400);
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+
+    p {
+      color: var(--grey-600);
+      margin-bottom: 16px;
+    }
+
+    p:last-child { margin-bottom: 0; }
+    p strong { color: var(--grey-800); font-weight: 600; }
+
+    a { color: var(--teal); text-decoration: none; }
+
+    /* STATS */
+    .stats-row {
+      display: flex;
+      border: 1px solid var(--grey-200);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .stat {
+      flex: 1;
+      padding: 20px 24px;
+      border-right: 1px solid var(--grey-200);
+    }
+
+    .stat:last-child { border-right: none; }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--grey-800);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--grey-400);
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+
+    /* SCREENSHOT */
+    .screenshot-wrap {
+      margin: 28px 0;
+      border: 1px solid var(--grey-200);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .screenshot-wrap img {
+      width: 100%;
+      display: block;
+    }
+
+    .screenshot-caption {
+      background: var(--grey-100);
+      padding: 10px 16px;
+      font-size: 12px;
+      color: var(--grey-400);
+      font-family: ui-monospace, 'Courier New', monospace;
+      letter-spacing: 0.02em;
+    }
+
+    /* COMPARE */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--grey-200);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .compare-col { padding: 20px 24px; }
+
+    .compare-col.today { background: var(--grey-100); }
+
+    .compare-col.after {
+      background: var(--teal-soft);
+      border-left: 3px solid var(--teal);
+    }
+
+    .compare-col-label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--grey-400);
+      margin-bottom: 8px;
+    }
+
+    .compare-col.after .compare-col-label { color: var(--teal); }
+
+    .compare-col p {
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+
+    .compare-col.today p { color: var(--grey-600); }
+    .compare-col.after p { color: var(--grey-800); font-weight: 500; }
+
+    /* FEATURE TABLE */
+    .feature-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-top: 24px;
+    }
+
+    .feature-table thead tr { background: var(--black); color: var(--white); }
+
+    .feature-table thead th {
+      padding: 10px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .feature-table tbody tr { border-bottom: 1px solid var(--grey-200); }
+    .feature-table tbody tr:last-child { border-bottom: none; }
+
+    .feature-table tbody td {
+      padding: 11px 16px;
+      color: var(--grey-600);
+    }
+
+    .feature-table tbody td.check {
+      color: var(--teal);
+      font-weight: 700;
+      font-size: 16px;
+      width: 48px;
+      text-align: center;
+    }
+
+    .feature-table tbody td.comp {
+      color: #1a7a3c;
+      font-size: 13px;
+      font-weight: 600;
+      width: 120px;
+    }
+
+    /* STATUS TABLE */
+    .status-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      border: 1px solid var(--grey-200);
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .status-table tr { border-bottom: 1px solid var(--grey-200); }
+    .status-table tr:last-child { border-bottom: none; }
+
+    .status-table td { padding: 13px 16px; }
+
+    .status-table td:first-child { width: 90px; }
+    .status-table td:last-child { color: var(--grey-600); }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .s-valid   { background: #e8f8ef; color: #1a7a3c; }
+    .s-flag    { background: #fff8e1; color: #7a5a00; }
+    .s-invalid { background: #fde8e8; color: #7a1a1a; }
+
+    /* PRICING TABLE */
+    .pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+
+    .pricing-table thead tr { background: var(--black); color: var(--white); }
+
+    .pricing-table thead th {
+      padding: 10px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .pricing-table tbody tr { border-bottom: 1px solid var(--grey-200); }
+    .pricing-table tbody tr:last-child { border-bottom: none; }
+
+    .pricing-table tbody td {
+      padding: 11px 16px;
+      color: var(--grey-600);
+    }
+
+    .pricing-table tbody td:last-child {
+      color: var(--grey-800);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .pricing-table tbody tr.total td {
+      color: var(--grey-800);
+      font-weight: 700;
+      font-size: 15px;
+      background: var(--grey-100);
+    }
+
+    /* TIMELINE */
+    .timeline-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      border: 1px solid var(--grey-200);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .timeline-table tr { border-bottom: 1px solid var(--grey-200); }
+    .timeline-table tr:last-child { border-bottom: none; }
+
+    .timeline-table td { padding: 13px 16px; }
+    .timeline-table td:first-child { color: var(--grey-800); font-weight: 500; }
+    .timeline-table td:last-child { color: var(--grey-400); font-size: 13px; text-align: right; }
+
+    /* STEPS */
+    .step {
+      display: flex;
+      gap: 20px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--grey-200);
+    }
+
+    .step:last-child { border-bottom: none; }
+
+    .step-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: 0.05em;
+      min-width: 24px;
+      padding-top: 2px;
+    }
+
+    .step-text { font-size: 14px; color: var(--grey-600); line-height: 1.5; }
+
+    /* CALLOUT */
+    .callout {
+      border-left: 3px solid var(--teal);
+      background: var(--teal-soft);
+      padding: 16px 20px;
+      margin: 24px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .callout p { color: var(--grey-800); font-size: 14px; margin: 0; }
+
+    /* KICKOFF TABLE */
+    .kickoff-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+
+    .kickoff-table tr { border-bottom: 1px solid var(--grey-200); }
+    .kickoff-table tr:last-child { border-bottom: none; }
+
+    .kickoff-table td { padding: 14px 16px; vertical-align: top; }
+    .kickoff-table td:first-child { color: var(--grey-800); font-weight: 500; width: 38%; }
+    .kickoff-table td:last-child { color: var(--grey-600); }
+
+    /* OPTIONAL BADGE */
+    .opt {
+      display: inline-block;
+      background: var(--grey-200);
+      color: var(--grey-600);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* FOOTNOTE */
+    .footnote {
+      font-size: 12px;
+      color: var(--grey-400);
+      margin-top: 14px;
+      line-height: 1.55;
+    }
+
+    /* CLOSING */
+    .closing {
+      margin-top: 36px;
+      padding-top: 32px;
+      border-top: 1px solid var(--grey-200);
+    }
+
+    .closing p { color: var(--grey-600); margin-bottom: 24px; }
+
+    .closing-sig strong { display: block; color: var(--grey-800); font-size: 15px; }
+    .closing-sig span { color: var(--grey-400); font-size: 14px; }
+
+    /* APPENDIX */
+    .appendix {
+      background: var(--grey-100);
+      border-top: 2px solid var(--grey-200);
+    }
+
+    /* SECTION DIVIDER */
+    .section-divider {
+      padding: 24px 0 0;
+      margin-top: 32px;
+      border-top: 1px solid var(--grey-200);
+    }
+
+    /* PRINT */
+    @media print {
+      .proposal-header {
+        background: white !important;
+        border-bottom: 2px solid #e8e8e8;
+        -webkit-print-color-adjust: exact;
+      }
+      .header-text h1 { color: #222 !important; }
+      .header-text h1 span { color: #3BD1D3 !important; }
+      .header-meta-item .value { color: #555 !important; }
+    }
+
+    @media (max-width: 640px) {
+      .proposal-header { padding: 36px 24px 32px; flex-direction: column; }
+      .proposal-header img { width: 90px; }
+      .container { padding: 0 20px; }
+      .stats-row { flex-wrap: wrap; }
+      .stat { min-width: 50%; }
+      .compare { grid-template-columns: 1fr; }
+      .compare-col.after { border-left: none; border-top: 3px solid var(--teal); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="proposal-header">
+  <div class="header-text">
+    <h1>Zoomanity Group<br><span>Digital Platform Proposal</span></h1>
+    <div class="header-meta">
+      <div class="header-meta-item">
+        <span class="label">Prepared for</span>
+        <span class="value">Karren Cernal, Kaye Valenzuela, Nedge Abrasia</span>
+      </div>
+      <div class="header-meta-item">
+        <span class="label">Date</span>
+        <span class="value">April 2026</span>
+      </div>
+    </div>
+  </div>
+  <img src="assets/logo-white.png" alt="POST205">
+</div>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <section class="section">
+    <div class="section-label">From Toffer</div>
+    <p>After we spoke, we looked carefully into Zoomanity's parks, platforms, and where it stands online. Here is what we found and what we are proposing.</p>
+  </section>
+
+  <!-- WHERE THINGS STAND -->
+  <section class="section">
+    <div class="section-label">Current State</div>
+    <h2>Where Things Stand</h2>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-value">6</div>
+        <div class="stat-label">Parks across PH</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">2</div>
+        <div class="stat-label">Hotels</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">~2M</div>
+        <div class="stat-label">Visitors per year</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">23K+</div>
+        <div class="stat-label">Zoobic check-ins on Facebook</div>
+      </div>
+    </div>
+
+    <p>Your parks are on Klook, KKday, and TripAdvisor. The demand is there.</p>
+
+    <p>We reviewed the current platform in detail. The customer-facing ticketing system is functional: five venues, multiple ticket types per venue, height-based pricing, date selection, live inventory, a five-step checkout, and payments across GCash, GrabPay, PayPal, credit card, and bank deposit.</p>
+
+    <div class="screenshot-wrap">
+      <img src="assets/screenshot-current.jpg" alt="zoomanitypayment.com — the current platform">
+      <div class="screenshot-caption">zoomanitypayment.com — the current platform, built in 2020</div>
+    </div>
+
+    <p>The opportunity is on the operations side. Gate validation, staff check-in, a unified admin view, direct guest communication, cross-park guest history — none of these exist yet.</p>
+
+    <p>The marketing website is offline. The ticketing platform copyright dates to 2020. There is no content under your own domain feeding search or AI recommendations.</p>
+
+    <p><strong>The customer-facing side works. The operator side does not exist yet.</strong></p>
+  </section>
+
+  <!-- WHAT WE'RE BUILDING INTRO -->
+  <section class="section">
+    <div class="section-label">The Build</div>
+    <h2>What We Are Building</h2>
+    <p>Six components, delivered together as a single platform. Phase 1 ships complete. Your team runs it. Then we build on top.</p>
+  </section>
+
+  <!-- 01. MARKETING SITE -->
+  <section class="section">
+    <div class="section-label">Component 01</div>
+    <h3>A marketing page, live within the first week.</h3>
+
+    <div class="compare">
+      <div class="compare-col today">
+        <div class="compare-col-label">Today</div>
+        <p>Marketing site offline. No front door for guests, partners, or operators.</p>
+      </div>
+      <div class="compare-col after">
+        <div class="compare-col-label">With POST205</div>
+        <p>zoomanity.com.ph live within days. A proper home for the Zoomanity brand.</p>
+      </div>
+    </div>
+
+    <p>Before anything else is built, we get a page live on your domain. Your team can share it, partners can link to it, and guests arriving from search have somewhere to land.</p>
+
+    <table class="feature-table">
+      <thead><tr><th style="width:100%">Included</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Professional landing page covering all parks</td><td class="comp">Complimentary</td></tr>
+        <tr><td>Live within 3–5 days of kickoff</td><td class="comp">Complimentary</td></tr>
+        <tr><td>Foundation the full platform builds on</td><td class="comp">Complimentary</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 02. TICKETING PLATFORM -->
+  <section class="section">
+    <div class="section-label">Component 02</div>
+    <h3>A ticketing platform across all parks.</h3>
+
+    <div class="compare">
+      <div class="compare-col today">
+        <div class="compare-col-label">Today</div>
+        <p>2020 platform. Bank deposits collected via Facebook.</p>
+      </div>
+      <div class="compare-col after">
+        <div class="compare-col-label">With POST205</div>
+        <p>Rebuilt platform, all payment methods, proper deposit upload flow.</p>
+      </div>
+    </div>
+
+    <p>Individual pages for Zoobic Safari, ZOORI in Tagaytay, Paradizoo in Cavite, Zoocobia in Clark, Zoocolate Thrills in Bohol, and Animal Wonderland. Multiple ticket types per venue, height-based pricing tiers, date selection with live availability. The moment a booking is confirmed, the signed QR* voucher goes out by email and SMS.</p>
+
+    <table class="feature-table">
+      <thead><tr><th style="width:100%">Included</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>All 6 parks with individual pages and ticket configurations</td><td class="check">✓</td></tr>
+        <tr><td>Multiple ticket types: regular, group packages, glamping, overnight, seasonal promos</td><td class="check">✓</td></tr>
+        <tr><td>Height-based pricing tiers (under 3ft / 3–4ft / 4ft+)</td><td class="check">✓</td></tr>
+        <tr><td>Date of visit with live inventory</td><td class="check">✓</td></tr>
+        <tr><td>GCash, GrabPay, PayPal, credit card, online banking</td><td class="check">✓</td></tr>
+        <tr><td>Bank deposit upload flow, automatic voucher release on approval</td><td class="check">✓</td></tr>
+        <tr><td>Online booking management for guests</td><td class="check">✓</td></tr>
+        <tr><td>Signed QR* voucher delivered by email and SMS on confirmation</td><td class="check">✓</td></tr>
+      </tbody>
+    </table>
+
+    <p class="footnote">* A signed QR code is cryptographically locked to the original booking on our server. If anyone copies, duplicates, or alters the voucher, the gate app catches it immediately and flags it as invalid.</p>
+  </section>
+
+  <!-- 03. GATE CHECK-IN -->
+  <section class="section">
+    <div class="section-label">Component 03</div>
+    <h3>Gate check-in and QR validation.</h3>
+
+    <div class="compare">
+      <div class="compare-col today">
+        <div class="compare-col-label">Today</div>
+        <p>Email vouchers with no gate validation layer.</p>
+      </div>
+      <div class="compare-col after">
+        <div class="compare-col-label">With POST205</div>
+        <p>Signed QR* scanned and validated in under a second on any phone.</p>
+      </div>
+    </div>
+
+    <p>Every ticket carries a signed QR* code with the full booking: park, date, ticket types, height tiers, add-ons, and status. Gate staff scan it on any phone or tablet, browser-based — no app to install. The booking appears instantly with a clear status.</p>
+
+    <table class="status-table">
+      <tbody>
+        <tr>
+          <td><span class="status-badge s-valid">Valid</span></td>
+          <td>Visit date matches today. Not yet used.</td>
+        </tr>
+        <tr>
+          <td><span class="status-badge s-flag">Flag</span></td>
+          <td>Height tier or ticket detail needs staff review. Exception logged automatically.</td>
+        </tr>
+        <tr>
+          <td><span class="status-badge s-invalid">Invalid</span></td>
+          <td>Already scanned, wrong date, or tampered.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="feature-table" style="margin-top: 20px;">
+      <thead><tr><th style="width:100%">Included</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Signed QR* on every voucher, cannot be duplicated or faked</td><td class="check">✓</td></tr>
+        <tr><td>Gate check-in app, works on any phone, browser-based, no install required</td><td class="check">✓</td></tr>
+        <tr><td>Height-tier mismatch flagging and exception logging</td><td class="check">✓</td></tr>
+        <tr><td>Gate and ticket dispute reporting in admin portal</td><td class="check">✓</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 04. ADMIN PORTAL -->
+  <section class="section">
+    <div class="section-label">Component 04</div>
+    <h3>An admin portal for your team.</h3>
+
+    <div class="compare">
+      <div class="compare-col today">
+        <div class="compare-col-label">Before</div>
+        <p>Six parks, multiple moving parts, no unified view.</p>
+      </div>
+      <div class="compare-col after">
+        <div class="compare-col-label">With POST205</div>
+        <p>One portal: every park, every ticket, every guest from a single login.</p>
+      </div>
+    </div>
+
+    <p>Sales, attendance, tickets, guests, and bank deposits — one login, one screen, across every Zoomanity property. Role-based access means staff see what they need and management sees everything.</p>
+
+    <table class="feature-table">
+      <thead><tr><th style="width:100%">Included</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Sales and attendance dashboard across all venues</td><td class="check">✓</td></tr>
+        <tr><td>Ticket management: issue, validate, modify from any park</td><td class="check">✓</td></tr>
+        <tr><td>Guest profiles with full cross-park purchase history</td><td class="check">✓</td></tr>
+        <tr><td>Bank deposit management: upload, approve, auto-release voucher</td><td class="check">✓</td></tr>
+        <tr><td>Booking management: view, modify, and action requests from guests</td><td class="check">✓</td></tr>
+        <tr><td>Role-based access: staff, manager, super admin</td><td class="check">✓</td></tr>
+        <tr><td>CSV and Excel export on demand</td><td class="check">✓</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 05. GUEST DATABASE -->
+  <section class="section">
+    <div class="section-label">Component 05</div>
+    <h3>One guest database across every park.</h3>
+
+    <div class="compare">
+      <div class="compare-col today">
+        <div class="compare-col-label">Today</div>
+        <p>Same guest, multiple parks: separate records every time.</p>
+      </div>
+      <div class="compare-col after">
+        <div class="compare-col-label">With POST205</div>
+        <p>One profile, full history, across every Zoomanity property.</p>
+      </div>
+    </div>
+
+    <p>A guest who visits Zoobic Safari in March and Zoocobia in July is one person in your system. One profile, full history, across every property. Built this way from day one because it cannot be retrofitted later.</p>
+
+    <table class="feature-table">
+      <thead><tr><th style="width:100%">Included</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Unified guest profile across all parks</td><td class="check">✓</td></tr>
+        <tr><td>Full purchase and visit history per guest</td><td class="check">✓</td></tr>
+        <tr><td>Phone number as identifier, no account required at checkout</td><td class="check">✓</td></tr>
+        <tr><td>Foundation for loyalty programs, annual passes, memberships (Phase 2)</td><td class="check">✓</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 06. SMS -->
+  <section class="section">
+    <div class="section-label">Component 06</div>
+    <h3>Reaching your guests directly.</h3>
+
+    <div class="compare">
+      <div class="compare-col today">
+        <div class="compare-col-label">Today</div>
+        <p>Zero SMS. No direct line to guests after purchase.</p>
+      </div>
+      <div class="compare-col after">
+        <div class="compare-col-label">With POST205</div>
+        <p>Automated confirmations and reminders, plus campaign blasts by park.</p>
+      </div>
+    </div>
+
+    <p>Every guest who buys a ticket leaves a phone number. That number is added to the contact list for that park automatically. Confirmations and day-before reminders go out without any staff involvement. When the team wants to run a campaign, the composer is in the admin portal: pick the group, write the message, send.</p>
+
+    <p>Every campaign runs through a clean list before anything is delivered. Opt-outs honored, frequency caps enforced, duplicate numbers removed, recently messaged contacts held back. The sender identity stays trusted across all networks.</p>
+
+    <table class="feature-table">
+      <thead><tr><th style="width:100%">Included</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Automated booking confirmations and day-before reminders</td><td class="check">✓</td></tr>
+        <tr><td>Contact groups per park, auto-populated at checkout</td><td class="check">✓</td></tr>
+        <tr><td>Campaign composer in admin portal with AI writing assistant</td><td class="check">✓</td></tr>
+        <tr><td>Clean list processing on every campaign</td><td class="check">✓</td></tr>
+        <tr><td>Campaign history and delivery reports</td><td class="check">✓</td></tr>
+      </tbody>
+    </table>
+
+    <p class="footnote">Marketing SMS campaigns are quoted per campaign. See Appendix A for rates.</p>
+  </section>
+
+  <!-- SEARCH (OPTIONAL) -->
+  <section class="section">
+    <div class="section-label">Optional</div>
+    <h3>Search<span class="opt">Optional</span></h3>
+
+    <div class="compare">
+      <div class="compare-col today">
+        <div class="compare-col-label">Today</div>
+        <p>No content under your domain. Third-party sites rank above you for your own parks.</p>
+      </div>
+      <div class="compare-col after">
+        <div class="compare-col-label">With POST205</div>
+        <p>Park guides and articles that feed Google search and AI recommendations.</p>
+      </div>
+    </div>
+
+    <p>Zoobic Safari is the only tiger safari in the Philippines. When someone asks an AI assistant where to take their family this weekend, that fact should surface immediately under zoomanity.com.ph. Right now travel blogs and booking platforms rank above your own domain because there is nothing there to rank.</p>
+
+    <table class="pricing-table">
+      <thead><tr><th>Optional add-on</th><th>Rate</th></tr></thead>
+      <tbody>
+        <tr><td>Monthly content program, 4–6 articles across parks</td><td>&#8369;12,000 / month</td></tr>
+        <tr><td>Content strategy and SEO setup</td><td>&#8369;25,000 one-time</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- POST205 INTELLIGENCE -->
+  <section class="section">
+    <div class="section-label">Included in monthly retainer</div>
+    <h2>POST205 Intelligence</h2>
+
+    <p>Every morning, your team opens the admin portal to a summary of the previous day across all parks: check-ins, ticket sales, anything that looked unusual. It is already there.</p>
+
+    <p>Throughout the day the platform watches quietly. A park down 40% on a Saturday compared to last month. A ticket type that stopped selling after a price change. These get surfaced before they become a problem.</p>
+
+    <p>Guest profiles are scored in the background by visit frequency, spend, parks visited, and recency. When the team runs a campaign, the scoring is already there. After each campaign, a short recap shows delivery, reach, and suggested timing for the next one.</p>
+
+    <p>The SMS composer includes a writing assistant. Describe the offer, the park, and the tone. A draft message comes back ready to review and send.</p>
+
+    <div class="callout">
+      <p>Included in the monthly retainer. No separate activation required.</p>
+    </div>
+  </section>
+
+  <!-- YOUR DATA -->
+  <section class="section">
+    <div class="section-label">Ownership</div>
+    <h2>Your Data</h2>
+
+    <p>The codebase and every record in your system belong to Zoomanity. We keep it running and organised. You can request a full export or transfer at any time.</p>
+
+    <div class="callout">
+      <p><strong>If POST205 closes tomorrow, your system keeps going.</strong> Full data export and complete codebase, no conditions.</p>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="section">
+    <div class="section-label">Schedule</div>
+    <h2>Timeline</h2>
+
+    <p style="margin-bottom: 20px;">Design approval at Week 2 keeps the schedule. That is the one dependency.</p>
+
+    <table class="timeline-table">
+      <tbody>
+        <tr><td>Marketing page live</td><td>3–5 days from kickoff</td></tr>
+        <tr><td>Design presented for approval</td><td>End of Week 2</td></tr>
+        <tr><td>Platform on staging</td><td>End of Week 5</td></tr>
+        <tr><td>Admin portal complete</td><td>End of Week 7</td></tr>
+        <tr><td>Your team tests</td><td>Weeks 8–9</td></tr>
+        <tr><td>Launch</td><td>Week 10</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- INVESTMENT -->
+  <section class="section">
+    <div class="section-label">Investment</div>
+    <h2>Investment</h2>
+
+    <h3 style="margin-top: 4px; margin-bottom: 8px;">Build fee</h3>
+
+    <table class="feature-table">
+      <thead><tr><th style="width:100%">Included</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Marketing landing page, live within the first week</td><td class="comp">Complimentary</td></tr>
+        <tr><td>UI/UX design across all parks and pages</td><td class="check">✓</td></tr>
+        <tr><td>Customer-facing ticketing platform</td><td class="check">✓</td></tr>
+        <tr><td>Admin portal</td><td class="check">✓</td></tr>
+        <tr><td>Unified guest database</td><td class="check">✓</td></tr>
+        <tr><td>iPay88 integration</td><td class="check">✓</td></tr>
+        <tr><td>SMS notifications: booking confirmation and day-before reminders</td><td class="check">✓</td></tr>
+        <tr><td>Automated email: confirmations, QR codes, receipts</td><td class="check">✓</td></tr>
+        <tr><td>CSV and Excel export</td><td class="check">✓</td></tr>
+        <tr><td>Hosting setup and deployment</td><td class="check">✓</td></tr>
+        <tr style="background:var(--grey-100);font-weight:700;"><td><strong>Total</strong></td><td style="color:var(--grey-800);font-size:15px;font-weight:700;text-align:center;">&#8369;380,000</td></tr>
+      </tbody>
+    </table>
+
+    <p class="footnote">50% deposit (&#8369;190,000) to start. Remaining 50% on delivery to staging.</p>
+
+    <div class="section-divider">
+      <h3 style="margin-bottom: 8px;">Monthly retainer</h3>
+    </div>
+
+    <table class="pricing-table">
+      <thead><tr><th>Component</th><th>Monthly</th></tr></thead>
+      <tbody>
+        <tr><td>Platform base: hosting, security, monitoring, maintenance</td><td>&#8369;8,000</td></tr>
+        <tr><td>Per active park</td><td>&#8369;2,500</td></tr>
+        <tr><td>4 parks at launch</td><td>&#8369;18,000 / month</td></tr>
+        <tr><td>6 parks active</td><td>&#8369;23,000 / month</td></tr>
+      </tbody>
+    </table>
+
+    <p class="footnote">Fee grows when the platform grows. Adding a park or hotel is a line item, not a renegotiation.</p>
+
+    <div class="section-divider">
+      <h3 style="margin-bottom: 8px;">Optional services</h3>
+    </div>
+
+    <table class="pricing-table">
+      <thead><tr><th>Addition</th><th>Investment</th></tr></thead>
+      <tbody>
+        <tr><td>Phase 2: Hotel reservation system (Residence Inn, Azotea Suites)</td><td>Quoted separately</td></tr>
+        <tr><td>Monthly content program, 4–6 articles across parks</td><td>&#8369;12,000 / month</td></tr>
+        <tr><td>Content strategy setup</td><td>&#8369;25,000 one-time</td></tr>
+        <tr><td>Business email (Google Workspace)</td><td>&#8369;600 / user / month</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- NEXT STEPS -->
+  <section class="section">
+    <div class="section-label">How We Start</div>
+    <h2>Next Steps</h2>
+
+    <div>
+      <div class="step"><div class="step-num">01</div><div class="step-text">Questions or changes: reach Toffer directly at <a href="mailto:toffer@post205.com">toffer@post205.com</a></div></div>
+      <div class="step"><div class="step-num">02</div><div class="step-text">Agreement signed, 50% deposit submitted</div></div>
+      <div class="step"><div class="step-num">03</div><div class="step-text">Kickoff call: park list, admin users, design direction</div></div>
+      <div class="step"><div class="step-num">04</div><div class="step-text">Marketing page goes live</div></div>
+      <div class="step"><div class="step-num">05</div><div class="step-text">Build begins</div></div>
+    </div>
+
+    <div class="closing">
+      <p>POST205 is a small team. We take on work we can stand behind. Zoomanity has six parks, real visitors, and a clear direction. We would like to build the platform behind it.</p>
+      <div class="closing-sig">
+        <strong>Toffer Lorenzana</strong>
+        <span>Founder &amp; Managing Partner, POST205, Inc.</span><br>
+        <a href="mailto:toffer@post205.com" style="font-size: 14px;">toffer@post205.com</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEFORE WE GET STARTED -->
+  <section class="section">
+    <div class="section-label">Before kickoff</div>
+    <h2>Before We Get Started</h2>
+
+    <p>Once the agreement is signed, a few things will need to be in place on your side before the full build moves at speed. The landing page goes live in the first week regardless.</p>
+
+    <table class="kickoff-table">
+      <tbody>
+        <tr>
+          <td>dotPH registrar access for zoomanity.com.ph</td>
+          <td>Registered under Roberto Yupangco. Needed to update nameservers and point the domain to the new platform.</td>
+        </tr>
+        <tr>
+          <td>GoDaddy access for zoomanitypayment.com</td>
+          <td>Privacy-protected registration. Someone on your team needs to identify who holds this login, required when the time comes to redirect the old site.</td>
+        </tr>
+        <tr>
+          <td>Decision on subdomain name</td>
+          <td>The new platform will live on a subdomain of zoomanity.com.ph. Options: book, tickets, visit, go, or your preference.</td>
+        </tr>
+        <tr>
+          <td>Parks active at launch</td>
+          <td>Determines the opening monthly retainer and which park pages are built in Phase 1.</td>
+        </tr>
+        <tr>
+          <td>Admin users and roles</td>
+          <td>Names, email addresses, and access levels for everyone who will log into the admin portal.</td>
+        </tr>
+        <tr>
+          <td>iPay88 merchant credentials</td>
+          <td>Merchant code and API keys for the existing payment integration. Your team or the iPay88 account holder will have these.</td>
+        </tr>
+        <tr>
+          <td>Brand assets</td>
+          <td>Logo files, color codes, and any font or design references. Used in the design phase before any code is written.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="footnote" style="margin-top: 16px;">If any of these are difficult to locate, flag them early. We have worked through situations like this before and can advise on the fastest path to resolution.</p>
+  </section>
+
+</div><!-- /container -->
+
+<!-- APPENDIX -->
+<div class="appendix">
+  <div class="container">
+    <section class="section" style="padding-top: 52px;">
+      <div class="section-label">Appendix A</div>
+      <h2>Service Rates</h2>
+
+      <p>The monthly retainer and build fee are in the proposal. This appendix shows the detail behind those figures and the optional services available when you are ready for them.</p>
+
+      <h3 style="margin-top: 32px; margin-bottom: 8px;">SMS Campaign Fees</h3>
+
+      <table class="pricing-table">
+        <thead><tr><th>Campaign size</th><th>Blast fee</th><th>Health fee</th><th>Total</th></tr></thead>
+        <tbody>
+          <tr><td>Up to 1,000 recipients</td><td>&#8369;2,500</td><td>&#8369;500</td><td>&#8369;3,000</td></tr>
+          <tr><td>1,001–5,000 recipients</td><td>&#8369;6,000</td><td>&#8369;1,000</td><td>&#8369;7,000</td></tr>
+          <tr><td>5,001–10,000 recipients</td><td>&#8369;10,000</td><td>&#8369;1,500</td><td>&#8369;11,500</td></tr>
+          <tr><td>10,001–25,000 recipients</td><td>&#8369;22,000</td><td>&#8369;2,000</td><td>&#8369;24,000</td></tr>
+          <tr><td>Above 25,000</td><td>Custom</td><td>Custom</td><td>Custom quote</td></tr>
+        </tbody>
+      </table>
+
+      <p class="footnote" style="margin-top: 12px;">Blast fee covers campaign execution, scheduling, delivery monitoring, and reporting. Campaign health fee covers clean list processing: opt-out enforcement, frequency cap filtering, duplicate removal, number validation, and suppression of recently messaged contacts. Applied to every campaign regardless of size.</p>
+
+      <div class="callout">
+        <p>Booking confirmations and day-before reminders are included in the monthly retainer. They run automatically and are separate from any campaign activity.</p>
+      </div>
+
+      <h3 style="margin-top: 32px; margin-bottom: 8px;">SMS Groups</h3>
+
+      <table class="pricing-table">
+        <thead><tr><th>Group</th><th style="text-align:left;font-weight:600;">Populated from</th></tr></thead>
+        <tbody>
+          <tr><td>Zoobic Safari</td><td>Ticket purchases at Zoobic Safari</td></tr>
+          <tr><td>ZOORI Tagaytay</td><td>Ticket purchases at Residence Inn</td></tr>
+          <tr><td>Paradizoo</td><td>Ticket purchases at Paradizoo</td></tr>
+          <tr><td>Zoocobia Clark</td><td>Ticket purchases at Zoocobia</td></tr>
+          <tr><td>Zoocolate Thrills Bohol</td><td>Ticket purchases at Zoocolate Thrills</td></tr>
+          <tr><td>Animal Wonderland</td><td>Ticket purchases at Animal Wonderland</td></tr>
+          <tr><td>All Parks</td><td>Every customer across all properties</td></tr>
+        </tbody>
+      </table>
+
+      <p class="footnote" style="margin-top: 12px;">Groups are populated automatically at checkout. No manual list management. Blasts can target any single group or any combination. Sender ID registered as ZOOMANITY — telco approval takes 2–3 business days.</p>
+
+      <p class="footnote" style="margin-top: 24px;">All rates in Philippine Peso. Valid for 90 days from date of this proposal. POST205 will give 30 days written notice of any rate changes.</p>
+    </section>
+  </div>
+</div>
+
+</body>
+</html>
