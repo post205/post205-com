@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frameworks — POST 205</title>
+  <meta name="description" content="Practical frameworks for Philippine founders. Real tools, real decisions, real language.">
+  <meta property="og:title" content="Frameworks — POST 205">
+  <meta property="og:description" content="Practical frameworks for Philippine founders. Real tools, real decisions, real language.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://post205.com/frameworks/">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="canonical" href="https://post205.com/frameworks/">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #18181A; --surface: #1a2424; --surface-2: #252f2f; --surface-deep: #0D2828;
+      --border: #1f3535; --border-2: #2a4040; --text: #f0f0f2; --text-2: #7aacac;
+      --text-3: #3d6868; --accent: #3BD1D3; --on-accent: #021616;
+      --nav-bg: rgba(24,24,26,0.96); --logo-filter: none; --logo-blend: screen;
+    }
+    [data-theme="light"] {
+      --black: #f2f8f8; --surface: #f4fefe; --surface-2: #e0fffe; --surface-deep: #024A4B;
+      --border: #c8eeed; --border-2: #b0e0df; --text: #0a1a1a; --text-2: #4a6262;
+      --text-3: #8aaaaa; --accent: #2db8ba; --on-accent: #021616;
+      --nav-bg: rgba(242,248,248,0.96); --logo-filter: none; --logo-blend: darken;
+    }
+    @media (prefers-color-scheme: light) {
+      [data-theme="system"] {
+        --black: #f2f8f8; --surface: #f4fefe; --surface-2: #e0fffe; --surface-deep: #024A4B;
+        --border: #c8eeed; --border-2: #b0e0df; --text: #0a1a1a; --text-2: #4a6262;
+        --text-3: #8aaaaa; --accent: #2db8ba; --on-accent: #021616;
+        --nav-bg: rgba(242,248,248,0.96); --logo-filter: none; --logo-blend: darken;
+      }
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--text); font-family: system-ui, -apple-system, sans-serif; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 16px 48px; background: var(--nav-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 26px; width: auto; mix-blend-mode: var(--logo-blend); filter: var(--logo-filter); opacity: 0.9; }
+    .nav-right { display: flex; align-items: center; gap: 24px; }
+    .nav-link { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); text-decoration: none; transition: color 0.15s; }
+    .nav-link:hover { color: var(--text); }
+    .nav-link.active { color: var(--accent); }
+    .nav-cta { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--on-accent); background: var(--accent); text-decoration: none; padding: 8px 14px; border-radius: 4px; font-weight: 500; transition: opacity 0.15s; }
+    .nav-cta:hover { opacity: 0.85; }
+    .theme-toggle { background: none; border: 1px solid var(--border-2); color: var(--text-3); cursor: pointer; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s, color 0.15s; flex-shrink: 0; }
+    .theme-toggle:hover { border-color: var(--text-3); color: var(--text-2); }
+    .theme-toggle svg { width: 14px; height: 14px; }
+    .theme-toggle .icon-dark { display: none; }
+    .theme-toggle .icon-light { display: none; }
+    .theme-toggle .icon-system { display: block; }
+    [data-theme="dark"]  .theme-toggle .icon-dark   { display: block; }
+    [data-theme="dark"]  .theme-toggle .icon-light  { display: none;  }
+    [data-theme="dark"]  .theme-toggle .icon-system { display: none;  }
+    [data-theme="light"] .theme-toggle .icon-dark   { display: none;  }
+    [data-theme="light"] .theme-toggle .icon-light  { display: block; }
+    [data-theme="light"] .theme-toggle .icon-system { display: none;  }
+
+    /* PAGE HEADER */
+    .page-header { padding: 72px 48px 56px; max-width: 1100px; margin: 0 auto; border-bottom: 1px solid var(--border); }
+    .page-eyebrow { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+    .page-title { font-size: clamp(36px, 5vw, 56px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; color: var(--text); margin-bottom: 16px; }
+    .page-sub { font-size: 18px; color: var(--text-2); max-width: 520px; line-height: 1.6; }
+
+    /* GRID */
+    .frameworks-grid { max-width: 1100px; margin: 0 auto; padding: 56px 48px 96px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+    /* CARD */
+    .fw-card { display: block; text-decoration: none; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
+    .fw-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .fw-card-img { aspect-ratio: 16/9; overflow: hidden; background: var(--surface-2); }
+    .fw-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+    .fw-card:hover .fw-card-img img { transform: scale(1.03); }
+    .fw-card-body { padding: 24px; }
+    .fw-card-date { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 10px; text-transform: uppercase; }
+    .fw-card-title { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); line-height: 1.2; margin-bottom: 8px; }
+    .fw-card-sub { font-size: 14px; color: var(--text-2); }
+    .fw-card-arrow { display: inline-block; margin-top: 16px; font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.06em; color: var(--accent); }
+
+    /* FOOTER */
+    footer { display: flex; align-items: center; justify-content: space-between; padding: 32px 48px; border-top: 1px solid var(--border); }
+    .footer-logo img { height: 22px; width: auto; mix-blend-mode: var(--logo-blend); filter: var(--logo-filter); opacity: 0.6; }
+    .footer-right { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.06em; color: var(--text-3); text-align: right; line-height: 1.8; }
+
+    @media (max-width: 900px) {
+      .frameworks-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      .nav-link { display: none; }
+      .page-header { padding: 48px 20px 40px; }
+      .frameworks-grid { grid-template-columns: 1fr; padding: 40px 20px 64px; }
+      footer { padding: 24px 20px; flex-direction: column; gap: 12px; align-items: flex-start; }
+      .footer-right { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png" alt="POST 205">
+  </a>
+  <div class="nav-right">
+    <a href="/frameworks/" class="nav-link active">Frameworks</a>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+      <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <svg class="icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+    </button>
+    <a href="/#contact" class="nav-cta">Let's talk</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="page-eyebrow">POST 205 · Frameworks</div>
+  <h1 class="page-title">Real tools.<br>Real decisions.</h1>
+  <p class="page-sub">Practical frameworks for founders who are already doing the work. Written in plain language, built for the Philippines.</p>
+</header>
+
+<div class="frameworks-grid">
+
+  <a href="/frameworks/rice/" class="fw-card">
+    <div class="fw-card-img">
+      <img src="https://irp.cdn-website.com/48c3ed79/dms3rep/multi/rice.png" alt="RICE framework">
+    </div>
+    <div class="fw-card-body">
+      <div class="fw-card-date">March 4, 2026</div>
+      <div class="fw-card-title">Busy ka... pero ba't 'di ka rich?</div>
+      <div class="fw-card-sub">(asking for a friend)</div>
+      <div class="fw-card-arrow">Read →</div>
+    </div>
+  </a>
+
+  <a href="/frameworks/site/" class="fw-card">
+    <div class="fw-card-img">
+      <img src="https://irp.cdn-website.com/48c3ed79/dms3rep/multi/1k-website.png" alt="1,000 Peso Website">
+    </div>
+    <div class="fw-card-body">
+      <div class="fw-card-date">March 5, 2026</div>
+      <div class="fw-card-title">1,000 Peso Website</div>
+      <div class="fw-card-sub">(for real, for real)</div>
+      <div class="fw-card-arrow">Read →</div>
+    </div>
+  </a>
+
+  <a href="/frameworks/kkk/" class="fw-card">
+    <div class="fw-card-img">
+      <img src="https://irp.cdn-website.com/48c3ed79/dms3rep/multi/kkk.png" alt="Do not start a business">
+    </div>
+    <div class="fw-card-body">
+      <div class="fw-card-date">March 6, 2026</div>
+      <div class="fw-card-title">Do not start a business.</div>
+      <div class="fw-card-sub">(wala kang K)</div>
+      <div class="fw-card-arrow">Read →</div>
+    </div>
+  </a>
+
+  <a href="/frameworks/claude/" class="fw-card">
+    <div class="fw-card-img">
+      <img src="https://irp.cdn-website.com/48c3ed79/dms3rep/multi/break-up-wtih-chatgpt.png" alt="Breaking up with ChatGPT">
+    </div>
+    <div class="fw-card-body">
+      <div class="fw-card-date">March 8, 2026</div>
+      <div class="fw-card-title">Breaking up with ChatGPT?</div>
+      <div class="fw-card-sub">(do it right)</div>
+      <div class="fw-card-arrow">Read →</div>
+    </div>
+  </a>
+
+  <a href="/frameworks/4rs/" class="fw-card">
+    <div class="fw-card-img">
+      <img src="https://irp.cdn-website.com/48c3ed79/dms3rep/multi/layo.png" alt="4 Rs">
+    </div>
+    <div class="fw-card-body">
+      <div class="fw-card-date">March 9, 2026</div>
+      <div class="fw-card-title">Ba't ang layo ng tingin mo?</div>
+      <div class="fw-card-sub">(andito lang sila)</div>
+      <div class="fw-card-arrow">Read →</div>
+    </div>
+  </a>
+
+  <a href="/frameworks/diyskarte/" class="fw-card">
+    <div class="fw-card-img">
+      <img src="https://irp.cdn-website.com/48c3ed79/dms3rep/multi/diyskarte.png" alt="DIYskarte">
+    </div>
+    <div class="fw-card-body">
+      <div class="fw-card-date">March 19, 2026</div>
+      <div class="fw-card-title">DIYskarte</div>
+      <div class="fw-card-sub">(on hiring)</div>
+      <div class="fw-card-arrow">Read →</div>
+    </div>
+  </a>
+
+  <a href="/frameworks/5million/" class="fw-card">
+    <div class="fw-card-img">
+      <img src="https://irp.cdn-website.com/48c3ed79/dms3rep/multi/5million-oh-tapos.png" alt="5 Million Pesos This Quarter">
+    </div>
+    <div class="fw-card-body">
+      <div class="fw-card-date">March 25, 2026</div>
+      <div class="fw-card-title">5 Million Pesos This Quarter</div>
+      <div class="fw-card-sub">oh 'tapos?</div>
+      <div class="fw-card-arrow">Read →</div>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  <a href="/" class="footer-logo">
+    <img src="/images/logo.png" alt="POST 205">
+  </a>
+  <div class="footer-right">
+    © 2026 · Post 205, Inc.<br>3/F LZF Building, 25A Timog Avenue<br>South Triangle, Quezon City 1103
+  </div>
+</footer>
+
+<script>
+(function(){
+  var saved = localStorage.getItem('post205-theme') || 'system';
+  document.documentElement.setAttribute('data-theme', saved);
+})();
+</script>
+<script>
+  document.getElementById('themeToggle').addEventListener('click', function() {
+    var cycle = { dark: 'light', light: 'system', system: 'dark' };
+    var current = document.documentElement.getAttribute('data-theme') || 'system';
+    var next = cycle[current] || 'system';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('post205-theme', next);
+  });
+</script>
+
+</body>
+</html>
