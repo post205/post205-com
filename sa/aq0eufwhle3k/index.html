@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Referral Commission Agreement — POST205 × Bernice Yupangco-Migrino</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black:   #0a0a0a;
+      --surface: #f5f5f5;
+      --border:  #e0e0e0;
+      --text:    #1a1a1a;
+      --text-2:  #555;
+      --text-3:  #999;
+      --teal:    #3BD1D3;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--surface);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    /* ── HEADER ── */
+    .doc-header {
+      background: #18181A;
+      padding: 56px 64px 48px;
+    }
+
+    .doc-label {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+
+    .doc-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #f0f4f4;
+      line-height: 1.15;
+      margin-bottom: 28px;
+    }
+
+    .doc-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .doc-meta-row {
+      display: flex;
+      gap: 16px;
+      align-items: baseline;
+    }
+
+    .doc-meta-label {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #5a7a7a;
+      min-width: 72px;
+      flex-shrink: 0;
+    }
+
+    .doc-meta-value {
+      font-size: 13px;
+      color: #a8bfbf;
+    }
+
+    /* ── PRINT BUTTON ── */
+    .print-btn {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--teal);
+      color: #021616;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .print-btn:hover { opacity: 0.88; }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+    }
+
+    /* ── BRIEF ── */
+    .brief {
+      background: white;
+      border-left: 3px solid var(--teal);
+      border-radius: 0 6px 6px 0;
+      padding: 36px 40px;
+      margin: 40px 0;
+    }
+
+    .brief-label {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 14px;
+    }
+
+    .brief h2 {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--black);
+      margin-bottom: 18px;
+    }
+
+    .brief p {
+      font-size: 15px;
+      color: var(--text-2);
+      margin-bottom: 12px;
+      line-height: 1.7;
+    }
+
+    .brief p:last-child { margin-bottom: 0; }
+    .brief strong { color: var(--black); font-weight: 600; }
+
+    /* ── AGREEMENT ── */
+    .agreement {
+      background: white;
+      border-radius: 6px;
+      padding: 48px;
+      margin-bottom: 24px;
+    }
+
+    .agreement-label {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 36px;
+    }
+
+    .clause {
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .clause:last-of-type {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .clause-number {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--text-3);
+      margin-bottom: 4px;
+    }
+
+    .clause h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 12px;
+    }
+
+    .clause p {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.75;
+      margin-bottom: 10px;
+    }
+
+    .clause p:last-child { margin-bottom: 0; }
+
+    .clause ul {
+      list-style: none;
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .clause ul li {
+      display: flex;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.65;
+    }
+
+    .clause ul li::before {
+      content: "·";
+      color: var(--text-3);
+      flex-shrink: 0;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    /* ── COMMISSION TABLE ── */
+    .commission-table {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+
+    .commission-row {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+
+    .commission-row:last-child { border-bottom: none; }
+
+    .commission-row.hd {
+      background: var(--surface);
+      font-size: 10px;
+      font-family: ui-monospace, monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    .commission-row .label { color: var(--text-2); }
+    .commission-row .value { font-weight: 600; color: var(--black); }
+
+    /* ── EXAMPLE BLOCK ── */
+    .example-block {
+      background: var(--surface);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+
+    .ex-label {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 10px;
+    }
+
+    .example-block p {
+      font-size: 13.5px;
+      color: var(--text-2);
+      margin-bottom: 5px;
+      line-height: 1.6;
+    }
+
+    .example-block p:last-child { margin-bottom: 0; }
+    .example-block strong { color: var(--black); font-weight: 600; }
+
+    /* ── SIGNATURES ── */
+    .signature-block {
+      background: white;
+      border-radius: 6px;
+      padding: 48px;
+      margin-bottom: 40px;
+      border-top: 3px solid var(--black);
+    }
+
+    .sig-label {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 36px;
+    }
+
+    .sig-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+
+    .sig-line {
+      border-bottom: 1.5px solid var(--black);
+      height: 52px;
+      margin-bottom: 10px;
+    }
+
+    .sig-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 2px;
+    }
+
+    .sig-role {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-bottom: 20px;
+    }
+
+    .sig-date-label {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 6px;
+    }
+
+    .sig-date-line {
+      border-bottom: 1px solid var(--border);
+      height: 36px;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      .print-btn { display: none !important; }
+
+      body { background: white; font-size: 13px; }
+
+      .doc-header {
+        background: white !important;
+        border-bottom: 2px solid var(--black);
+        padding: 0 0 24px;
+        margin-bottom: 0;
+      }
+
+      .doc-label { color: var(--black); }
+      .doc-title { color: var(--black); }
+      .doc-meta-label { color: var(--text-3); }
+      .doc-meta-value { color: var(--text-2); }
+
+      .container { padding: 0; max-width: 100%; }
+
+      .brief {
+        border-color: var(--black);
+        margin: 24px 0;
+        break-inside: avoid;
+      }
+
+      .brief-label { color: var(--black); }
+
+      .agreement {
+        padding: 0;
+        margin-bottom: 0;
+      }
+
+      .clause { break-inside: avoid; }
+
+      .signature-block {
+        break-before: page;
+        padding: 0;
+        padding-top: 32px;
+        margin-bottom: 0;
+      }
+
+      @page {
+        margin: 20mm;
+        size: A4;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .doc-header { padding: 32px 24px; }
+      .container { padding: 0 20px 60px; }
+      .brief { padding: 28px 24px; }
+      .agreement { padding: 28px 24px; }
+      .signature-block { padding: 28px 24px; }
+      .sig-grid { grid-template-columns: 1fr; gap: 32px; }
+      .commission-row { grid-template-columns: 1fr; gap: 2px; }
+      .commission-row .label { font-size: 11px; color: var(--text-3); }
+      .print-btn { bottom: 20px; right: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="doc-header">
+  <div class="doc-label">Referral Commission Agreement</div>
+  <div class="doc-title">POST205 × Bernice Yupangco-Migrino</div>
+  <div class="doc-meta">
+    <div class="doc-meta-row">
+      <span class="doc-meta-label">Effective</span>
+      <span class="doc-meta-value">27 April 2026</span>
+    </div>
+    <div class="doc-meta-row">
+      <span class="doc-meta-label">Company</span>
+      <span class="doc-meta-value">POST205, Inc. · 3/F LZF Building, 25A Timog Avenue, South Triangle, Quezon City 1103</span>
+    </div>
+    <div class="doc-meta-row">
+      <span class="doc-meta-label">Agent</span>
+      <span class="doc-meta-value">Bernice Yupangco-Migrino</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── BODY ── -->
+<div class="container">
+
+  <!-- BRIEF -->
+  <div class="brief">
+    <div class="brief-label">Before the formal part</div>
+    <h2>Bernice, here's what we're agreeing to.</h2>
+    <p>You connect me with someone. I take it from there: the meeting, the proposal, the project. You're copied on the emails so you know what's happening, but there's nothing you need to do once the introduction is made.</p>
+    <p>When the deal closes and the payment lands in our account, you get <strong>20% of the project fee, up to PHP 100,000 per deal.</strong> If the client pays in installments, you get paid in installments. Same timing, same proportion.</p>
+    <p>The monthly fee we charge clients is never part of this. But if the same client comes back for a new project later, that counts. Same percentage.</p>
+    <p>Big projects above PHP 500,000 we'll agree on a number separately before anything moves forward.</p>
+    <p>Either of us can walk away with 30 days notice. If you referred someone before that and they sign and pay within 60 days after, you still get your share.</p>
+  </div>
+
+  <!-- FORMAL AGREEMENT -->
+  <div class="agreement">
+    <div class="agreement-label">Referral Commission Agreement · Full Terms</div>
+
+    <div class="clause">
+      <div class="clause-number">01</div>
+      <h3>The Parties</h3>
+      <p>This agreement is entered into by <strong>POST205, Inc.</strong> ("POST205"), represented by Kristoffer Ross C. Lorenzana, with principal office at 3/F LZF Building, 25A Timog Avenue, South Triangle, Quezon City 1103, Philippines, and <strong>Bernice Yupangco-Migrino</strong> ("Agent"), effective 27 April 2026.</p>
+    </div>
+
+    <div class="clause">
+      <div class="clause-number">02</div>
+      <h3>Nature of Relationship</h3>
+      <p>Agent is an independent contractor, not an employee of POST205. This agreement does not create an employer-employee relationship. Agent has full autonomy over methods, schedule, and approach. POST205 specifies only the services to be referred and the commission structure. Agent is not subject to POST205 employment policies and is not entitled to any employee benefits, including but not limited to 13th-month pay, leave credits, or social security contributions from POST205.</p>
+    </div>
+
+    <div class="clause">
+      <div class="clause-number">03</div>
+      <h3>Scope of Engagement</h3>
+      <p>Agent's role is limited to referral and introduction. Agent identifies prospective clients and introduces them to POST205. POST205 manages all communication, pitching, proposal preparation, negotiation, closing, and project delivery. Agent is copied on relevant communications as a courtesy. No sales work, project management, client servicing, or delivery work is expected from Agent.</p>
+    </div>
+
+    <div class="clause">
+      <div class="clause-number">04</div>
+      <h3>Commission</h3>
+      <p>Agent earns commission on one-time project fees only, under the following terms:</p>
+
+      <div class="commission-table">
+        <div class="commission-row hd">
+          <div>Item</div>
+          <div>Terms</div>
+        </div>
+        <div class="commission-row">
+          <div class="label">Rate</div>
+          <div class="value">20% of the one-time project fee</div>
+        </div>
+        <div class="commission-row">
+          <div class="label">Maximum per deal</div>
+          <div class="value">PHP 100,000</div>
+        </div>
+        <div class="commission-row">
+          <div class="label">Applies to projects up to</div>
+          <div class="value">PHP 500,000</div>
+        </div>
+        <div class="commission-row">
+          <div class="label">Above PHP 500,000</div>
+          <div class="value">Commission agreed separately in writing before the project closes</div>
+        </div>
+        <div class="commission-row">
+          <div class="label">Payment trigger</div>
+          <div class="value">Payment clears POST205's bank account</div>
+        </div>
+        <div class="commission-row">
+          <div class="label">Installment projects</div>
+          <div class="value">Commission released proportionally as each installment clears</div>
+        </div>
+      </div>
+
+      <div class="example-block">
+        <div class="ex-label">Example</div>
+        <p>Project fee: PHP 300,000, paid 50% upfront and 50% on completion.</p>
+        <p>Bernice's total commission: PHP 60,000 (20% of PHP 300,000).</p>
+        <p>Client pays PHP 150,000 upfront. Bernice receives <strong>PHP 30,000</strong> when this clears (less EWT).</p>
+        <p>Client pays PHP 150,000 on completion. Bernice receives <strong>PHP 30,000</strong> when this clears (less EWT).</p>
+      </div>
+    </div>
+
+    <div class="clause">
+      <div class="clause-number">05</div>
+      <h3>What Does Not Earn Commission</h3>
+      <p>Commission is not earned on:</p>
+      <ul>
+        <li>Monthly retainer fees, subscription fees, or any recurring charges, regardless of client origin</li>
+        <li>Deals where Agent is not the originating contact</li>
+        <li>Referrals that POST205 declines to pursue</li>
+        <li>Projects above PHP 500,000 without a separately agreed commission in writing</li>
+      </ul>
+      <p>New projects from a referred client do earn commission at the same rate and structure as the original project.</p>
+    </div>
+
+    <div class="clause">
+      <div class="clause-number">06</div>
+      <h3>Payment Schedule</h3>
+      <p>Commissions are calculated monthly. Payment is released within 10 business days of the end of each calendar month, covering all commissions earned in that month. Payment is made via bank transfer to Agent's registered account. POST205 will provide a written commission statement with each payment.</p>
+    </div>
+
+    <div class="clause">
+      <div class="clause-number">07</div>
+      <h3>Tax and Withholding</h3>
+      <p>POST205 will withhold Expanded Withholding Tax (EWT) on all commission payments as required by the Bureau of Internal Revenue. POST205 will issue BIR Form 2307 quarterly. Agent is responsible for all income tax, SSS, PhilHealth, and Pag-IBIG contributions. Agent must provide a valid BIR Tax Identification Number before receiving the first commission payment.</p>
+    </div>
+
+    <div class="clause">
+      <div class="clause-number">08</div>
+      <h3>Confidentiality</h3>
+      <p>Agent agrees to keep confidential all POST205 business information, including pricing, client names, proposal content, service structure, and business strategy. This obligation survives termination of this agreement by two years.</p>
+    </div>
+
+    <div class="clause">
+      <div class="clause-number">09</div>
+      <h3>Termination</h3>
+      <p>Either party may terminate this agreement with 30 days written notice. Upon termination, POST205 will pay all earned and unpaid commissions within 30 days.</p>
+      <p>Tail period: If Agent referred a client before the termination date and a project closes and clears payment within 60 days of termination, Agent earns commission on that project. Projects that do not close and clear within 60 days of termination do not earn commission.</p>
+      <p>POST205 may decline to pursue any referred client at any time without owing commission.</p>
+    </div>
+
+    <div class="clause">
+      <div class="clause-number">10</div>
+      <h3>Independence</h3>
+      <p>This agreement does not prevent Agent from pursuing other professional opportunities. Agent may not represent directly competing consultancies while this agreement is active. Agent acknowledges that POST205 may engage other referral agents simultaneously.</p>
+    </div>
+
+    <div class="clause">
+      <div class="clause-number">11</div>
+      <h3>Governing Law</h3>
+      <p>This agreement is governed by the laws of the Republic of the Philippines. Any disputes shall be resolved in the courts of Quezon City, Metro Manila.</p>
+    </div>
+
+    <div class="clause">
+      <div class="clause-number">12</div>
+      <h3>Entire Agreement</h3>
+      <p>This document constitutes the entire agreement between the parties on this subject. Amendments must be in writing and signed by both parties.</p>
+    </div>
+
+  </div>
+
+  <!-- SIGNATURES -->
+  <div class="signature-block">
+    <div class="sig-label">Signatures · By signing below, both parties agree to all terms above</div>
+    <div class="sig-grid">
+      <div class="sig-party">
+        <img src="signature.png" alt="Kristoffer Ross C. Lorenzana signature" style="height:56px;display:block;margin-bottom:4px;">
+        <div style="border-bottom:1.5px solid var(--black);margin-bottom:10px;"></div>
+        <div class="sig-name">Kristoffer Ross C. Lorenzana</div>
+        <div class="sig-role">POST205, Inc.</div>
+        <div class="sig-date-label">Date</div>
+        <div class="sig-date-line"></div>
+      </div>
+      <div class="sig-party">
+        <div class="sig-line"></div>
+        <div class="sig-name">Bernice Yupangco-Migrino</div>
+        <div class="sig-role">Referral Partner</div>
+        <div class="sig-date-label">Date</div>
+        <div class="sig-date-line"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PRINT BUTTON -->
+<button class="print-btn" onclick="window.print()">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 9V2h12v7"/>
+    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+    <rect x="6" y="14" width="12" height="8"/>
+  </svg>
+  Print
+</button>
+
+</body>
+</html>

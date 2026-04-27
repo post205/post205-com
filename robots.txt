@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /p/
+Disallow: /sa/
 
 Sitemap: https://post205.com/sitemap.xml
