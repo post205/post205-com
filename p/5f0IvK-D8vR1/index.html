@@ -778,6 +778,66 @@
       .header-meta-item .value { color: #555 !important; }
     }
 
+    /* ── PRICING SUMMARY CARDS ── */
+    .pricing-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0 0;
+    }
+
+    .pricing-card {
+      border-radius: 8px;
+      padding: 20px 22px;
+    }
+
+    .pricing-card.primary {
+      background: var(--grey-900, #111);
+      border: 2px solid var(--grey-900, #111);
+    }
+
+    .pricing-card.secondary {
+      background: var(--grey-50, #fafafa);
+      border: 1px solid var(--grey-200);
+    }
+
+    .pricing-card-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .pricing-card.primary .pricing-card-label { color: #666; }
+    .pricing-card.secondary .pricing-card-label { color: var(--grey-400); }
+
+    .pricing-card-amount {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .pricing-card.primary .pricing-card-amount { color: #fff; }
+    .pricing-card.secondary .pricing-card-amount { color: var(--grey-900, #111); }
+
+    .pricing-card-unit {
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .pricing-card.primary .pricing-card-unit { color: #555; }
+    .pricing-card.secondary .pricing-card-unit { color: var(--grey-400); }
+
+    .pricing-card-sub {
+      font-size: 11px;
+      margin-top: 6px;
+    }
+
+    .pricing-card.primary .pricing-card-sub { color: #555; }
+    .pricing-card.secondary .pricing-card-sub { color: var(--grey-400); }
+
     @media (max-width: 640px) {
       .proposal-header { padding: 36px 24px 32px; flex-direction: column; }
       .proposal-header img { width: 90px; }
@@ -787,6 +847,7 @@
       .compare { grid-template-columns: 1fr; }
       .compare-col.after { border-left: none; border-top: 3px solid var(--teal); }
       .browser-pair { grid-template-columns: 1fr; }
+      .pricing-summary { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -1543,7 +1604,7 @@
     <h2>Your data is safe.</h2>
 
     <p>Every guest record, booking, and transaction is backed up daily to a separate private location. You can export everything at any time — no request needed, no conditions.</p>
-    <p>A second person reviews all code before anything goes live and has ongoing access to the platform. If we're ever unreachable, they step in and keep things running.</p>
+    <p>All code is reviewed before anything goes live. Every critical part of the platform has a designated person responsible for it — if one person is unavailable, the work doesn't stop.</p>
   </section>
 
   <!-- TIMELINE -->
@@ -1570,7 +1631,22 @@
     <div class="section-label">Investment</div>
     <h2>Investment</h2>
 
-    <h3 style="margin-top: 4px; margin-bottom: 8px;">Build fee</h3>
+    <!-- Summary: the real ask at a glance -->
+    <div class="pricing-summary">
+      <div class="pricing-card primary">
+        <div class="pricing-card-label">One-time build</div>
+        <div class="pricing-card-amount">&#8369;380,000</div>
+        <div class="pricing-card-sub">50% to start · 50% on staging</div>
+      </div>
+      <div class="pricing-card secondary">
+        <div class="pricing-card-label">Monthly after launch</div>
+        <div class="pricing-card-amount">&#8369;18,000<span class="pricing-card-unit">/mo</span></div>
+        <div class="pricing-card-sub">4 parks · scales &#8369;2,500 per park added</div>
+      </div>
+    </div>
+
+    <!-- Build fee breakdown -->
+    <h3 style="margin-top: 28px; margin-bottom: 8px;">What's included in the build</h3>
 
     <table class="feature-table">
       <thead><tr><th style="width:100%">Included</th><th></th></tr></thead>
@@ -1585,14 +1661,12 @@
         <tr><td>Automated email: confirmations, QR codes, receipts</td><td class="check">✓</td></tr>
         <tr><td>CSV and Excel export</td><td class="check">✓</td></tr>
         <tr><td>Hosting setup and deployment</td><td class="check">✓</td></tr>
-        <tr style="background:var(--grey-100);font-weight:700;"><td><strong>Total</strong></td><td style="color:var(--grey-800);font-size:15px;font-weight:700;text-align:center;">&#8369;380,000</td></tr>
       </tbody>
     </table>
 
-    <p class="footnote">50% deposit (&#8369;190,000) to start. Remaining 50% on delivery to staging.</p>
-
+    <!-- Monthly breakdown -->
     <div class="section-divider">
-      <h3 style="margin-bottom: 8px;">Monthly retainer</h3>
+      <h3 style="margin-bottom: 8px;">How the monthly fee breaks down</h3>
     </div>
 
     <table class="pricing-table">
@@ -1600,18 +1674,22 @@
       <tbody>
         <tr><td>Platform base: hosting, security, monitoring, maintenance</td><td>&#8369;8,000</td></tr>
         <tr><td>Per active park</td><td>&#8369;2,500</td></tr>
-        <tr><td>4 parks at launch</td><td>&#8369;18,000 / month</td></tr>
-        <tr><td>6 parks active</td><td>&#8369;23,000 / month</td></tr>
+        <tr><td>4 parks at launch</td><td><strong>&#8369;18,000</strong></td></tr>
+        <tr><td>6 parks active</td><td>&#8369;23,000</td></tr>
       </tbody>
     </table>
 
     <p class="footnote">Fee grows when the platform grows. Adding a park or hotel is a line item, not a renegotiation.</p>
 
+    <!-- Optional -->
     <div class="section-divider">
-      <h3 style="margin-bottom: 8px;">Optional services</h3>
+      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;">
+        <h3 style="margin:0;">Add-ons</h3>
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;color:var(--grey-400);text-transform:uppercase;">Optional — not required to start</span>
+      </div>
     </div>
 
-    <table class="pricing-table">
+    <table class="pricing-table" style="opacity:0.75;">
       <thead><tr><th>Addition</th><th>Investment</th></tr></thead>
       <tbody>
         <tr><td>Phase 2: Hotel reservation system (Residence Inn, Azotea Suites)</td><td>Quoted separately</td></tr>
