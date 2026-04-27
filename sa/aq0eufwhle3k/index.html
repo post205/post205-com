@@ -459,48 +459,242 @@
 
     /* ── PRINT ── */
     @media print {
-      .print-btn { display: none !important; }
-      .brief { display: none !important; }
-      .dst-note { display: none !important; }
+      /* ── HIDE WEB-ONLY ELEMENTS ── */
+      .print-btn,
+      .brief,
+      .dst-note,
+      .agreement-label { display: none !important; }
 
-      body { background: white; font-size: 12px; }
+      @page { margin: 25mm 20mm; size: A4; }
 
-      .doc-header {
-        background: white !important;
-        border-bottom: 2px solid var(--black);
-        padding: 0 0 20px;
-        margin-bottom: 0;
+      /* ── GLOBAL: plain legal document ── */
+      *, *::before, *::after {
+        font-family: "Times New Roman", Times, serif !important;
+        color: #000 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
       }
 
-      .doc-label { color: var(--black); }
-      .doc-title { color: var(--black); font-size: 20px; }
-      .doc-meta-label { color: var(--text-3); }
-      .doc-meta-value { color: var(--text-2); }
-
+      body { font-size: 12pt; line-height: 1.5; }
       .container { padding: 0; max-width: 100%; }
 
-      .agreement { padding: 0; margin-bottom: 0; }
+      /* ── HEADER ── */
+      .doc-header {
+        text-align: center;
+        padding: 0 0 12pt;
+        margin-bottom: 14pt;
+        border-bottom: 1pt solid #000;
+      }
+      .doc-label {
+        font-size: 10pt;
+        letter-spacing: normal !important;
+        text-transform: uppercase !important;
+        margin-bottom: 4pt;
+      }
+      .doc-title {
+        font-size: 14pt;
+        font-weight: bold;
+        text-transform: uppercase !important;
+        letter-spacing: normal !important;
+        margin-bottom: 10pt;
+        line-height: 1.3;
+      }
+      .doc-meta { text-align: left; margin-top: 8pt; }
+      .doc-meta-row { display: flex; gap: 6pt; margin-bottom: 3pt; font-size: 11pt; }
+      .doc-meta-label { font-weight: bold; min-width: 64pt; }
+      .doc-meta-value { font-weight: normal; }
 
-      .clause { break-inside: avoid; }
+      /* ── AGREEMENT BODY ── */
+      .agreement { padding: 0; border: none !important; }
 
+      /* ── CLAUSES ── */
+      .clause {
+        margin-bottom: 10pt;
+        padding: 0;
+        border: none !important;
+        break-inside: avoid;
+      }
+      .clause-number {
+        display: inline;
+        font-size: 12pt;
+        font-weight: bold;
+        letter-spacing: normal !important;
+        padding: 0;
+        margin: 0;
+      }
+      .clause-number::after { content: ". "; }
+      .clause h3 {
+        display: inline;
+        font-size: 12pt;
+        font-weight: bold;
+        text-transform: none !important;
+        letter-spacing: normal !important;
+        margin: 0;
+      }
+      .clause h3::after { content: ""; display: block; margin-bottom: 4pt; }
+      .clause p {
+        font-size: 12pt;
+        line-height: 1.5;
+        margin-bottom: 5pt;
+        text-align: justify;
+      }
+      .clause ul {
+        list-style: disc;
+        padding-left: 20pt;
+        margin: 4pt 0;
+        display: block;
+      }
+      .clause ul li {
+        font-size: 12pt;
+        line-height: 1.5;
+        margin-bottom: 3pt;
+        display: list-item;
+      }
+      .clause ul li::before { content: none; }
+
+      /* ── COMMISSION TABLE (div-based → display:table) ── */
+      .commission-table {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11pt;
+        margin: 6pt 0;
+        border: 1pt solid #000;
+      }
+      .commission-row { display: table-row; }
+      .commission-row > div {
+        display: table-cell;
+        border: 1pt solid #000;
+        padding: 3pt 7pt;
+        vertical-align: top;
+      }
+      .commission-row.hd > div {
+        font-weight: bold;
+        font-size: 10pt;
+        text-transform: uppercase;
+      }
+      .commission-row .label { width: 40%; }
+      .commission-row .value { width: 60%; font-weight: normal; }
+
+      /* ── EXAMPLE BLOCK ── */
+      .example-block {
+        margin: 6pt 0 4pt 14pt;
+        padding: 3pt 0 3pt 10pt;
+        border-left: 1.5pt solid #000;
+      }
+      .ex-label {
+        font-size: 10pt;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: normal;
+        margin-bottom: 3pt;
+      }
+      .example-block p { font-size: 11pt; margin-bottom: 2pt; text-align: left; }
+
+      /* ── SIGNATURE BLOCK ── */
       .signature-block {
         break-before: page;
-        border-radius: 0;
-        padding: 32px 0 0;
-        margin-bottom: 0;
-        border-top: 2px solid var(--black);
+        padding: 0;
+        margin: 0;
+        border: none !important;
+      }
+      .sig-label {
+        font-size: 12pt;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 28pt;
+        padding: 0;
+        border: none !important;
+        text-transform: none !important;
+        letter-spacing: normal !important;
+      }
+      .sig-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32pt;
+      }
+      .sig-party { padding: 0; border: none !important; }
+      .sig-line, .sig-date-line, .sig-tin-line {
+        border-bottom: 1pt solid #000 !important;
+        height: 22pt;
+        margin-bottom: 3pt;
+      }
+      .sig-name { font-size: 12pt; font-weight: bold; margin-bottom: 2pt; }
+      .sig-role { font-size: 11pt; margin-bottom: 6pt; }
+      .sig-tin-label {
+        font-size: 10pt;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: normal;
+        margin-top: 8pt;
+        margin-bottom: 2pt;
+      }
+      .sig-id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6pt; }
+      .sig-date-label {
+        font-size: 10pt;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-top: 8pt;
+        margin-bottom: 2pt;
       }
 
+      /* ── NOTARIZATION ── */
       .notarization {
         break-before: page;
-        border-radius: 0;
-        padding: 32px 0;
-        margin-bottom: 0;
+        padding: 0;
+        margin: 0;
+        border: none !important;
       }
-
-      @page {
-        margin: 25mm 20mm;
-        size: A4;
+      .notarization-title {
+        font-size: 13pt;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-align: center;
+        margin-bottom: 16pt;
+        letter-spacing: normal;
+      }
+      .notarization-republic { font-size: 12pt; margin-bottom: 12pt; line-height: 1.8; }
+      .notarization-body {
+        font-size: 12pt;
+        line-height: 1.5;
+        text-align: justify;
+        margin-bottom: 10pt;
+      }
+      .notarization-id-table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 11pt;
+        margin: 6pt 0 10pt;
+      }
+      .notarization-id-table th,
+      .notarization-id-table td {
+        border: 1pt solid #000 !important;
+        padding: 3pt 6pt;
+        text-align: left;
+      }
+      .notarization-id-table th {
+        font-size: 10pt;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: normal;
+      }
+      .notarization-seal {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 20pt;
+        margin-top: 20pt;
+      }
+      .notarization-line { border-top: 1pt solid #000; margin-bottom: 4pt; width: 70%; }
+      .notarization-notary-block { font-size: 11pt; line-height: 1.8; }
+      .notarization-doc-nos { font-size: 11pt; line-height: 1.8; margin-top: 14pt; }
+      .notarization-seal > div:last-child {
+        border: 1pt solid #000 !important;
+        min-height: 90pt;
+        min-width: 72pt;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
 
@@ -647,8 +841,12 @@
 
     <div class="clause">
       <div class="clause-number">08</div>
-      <h3>Confidentiality</h3>
-      <p>Agent agrees to keep confidential all POST205 business information, including pricing, client names, proposal content, service structure, and business strategy. This obligation survives termination of this agreement by two years.</p>
+      <h3>Confidentiality and Non-Disclosure</h3>
+      <p><strong>Definition.</strong> "Confidential Information" means any information disclosed by POST205 to Agent in connection with this Agreement, including but not limited to: client identities, contact details, and project history; pricing, rates, and fee structures; proposal and contract content; service methods, workflows, and technical approaches; financial data and business strategy; and any information that a reasonable person would understand to be confidential given the nature of the disclosure.</p>
+      <p><strong>Exclusions.</strong> Confidential Information does not include information that: (a) is or becomes publicly available through no act or omission of Agent; (b) was already in Agent's possession prior to disclosure, as evidenced by contemporaneous written records; (c) is lawfully received by Agent from a third party without restriction; or (d) is required to be disclosed by law, regulation, or court order, provided that Agent gives POST205 prompt prior written notice and cooperates in seeking a protective order.</p>
+      <p><strong>Obligations.</strong> Agent agrees to: (a) hold all Confidential Information in strict confidence; (b) not disclose Confidential Information to any third party without POST205's prior written consent; (c) use Confidential Information solely to perform the referral activities contemplated by this Agreement; and (d) protect Confidential Information with at least the same degree of care used to protect Agent's own confidential information, but in no event less than reasonable care.</p>
+      <p><strong>Survival and Return.</strong> This obligation survives termination of this Agreement for a period of two (2) years. Upon written request by POST205, Agent shall promptly return or certifiably destroy all Confidential Information in Agent's possession.</p>
+      <p><strong>Remedies.</strong> Agent acknowledges that any breach or threatened breach of this clause may cause irreparable harm for which monetary damages would be inadequate, and that POST205 shall be entitled to seek injunctive or other equitable relief without the requirement of posting bond or other security, in addition to all other remedies available at law or in equity.</p>
     </div>
 
     <div class="clause">
