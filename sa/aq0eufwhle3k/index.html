@@ -461,12 +461,24 @@
       line-height: 1.6;
     }
 
+    .print-notice {
+      background: var(--grey-50, #f9f9f9);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-size: 12px;
+      color: var(--text-3);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
     /* ── PRINT ── */
     @media print {
       /* ── HIDE WEB-ONLY ELEMENTS ── */
       .print-btn,
       .brief,
       .dst-note,
+      .print-notice,
       .agreement-label { display: none !important; }
 
       @page { margin: 25mm 20mm; size: A4; }
@@ -848,7 +860,7 @@
     <div class="clause">
       <div class="clause-number">08</div>
       <h3>Confidentiality and Non-Disclosure</h3>
-      <p><strong>Definition.</strong> "Confidential Information" means any information disclosed by POST205 to Agent in connection with this Agreement, including but not limited to: client identities, contact details, and project history; pricing, rates, and fee structures; proposal and contract content; service methods, workflows, and technical approaches; financial data and business strategy; and any information that a reasonable person would understand to be confidential given the nature of the disclosure.</p>
+      <p><strong>Definition.</strong> "Confidential Information" means any information disclosed by POST205 to Agent in connection with this Agreement, including but not limited to: pricing, rates, and fee structures; proposal and contract content; service methods, workflows, and technical approaches; financial data and business strategy; and any information that a reasonable person would understand to be confidential given the nature of the disclosure. For the avoidance of doubt, client identities and contacts introduced by Agent to POST205 remain Agent's confidential information, and POST205 shall not disclose Agent's identity as the source of any referral without Agent's prior written consent.</p>
       <p><strong>Exclusions.</strong> Confidential Information does not include information that: (a) is or becomes publicly available through no act or omission of Agent; (b) was already in Agent's possession prior to disclosure, as evidenced by contemporaneous written records; (c) is lawfully received by Agent from a third party without restriction; or (d) is required to be disclosed by law, regulation, or court order, provided that Agent gives POST205 prompt prior written notice and cooperates in seeking a protective order.</p>
       <p><strong>Obligations.</strong> Agent agrees to: (a) hold all Confidential Information in strict confidence; (b) not disclose Confidential Information to any third party without POST205's prior written consent; (c) use Confidential Information solely to perform the referral activities contemplated by this Agreement; and (d) protect Confidential Information with at least the same degree of care used to protect Agent's own confidential information, but in no event less than reasonable care.</p>
       <p><strong>Survival and Return.</strong> This obligation survives termination of this Agreement for a period of two (2) years. Upon written request by POST205, Agent shall promptly return or certifiably destroy all Confidential Information in Agent's possession.</p>
@@ -990,6 +1002,11 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- PRINT NOTICE (screen only, hidden in print) -->
+  <div class="print-notice">
+    The printed version of this document includes the signature block and notarial acknowledgment. Use the print button to generate the full document for signing and notarization.
   </div>
 
   <!-- DST NOTE (screen only, hidden in print) -->
