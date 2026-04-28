@@ -111,9 +111,15 @@ ANTHROPIC_API_KEY=            ← if AI features are needed
 **`.env.example` — committed to git, values blank**
 Documents what keys are needed without exposing any values.
 
-## Rules
+## Rules and reference
 
-Read `docs/build-rules.md` before building anything. Key ones:
+Read these three files before building anything — they're in `docs/`:
+
+- **`build-rules.md`** — what we always do (architecture, DNS, stack, secrets, design)
+- **`core-values.md`** — why we do it (the principles behind the rules)
+- **`learnings.md`** — what surprised us across past projects (add to this after every build)
+
+Key rules from `build-rules.md`:
 
 - Admin never lives on this domain — always `desk.[domain]`
 - `toffer@post205.com` never in source — not in HTML, not in JSON-LD
