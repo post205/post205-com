@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — POST 205</title>
+  <meta name="description" content="How POST 205 handles your personal information. Compliant with RA 10173 (Data Privacy Act of 2012).">
+  <link rel="canonical" href="https://post205.com/privacy">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+  <script>
+    (function() {
+      const stored = localStorage.getItem('theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', stored || system);
+    })();
+  </script>
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black:        #18181A;
+      --surface:      #1a2424;
+      --surface-2:    #252f2f;
+      --border:       #1f3535;
+      --text:         #f0f0f2;
+      --text-2:       #7aacac;
+      --text-3:       #629a9a;
+      --accent:       #3BD1D3;
+      --nav-bg:       rgba(24, 24, 26, 0.96);
+      --logo-filter:  none;
+      --logo-blend:   screen;
+    }
+
+    [data-theme="light"] {
+      --black:        #f2f8f8;
+      --surface:      #f4fefe;
+      --surface-2:    #e0fffe;
+      --border:       #c8eeed;
+      --text:         #0a1a1a;
+      --text-2:       #4a6262;
+      --text-3:       #4a7070;
+      --accent:       #2db8ba;
+      --nav-bg:       rgba(242, 248, 248, 0.96);
+      --logo-filter:  none;
+      --logo-blend:   darken;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Nav */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 48px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .nav-logo img {
+      height: 26px;
+      width: auto;
+      mix-blend-mode: var(--logo-blend);
+      filter: var(--logo-filter);
+      opacity: 0.9;
+    }
+
+    /* Content */
+    .policy-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 64px 24px 96px;
+    }
+
+    .policy-label {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .policy-meta {
+      font-family: ui-monospace, monospace;
+      font-size: 12px;
+      color: var(--text-3);
+      margin-bottom: 48px;
+    }
+
+    .policy-intro {
+      font-size: 18px;
+      color: var(--text-2);
+      line-height: 1.6;
+      padding: 24px;
+      border-left: 3px solid var(--accent);
+      background: var(--surface);
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 48px;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 48px;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    h2:first-of-type { margin-top: 0; }
+
+    p {
+      color: var(--text-2);
+      margin-bottom: 16px;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+
+    /* Data table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0 24px;
+      font-size: 15px;
+    }
+
+    .data-table th {
+      text-align: left;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-2);
+      vertical-align: top;
+    }
+
+    .data-table td:first-child {
+      color: var(--text);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* Rights list */
+    .rights-list {
+      list-style: none;
+      margin: 16px 0;
+    }
+
+    .rights-list li {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-2);
+    }
+
+    .rights-list li:last-child { border-bottom: none; }
+
+    .rights-list li .right-name {
+      font-weight: 600;
+      color: var(--text);
+      min-width: 180px;
+      font-size: 14px;
+    }
+
+    .rights-list li .right-desc {
+      font-size: 15px;
+    }
+
+    /* Contact card */
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 20px;
+    }
+
+    .contact-card .contact-name {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .contact-card .contact-role {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .contact-card p {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    /* NPC note */
+    .npc-note {
+      margin-top: 20px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--text-2);
+      border: 1px solid var(--border);
+    }
+
+    .npc-note strong { color: var(--text); }
+
+    /* Divider */
+    .policy-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 40px 0;
+    }
+
+    /* Footer */
+    footer {
+      padding: 32px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo img {
+      height: 20px;
+      width: auto;
+      mix-blend-mode: var(--logo-blend);
+      filter: var(--logo-filter);
+      opacity: 0.5;
+    }
+
+    .footer-right {
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      color: var(--text-3);
+      text-align: right;
+      line-height: 1.8;
+    }
+
+    .footer-right a {
+      color: var(--text-3);
+      text-decoration: none;
+    }
+
+    .footer-right a:hover { color: var(--text-2); }
+
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      .policy-wrap { padding: 40px 20px 64px; }
+      footer { padding: 24px 20px; flex-direction: column; gap: 12px; align-items: flex-start; }
+      .footer-right { text-align: left; }
+      .rights-list li { flex-direction: column; gap: 4px; }
+      .rights-list li .right-name { min-width: unset; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png" alt="POST 205">
+  </a>
+</nav>
+
+<div class="policy-wrap">
+
+  <div class="policy-label">Legal</div>
+  <h1>Privacy Policy</h1>
+  <div class="policy-meta">Last updated: April 29, 2026 · Post 205, Inc.</div>
+
+  <div class="policy-intro">
+    Short version: we collect only what we need to talk to you and do the work. We don't sell your data, we don't track you across the web, and we don't share your information beyond what's necessary to run our services.
+  </div>
+
+  <h2>Who we are</h2>
+  <p>Post 205, Inc. builds business systems for founder-led SMEs in the Philippines. We operate post205.com. Under the Data Privacy Act of 2012 (Republic Act No. 10173), we are the personal information controller for data collected through this website.</p>
+  <p>Our registered address is 3/F LZF Building, 25A Timog Avenue, South Triangle, Quezon City, Metro Manila 1103.</p>
+
+  <h2>What we collect — and why</h2>
+  <p>We collect only what's necessary. When you reach out or engage with our services, here's what we handle and why:</p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Information</th>
+        <th>Why we collect it</th>
+        <th>Legal basis</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Name and email address</td>
+        <td>To respond to your inquiry or send you a proposal</td>
+        <td>Consent / Contract</td>
+      </tr>
+      <tr>
+        <td>Message content</td>
+        <td>To understand what you need and how we can help</td>
+        <td>Consent</td>
+      </tr>
+      <tr>
+        <td>Company name and role</td>
+        <td>To tailor proposals and service agreements to your business</td>
+        <td>Contract</td>
+      </tr>
+      <tr>
+        <td>Proposal acceptance data</td>
+        <td>To create a service record when you agree to work with us</td>
+        <td>Contract</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>We don't ask for more than we need. If we need something specific for a project, we'll tell you why before collecting it.</p>
+
+  <h2>Cookies and browser storage</h2>
+  <p>This site stores exactly one thing in your browser: your theme preference (dark, light, or system default). This lives in <code>localStorage</code> — it never leaves your device, is never sent to our servers, and exists purely for your comfort.</p>
+  <p>We don't use tracking cookies. We don't use advertising cookies. We don't run Google Analytics or any tool that identifies you as an individual visitor. When you leave this site, we don't follow you.</p>
+
+  <h2>Who we share your information with</h2>
+  <p>We use the following services to operate:</p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Purpose</th>
+        <th>Data involved</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Resend</td>
+        <td>Email delivery</td>
+        <td>Name, email, message content</td>
+      </tr>
+      <tr>
+        <td>Supabase</td>
+        <td>Secure data storage</td>
+        <td>Proposal and contact data</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>That's it. We don't sell, rent, or trade your personal information to anyone. We don't share data with advertisers, data brokers, or third-party analytics platforms.</p>
+
+  <h2>How we protect your information</h2>
+  <p>Data submitted through this site is stored in Supabase, a secure cloud database with encryption in transit (TLS) and at rest. Access is restricted to authorized personnel. For a company of our size, that's currently one person — Toffer Lorenzana, founder.</p>
+  <p>We review our security practices as we grow. If a breach ever occurs that affects your data, we will notify you and the National Privacy Commission within 72 hours, as required by law.</p>
+
+  <h2>How long we keep it</h2>
+  <p>We keep your information for as long as it's needed to deliver the service you engaged us for, and for a reasonable period afterward in case you return or in case of a dispute. If you ask us to delete your data and there's no legal obligation to keep it, we will.</p>
+
+  <hr class="policy-divider">
+
+  <h2>Your rights under RA 10173</h2>
+  <p>The Data Privacy Act of 2012 gives you the following rights over your personal information:</p>
+
+  <ul class="rights-list">
+    <li>
+      <div class="right-name">Right to be informed</div>
+      <div class="right-desc">To know whether we hold personal information about you, and what we're doing with it.</div>
+    </li>
+    <li>
+      <div class="right-name">Right to access</div>
+      <div class="right-desc">To request a copy of the personal data we hold about you, including its source and who it's been shared with.</div>
+    </li>
+    <li>
+      <div class="right-name">Right to correction</div>
+      <div class="right-desc">To have inaccurate or incomplete data corrected without unreasonable delay.</div>
+    </li>
+    <li>
+      <div class="right-name">Right to erasure</div>
+      <div class="right-desc">To request deletion of your personal data when it's no longer necessary for the purpose it was collected, or when you withdraw consent.</div>
+    </li>
+    <li>
+      <div class="right-name">Right to object</div>
+      <div class="right-desc">To object to the processing of your personal data, including for direct marketing purposes.</div>
+    </li>
+    <li>
+      <div class="right-name">Right to data portability</div>
+      <div class="right-desc">To receive your personal data in a structured, commonly used format so you can take it elsewhere.</div>
+    </li>
+    <li>
+      <div class="right-name">Right to lodge a complaint</div>
+      <div class="right-desc">To file a complaint directly with the National Privacy Commission if you believe your rights have been violated.</div>
+    </li>
+  </ul>
+
+  <p>To exercise any of these rights, contact us at the details below. We'll respond within 15 business days.</p>
+
+  <hr class="policy-divider">
+
+  <h2>Contact us</h2>
+  <p>Questions about your data, requests to exercise your rights, or concerns about how we've handled your information — reach out directly:</p>
+
+  <div class="contact-card">
+    <div class="contact-name">Toffer Lorenzana</div>
+    <div class="contact-role">Data Protection Officer · Post 205, Inc.</div>
+    <p>3/F LZF Building, 25A Timog Avenue<br>South Triangle, Quezon City, Metro Manila 1103</p>
+    <p><a href="mailto:toffer@post205.com">toffer@post205.com</a></p>
+  </div>
+
+  <div class="npc-note">
+    <strong>National Privacy Commission</strong> — You also have the right to file a complaint directly with the NPC. Visit <a href="https://www.privacy.gov.ph" target="_blank" rel="noopener">privacy.gov.ph</a> or email <a href="mailto:complaints@privacy.gov.ph">complaints@privacy.gov.ph</a>.
+  </div>
+
+  <hr class="policy-divider">
+
+  <p style="font-size:13px;color:var(--text-3);">This policy was written to be read, not to protect us from you. If something is unclear or you think we've missed something, tell us — we'll fix it.</p>
+
+</div>
+
+<footer>
+  <a href="/" class="footer-logo">
+    <img src="/images/logo.png" alt="POST 205">
+  </a>
+  <div class="footer-right">
+    © 2026 · Post 205, Inc.<br>3/F LZF Building, 25A Timog Avenue<br>South Triangle, Quezon City 1103<br>
+    <a href="/privacy.html">Privacy Policy</a>
+  </div>
+</footer>
+
+</body>
+</html>
