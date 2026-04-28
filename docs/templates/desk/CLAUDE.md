@@ -24,12 +24,23 @@ source .env && npx netlify deploy --prod --dir=. --auth=$NETLIFY_AUTH_TOKEN --si
 
 ## Auth
 
-Supabase email/password. Single user (Toffer). RLS policy on all tables:
+Supabase email/password. RLS on all tables.
+
+**For Toffer-only tools (ops, your own desk):**
 ```sql
 auth.uid() = '[TOFFER_UID]'
 ```
 
-Anon key is safe client-side — RLS blocks all unauthenticated access.
+**For client-facing tools (client's desk, portals):**
+Use a `profiles` table with a `role` column (`admin`, `editor`, `viewer`). RLS policies reference role:
+```sql
+-- editors and admins can read
+auth.uid() in (select id from profiles where role in ('admin', 'editor'))
+
+-- only admins can publish (update status to 'published')
+auth.uid() in (select id from profiles where role = 'admin')
+```
+Toffer is always `admin`. Client team members are `editor` by default. Editors draft; admins publish. Add users via Supabase dashboard — no self-signup unless explicitly built.
 
 **Note:** SQL Editor in Supabase dashboard runs as service_role and bypasses RLS. Always verify RLS using the REST API with the anon key, not the SQL editor.
 
@@ -85,15 +96,31 @@ articles (
 - Public: SELECT where status = 'published'
 - Authenticated: SELECT, INSERT, UPDATE, DELETE
 
-## Environment variables
+## Secrets management
 
+Three tiers. Never mix them.
+
+**`.env` — local dev only, never committed to git**
 ```
 SUPABASE_URL=
 SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=    ← server-side only, never in frontend
 NETLIFY_AUTH_TOKEN=
 NETLIFY_SITE_ID=
 ```
+
+**Netlify dashboard environment variables — production server-side secrets**
+Set via Netlify UI or CLI (`netlify env:set KEY value`). Never written to any file.
+```
+SUPABASE_SERVICE_ROLE_KEY=    ← server-side only, never in frontend
+RESEND_API_KEY=               ← if email notifications are needed
+```
+
+**Never in frontend code — regardless of where the key is stored**
+- `SUPABASE_SERVICE_ROLE_KEY` — bypasses RLS entirely, exposes all data if leaked
+- Any secret API key
+
+**`.env.example` — committed to git, values blank**
+Documents what keys are needed without exposing any values.
 
 ## Rules
 

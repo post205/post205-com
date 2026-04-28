@@ -68,14 +68,34 @@ source .env && npx netlify deploy --prod --dir=. --auth=$NETLIFY_AUTH_TOKEN --si
 
 **Privacy policy:** RA 10173 sections: who we are, what we collect (data table), cookies, who we share with (classes only — no vendor names), how we protect, retention, 7 rights, DPO contact, NPC complaint path.
 
-## Environment variables
+## Secrets management
 
+Three tiers. Never mix them.
+
+**`.env` — local dev only, never committed to git**
+Safe for keys used from the command line or that are already public (anon key is safe — RLS protects it).
 ```
 SUPABASE_URL=
 SUPABASE_ANON_KEY=
 NETLIFY_AUTH_TOKEN=
 NETLIFY_SITE_ID=
 ```
+
+**Netlify dashboard environment variables — production server-side secrets**
+Set via Netlify UI or CLI (`netlify env:set KEY value`). These are injected into Netlify Functions at runtime. Never written to any file.
+```
+SUPABASE_SERVICE_ROLE_KEY=    ← server-side only
+RESEND_API_KEY=               ← if email is needed
+STRIPE_SECRET_KEY=            ← if payments are needed
+ANTHROPIC_API_KEY=            ← if AI features are needed
+```
+
+**Never in frontend code — regardless of where the key is stored**
+- `SUPABASE_SERVICE_ROLE_KEY` — bypasses RLS, exposes all data if leaked
+- Any secret API key — treat as a password
+
+**`.env.example` — committed to git, values blank**
+Documents what keys are needed without exposing any values.
 
 ## Rules
 
