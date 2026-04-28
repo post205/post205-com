@@ -33,6 +33,16 @@ Once activated, the relationship has a natural progression: Retain → Review �
 
 *Source: post205.com/frameworks/4rs — Toffer's published framework. 2026-04-28*
 
+### Clients own their infrastructure — we manage it
+
+Never hold a client's assets under our accounts. They own the domain, the DNS, the database, the email, the social accounts. We're a collaborator — we can be added, and we can be removed. If we part ways, everything stays intact and theirs.
+
+This is how trust works at scale. A client who knows they own everything is a client who doesn't worry about being locked in.
+
+In practice: every client gets their own Supabase project, their own DNS account (with us added as a member), their own registrar credentials. We never ask for registrar access. We give them a CNAME record; they add it. For ongoing DNS work, they set up Cloudflare and add us — not the other way around.
+
+**How we build this in:** At the start of every engagement, document who owns what. Post205 is always a collaborator, never a custodian.
+
 ### Design for the person on the other end
 
 When research and convention converge on something that works better for the reader, we use it. A 680px reading column on a text-heavy page isn't narrow — it's optimal. Long lines slow reading. Every major publication knows this.
