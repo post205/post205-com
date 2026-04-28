@@ -5,7 +5,7 @@
   banner.id = 'cookie-banner';
   banner.innerHTML = `
     <span class="cookie-icon">🍪</span>
-    <span class="cookie-text">We store one thing locally: your theme preference. No tracking. No ads. <a href="/privacy.html">Full story</a></span>
+    <span class="cookie-text">This site saves your theme preference. That's the only thing stored in your browser. <a href="/privacy.html">Privacy policy</a></span>
     <button class="cookie-btn" id="cookie-ok-btn">Got it</button>
   `;
   document.body.appendChild(banner);
