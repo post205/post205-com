@@ -33,6 +33,14 @@ Once activated, the relationship has a natural progression: Retain → Review �
 
 *Source: post205.com/frameworks/4rs — Toffer's published framework. 2026-04-28*
 
+### Design for the person on the other end
+
+When research and convention converge on something that works better for the reader, we use it. A 680px reading column on a text-heavy page isn't narrow — it's optimal. Long lines slow reading. Every major publication knows this.
+
+Design choices should serve the person using the thing, not the person building it. When the evidence is there, we follow it — even if it looks smaller, simpler, or less impressive than the alternative.
+
+**How we build this in:** Before overriding a standard or convention, ask who benefits from the change. "It looks better" isn't a reason. "It works better for them" is.
+
 ---
 
 ## How this applies to building
