@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "/articles/:slug"
+  to = "/articles/edit.html"
+  status = 200

@@ -1,5 +1,19 @@
 # [CLIENT NAME] — Website
 
+## Before we start
+
+This file has placeholders. **Ask me for each one before doing anything else.** Do not write any code until all placeholders are filled in.
+
+| Placeholder | What it is | Example |
+|---|---|---|
+| `[CLIENT NAME]` | Client's business name | Vienna United |
+| `[DOMAIN]` | Their domain, no protocol | viennaunited.com |
+| `[YEAR]` | Current year | 2026 |
+
+Once I give you the answers, find and replace every placeholder in this file, then confirm what you replaced before proceeding.
+
+---
+
 ## What this project is
 
 Public marketing website for [CLIENT NAME]. Lives at `[DOMAIN]`. Built on Netlify. Reads content from Supabase. This is a display layer — no admin, no editor, no private routes.

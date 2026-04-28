@@ -1,5 +1,19 @@
 # [CLIENT NAME] — Desk
 
+## Before we start
+
+This file has placeholders. **Ask me for each one before doing anything else.** Do not write any code until all placeholders are filled in.
+
+| Placeholder | What it is | How to find it |
+|---|---|---|
+| `[CLIENT NAME]` | Client's business name | — |
+| `[DOMAIN]` | Their domain, no protocol | — |
+| `[TOFFER_UID]` | Your Supabase user UUID | Supabase dashboard → Authentication → Users → copy your ID |
+
+Once I give you the answers, find and replace every placeholder in this file, then confirm what you replaced before proceeding.
+
+---
+
 ## What this project is
 
 Content management subdomain for [CLIENT NAME]'s website at `[DOMAIN]`. Lives at `desk.[domain]`. Toffer-only — no client access, never linked from the public site. Not crawled.

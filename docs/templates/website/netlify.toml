@@ -1,0 +1,14 @@
+[[redirects]]
+  from = "/p/:slug"
+  to = "/p/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/sa/:slug"
+  to = "/sa/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/frameworks/:slug"
+  to = "/frameworks/article.html"
+  status = 200
