@@ -1,6 +1,6 @@
 # Project Templates — How to Use
 
-Two templates. One for the public website, one for the content management desk. Every new client gets both.
+Three templates. One for the public website, one for the content management desk, one for internal back-office tools. Every new client gets the first two. Add ops when they need an internal command center.
 
 ---
 
@@ -69,6 +69,38 @@ Separate window, separate Claude Code session from the website project.
 
 ---
 
+## Starting a new ops project
+
+**1. Duplicate the template folder**
+Copy `docs/templates/ops/` into your projects directory. Rename it:
+```
+post205-[clientname]-ops/
+```
+Or for POST 205's own ops: `post205-ops/`
+
+**2. Fill in the placeholders**
+Open `CLAUDE.md` and replace:
+- `[ENTITY NAME]` → the business name this tool is for
+- `[DOMAIN]` → the ops subdomain (e.g. `ops.post205.com`)
+- `[TOFFER_UID]` → your Supabase user UUID
+
+**3. Create the infrastructure**
+- GitHub: new repo (private)
+- Netlify: new site, connect to repo, note the site ID
+- DNS: add `ops.[domain]` CNAME → Netlify site
+- Supabase: use the same project as the paired website and desk, or create a new one if this is a standalone tool
+
+**4. Set up `.env` and `js/env.js`**
+Copy `.env.example` to `.env`, fill in keys. Then create `js/env.js` manually — it's gitignored and must be created on every fresh clone.
+
+**5. Open as a new VS Code project**
+Separate window, separate Claude Code session.
+
+**6. Align Claude**
+> "Read CLAUDE.md."
+
+---
+
 ## Rules that apply to every project
 
 - Read `docs/build-rules.md` before building anything
@@ -85,6 +117,7 @@ Separate window, separate Claude Code session from the website project.
 ```
 [domain]          → public website     → post205-[client]-com repo
 desk.[domain]     → content mgmt       → post205-[client]-desk repo
+ops.[domain]      → internal tool      → post205-[client]-ops repo
 sign.[domain]     → proposals + SLAs   → post205-sign repo (shared)
 ops.post205.com   → POST 205 ops       → post205-ops repo (yours, not theirs)
 ```

@@ -1,0 +1,19 @@
+[[redirects]]
+  from = "/clients/:id"
+  to = "/clients/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/projects/:id"
+  to = "/projects/index.html"
+  status = 200
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "no-cache"
