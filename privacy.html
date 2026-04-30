@@ -303,6 +303,21 @@
       .footer-right { text-align: left; }
       .rights-list li { flex-direction: column; gap: 4px; }
       .rights-list li .right-name { min-width: unset; }
+      .data-table thead { display: none; }
+      .data-table tr { display: block; border-bottom: 1px solid var(--border); padding: 12px 0; }
+      .data-table tr:first-child { border-top: 1px solid var(--border); }
+      .data-table td { display: block; border: none; padding: 4px 0; white-space: normal; }
+      .data-table td:first-child { white-space: normal; font-size: 14px; margin-bottom: 4px; }
+      .data-table td::before {
+        content: attr(data-label);
+        display: block;
+        font-family: ui-monospace, monospace;
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--text-3);
+        margin-bottom: 2px;
+      }
     }
 
     /* Nav CTA */
@@ -519,14 +534,14 @@
 
   <div class="policy-label">Legal</div>
   <h1>Privacy Policy</h1>
-  <div class="policy-meta">Last updated: April 29, 2026 · Post 205, Inc.</div>
+  <div class="policy-meta">Last updated: April 29, 2026 · POST205, Inc.</div>
 
   <div class="policy-intro">
     When you contact us, we have your email. When you sign a proposal, we have your name and company. Visitors who don't reach out are anonymous to us.
   </div>
 
   <h2>Who we are</h2>
-  <p>Post 205, Inc. builds business systems for founder-led SMEs in the Philippines. We operate post205.com. Under the Data Privacy Act of 2012 (Republic Act No. 10173), we are the personal information controller for data collected through this website.</p>
+  <p>POST205, Inc. builds business systems for founder-led SMEs in the Philippines. We operate post205.com. Under the Data Privacy Act of 2012 (Republic Act No. 10173), we are the personal information controller for data collected through this website.</p>
   <p>Our registered address is 3/F LZF Building, 25A Timog Avenue, South Triangle, Quezon City, Metro Manila 1103.</p>
 
   <h2>What we collect — and why</h2>
@@ -542,24 +557,24 @@
     </thead>
     <tbody>
       <tr>
-        <td>Name and email address</td>
-        <td>To respond to your inquiry or send you a proposal</td>
-        <td>Consent / Contract</td>
+        <td data-label="Information">Name and email address</td>
+        <td data-label="Why we collect it">To respond to your inquiry or send you a proposal</td>
+        <td data-label="Legal basis">Consent / Contract</td>
       </tr>
       <tr>
-        <td>Message content</td>
-        <td>To understand what you need and how we can help</td>
-        <td>Consent</td>
+        <td data-label="Information">Message content</td>
+        <td data-label="Why we collect it">To understand what you need and how we can help</td>
+        <td data-label="Legal basis">Consent</td>
       </tr>
       <tr>
-        <td>Company name and role</td>
-        <td>To tailor proposals and service agreements to your business</td>
-        <td>Contract</td>
+        <td data-label="Information">Company name and role</td>
+        <td data-label="Why we collect it">To tailor proposals and service agreements to your business</td>
+        <td data-label="Legal basis">Contract</td>
       </tr>
       <tr>
-        <td>Proposal acceptance data</td>
-        <td>To create a service record when you agree to work with us</td>
-        <td>Contract</td>
+        <td data-label="Information">Proposal acceptance data</td>
+        <td data-label="Why we collect it">To create a service record when you agree to work with us</td>
+        <td data-label="Legal basis">Contract</td>
       </tr>
     </tbody>
   </table>
@@ -622,7 +637,7 @@
 
   <div class="contact-card">
     <div class="contact-name">Data Protection Officer</div>
-    <div class="contact-role">Post 205, Inc.</div>
+    <div class="contact-role">POST205, Inc.</div>
     <p>3/F LZF Building, 25A Timog Avenue<br>South Triangle, Quezon City, Metro Manila 1103</p>
     <p><a href="mailto:dpo@post205.com">dpo@post205.com</a></p>
   </div>
@@ -656,7 +671,7 @@
     <img src="/images/logo.png" alt="POST 205">
   </a>
   <div class="footer-right">
-    © 2026 · Post 205, Inc.<br>Metro Manila<br>
+    © 2026 · POST205, Inc.<br>Metro Manila<br>
     <a href="/privacy.html">Privacy Policy</a>
   </div>
 </footer>

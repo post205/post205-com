@@ -17,3 +17,8 @@
   from = "/systems/:page"
   to = "/systems/:page.html"
   status = 200
+
+[[redirects]]
+  from = "/frameworks/:slug"
+  to = "/frameworks/article.html"
+  status = 200
