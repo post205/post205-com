@@ -768,15 +768,16 @@
       flex-direction: column;
     }
 
-    .promise-img-wrap {
-      background: var(--promise-bg);
-      height: 160px;
+    .promise-img-wrap { display: none; }
+    .promise-card-body { padding: 32px; }
+    .promise-card-icon {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 32px;
+      gap: 10px;
+      margin-bottom: 14px;
+      color: var(--accent);
     }
-    .promise-card-body { padding: 32px; }
+    .promise-card-icon svg { flex-shrink: 0; }
 
     .promise-key {
       font-family: ui-monospace, monospace;
@@ -1357,7 +1358,15 @@
           </svg>
         </div>
         <div class="promise-card-body">
-          <div class="promise-key">Your team</div>
+          <div class="promise-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M1 19 Q1 13 8 13 Q15 13 15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="17" cy="9" r="3" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M12 19 Q12 15 17 15 Q23 15 23 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <div class="promise-key">Your team</div>
+          </div>
           <h4>Your team has to use it.</h4>
           <p>We build it. We make sure it runs. Every time your team uses it, the system learns. If they stop using it, so does the system. We'll tell you when we see it.</p>
           <div class="promise-badge" data-tip="A second developer reads every line of code before your system goes live. Not the same person who built it.">Code reviewed</div>
@@ -1372,7 +1381,13 @@
           </svg>
         </div>
         <div class="promise-card-body">
-          <div class="promise-key">First version</div>
+          <div class="promise-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 12 A8 8 0 1 0 16 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M16 5 L16 1 L20 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="promise-key">First version</div>
+          </div>
           <h4>Day one isn't the best version.</h4>
           <p>The first build handles the daily cases. Every day it runs, the system learns. Patterns are recorded. By the end of the first week, it's already smarter.</p>
           <div class="promise-badge" data-tip="Most systems go live within the first month. You're not waiting quarters to see something work.">Live in &lt; 30 days</div>
@@ -1396,7 +1411,17 @@
           </svg>
         </div>
         <div class="promise-card-body">
-          <div class="promise-key">Your judgment</div>
+          <div class="promise-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="12" y1="3" x2="12" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="7" y1="21" x2="17" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="3" y1="8" x2="21" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="12" cy="8" r="2" fill="currentColor"/>
+              <path d="M2 8 Q5.5 14 9 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+              <path d="M15 8 Q18.5 14 22 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            </svg>
+            <div class="promise-key">Your judgment</div>
+          </div>
           <h4>The hard calls stay with you.</h4>
           <p>The routine runs itself. When something new comes up, the system surfaces what it's learned and waits. Everything it knows is in front of you before you decide.</p>
           <div class="promise-badge" data-tip="Every action in the system is logged. You always know what happened, who did it, and when.">Audit trail</div>
