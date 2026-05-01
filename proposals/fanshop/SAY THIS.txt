@@ -1,0 +1,3 @@
+New project. Check the new project setup checklist.
+
+"All pages must use folder-based structure — no .html extensions in URLs. Every page is a folder with an index.html inside (e.g., contact/index.html, not contact.html)."

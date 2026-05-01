@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — POST 205</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #18181A; --surface: #1a2424; --surface-2: #252f2f;
+      --border: #1f3535; --border-2: #2a4040; --text: #f0f0f2; --text-2: #7aacac;
+      --text-3: #3d6868; --accent: #3BD1D3; --on-accent: #021616;
+      --danger: #e55a5a;
+    }
+    html, body { height: 100%; }
+    body { background: var(--black); color: var(--text); font-family: system-ui, -apple-system, sans-serif; font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+    /* NAV */
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 32px; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .nav-left { display: flex; align-items: center; gap: 10px; }
+    .nav-logo { font-family: ui-monospace, monospace; font-size: 13px; font-weight: 700; color: var(--text); letter-spacing: 0.04em; text-decoration: none; }
+    .nav-sep { color: var(--text-3); }
+    .nav-section { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); }
+    .btn { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; border: none; padding: 8px 14px; border-radius: 5px; transition: opacity 0.15s; }
+    .btn-ghost { background: none; border: 1px solid var(--border-2); color: var(--text-3); }
+    .btn-ghost:hover { border-color: var(--text-3); color: var(--text-2); }
+    .btn-primary { background: var(--accent); color: var(--on-accent); }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-danger { background: none; border: 1px solid var(--danger); color: var(--danger); }
+    .btn-danger:hover { background: var(--danger); color: #fff; }
+    .btn-sm { padding: 5px 10px; font-size: 9px; }
+
+    /* LOGIN VIEW */
+    #view-login { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 53px); }
+    .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 40px; width: 100%; max-width: 380px; }
+    .login-card h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .login-card p { font-size: 13px; color: var(--text-3); margin-bottom: 28px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 6px; }
+    input[type="email"], input[type="password"], input[type="text"], input[type="date"], input[type="url"], textarea, select {
+      width: 100%; background: var(--black); border: 1px solid var(--border-2); border-radius: 6px; color: var(--text); font-size: 14px; font-family: system-ui, -apple-system, sans-serif; padding: 10px 12px; transition: border-color 0.15s; outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+    .login-btn { width: 100%; margin-top: 8px; padding: 12px; font-size: 12px; }
+    .login-error { font-size: 13px; color: var(--danger); margin-top: 12px; text-align: center; }
+
+    /* ARTICLES VIEW */
+    #view-articles { display: none; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; padding: 28px 32px; border-bottom: 1px solid var(--border); }
+    .page-header h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+    .articles-table { padding: 0 32px 48px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+    thead th { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); padding: 0 0 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+    tbody tr:hover { background: var(--surface); }
+    td { padding: 14px 0; vertical-align: middle; }
+    .td-title { font-size: 14px; font-weight: 600; color: var(--text); max-width: 320px; }
+    .td-date { font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-3); white-space: nowrap; padding-right: 20px; }
+    .td-section { font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-3); white-space: nowrap; padding-right: 20px; }
+    .status-badge { display: inline-block; font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
+    .status-published { background: rgba(59,209,211,0.12); color: var(--accent); }
+    .status-draft { background: rgba(255,255,255,0.06); color: var(--text-3); }
+    .td-actions { white-space: nowrap; text-align: right; }
+    .td-actions a { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.06em; color: var(--text-3); text-decoration: none; margin-left: 16px; transition: color 0.15s; cursor: pointer; }
+    .td-actions a:hover { color: var(--accent); }
+    .td-actions a.del:hover { color: var(--danger); }
+    .empty-state { padding: 64px 32px; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; color: var(--text-3); letter-spacing: 0.06em; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <span class="nav-logo">POST 205</span>
+    <span class="nav-sep">·</span>
+    <span class="nav-section">Admin</span>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <button class="btn btn-ghost" id="changePwBtn" style="display:none;" onclick="toggleChangePw()">Change password</button>
+    <button class="btn btn-ghost" id="logoutBtn" style="display:none;" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<div id="changePwBar" style="display:none;background:var(--surface);border-bottom:1px solid var(--border);padding:14px 32px;display:none;align-items:center;gap:10px;">
+  <input type="password" id="newPw" placeholder="New password" style="max-width:220px;background:var(--black);border:1px solid var(--border-2);border-radius:5px;color:var(--text);font-size:13px;padding:7px 10px;outline:none;">
+  <button class="btn btn-primary" onclick="changePassword()">Update</button>
+  <span id="pwMsg" style="font-family:ui-monospace,monospace;font-size:11px;color:var(--text-3);"></span>
+</div>
+
+<div id="view-login">
+  <div class="login-card">
+    <h1>Sign in</h1>
+    <p>POST 205 Admin — private access only.</p>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="toffer@post205.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary login-btn" onclick="login()">Sign in</button>
+    <div class="login-error" id="loginError" style="display:none;"></div>
+  </div>
+</div>
+
+<div id="view-articles">
+  <div class="page-header">
+    <h2>Articles</h2>
+    <a href="/admin/articles/edit.html" class="btn btn-primary">+ New Article</a>
+  </div>
+  <div class="articles-table">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:40%">Title</th>
+          <th>Date</th>
+          <th>Section</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="articleRows">
+        <tr><td colspan="5" class="empty-state">Loading articles...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://dikuhcaaxxsadlwepblf.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpa3VoY2FheHhzYWRsd2VwYmxmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNTc0MzMsImV4cCI6MjA5MjYzMzQzM30.yV2uutaX523kPtCKMea6dH-Hk4DkX5_ZwHAjCNXx610';
+
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+function formatDate(d) {
+  if (!d) return '—';
+  return new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    showArticles();
+  } else {
+    document.getElementById('view-login').style.display = 'flex';
+  }
+}
+
+async function login() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const err = document.getElementById('loginError');
+  err.style.display = 'none';
+
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) {
+    err.textContent = error.message;
+    err.style.display = 'block';
+    return;
+  }
+  showArticles();
+}
+
+async function logout() {
+  await sb.auth.signOut();
+  location.reload();
+}
+
+async function showArticles() {
+  document.getElementById('view-login').style.display = 'none';
+  document.getElementById('view-articles').style.display = 'block';
+  document.getElementById('logoutBtn').style.display = 'inline-block';
+  document.getElementById('changePwBtn').style.display = 'inline-block';
+  loadArticles();
+}
+
+function toggleChangePw() {
+  var bar = document.getElementById('changePwBar');
+  bar.style.display = bar.style.display === 'flex' ? 'none' : 'flex';
+  if (bar.style.display === 'flex') document.getElementById('newPw').focus();
+}
+
+async function changePassword() {
+  var pw = document.getElementById('newPw').value;
+  var msg = document.getElementById('pwMsg');
+  if (!pw || pw.length < 8) { msg.textContent = 'Min 8 characters.'; msg.style.color = 'var(--danger)'; return; }
+  const { error } = await sb.auth.updateUser({ password: pw });
+  if (error) { msg.textContent = error.message; msg.style.color = 'var(--danger)'; }
+  else { msg.textContent = 'Password updated.'; msg.style.color = 'var(--accent)'; document.getElementById('newPw').value = ''; }
+}
+
+async function loadArticles() {
+  const { data, error } = await sb
+    .from('articles')
+    .select('id, slug, title, date, section, status')
+    .order('date', { ascending: false });
+
+  const tbody = document.getElementById('articleRows');
+
+  if (error || !data || data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No articles yet. Create your first one.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = data.map(function(a) {
+    return '<tr>' +
+      '<td class="td-title">' + (a.title || '—') + '</td>' +
+      '<td class="td-date">' + formatDate(a.date) + '</td>' +
+      '<td class="td-section">' + (a.section || '—') + '</td>' +
+      '<td><span class="status-badge status-' + (a.status || 'draft') + '">' + (a.status || 'draft') + '</span></td>' +
+      '<td class="td-actions">' +
+        '<a href="/frameworks/' + a.slug + '/" target="_blank">View</a>' +
+        '<a href="/admin/articles/edit.html?id=' + a.id + '">Edit</a>' +
+        '<a class="del" onclick="deleteArticle(\'' + a.id + '\', \'' + (a.title || '').replace(/'/g, "\\'") + '\')">Delete</a>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+async function deleteArticle(id, title) {
+  if (!confirm('Delete "' + title + '"?\n\nThis cannot be undone.')) return;
+  const { error } = await sb.from('articles').delete().eq('id', id);
+  if (error) { alert('Delete failed: ' + error.message); return; }
+  loadArticles();
+}
+
+document.getElementById('email') && document.getElementById('email').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('password').focus();
+});
+document.getElementById('password') && document.getElementById('password').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') login();
+});
+
+init();
+</script>
+</body>
+</html>
