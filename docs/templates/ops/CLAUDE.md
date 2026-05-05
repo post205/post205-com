@@ -1,5 +1,22 @@
 # [ENTITY NAME] — Ops
 
+## Always do first
+
+- **Invoke `frontend-design`** before writing any frontend code, every session, no exceptions.
+
+## Skills
+
+| Skill | When to invoke |
+|---|---|
+| `frontend-design` | Before writing any frontend code |
+| `mobile-responsive` | Before shipping any page, or when debugging a mobile layout issue |
+| `firecrawl` | When researching client context, integrations, or business processes |
+| `superpowers:brainstorming` | Before designing any new feature or workflow |
+| `superpowers:systematic-debugging` | When hitting any bug |
+| `gsd:new-project` | When planning a full structured build with multiple phases |
+
+---
+
 ## Before we start
 
 This file has placeholders. **Ask me for each one before doing anything else.** Do not write any code until all placeholders are filled in.
@@ -168,6 +185,37 @@ After every fresh clone, `env.js` must be created manually — it's never in the
 
 Add more sections as needed. Each section = its own folder.
 
+## WAT Framework (Workflows, Agents, Tools)
+
+This project follows the WAT architecture. AI handles orchestration; deterministic scripts handle execution. Ops is where WAT pays off most — client onboarding, proposals, billing checks, and invoices are all multi-step processes with external APIs.
+
+**Layer 1 — Workflows** (`workflows/`): Markdown SOPs. Each defines the objective, inputs, which tool to call, expected output, and how to handle failure.
+**Layer 2 — Agent** (you): Read the relevant workflow. Run tools in sequence. Handle errors. Ask when blocked.
+**Layer 3 — Tools** (`tools/`): Scripts that do the actual work — consistent, testable, fast.
+
+Before building anything new, check `tools/` first. Only create a new script when nothing exists for that task. When a tool fails, fix it, verify the fix, then update the workflow so it doesn't fail the same way again.
+
+### Workflows in this project
+
+| Workflow | What it does |
+|---|---|
+| `onboard-client.md` | Create client record in Supabase, set up profile, output subdomain CNAME instructions |
+| `generate-proposal.md` | Draft proposal content, store in Supabase, return `sign.post205.com/p/[uuid]` URL |
+| `create-sla.md` | Draft service agreement, store in Supabase, return `sign.post205.com/sa/[uuid]` URL |
+| `billing-check.md` | Fetch Xendit subscription statuses, compare to client records, flag mismatches |
+| `send-invoice.md` | Generate invoice content, send via Resend to client email, log in Supabase |
+| `deploy.md` | Deploy to Netlify via CLI with env vars |
+
+### Tools in this project
+
+| Tool | What it does |
+|---|---|
+| `supabase-client.py` | CRUD on clients, projects, proposals, SLA tables via service role key |
+| `xendit-check.py` | Fetch subscription statuses from Xendit API, return structured list |
+| `resend-send.py` | Send transactional email via Resend (invoice, proposal notification, SLA notification) |
+| `generate-uuid-doc.py` | Insert proposal or SLA record into Supabase, return UUID-gated sign URL |
+| `deploy.sh` | Runs the Netlify deploy command using `.env` vars |
+
 ## Rules and reference
 
 Read these three files before building anything — they're in `docs/`:
@@ -204,6 +252,19 @@ Key rules from `build-rules.md`:
 ├── index.html              ← dashboard
 ├── clients/
 │   └── index.html
+├── workflows/
+│   ├── onboard-client.md
+│   ├── generate-proposal.md
+│   ├── create-sla.md
+│   ├── billing-check.md
+│   ├── send-invoice.md
+│   └── deploy.md
+├── tools/
+│   ├── supabase-client.py
+│   ├── xendit-check.py
+│   ├── resend-send.py
+│   ├── generate-uuid-doc.py
+│   └── deploy.sh
 └── docs/
     ├── build-rules.md
     ├── core-values.md

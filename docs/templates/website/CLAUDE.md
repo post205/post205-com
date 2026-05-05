@@ -1,5 +1,24 @@
 # [CLIENT NAME] — Website
 
+## Always do first
+
+- **Invoke `frontend-design`** before writing any frontend code, every session, no exceptions.
+- Check `images/` for existing brand assets before designing. Use real assets — do not use placeholders where real logos, colors, or images exist.
+
+## Skills
+
+| Skill | When to invoke |
+|---|---|
+| `frontend-design` | Before writing any frontend code |
+| `mobile-responsive` | Before shipping any page, or when debugging a mobile layout issue |
+| `copywriting` | Before writing any page copy, headlines, CTAs, or privacy policy text |
+| `firecrawl` | When researching competitors, reference sites, or existing client content |
+| `superpowers:brainstorming` | Before designing any new page or feature section |
+| `superpowers:systematic-debugging` | When hitting any bug |
+| `gsd:new-project` | When planning a full structured build with multiple phases |
+
+---
+
 ## Before we start
 
 This file has placeholders. **Ask me for each one before doing anything else.** Do not write any code until all placeholders are filled in.
@@ -38,6 +57,15 @@ Public marketing website for [CLIENT NAME]. Lives at `[DOMAIN]`. Built on Netlif
 source .env && npx netlify deploy --prod --dir=. --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID
 ```
 
+**Local dev server:**
+```bash
+node serve.mjs
+```
+Serves the project root at `http://localhost:3000`. Always develop and screenshot from localhost — never from a `file:///` URL (breaks relative fetches and CORS).
+
+**Reference image workflow (when a design reference exists):**
+Match layout, spacing, typography, and color exactly. Don't improve or add to the design. Screenshot from localhost, compare against reference, fix mismatches, screenshot again. Do at least 2 comparison rounds. Stop only when no visible differences remain.
+
 ## Design system
 
 | Token | Dark | Light |
@@ -58,6 +86,16 @@ source .env && npx netlify deploy --prod --dir=. --auth=$NETLIFY_AUTH_TOKEN --si
 - Mono/labels: `ui-monospace, monospace` weight 400
 
 **Reading column (text-heavy pages):** 680px max-width
+
+**Anti-generic guardrails:**
+- **Shadows:** Never flat `box-shadow: 0 2px 4px rgba(0,0,0,0.1)`. Use layered shadows with low opacity and a color tint from the palette.
+- **Typography:** Tight letter-spacing (`-0.03em`) on large headings. Generous line-height (`1.7`) on body text.
+- **Gradients:** Layer multiple radial gradients. Add grain/texture via SVG noise filter for depth where appropriate.
+- **Animations:** Only animate `transform` and `opacity`. Never `transition: all`. Use `cubic-bezier` easing.
+- **Interactive states:** Every clickable element needs `:hover`, `:focus-visible`, and `:active` states. No exceptions.
+- **Images:** Add a gradient overlay (`linear-gradient(to top, rgba(0,0,0,0.6), transparent)`) where images carry text.
+- **Spacing:** Use CSS custom property tokens — not arbitrary values. Keep a consistent spacing scale.
+- **Depth:** Follow the layering system in the design tokens (Background → Surface → Surface 2). Elements should sit at distinct z-planes, not all at the same level.
 
 ## Pages to build
 
@@ -111,6 +149,30 @@ ANTHROPIC_API_KEY=            ← if AI features are needed
 **`.env.example` — committed to git, values blank**
 Documents what keys are needed without exposing any values.
 
+## WAT Framework (Workflows, Agents, Tools)
+
+This project follows the WAT architecture. AI handles orchestration; deterministic scripts handle execution. When a task involves multiple steps or an external API, use a workflow + tool rather than doing it all inline.
+
+**Layer 1 — Workflows** (`workflows/`): Markdown SOPs. Each defines the objective, inputs, which tool to call, expected output, and how to handle failure.
+**Layer 2 — Agent** (you): Read the relevant workflow. Run tools in sequence. Handle errors. Ask when blocked.
+**Layer 3 — Tools** (`tools/`): Scripts that do the actual work — consistent, testable, fast.
+
+Before building anything new, check `tools/` first. Only create a new script when nothing exists for that task. When a tool fails, fix it, verify the fix, then update the workflow so it doesn't fail the same way again.
+
+### Workflows in this project
+
+| Workflow | What it does |
+|---|---|
+| `deploy.md` | Deploy to Netlify via CLI with env vars |
+| `sitemap-update.md` | Regenerate `sitemap.xml` from current pages |
+
+### Tools in this project
+
+| Tool | What it does |
+|---|---|
+| `deploy.sh` | Runs the Netlify deploy command using `.env` vars |
+| `sitemap-gen.py` | Scans HTML files, writes `sitemap.xml` with correct base URL |
+
 ## Rules and reference
 
 Read these three files before building anything — they're in `docs/`:
@@ -145,6 +207,12 @@ Key rules from `build-rules.md`:
 │   └── apple-touch-icon.png
 ├── js/
 │   └── cookie-banner.js
+├── workflows/
+│   ├── deploy.md
+│   └── sitemap-update.md
+├── tools/
+│   ├── deploy.sh
+│   └── sitemap-gen.py
 └── docs/
     ├── build-rules.md
     └── core-values.md

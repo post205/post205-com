@@ -1,5 +1,24 @@
 # [CLIENT NAME] — Desk
 
+## Always do first
+
+- **Invoke `frontend-design`** before writing any frontend code, every session, no exceptions.
+
+## Skills
+
+| Skill | When to invoke |
+|---|---|
+| `frontend-design` | Before writing any frontend code |
+| `editorial` | Before writing or editing any article, newsletter body, or long-form content |
+| `copywriting` | Before writing newsletter subject lines, CTAs, or short marketing copy |
+| `firecrawl` | When researching for an article or gathering reference material |
+| `mobile-responsive` | Before shipping any page, or when debugging a mobile layout issue |
+| `superpowers:brainstorming` | Before designing any new feature |
+| `superpowers:systematic-debugging` | When hitting any bug |
+| `gsd:new-project` | When planning a full structured build with multiple phases |
+
+---
+
 ## Before we start
 
 This file has placeholders. **Ask me for each one before doing anything else.** Do not write any code until all placeholders are filled in.
@@ -136,6 +155,34 @@ RESEND_API_KEY=               ← if email notifications are needed
 **`.env.example` — committed to git, values blank**
 Documents what keys are needed without exposing any values.
 
+## WAT Framework (Workflows, Agents, Tools)
+
+This project follows the WAT architecture. AI handles orchestration; deterministic scripts handle execution. The content publication pipeline is the core use case here — each step from draft to published article to newsletter should have a workflow.
+
+**Layer 1 — Workflows** (`workflows/`): Markdown SOPs. Each defines the objective, inputs, which tool to call, expected output, and how to handle failure.
+**Layer 2 — Agent** (you): Read the relevant workflow. Run tools in sequence. Handle errors. Ask when blocked.
+**Layer 3 — Tools** (`tools/`): Scripts that do the actual work — consistent, testable, fast.
+
+Before building anything new, check `tools/` first. Only create a new script when nothing exists for that task. When a tool fails, fix it, verify the fix, then update the workflow so it doesn't fail the same way again.
+
+### Workflows in this project
+
+| Workflow | What it does |
+|---|---|
+| `publish-article.md` | Draft → AI alignment check → publish to Supabase → trigger learnings extraction |
+| `send-newsletter.md` | Compose subject + body → preview → send to all active subscribers via Resend |
+| `extract-learnings.md` | Pull insights from a published article, append to `docs/learnings.md` |
+| `deploy.md` | Deploy to Netlify via CLI with env vars |
+
+### Tools in this project
+
+| Tool | What it does |
+|---|---|
+| `ai-check.py` | POSTs article content to `/api/ai` (action: `check`), prints flagged paragraphs |
+| `send-newsletter.py` | POSTs subject + body to `/api/send-newsletter`, returns delivery status |
+| `extract-learnings.py` | POSTs article content to `/api/ai` (action: `extract`), appends result to `docs/learnings.md` |
+| `deploy.sh` | Runs the Netlify deploy command using `.env` vars |
+
 ## Rules and reference
 
 Read these three files before building anything — they're in `docs/`:
@@ -163,6 +210,16 @@ Key rules from `build-rules.md`:
 ├── index.html              ← login + content list
 ├── articles/
 │   └── edit.html           ← markdown editor
+├── workflows/
+│   ├── publish-article.md
+│   ├── send-newsletter.md
+│   ├── extract-learnings.md
+│   └── deploy.md
+├── tools/
+│   ├── ai-check.py
+│   ├── send-newsletter.py
+│   ├── extract-learnings.py
+│   └── deploy.sh
 └── docs/
     ├── build-rules.md
     └── core-values.md
