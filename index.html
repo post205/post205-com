@@ -1486,122 +1486,77 @@
     <div class="about-graphic">
       <svg viewBox="0 0 360 315" width="100%" height="auto" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="sys-f" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+          <filter id="sys-f" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
             <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
+          <!-- 4-wave bezier circle, R=100, amplitude=20. Peaks at 0°/90°/180°/270°, troughs at 45° intervals -->
+          <path id="wv1" d="M 300 155 C 300 221 268 180 237 212 C 205 243 246 275 180 275 C 114 275 155 243 123 212 C 92 180 60 221 60 155 C 60 89 92 130 123 98 C 155 67 180 101 180 35 C 246 35 205 67 237 98 C 268 130 300 89 300 155 Z"/>
+          <!-- 4-wave bezier circle, R=90, amplitude=25. Slightly wider oscillation -->
+          <path id="wv2" d="M 295 155 C 295 219 251 176 226 201 C 201 226 244 270 180 270 C 117 270 160 226 134 201 C 109 176 65 219 65 155 C 65 92 109 135 134 109 C 160 84 180 104 180 40 C 244 40 201 84 226 109 C 251 135 295 92 295 155 Z"/>
         </defs>
         <g filter="url(#sys-f)">
-          <!-- Stable connections (structural web) -->
-          <line x1="178" y1="152" x2="150" y2="128" stroke="var(--accent)" stroke-width="0.8" opacity="0.3"/>
-          <line x1="178" y1="152" x2="210" y2="136" stroke="var(--accent)" stroke-width="0.8" opacity="0.35"/>
-          <line x1="178" y1="152" x2="196" y2="178" stroke="var(--accent)" stroke-width="0.7" opacity="0.25"/>
-          <line x1="178" y1="152" x2="156" y2="178" stroke="var(--accent)" stroke-width="0.7" opacity="0.2"/>
-          <line x1="150" y1="128" x2="210" y2="136" stroke="var(--accent)" stroke-width="0.6" opacity="0.2"/>
-          <line x1="150" y1="128" x2="156" y2="178" stroke="var(--accent)" stroke-width="0.5" opacity="0.15"/>
-          <line x1="210" y1="136" x2="196" y2="178" stroke="var(--accent)" stroke-width="0.5" opacity="0.15"/>
-          <line x1="196" y1="178" x2="156" y2="178" stroke="var(--accent)" stroke-width="0.5" opacity="0.2"/>
-          <line x1="242" y1="102" x2="280" y2="125" stroke="var(--accent)" stroke-width="0.6" opacity="0.25"/>
-          <line x1="280" y1="125" x2="298" y2="162" stroke="var(--accent)" stroke-width="0.5" opacity="0.2"/>
-          <line x1="108" y1="148" x2="78"  y2="122" stroke="var(--accent)" stroke-width="0.6" opacity="0.2"/>
-          <line x1="78"  y1="122" x2="85"  y2="175" stroke="var(--accent)" stroke-width="0.5" opacity="0.15"/>
-          <line x1="145" y1="235" x2="110" y2="260" stroke="var(--accent)" stroke-width="0.5" opacity="0.2"/>
-          <line x1="110" y1="260" x2="178" y2="270" stroke="var(--accent)" stroke-width="0.5" opacity="0.15"/>
-          <line x1="178" y1="270" x2="215" y2="248" stroke="var(--accent)" stroke-width="0.5" opacity="0.2"/>
-          <!-- Flickering connections (fire asynchronously) -->
-          <line x1="178" y1="152" x2="242" y2="102" stroke="var(--accent)" stroke-width="1.0">
-            <animate attributeName="opacity" values="0.08;0.5;0.08" dur="3.2s" begin="0s" repeatCount="indefinite"/>
-          </line>
-          <line x1="178" y1="152" x2="108" y2="148" stroke="var(--accent)" stroke-width="1.0">
-            <animate attributeName="opacity" values="0.12;0.55;0.12" dur="2.8s" begin="0.6s" repeatCount="indefinite"/>
-          </line>
-          <line x1="178" y1="152" x2="145" y2="235" stroke="var(--accent)" stroke-width="0.9">
-            <animate attributeName="opacity" values="0.06;0.42;0.06" dur="4.0s" begin="1.2s" repeatCount="indefinite"/>
-          </line>
-          <line x1="178" y1="152" x2="162" y2="68" stroke="var(--accent)" stroke-width="0.9">
-            <animate attributeName="opacity" values="0.08;0.48;0.08" dur="3.5s" begin="0.4s" repeatCount="indefinite"/>
-          </line>
-          <line x1="150" y1="128" x2="108" y2="148" stroke="var(--accent)" stroke-width="0.6">
-            <animate attributeName="opacity" values="0.05;0.35;0.05" dur="4.5s" begin="2.0s" repeatCount="indefinite"/>
-          </line>
-          <line x1="150" y1="128" x2="78" y2="122" stroke="var(--accent)" stroke-width="0.6">
-            <animate attributeName="opacity" values="0.07;0.38;0.07" dur="3.8s" begin="0.8s" repeatCount="indefinite"/>
-          </line>
-          <line x1="210" y1="136" x2="242" y2="102" stroke="var(--accent)" stroke-width="0.7">
-            <animate attributeName="opacity" values="0.1;0.5;0.1" dur="2.5s" begin="1.5s" repeatCount="indefinite"/>
-          </line>
-          <line x1="210" y1="136" x2="280" y2="125" stroke="var(--accent)" stroke-width="0.6">
-            <animate attributeName="opacity" values="0.07;0.4;0.07" dur="3.2s" begin="0.2s" repeatCount="indefinite"/>
-          </line>
-          <line x1="242" y1="102" x2="260" y2="155" stroke="var(--accent)" stroke-width="0.6">
-            <animate attributeName="opacity" values="0.08;0.45;0.08" dur="2.8s" begin="1.0s" repeatCount="indefinite"/>
-          </line>
-          <line x1="260" y1="155" x2="298" y2="162" stroke="var(--accent)" stroke-width="0.5">
-            <animate attributeName="opacity" values="0.05;0.32;0.05" dur="3.5s" begin="2.3s" repeatCount="indefinite"/>
-          </line>
-          <line x1="280" y1="125" x2="260" y2="155" stroke="var(--accent)" stroke-width="0.5">
-            <animate attributeName="opacity" values="0.05;0.3;0.05" dur="4.2s" begin="1.8s" repeatCount="indefinite"/>
-          </line>
-          <line x1="85"  y1="175" x2="70"  y2="200" stroke="var(--accent)" stroke-width="0.5">
-            <animate attributeName="opacity" values="0.06;0.35;0.06" dur="3.8s" begin="0.5s" repeatCount="indefinite"/>
-          </line>
-          <line x1="85"  y1="175" x2="108" y2="148" stroke="var(--accent)" stroke-width="0.5">
-            <animate attributeName="opacity" values="0.07;0.38;0.07" dur="2.6s" begin="1.5s" repeatCount="indefinite"/>
-          </line>
-          <line x1="156" y1="178" x2="85"  y2="175" stroke="var(--accent)" stroke-width="0.6">
-            <animate attributeName="opacity" values="0.07;0.4;0.07" dur="4.0s" begin="0.9s" repeatCount="indefinite"/>
-          </line>
-          <line x1="196" y1="178" x2="145" y2="235" stroke="var(--accent)" stroke-width="0.6">
-            <animate attributeName="opacity" values="0.08;0.45;0.08" dur="3.0s" begin="1.3s" repeatCount="indefinite"/>
-          </line>
-          <line x1="196" y1="178" x2="215" y2="248" stroke="var(--accent)" stroke-width="0.5">
-            <animate attributeName="opacity" values="0.06;0.35;0.06" dur="3.6s" begin="2.1s" repeatCount="indefinite"/>
-          </line>
-          <line x1="145" y1="235" x2="215" y2="248" stroke="var(--accent)" stroke-width="0.5">
-            <animate attributeName="opacity" values="0.07;0.38;0.07" dur="2.8s" begin="0.4s" repeatCount="indefinite"/>
-          </line>
-          <line x1="162" y1="68"  x2="230" y2="76"  stroke="var(--accent)" stroke-width="0.5">
-            <animate attributeName="opacity" values="0.06;0.35;0.06" dur="3.2s" begin="1.6s" repeatCount="indefinite"/>
-          </line>
-          <line x1="230" y1="76"  x2="242" y2="102" stroke="var(--accent)" stroke-width="0.5">
-            <animate attributeName="opacity" values="0.07;0.4;0.07" dur="2.5s" begin="0.6s" repeatCount="indefinite"/>
-          </line>
-          <line x1="162" y1="68"  x2="150" y2="128" stroke="var(--accent)" stroke-width="0.5">
-            <animate attributeName="opacity" values="0.05;0.3;0.05" dur="4.8s" begin="2.4s" repeatCount="indefinite"/>
-          </line>
-          <!-- Nodes (pulsing individually) -->
-          <circle cx="230" cy="76"  r="3"   fill="var(--accent)"><animate attributeName="opacity" values="0.2;0.7;0.2"  dur="2.0s" begin="1.4s" repeatCount="indefinite"/></circle>
-          <circle cx="162" cy="68"  r="3.5" fill="var(--accent)"><animate attributeName="opacity" values="0.25;0.8;0.25" dur="3.1s" begin="0.8s" repeatCount="indefinite"/></circle>
-          <circle cx="78"  cy="122" r="3.5" fill="var(--accent)"><animate attributeName="opacity" values="0.2;0.7;0.2"  dur="3.8s" begin="1.3s" repeatCount="indefinite"/></circle>
-          <circle cx="298" cy="162" r="3"   fill="var(--accent)"><animate attributeName="opacity" values="0.15;0.6;0.15" dur="3.5s" begin="1.5s" repeatCount="indefinite"/></circle>
-          <circle cx="70"  cy="200" r="3"   fill="var(--accent)"><animate attributeName="opacity" values="0.15;0.5;0.15" dur="4.5s" begin="0.7s" repeatCount="indefinite"/></circle>
-          <circle cx="110" cy="260" r="3"   fill="var(--accent)"><animate attributeName="opacity" values="0.2;0.6;0.2"  dur="2.7s" begin="2.5s" repeatCount="indefinite"/></circle>
-          <circle cx="178" cy="270" r="3.5" fill="var(--accent)"><animate attributeName="opacity" values="0.25;0.75;0.25" dur="3.5s" begin="1.7s" repeatCount="indefinite"/></circle>
-          <circle cx="215" cy="248" r="3"   fill="var(--accent)"><animate attributeName="opacity" values="0.2;0.65;0.2" dur="2.4s" begin="0.2s" repeatCount="indefinite"/></circle>
-          <circle cx="85"  cy="175" r="3"   fill="var(--accent)"><animate attributeName="opacity" values="0.2;0.6;0.2"  dur="2.3s" begin="2.2s" repeatCount="indefinite"/></circle>
-          <circle cx="145" cy="235" r="4"   fill="var(--accent)"><animate attributeName="opacity" values="0.3;0.85;0.3" dur="3.0s" begin="1.0s" repeatCount="indefinite"/></circle>
-          <circle cx="260" cy="155" r="3"   fill="var(--accent)"><animate attributeName="opacity" values="0.2;0.65;0.2" dur="2.9s" begin="0.9s" repeatCount="indefinite"/></circle>
-          <circle cx="280" cy="125" r="3.5" fill="var(--accent)"><animate attributeName="opacity" values="0.25;0.75;0.25" dur="4.2s" begin="2.0s" repeatCount="indefinite"/></circle>
-          <circle cx="108" cy="148" r="4"   fill="var(--accent)"><animate attributeName="opacity" values="0.3;0.85;0.3" dur="2.6s" begin="0.4s" repeatCount="indefinite"/></circle>
-          <circle cx="156" cy="178" r="3"   fill="var(--accent)"><animate attributeName="opacity" values="0.2;0.7;0.2"  dur="3.8s" begin="1.8s" repeatCount="indefinite"/></circle>
-          <circle cx="196" cy="178" r="3.5" fill="var(--accent)"><animate attributeName="opacity" values="0.25;0.8;0.25" dur="2.5s" begin="0.6s" repeatCount="indefinite"/></circle>
-          <circle cx="242" cy="102" r="4"   fill="var(--accent)"><animate attributeName="opacity" values="0.3;0.9;0.3"  dur="2.2s" begin="0s"   repeatCount="indefinite"/></circle>
-          <circle cx="150" cy="128" r="4"   fill="var(--accent)"><animate attributeName="opacity" values="0.3;0.85;0.3" dur="2.8s" begin="0.3s" repeatCount="indefinite"/></circle>
-          <circle cx="210" cy="136" r="4.5" fill="var(--accent)"><animate attributeName="opacity" values="0.35;0.9;0.35" dur="3.2s" begin="1.1s" repeatCount="indefinite"/></circle>
-          <!-- Hub — largest node, pulses in r and opacity -->
-          <circle cx="178" cy="152" r="7" fill="var(--accent)">
-            <animate attributeName="r"       values="6;9;6"     dur="4s" begin="0s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0.6;1;0.6" dur="4s" begin="0s" repeatCount="indefinite"/>
+          <!-- Soft glow base ring — breathes slowly -->
+          <circle cx="180" cy="155" r="100" stroke="var(--accent)" stroke-width="40" fill="none">
+            <animate attributeName="opacity" values="0.03;0.07;0.03" dur="6s" begin="0s" repeatCount="indefinite"/>
           </circle>
-          <!-- Traveling particles -->
-          <circle r="2"   fill="var(--accent)" opacity="0.9"><animateMotion path="M 178 152 L 242 102" dur="2.0s" begin="0s"   repeatCount="indefinite"/></circle>
-          <circle r="2"   fill="var(--accent)" opacity="0.9"><animateMotion path="M 108 148 L 178 152" dur="2.5s" begin="0.7s" repeatCount="indefinite"/></circle>
-          <circle r="1.5" fill="var(--accent)" opacity="0.8"><animateMotion path="M 108 148 L 78  122" dur="1.5s" begin="1.2s" repeatCount="indefinite"/></circle>
-          <circle r="1.5" fill="var(--accent)" opacity="0.8"><animateMotion path="M 210 136 L 280 125" dur="2.2s" begin="0.3s" repeatCount="indefinite"/></circle>
-          <circle r="1.5" fill="var(--accent)" opacity="0.8"><animateMotion path="M 145 235 L 178 270" dur="1.8s" begin="1.8s" repeatCount="indefinite"/></circle>
-          <circle r="2"   fill="var(--accent)" opacity="0.9"><animateMotion path="M 178 152 L 162 68"  dur="2.8s" begin="0.5s" repeatCount="indefinite"/></circle>
-          <circle r="1.5" fill="var(--accent)" opacity="0.8"><animateMotion path="M 242 102 L 260 155" dur="1.6s" begin="2.0s" repeatCount="indefinite"/></circle>
-          <circle r="1.5" fill="var(--accent)" opacity="0.8"><animateMotion path="M 196 178 L 145 235" dur="2.3s" begin="1.0s" repeatCount="indefinite"/></circle>
+          <circle cx="180" cy="155" r="100" stroke="#C84BE8" stroke-width="40" fill="none">
+            <animate attributeName="opacity" values="0.02;0.05;0.02" dur="7s" begin="1.5s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Ribbon A: teal — CW rotation, clustered around 0–20° -->
+          <g stroke="var(--accent)" fill="none">
+            <g opacity="0.5" stroke-width="0.4">
+              <animateTransform attributeName="transform" type="rotate" from="3 180 155" to="363 180 155" dur="40s" repeatCount="indefinite"/>
+              <use href="#wv1"/>
+            </g>
+            <g opacity="0.35" stroke-width="0.3">
+              <animateTransform attributeName="transform" type="rotate" from="9 180 155" to="369 180 155" dur="46s" repeatCount="indefinite"/>
+              <use href="#wv2"/>
+            </g>
+            <g opacity="0.2" stroke-width="0.65">
+              <animateTransform attributeName="transform" type="rotate" from="0 180 155" to="360 180 155" dur="42s" repeatCount="indefinite"/>
+              <use href="#wv1"/>
+            </g>
+            <g opacity="0.15" stroke-width="0.5">
+              <animateTransform attributeName="transform" type="rotate" from="6 180 155" to="366 180 155" dur="38s" repeatCount="indefinite"/>
+              <use href="#wv2"/>
+            </g>
+            <g opacity="0.1" stroke-width="0.5">
+              <animateTransform attributeName="transform" type="rotate" from="14 180 155" to="374 180 155" dur="54s" repeatCount="indefinite"/>
+              <use href="#wv1"/>
+            </g>
+            <g opacity="0.06" stroke-width="0.4">
+              <animateTransform attributeName="transform" type="rotate" from="20 180 155" to="380 180 155" dur="64s" repeatCount="indefinite"/>
+              <use href="#wv2"/>
+            </g>
+          </g>
+          <!-- Ribbon B: magenta — CCW rotation, clustered around 55–75° -->
+          <g stroke="#C84BE8" fill="none">
+            <g opacity="0.5" stroke-width="0.4">
+              <animateTransform attributeName="transform" type="rotate" from="58 180 155" to="-302 180 155" dur="40s" repeatCount="indefinite"/>
+              <use href="#wv1"/>
+            </g>
+            <g opacity="0.35" stroke-width="0.3">
+              <animateTransform attributeName="transform" type="rotate" from="64 180 155" to="-296 180 155" dur="48s" repeatCount="indefinite"/>
+              <use href="#wv2"/>
+            </g>
+            <g opacity="0.2" stroke-width="0.65">
+              <animateTransform attributeName="transform" type="rotate" from="55 180 155" to="-305 180 155" dur="38s" repeatCount="indefinite"/>
+              <use href="#wv1"/>
+            </g>
+            <g opacity="0.15" stroke-width="0.5">
+              <animateTransform attributeName="transform" type="rotate" from="61 180 155" to="-299 180 155" dur="44s" repeatCount="indefinite"/>
+              <use href="#wv2"/>
+            </g>
+            <g opacity="0.1" stroke-width="0.5">
+              <animateTransform attributeName="transform" type="rotate" from="69 180 155" to="-291 180 155" dur="56s" repeatCount="indefinite"/>
+              <use href="#wv1"/>
+            </g>
+            <g opacity="0.06" stroke-width="0.4">
+              <animateTransform attributeName="transform" type="rotate" from="75 180 155" to="-285 180 155" dur="66s" repeatCount="indefinite"/>
+              <use href="#wv2"/>
+            </g>
+          </g>
         </g>
       </svg>
     </div>
