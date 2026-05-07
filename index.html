@@ -866,6 +866,22 @@
       margin-top: 32px;
       font-weight: 500;
     }
+    .about-icon {
+      margin-bottom: 28px;
+      color: var(--accent);
+    }
+    .about-sun-g {
+      animation: aboutSpin 22s linear infinite;
+      transform-origin: 0px 0px;
+    }
+    .about-star-a { animation: aboutStarGlow 3.5s ease-in-out infinite 0s; }
+    .about-star-b { animation: aboutStarGlow 3.5s ease-in-out infinite 1.2s; }
+    .about-star-c { animation: aboutStarGlow 3.5s ease-in-out infinite 2.4s; }
+    @keyframes aboutSpin { to { transform: rotate(360deg); } }
+    @keyframes aboutStarGlow {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
 
     /* ── CTA ── */
     .cta {
@@ -1408,6 +1424,28 @@
 <section class="about" id="about">
   <div class="about-inner">
     <div class="about-mission">
+      <div class="about-icon">
+        <svg width="64" height="64" viewBox="-40 -40 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g class="about-sun-g">
+            <!-- Long rays: N E S W -->
+            <line x1="0" y1="-11" x2="0" y2="-24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="11" y1="0" x2="24" y2="0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="0" y1="11" x2="0" y2="24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="-11" y1="0" x2="-24" y2="0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- Short rays: diagonals -->
+            <line x1="7.8" y1="-7.8" x2="13" y2="-13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="7.8" y1="7.8" x2="13" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="-7.8" y1="7.8" x2="-13" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="-7.8" y1="-7.8" x2="-13" y2="-13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- Center circle -->
+            <circle r="9" stroke="currentColor" stroke-width="1.5"/>
+          </g>
+          <!-- 3 five-pointed stars at equilateral triangle positions -->
+          <path class="about-star-a" transform="translate(0,-33)" fill="currentColor" d="M0,-3 L0.71,-0.97 L2.85,-0.93 L1.14,0.37 L1.76,2.43 L0,1.2 L-1.76,2.43 L-1.14,0.37 L-2.85,-0.93 L-0.71,-0.97 Z"/>
+          <path class="about-star-b" transform="translate(-29,17)" fill="currentColor" d="M0,-3 L0.71,-0.97 L2.85,-0.93 L1.14,0.37 L1.76,2.43 L0,1.2 L-1.76,2.43 L-1.14,0.37 L-2.85,-0.93 L-0.71,-0.97 Z"/>
+          <path class="about-star-c" transform="translate(29,17)" fill="currentColor" d="M0,-3 L0.71,-0.97 L2.85,-0.93 L1.14,0.37 L1.76,2.43 L0,1.2 L-1.76,2.43 L-1.14,0.37 L-2.85,-0.93 L-0.71,-0.97 Z"/>
+        </svg>
+      </div>
       <p class="about-mission-hl">Filipinos don't march. We sway.</p>
       <p class="about-mission-body">We build close to what you actually do, not what a template assumes. Every business runs differently. We listen first, build second, and adjust as things change.</p>
       <p class="about-mission-body">There's no license you're paying for. What we build is yours — not a subscription someone else can revoke. If we ever part ways, your system and your data stay with you.</p>
