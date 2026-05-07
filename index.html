@@ -1594,7 +1594,7 @@
 
     var answers = {};
 
-    botSay('Hey. What kind of business?', 500).then(function() {
+    botSay('‘Musta? What’s your business?', 500).then(function() {
       chips(['Clinic · Spa', 'Retail · Store', 'Events · Venue', 'Professional firm', 'Something else'], function(v) {
         answers.business = v;
         botSay("What's taking the most time right now?").then(function() {
