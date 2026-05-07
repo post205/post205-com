@@ -1,0 +1,9 @@
+[[redirects]]
+  from = "/publications/:id"
+  to = "/publications/detail.html"
+  status = 200
+
+[[redirects]]
+  from = "/users/:id"
+  to = "/users/detail.html"
+  status = 200

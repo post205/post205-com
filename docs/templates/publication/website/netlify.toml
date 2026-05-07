@@ -1,0 +1,9 @@
+[[redirects]]
+  from = "/article/:slug"
+  to = "/article.html"
+  status = 200
+
+[[redirects]]
+  from = "/:section"
+  to = "/section.html"
+  status = 200
