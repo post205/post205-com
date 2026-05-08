@@ -854,6 +854,7 @@
       align-items: center;
       min-width: 0;
     }
+    .about-graphic canvas { display: block; width: 100%; height: auto; max-width: 400px; }
     .sys-hub {
       transform-box: fill-box;
       transform-origin: center;
@@ -1484,81 +1485,7 @@
       <p class="about-mission-close">Building systems for Filipino businesses since 2015. Metro Manila.</p>
     </div>
     <div class="about-graphic">
-      <svg viewBox="0 0 360 315" width="100%" height="auto" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="sys-f" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-          <!-- 4-wave bezier circle, R=100, amplitude=20. Peaks at 0°/90°/180°/270°, troughs at 45° intervals -->
-          <path id="wv1" d="M 300 155 C 300 221 268 180 237 212 C 205 243 246 275 180 275 C 114 275 155 243 123 212 C 92 180 60 221 60 155 C 60 89 92 130 123 98 C 155 67 180 101 180 35 C 246 35 205 67 237 98 C 268 130 300 89 300 155 Z"/>
-          <!-- 4-wave bezier circle, R=90, amplitude=25. Slightly wider oscillation -->
-          <path id="wv2" d="M 295 155 C 295 219 251 176 226 201 C 201 226 244 270 180 270 C 117 270 160 226 134 201 C 109 176 65 219 65 155 C 65 92 109 135 134 109 C 160 84 180 104 180 40 C 244 40 201 84 226 109 C 251 135 295 92 295 155 Z"/>
-        </defs>
-        <g filter="url(#sys-f)">
-          <!-- Soft glow base ring — breathes slowly -->
-          <circle cx="180" cy="155" r="100" stroke="var(--accent)" stroke-width="40" fill="none">
-            <animate attributeName="opacity" values="0.03;0.07;0.03" dur="6s" begin="0s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="180" cy="155" r="100" stroke="#C84BE8" stroke-width="40" fill="none">
-            <animate attributeName="opacity" values="0.02;0.05;0.02" dur="7s" begin="1.5s" repeatCount="indefinite"/>
-          </circle>
-          <!-- Ribbon A: teal — CW rotation, clustered around 0–20° -->
-          <g stroke="var(--accent)" fill="none">
-            <g opacity="0.5" stroke-width="0.4">
-              <animateTransform attributeName="transform" type="rotate" from="3 180 155" to="363 180 155" dur="40s" repeatCount="indefinite"/>
-              <use href="#wv1"/>
-            </g>
-            <g opacity="0.35" stroke-width="0.3">
-              <animateTransform attributeName="transform" type="rotate" from="9 180 155" to="369 180 155" dur="46s" repeatCount="indefinite"/>
-              <use href="#wv2"/>
-            </g>
-            <g opacity="0.2" stroke-width="0.65">
-              <animateTransform attributeName="transform" type="rotate" from="0 180 155" to="360 180 155" dur="42s" repeatCount="indefinite"/>
-              <use href="#wv1"/>
-            </g>
-            <g opacity="0.15" stroke-width="0.5">
-              <animateTransform attributeName="transform" type="rotate" from="6 180 155" to="366 180 155" dur="38s" repeatCount="indefinite"/>
-              <use href="#wv2"/>
-            </g>
-            <g opacity="0.1" stroke-width="0.5">
-              <animateTransform attributeName="transform" type="rotate" from="14 180 155" to="374 180 155" dur="54s" repeatCount="indefinite"/>
-              <use href="#wv1"/>
-            </g>
-            <g opacity="0.06" stroke-width="0.4">
-              <animateTransform attributeName="transform" type="rotate" from="20 180 155" to="380 180 155" dur="64s" repeatCount="indefinite"/>
-              <use href="#wv2"/>
-            </g>
-          </g>
-          <!-- Ribbon B: magenta — CCW rotation, clustered around 55–75° -->
-          <g stroke="#C84BE8" fill="none">
-            <g opacity="0.5" stroke-width="0.4">
-              <animateTransform attributeName="transform" type="rotate" from="58 180 155" to="-302 180 155" dur="40s" repeatCount="indefinite"/>
-              <use href="#wv1"/>
-            </g>
-            <g opacity="0.35" stroke-width="0.3">
-              <animateTransform attributeName="transform" type="rotate" from="64 180 155" to="-296 180 155" dur="48s" repeatCount="indefinite"/>
-              <use href="#wv2"/>
-            </g>
-            <g opacity="0.2" stroke-width="0.65">
-              <animateTransform attributeName="transform" type="rotate" from="55 180 155" to="-305 180 155" dur="38s" repeatCount="indefinite"/>
-              <use href="#wv1"/>
-            </g>
-            <g opacity="0.15" stroke-width="0.5">
-              <animateTransform attributeName="transform" type="rotate" from="61 180 155" to="-299 180 155" dur="44s" repeatCount="indefinite"/>
-              <use href="#wv2"/>
-            </g>
-            <g opacity="0.1" stroke-width="0.5">
-              <animateTransform attributeName="transform" type="rotate" from="69 180 155" to="-291 180 155" dur="56s" repeatCount="indefinite"/>
-              <use href="#wv1"/>
-            </g>
-            <g opacity="0.06" stroke-width="0.4">
-              <animateTransform attributeName="transform" type="rotate" from="75 180 155" to="-285 180 155" dur="66s" repeatCount="indefinite"/>
-              <use href="#wv2"/>
-            </g>
-          </g>
-        </g>
-      </svg>
+      <canvas id="about-canvas" width="360" height="360"></canvas>
     </div>
   </div>
 </section>
@@ -1781,6 +1708,84 @@
 </script>
 
 <script src="/js/cookie-banner.js"></script>
+
+<script>
+(function() {
+  var canvas = document.getElementById('about-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width;   // 360
+  var H = canvas.height;  // 360
+  var cx = W / 2, cy = H / 2;
+
+  // Ring geometry
+  var R = W * 0.335;   // base ring radius ~121px
+  var A = W * 0.068;   // wave amplitude ~24px  (A/R ≈ 0.20 matches reference)
+  var N = 4;           // sine waves per revolution
+  var LINES = 34;      // lines per ribbon — more = denser band
+  var STEPS = 220;     // path resolution
+  var SPREAD = 1.7;    // phase spread across the bundle (radians)
+
+  var phase = 0;
+
+  // Bell-curve opacity across the ribbon bundle (quartic fall-off from center)
+  function lineOpacity(i) {
+    var t = (i / (LINES - 1) - 0.5) * 2; // -1..1
+    return Math.max(0, 1 - t * t * t * t);
+  }
+
+  // Build a closed parametric wave-ring path
+  // dir = 1 → sin(N·θ + lp), dir = -1 → sin(-N·θ + lp)  (mirrors the wave)
+  function buildPath(lp, dir) {
+    var pts = new Float32Array((STEPS + 1) * 2);
+    for (var j = 0; j <= STEPS; j++) {
+      var theta = (j / STEPS) * Math.PI * 2;
+      var r = R + A * Math.sin(N * dir * theta + lp);
+      pts[j * 2]     = cx + r * Math.cos(theta);
+      pts[j * 2 + 1] = cy + r * Math.sin(theta);
+    }
+    return pts;
+  }
+
+  function strokePath(pts, color, alpha, width) {
+    ctx.beginPath();
+    ctx.moveTo(pts[0], pts[1]);
+    for (var k = 1; k <= STEPS; k++) ctx.lineTo(pts[k * 2], pts[k * 2 + 1]);
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(' + color + ',' + alpha.toFixed(3) + ')';
+    ctx.lineWidth = width;
+    ctx.stroke();
+  }
+
+  // Draw one ribbon: many thin lines with glow passes
+  function drawRibbon(color, basePhase, dir) {
+    for (var i = 0; i < LINES; i++) {
+      var o = lineOpacity(i);
+      if (o < 0.015) continue;
+      var lp = basePhase + (i / (LINES - 1) - 0.5) * SPREAD;
+      var pts = buildPath(lp, dir);
+      strokePath(pts, color, o * 0.045, 10);   // wide halo
+      strokePath(pts, color, o * 0.11,   2.5); // soft glow
+      strokePath(pts, color, o * 0.48,   0.45);// bright core
+    }
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Ribbon A — cyan, flows one direction
+    drawRibbon('0,205,218', phase, 1);
+
+    // Ribbon B — magenta, mirrored wave + π/N phase offset → interlocks with A
+    drawRibbon('198,52,228', -phase * 0.88 + Math.PI / N, -1);
+
+    phase += 0.007;
+    requestAnimationFrame(frame);
+  }
+
+  frame();
+})();
+</script>
 
 </body>
 </html>
