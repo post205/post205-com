@@ -854,7 +854,6 @@
       align-items: center;
       min-width: 0;
     }
-    .about-graphic canvas { display: block; width: 100%; height: auto; max-width: 400px; }
     .sys-hub {
       transform-box: fill-box;
       transform-origin: center;
@@ -1484,9 +1483,6 @@
       <p class="about-mission-body">The team has run businesses. We've sat in the rooms where Filipino founders talk about what's broken. We know what that conversation sounds like.</p>
       <p class="about-mission-close">Building systems for Filipino businesses since 2015. Metro Manila.</p>
     </div>
-    <div class="about-graphic">
-      <canvas id="about-canvas" width="360" height="360"></canvas>
-    </div>
   </div>
 </section>
 
@@ -1708,84 +1704,6 @@
 </script>
 
 <script src="/js/cookie-banner.js"></script>
-
-<script>
-(function() {
-  var canvas = document.getElementById('about-canvas');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var W = canvas.width;   // 360
-  var H = canvas.height;  // 360
-  var cx = W / 2, cy = H / 2;
-
-  // Ring geometry
-  var R = W * 0.335;   // base ring radius ~121px
-  var A = W * 0.068;   // wave amplitude ~24px  (A/R ≈ 0.20 matches reference)
-  var N = 4;           // sine waves per revolution
-  var LINES = 34;      // lines per ribbon — more = denser band
-  var STEPS = 220;     // path resolution
-  var SPREAD = 1.7;    // phase spread across the bundle (radians)
-
-  var phase = 0;
-
-  // Bell-curve opacity across the ribbon bundle (quartic fall-off from center)
-  function lineOpacity(i) {
-    var t = (i / (LINES - 1) - 0.5) * 2; // -1..1
-    return Math.max(0, 1 - t * t * t * t);
-  }
-
-  // Build a closed parametric wave-ring path
-  // dir = 1 → sin(N·θ + lp), dir = -1 → sin(-N·θ + lp)  (mirrors the wave)
-  function buildPath(lp, dir) {
-    var pts = new Float32Array((STEPS + 1) * 2);
-    for (var j = 0; j <= STEPS; j++) {
-      var theta = (j / STEPS) * Math.PI * 2;
-      var r = R + A * Math.sin(N * dir * theta + lp);
-      pts[j * 2]     = cx + r * Math.cos(theta);
-      pts[j * 2 + 1] = cy + r * Math.sin(theta);
-    }
-    return pts;
-  }
-
-  function strokePath(pts, color, alpha, width) {
-    ctx.beginPath();
-    ctx.moveTo(pts[0], pts[1]);
-    for (var k = 1; k <= STEPS; k++) ctx.lineTo(pts[k * 2], pts[k * 2 + 1]);
-    ctx.closePath();
-    ctx.strokeStyle = 'rgba(' + color + ',' + alpha.toFixed(3) + ')';
-    ctx.lineWidth = width;
-    ctx.stroke();
-  }
-
-  // Draw one ribbon: many thin lines with glow passes
-  function drawRibbon(color, basePhase, dir) {
-    for (var i = 0; i < LINES; i++) {
-      var o = lineOpacity(i);
-      if (o < 0.015) continue;
-      var lp = basePhase + (i / (LINES - 1) - 0.5) * SPREAD;
-      var pts = buildPath(lp, dir);
-      strokePath(pts, color, o * 0.045, 10);   // wide halo
-      strokePath(pts, color, o * 0.11,   2.5); // soft glow
-      strokePath(pts, color, o * 0.48,   0.45);// bright core
-    }
-  }
-
-  function frame() {
-    ctx.clearRect(0, 0, W, H);
-
-    // Ribbon A — cyan, flows one direction
-    drawRibbon('0,205,218', phase, 1);
-
-    // Ribbon B — magenta, mirrored wave + π/N phase offset → interlocks with A
-    drawRibbon('198,52,228', -phase * 0.88 + Math.PI / N, -1);
-
-    phase += 0.007;
-    requestAnimationFrame(frame);
-  }
-
-  frame();
-})();
-</script>
 
 </body>
 </html>
