@@ -922,6 +922,10 @@
       0%, 100% { opacity: 0.25; }
       50% { opacity: 1; }
     }
+    @keyframes starBlink {
+      0%, 100% { opacity: var(--so, 0.12); }
+      50% { opacity: 0; }
+    }
     .about-star-group { cursor: default; }
     .about-tip {
       opacity: 0;
@@ -1516,20 +1520,20 @@
         <!-- ── Sun ── -->
         <g class="about-sun-g">
           <!-- outer circle + inner ring -->
-          <circle r="9" stroke="currentColor" stroke-width="0.7"/>
-          <circle r="5" stroke="currentColor" stroke-width="0.25"/>
+          <circle r="9" stroke="currentColor" stroke-width="0.22"/>
+          <circle r="5" stroke="currentColor" stroke-width="0.08"/>
           <!-- 4 cardinal rays: long, thin -->
-          <line x1="0" y1="-10" x2="0" y2="-27" stroke="currentColor" stroke-width="0.7" stroke-linecap="round"/>
-          <line x1="10" y1="0" x2="27" y2="0" stroke="currentColor" stroke-width="0.7" stroke-linecap="round"/>
-          <line x1="0" y1="10" x2="0" y2="27" stroke="currentColor" stroke-width="0.7" stroke-linecap="round"/>
-          <line x1="-10" y1="0" x2="-27" y2="0" stroke="currentColor" stroke-width="0.7" stroke-linecap="round"/>
+          <line x1="0" y1="-10" x2="0" y2="-27" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="10" y1="0" x2="27" y2="0" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="0" y1="10" x2="0" y2="27" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="-10" y1="0" x2="-27" y2="0" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
           <!-- 4 diagonal rays: medium -->
-          <line x1="7.07" y1="-7.07" x2="15.56" y2="-15.56" stroke="currentColor" stroke-width="0.45" stroke-linecap="round"/>
-          <line x1="7.07" y1="7.07" x2="15.56" y2="15.56" stroke="currentColor" stroke-width="0.45" stroke-linecap="round"/>
-          <line x1="-7.07" y1="7.07" x2="-15.56" y2="15.56" stroke="currentColor" stroke-width="0.45" stroke-linecap="round"/>
-          <line x1="-7.07" y1="-7.07" x2="-15.56" y2="-15.56" stroke="currentColor" stroke-width="0.45" stroke-linecap="round"/>
+          <line x1="7.07" y1="-7.07" x2="15.56" y2="-15.56" stroke="currentColor" stroke-width="0.14" stroke-linecap="round"/>
+          <line x1="7.07" y1="7.07" x2="15.56" y2="15.56" stroke="currentColor" stroke-width="0.14" stroke-linecap="round"/>
+          <line x1="-7.07" y1="7.07" x2="-15.56" y2="15.56" stroke="currentColor" stroke-width="0.14" stroke-linecap="round"/>
+          <line x1="-7.07" y1="-7.07" x2="-15.56" y2="-15.56" stroke="currentColor" stroke-width="0.14" stroke-linecap="round"/>
           <!-- 8 micro rays at 22.5° between main rays -->
-          <line x1="3.83" y1="-9.24" x2="5.36" y2="-12.93" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="3.83" y1="-9.24" x2="5.36" y2="-12.93" stroke="currentColor" stroke-width="0.07" stroke-linecap="round"/>
           <line x1="9.24" y1="-3.83" x2="12.93" y2="-5.36" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
           <line x1="9.24" y1="3.83" x2="12.93" y2="5.36" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
           <line x1="3.83" y1="9.24" x2="5.36" y2="12.93" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
@@ -1586,18 +1590,21 @@
   // Seeded LCG — consistent pattern every load
   var s = 20260512;
   function rng() { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967295; }
-  // 761 ambient stars across the full section (viewBox 0 0 120 50)
-  for (var i = 0; i < 761; i++) {
+  // 76 ambient stars (1/10 of 764 total, 1/100 of PH's 7641 islands)
+  for (var i = 0; i < 76; i++) {
     var x = rng() * 120;
     var y = rng() * 50;
-    var r = (rng() * 0.28 + 0.14).toFixed(2);
-    var o = (rng() * 0.18 + 0.06).toFixed(2);
+    var r = (rng() * 0.12 + 0.06).toFixed(2);  // tiny: 0.06–0.18 units
+    var o = (rng() * 0.16 + 0.07).toFixed(2);
+    var dur = (2.5 + rng() * 5).toFixed(1);    // 2.5–7.5s blink cycle
+    var del = (rng() * 8).toFixed(1);           // 0–8s stagger
     var c = document.createElementNS(ns, 'circle');
     c.setAttribute('cx', x.toFixed(1));
     c.setAttribute('cy', y.toFixed(1));
     c.setAttribute('r', r);
     c.setAttribute('fill', 'currentColor');
-    c.setAttribute('opacity', o);
+    c.style.setProperty('--so', o);
+    c.style.animation = 'starBlink ' + dur + 's ease-in-out ' + del + 's infinite';
     g.appendChild(c);
   }
   svg.appendChild(g);
