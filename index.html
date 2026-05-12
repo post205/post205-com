@@ -1237,10 +1237,6 @@
       <div class="cs-industry">Salon · Spa · Skin clinic</div>
       <p>Bianca has been coming here for two years. Her stylist knows her preferences, her usual drink, what she's been thinking about trying next. When her stylist isn't around, the person who greets her has none of that. The visit starts over.</p>
       <p>Now it doesn't. Her name opens and everything the team knows about her is already there.</p>
-      <div class="cs-ai">
-        <span class="cs-ai-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0.5L7.4 4.6L11.5 6L7.4 7.4L6 11.5L4.6 7.4L0.5 6L4.6 4.6Z"/></svg></span>
-        <p class="cs-ai-text">It flags the treatment she brought up three visits ago. The receptionist mentions it before she has to.</p>
-      </div>
     </div>
     <div class="cs-mockup">
       <div class="mock-win">
@@ -1290,10 +1286,6 @@
       <div class="cs-industry">Accounting · Law office · Consulting</div>
       <p>You manage five companies. Altair Group and Meridian Partners are both in your books, but their numbers can't mix. Right now you're the one making sure of that — deciding who sees what, filtering every file before it goes out.</p>
       <p>Now the system handles the separation. Each company logs in and sees only itself.</p>
-      <div class="cs-ai">
-        <span class="cs-ai-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0.5L7.4 4.6L11.5 6L7.4 7.4L6 11.5L4.6 7.4L0.5 6L4.6 4.6Z"/></svg></span>
-        <p class="cs-ai-text">A question from inside Altair Group goes to whoever handles Altair Group.</p>
-      </div>
     </div>
     <div class="cs-mockup">
       <div class="mock-win">
@@ -1345,10 +1337,6 @@
       <div class="cs-industry">Theme park · Events venue · Resort</div>
       <p>A family arrived on Saturday with tickets they'd bought weeks before. At the gate, their son was too short for the main ride. Nobody had a clear answer — what to offer, who approves a refund, how long it takes. Staff went to find a manager while everyone waited.</p>
       <p>Now the moment the ticket scans, the options are already on screen. The staff member has what they need before the conversation starts.</p>
-      <div class="cs-ai">
-        <span class="cs-ai-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0.5L7.4 4.6L11.5 6L7.4 7.4L6 11.5L4.6 7.4L0.5 6L4.6 4.6Z"/></svg></span>
-        <p class="cs-ai-text">It catches bookings where height might be an issue and messages those families before they leave home.</p>
-      </div>
     </div>
     <div class="cs-mockup">
       <div class="mock-win">
@@ -1842,8 +1830,10 @@
   function hide() { tip.style.display = 'none'; activeBadge = null; }
 
   document.querySelectorAll('.promise-badge[data-tip]').forEach(function(b) {
-    b.addEventListener('mouseenter', function() { show(b); });
-    b.addEventListener('mouseleave', hide);
+    // Hover only for mouse — pointerType check prevents mobile mouseenter from firing
+    b.addEventListener('pointerenter', function(e) { if (e.pointerType === 'mouse') show(b); });
+    b.addEventListener('pointerleave', function(e) { if (e.pointerType === 'mouse') hide(); });
+    // Tap to toggle on touch
     b.addEventListener('click', function(e) {
       e.stopPropagation();
       activeBadge === b ? hide() : show(b);
