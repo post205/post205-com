@@ -750,7 +750,6 @@
       background: var(--border);
       border: 1px solid var(--border);
       border-radius: 8px;
-      overflow: hidden;
     }
 
     .promise-card {
@@ -758,6 +757,9 @@
       display: flex;
       flex-direction: column;
     }
+    /* Round corner cards manually since overflow:hidden is removed (it clips tooltips) */
+    .promise-card:first-child { border-radius: 7px 0 0 7px; }
+    .promise-card:last-child  { border-radius: 0 7px 7px 0; }
 
     .promise-img-wrap { display: none; }
     .promise-card-body { padding: 32px; }
@@ -817,7 +819,8 @@
       content: attr(data-tip);
       position: absolute;
       bottom: calc(100% + 8px);
-      left: 0;
+      left: 50%;
+      transform: translateX(-50%);
       background: var(--surface-2);
       border: 1px solid var(--border-2);
       border-radius: 4px;
@@ -1153,9 +1156,9 @@
       .cs-mockup { padding: 20px; }
       .promises { padding: 56px 20px; }
       .promises-cards { grid-template-columns: 1fr; }
+      .promise-card:first-child { border-radius: 7px 7px 0 0; }
+      .promise-card:last-child  { border-radius: 0 0 7px 7px; }
       .promise-card-body { padding: 24px 20px; }
-      /* Tooltips don't work reliably on touch — hide them */
-      .promise-badge[data-tip]:hover::after { display: none; }
       .about { padding: 56px 20px; }
       .about-inner { flex-direction: column; }
       .about-graphic { display: none; }
