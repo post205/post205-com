@@ -354,10 +354,7 @@
       font-size: 9px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--accent-text);
-      margin-top: 6px;
-      margin-bottom: 20px;
-      opacity: 0.8;
+      color: var(--text-3);
     }
     .cs-tab:first-child { border-radius: 6px 0 0 0; }
     .cs-tab:last-child  { border-radius: 0 6px 0 0; }
@@ -441,25 +438,13 @@
     }
     .cs-link:hover { color: var(--text); }
 
-    .cs-industries {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 32px;
-      margin-top: 16px;
-    }
-    .cs-industries span {
-      font-family: ui-monospace, monospace;
-      font-size: 9px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-3);
-    }
-
     .cs-mockup {
       padding: 28px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 14px;
       background: var(--black);
     }
 
@@ -1248,9 +1233,8 @@
   <div class="cs-panel active" id="cs-information" role="tabpanel">
     <div class="cs-content">
       <h2>Your salon, where every guest feels like a VIP.</h2>
-      <div class="cs-industry">Salon · Spa · Skin clinic</div>
       <p>Bianca has been coming here for two years. Her stylist knows her preferences, her usual drink, what she's been thinking about trying next. When her stylist isn't around, the person who greets her has none of that. The visit starts over.</p>
-      <p>We built Piandré a front desk system. Her name opens and everything the team knows about her is already in front of whoever walks her in.</p>
+      <p>We built a front desk system. Her name opens and everything the team knows about her is already in front of whoever walks her in.</p>
     </div>
     <div class="cs-mockup">
       <div class="mock-win">
@@ -1290,6 +1274,7 @@
           <div class="mock-ai-text">Hasn't tried a color treatment in 3 visits. Mentioned a tint refresh in March — consider recommending today.</div>
         </div>
       </div>
+      <div class="cs-industry">Salon · Spa · Skin clinic</div>
     </div>
   </div>
 
@@ -1297,9 +1282,8 @@
   <div class="cs-panel" id="cs-person" role="tabpanel">
     <div class="cs-content">
       <h2>Your firm, where no two companies share what they shouldn't.</h2>
-      <div class="cs-industry">Accounting · Law office · Consulting</div>
       <p>You manage five companies. Altair Group and Meridian Partners are both in your books, but their numbers can't mix. Right now you're the one making sure of that — deciding who sees what, filtering every file before it goes out.</p>
-      <p>We built them a client portal. Each company logs in and sees only itself.</p>
+      <p>We built a client portal. Each company logs in and sees only itself.</p>
     </div>
     <div class="cs-mockup">
       <div class="mock-win">
@@ -1341,6 +1325,7 @@
           <div class="mock-ai-text">Altair Group raised a billing concern. Routing to M. Cruz — handled their account in Q1.</div>
         </div>
       </div>
+      <div class="cs-industry">Accounting · Law office · Consulting</div>
     </div>
   </div>
 
@@ -1348,9 +1333,8 @@
   <div class="cs-panel" id="cs-time" role="tabpanel">
     <div class="cs-content">
       <h2>Your themepark, where staff always has the answer.</h2>
-      <div class="cs-industry">Theme park · Events venue · Resort</div>
       <p>A family arrived on Saturday with tickets they'd bought weeks before. At the gate, their son was too short for the main ride. Nobody had a clear answer — what to offer, who approves a refund, how long it takes. Staff went to find a manager while everyone waited.</p>
-      <p>We built them a smart gate scanner. The moment the ticket scans, what to offer and who approves it are already on screen. Nobody has to find a manager.</p>
+      <p>We built a smart gate scanner. The moment the ticket scans, what to offer and who approves it are already on screen. Nobody has to find a manager.</p>
     </div>
     <div class="cs-mockup">
       <div class="mock-win">
@@ -1381,12 +1365,8 @@
           <div class="mock-ai-text">Similar booking tomorrow at 3 PM. Height reminder SMS queued for pre-arrival.</div>
         </div>
       </div>
+      <div class="cs-industry">Theme park · Events venue · Resort</div>
     </div>
-  </div>
-  <div class="cs-industries">
-    <span>Salon · Spa · Skin clinic</span>
-    <span>Accounting · Law office · Consulting</span>
-    <span>Theme park · Events venue · Resort</span>
   </div>
   </div>
 </section>
