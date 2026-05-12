@@ -929,8 +929,8 @@
       50% { opacity: 1; }
     }
     @keyframes starBlink {
-      0%, 100% { opacity: var(--so, 0.12); }
-      50% { opacity: 0; }
+      0%, 100% { opacity: 0; }
+      50% { opacity: var(--so, 0.35); }
     }
 
     /* ── CTA ── */
@@ -1549,7 +1549,7 @@
     var x = rng() * 120;
     var y = rng() * 50;
     var r = (rng() * 0.1 + 0.05).toFixed(2);
-    var o = (rng() * 0.14 + 0.06).toFixed(2);
+    var o = (rng() * 0.35 + 0.2).toFixed(2);
     var dur = (2.5 + rng() * 5).toFixed(1);
     var del = (rng() * 8).toFixed(1);
     var c = document.createElementNS(ns, 'circle');
@@ -1558,7 +1558,7 @@
     c.setAttribute('r', r);
     c.setAttribute('fill', 'currentColor');
     c.style.setProperty('--so', o);
-    c.style.animation = 'starBlink ' + dur + 's ease-in-out ' + del + 's infinite';
+    c.style.animation = 'starBlink ' + dur + 's ease-in-out ' + del + 's infinite backwards';
     g.appendChild(c);
   }
   // Nebula cluster — dense patch of tiny static stars, upper-right of section
