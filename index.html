@@ -778,7 +778,6 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--accent-text);
-      margin-bottom: 10px;
     }
 
     .promise-card h4 {
@@ -803,6 +802,7 @@
       display: inline-flex;
       align-items: center;
       margin-top: 16px;
+      margin-right: 4px;
       font-family: ui-monospace, monospace;
       font-size: 9px;
       letter-spacing: 0.08em;
@@ -811,31 +811,35 @@
       border: 1px solid var(--border);
       border-radius: 3px;
       padding: 3px 7px;
-      position: relative;
       cursor: default;
     }
+    .promise-badge[data-tip] { cursor: help; }
 
-    .promise-badge[data-tip]:hover::after {
-      content: attr(data-tip);
-      position: absolute;
-      bottom: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
+    /* JS-powered tooltip — positioned via getBoundingClientRect, viewport-clamped */
+    .badge-tooltip {
+      display: none;
+      position: fixed;
       background: var(--surface-2);
       border: 1px solid var(--border-2);
       border-radius: 4px;
       padding: 7px 10px;
+      font-family: ui-monospace, monospace;
       font-size: 10px;
       line-height: 1.6;
       color: var(--text-2);
-      text-transform: none;
       letter-spacing: 0.02em;
       font-weight: 400;
       width: 210px;
       white-space: normal;
-      z-index: 10;
+      z-index: 1000;
       pointer-events: none;
     }
+
+    /* Icon breathe animation */
+    @keyframes iconBreath { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+    .promise-card-icon svg { animation: iconBreath 2.6s ease-in-out infinite; }
+    .promise-card:nth-child(2) .promise-card-icon svg { animation-delay: -0.87s; }
+    .promise-card:nth-child(3) .promise-card-icon svg { animation-delay: -1.73s; }
 
     /* ── ABOUT ── */
     .about {
@@ -1812,6 +1816,44 @@
 </script>
 
 <script src="/js/cookie-banner.js"></script>
+
+<script>
+(function() {
+  var tip = document.createElement('div');
+  tip.className = 'badge-tooltip';
+  document.body.appendChild(tip);
+  var activeBadge = null;
+
+  function show(badge) {
+    tip.textContent = badge.getAttribute('data-tip');
+    tip.style.display = 'block';
+    var r = badge.getBoundingClientRect();
+    var w = tip.offsetWidth;
+    var h = tip.offsetHeight;
+    var left = r.left + r.width / 2 - w / 2;
+    var top = r.top - h - 8;
+    left = Math.max(10, Math.min(left, window.innerWidth - w - 10));
+    if (top < 10) top = r.bottom + 8;
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+    activeBadge = badge;
+  }
+
+  function hide() { tip.style.display = 'none'; activeBadge = null; }
+
+  document.querySelectorAll('.promise-badge[data-tip]').forEach(function(b) {
+    b.addEventListener('mouseenter', function() { show(b); });
+    b.addEventListener('mouseleave', hide);
+    b.addEventListener('click', function(e) {
+      e.stopPropagation();
+      activeBadge === b ? hide() : show(b);
+    });
+  });
+
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', function() { if (activeBadge) show(activeBadge); }, { passive: true });
+})();
+</script>
 
 </body>
 </html>
