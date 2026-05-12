@@ -897,6 +897,16 @@
       line-height: 1.7;
       max-width: 560px;
     }
+    .about-mission-label {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-text);
+      margin-top: 28px;
+      margin-bottom: 6px;
+    }
     .about-mission-close {
       font-size: 17px;
       color: var(--text);
@@ -1508,10 +1518,17 @@
     <div class="about-mission">
       <p class="about-mission-hl">Filipinos don't march. We sway.</p>
       <p class="about-mission-body">Swaying means the system moves with the person using it.</p>
-      <p class="about-mission-body"><em>Hiya.</em> Your staff will smile through a broken process before they tell you about it. Our systems catch what people won't say.</p>
-      <p class="about-mission-body"><em>Kusa.</em> The best people on your team don't wait to be told. They act. We build systems that make it easy to do the right thing without permission at every step.</p>
-      <p class="about-mission-body"><em>Kapwa.</em> Your accountant has a PhD. Your receptionist finished high school. The accountant needs reports, permissions, an audit trail. The receptionist needs to do one thing and get back to work. We build for both without either feeling out of place.</p>
+
+      <p class="about-mission-label">Hiya</p>
+      <p class="about-mission-body">Your staff will smile through a broken process before they tell you about it. Our systems catch what people won't say.</p>
+
+      <p class="about-mission-label">Kusa</p>
+      <p class="about-mission-body">The best people on your team don't wait to be told. They act. We build systems that make it easy to do the right thing without permission at every step.</p>
+
+      <p class="about-mission-label">Kapwa</p>
+      <p class="about-mission-body">Your accountant has a PhD. Your receptionist finished high school. The accountant needs reports, permissions, an audit trail. The receptionist needs to do one thing and get back to work. We build for both without either feeling out of place.</p>
       <p class="about-mission-body">The receptionist never sees what they don't need. The accountant can always go deeper.</p>
+
       <p class="about-mission-close">Building systems for Filipino businesses since 2015.</p>
     </div>
     <div class="about-graphic">
@@ -1590,14 +1607,14 @@
   // Seeded LCG — consistent pattern every load
   var s = 20260512;
   function rng() { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967295; }
-  // 76 ambient stars (1/10 of 764 total, 1/100 of PH's 7641 islands)
+  // 76 sparse blinking stars across the section
   for (var i = 0; i < 76; i++) {
     var x = rng() * 120;
     var y = rng() * 50;
-    var r = (rng() * 0.12 + 0.06).toFixed(2);  // tiny: 0.06–0.18 units
-    var o = (rng() * 0.16 + 0.07).toFixed(2);
-    var dur = (2.5 + rng() * 5).toFixed(1);    // 2.5–7.5s blink cycle
-    var del = (rng() * 8).toFixed(1);           // 0–8s stagger
+    var r = (rng() * 0.1 + 0.05).toFixed(2);
+    var o = (rng() * 0.14 + 0.06).toFixed(2);
+    var dur = (2.5 + rng() * 5).toFixed(1);
+    var del = (rng() * 8).toFixed(1);
     var c = document.createElementNS(ns, 'circle');
     c.setAttribute('cx', x.toFixed(1));
     c.setAttribute('cy', y.toFixed(1));
@@ -1606,6 +1623,26 @@
     c.style.setProperty('--so', o);
     c.style.animation = 'starBlink ' + dur + 's ease-in-out ' + del + 's infinite';
     g.appendChild(c);
+  }
+  // Nebula cluster — dense patch of tiny static stars, upper-right of section
+  // Box-Muller Gaussian using seeded rng
+  function gauss() {
+    var u = rng() || 0.0001, v = rng();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+  for (var j = 0; j < 420; j++) {
+    var cx = 90 + gauss() * 9;   // cluster center x=90, spread σ=9
+    var cy = 18 + gauss() * 5;   // cluster center y=18, spread σ=5
+    if (cx < 0 || cx > 120 || cy < 0 || cy > 50) continue;
+    var r2 = (rng() * 0.07 + 0.03).toFixed(2); // very tiny: 0.03–0.10
+    var o2 = (rng() * 0.18 + 0.04).toFixed(2);
+    var c2 = document.createElementNS(ns, 'circle');
+    c2.setAttribute('cx', cx.toFixed(1));
+    c2.setAttribute('cy', cy.toFixed(1));
+    c2.setAttribute('r', r2);
+    c2.setAttribute('fill', 'currentColor');
+    c2.setAttribute('opacity', o2);
+    g.appendChild(c2);
   }
   svg.appendChild(g);
 })();
