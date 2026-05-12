@@ -1142,25 +1142,28 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 960px) {
-      nav { padding: 16px 24px; }
+      nav { padding: 16px 20px; }
       .nav-link { display: none; }
-      .hero-inner { padding: 72px 24px 48px; }
-      .case-studies { padding: 32px 24px 56px; }
+      .hero-inner { padding: 72px 20px 48px; }
+      .case-studies { padding: 32px 20px 56px; }
       .cs-tabs { margin-bottom: 0; }
       .cs-panel.active { grid-template-columns: 1fr; }
       .cs-panel { border-radius: 0 0 6px 6px; }
-      .cs-content { padding: 28px; border-right: none; border-bottom: 1px solid var(--border); }
+      .cs-content { padding: 24px 20px; border-right: none; border-bottom: 1px solid var(--border); }
       .cs-mockup { padding: 20px; }
-      .promises { padding: 56px 24px; }
+      .promises { padding: 56px 20px; }
       .promises-cards { grid-template-columns: 1fr; }
-      .about { padding: 56px 24px; }
+      .promise-card-body { padding: 24px 20px; }
+      /* Tooltips don't work reliably on touch — hide them */
+      .promise-badge[data-tip]:hover::after { display: none; }
+      .about { padding: 56px 20px; }
       .about-inner { flex-direction: column; }
       .about-graphic { display: none; }
 
-      .cta { padding: 56px 24px; }
+      .cta { padding: 56px 20px; }
       .cta-inner { flex-direction: column; align-items: flex-start; gap: 32px; }
       .chat-widget { width: 100%; }
-      footer { padding: 28px 24px; flex-direction: column; gap: 12px; align-items: flex-start; }
+      footer { padding: 28px 20px; flex-direction: column; gap: 12px; align-items: flex-start; }
       .footer-right { text-align: left; }
     }
 
