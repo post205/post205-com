@@ -62,6 +62,7 @@
       --accent:       #3BD1D3;
       --accent-text:  #3BD1D3;
       --accent-dim:   rgba(59, 209, 211, 0.12);
+      --accent-border: rgba(59, 209, 211, 0.25);
       --on-accent:    #021616;
       --green:        #2ecc71;
       --red:          #ff4d4d;
@@ -85,6 +86,7 @@
       --accent:       #2db8ba;
       --accent-text:  #0f7476;
       --accent-dim:   rgba(45, 184, 186, 0.12);
+      --accent-border: rgba(45, 184, 186, 0.25);
       --on-accent:    #021616;
       --nav-bg:       rgba(242, 248, 248, 0.96);
       --logo-filter:  none;
@@ -155,7 +157,7 @@
       color: var(--on-accent);
       background: var(--accent);
       text-decoration: none;
-      padding: 8px 14px;
+      padding: 10px 14px;
       border-radius: 4px;
       font-weight: 500;
       transition: opacity 0.15s;
@@ -167,8 +169,8 @@
       border: 1px solid var(--border-2);
       color: var(--text-3);
       cursor: pointer;
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
       border-radius: 6px;
       display: flex;
       align-items: center;
@@ -205,6 +207,7 @@
         --accent:       #2db8ba;
         --accent-text:  #0f7476;
         --accent-dim:   rgba(45, 184, 186, 0.12);
+        --accent-border: rgba(45, 184, 186, 0.25);
         --on-accent:    #021616;
         --nav-bg:       rgba(242, 248, 248, 0.96);
         --logo-filter:  none;
@@ -457,7 +460,7 @@
       font-size: 11px;
     }
     .mock-bar {
-      background: #1a1a1a;
+      background: var(--surface-deep);
       padding: 7px 10px;
       display: flex;
       align-items: center;
@@ -668,7 +671,7 @@
     .tkt-primary {
       background: var(--accent-dim);
       color: var(--accent);
-      border-color: rgba(59,209,211,0.3);
+      border-color: var(--accent-border);
     }
 
     /* AI output card inside mockup */
@@ -676,7 +679,7 @@
       margin: 0 14px 12px;
       padding: 9px 11px;
       background: var(--accent-dim);
-      border: 1px solid rgba(59,209,211,0.2);
+      border: 1px solid var(--accent-border);
       border-radius: 4px;
       display: flex;
       gap: 8px;
@@ -752,7 +755,7 @@
     }
 
     .promise-card {
-      background: var(--black);
+      background: var(--surface);
       display: flex;
       flex-direction: column;
     }
@@ -813,6 +816,9 @@
       cursor: default;
     }
     .promise-badge[data-tip] { cursor: help; }
+    @media (max-width: 960px) {
+      .promise-badge { padding: 8px 12px; }
+    }
 
     /* JS-powered tooltip — positioned via getBoundingClientRect, viewport-clamped */
     .badge-tooltip {
@@ -1037,7 +1043,7 @@
       background: none;
       border: 1px solid var(--text-3);
       border-radius: 20px;
-      padding: 7px 14px;
+      padding: 10px 14px;
       font-size: 13px;
       color: var(--text);
       cursor: pointer;
@@ -1191,7 +1197,7 @@
 <!-- ── NAV ── -->
 <nav>
   <a href="/" class="nav-logo">
-    <img src="/images/logo.png" alt="POST 205">
+    <img src="/images/logo.png" alt="POST205">
   </a>
   <div class="nav-right">
     <button class="theme-toggle" id="themeToggle" title="Toggle theme">
@@ -1211,7 +1217,7 @@
 
 <!-- ── HERO ── -->
 <section class="hero">
-  <div class="hero-binary"></div>
+  <div class="hero-binary" aria-hidden="true"></div>
   <div class="hero-fade"></div>
   <div class="hero-inner">
     <div class="hero-eyebrow">For Philippine founders.</div>
@@ -1223,14 +1229,14 @@
 <!-- ── CASE STUDIES ── -->
 <section class="case-studies" id="work">
   <div class="case-studies-inner">
-  <div class="cs-tabs" role="tablist">
-    <button class="cs-tab active" onclick="switchCase(this,'information')" role="tab">Right information</button>
-    <button class="cs-tab" onclick="switchCase(this,'person')" role="tab">Right person</button>
-    <button class="cs-tab" onclick="switchCase(this,'time')" role="tab">Right time</button>
+  <div class="cs-tabs" role="tablist" aria-label="Case studies">
+    <button class="cs-tab active" onclick="switchCase(this,'information')" role="tab" aria-selected="true" aria-controls="cs-information" id="tab-information">Right information</button>
+    <button class="cs-tab" onclick="switchCase(this,'person')" role="tab" aria-selected="false" aria-controls="cs-person" id="tab-person">Right person</button>
+    <button class="cs-tab" onclick="switchCase(this,'time')" role="tab" aria-selected="false" aria-controls="cs-time" id="tab-time">Right time</button>
   </div>
 
   <!-- RIGHT INFORMATION -->
-  <div class="cs-panel active" id="cs-information" role="tabpanel">
+  <div class="cs-panel active" id="cs-information" role="tabpanel" aria-labelledby="tab-information">
     <div class="cs-content">
       <h2>Your salon, where every guest feels like a VIP.</h2>
       <p>Bianca has been coming here for two years. Her stylist knows her preferences, her usual drink, what she's been thinking about trying next. When her stylist isn't around, the person who greets her has none of that. The visit starts over.</p>
@@ -1279,7 +1285,7 @@
   </div>
 
   <!-- RIGHT PERSON -->
-  <div class="cs-panel" id="cs-person" role="tabpanel">
+  <div class="cs-panel" id="cs-person" role="tabpanel" aria-labelledby="tab-person">
     <div class="cs-content">
       <h2>Your firm, where no two companies share what they shouldn't.</h2>
       <p>You manage five companies. Altair Group and Meridian Partners are both in your books, but their numbers can't mix. Right now you're the one making sure of that. Deciding who sees what, filtering every file before it goes out.</p>
@@ -1330,7 +1336,7 @@
   </div>
 
   <!-- RIGHT TIME -->
-  <div class="cs-panel" id="cs-time" role="tabpanel">
+  <div class="cs-panel" id="cs-time" role="tabpanel" aria-labelledby="tab-time">
     <div class="cs-content">
       <h2>Your themepark, where staff always has the answer.</h2>
       <p>A family arrived on Saturday with tickets they'd bought weeks before. At the gate, their son was too short for the main ride. Nobody had a clear answer: what to offer, who approves a refund, how long it takes. Staff went to find a manager while everyone waited.</p>
@@ -1480,7 +1486,7 @@
   <svg id="about-star-bg" class="about-star-bg" viewBox="0 0 120 50" preserveAspectRatio="none" aria-hidden="true"></svg>
   <div class="about-inner">
     <div class="about-mission">
-      <p class="about-mission-hl">Filipinos don't march. We sway.</p>
+      <h2 class="about-mission-hl">Filipinos don't march. We sway.</h2>
       <p class="about-mission-body">Swaying means the system moves with you. Built around how Filipinos actually work.</p>
 
       <p class="about-mission-body"><em><strong>Hiya.</strong></em> Your staff will smile through a broken process before they tell you about it. We design around that.</p>
@@ -1492,7 +1498,7 @@
       <p class="about-mission-close">Building for Filipino businesses since 2015.</p>
     </div>
     <div class="about-graphic">
-      <svg viewBox="-60 -65 120 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="-60 -65 120 108" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 
         <!-- ── Sun ── -->
         <g class="about-sun-g">
@@ -1592,7 +1598,7 @@
       <p class="cta-sub">We reply within a day.</p>
     </div>
     <div class="chat-widget">
-      <div class="chat-log" id="chatLog"></div>
+      <div class="chat-log" id="chatLog" aria-live="polite" aria-atomic="false"></div>
       <div class="chat-input-area" id="chatInput"></div>
     </div>
     <form id="nlForm" name="contact" netlify data-netlify="true" data-netlify-honeypot="bot-field" hidden>
@@ -1610,7 +1616,7 @@
 <!-- ── FOOTER ── -->
 <footer>
   <a href="/" class="footer-logo">
-    <img src="/images/logo.png" alt="POST 205">
+    <img src="/images/logo.png" alt="POST205">
   </a>
   <div class="footer-right">
     © 2026 · POST205, Inc.<br>Metro Manila<br>
@@ -1621,9 +1627,10 @@
 <script>
   function switchCase(tab, id) {
     document.querySelectorAll('.cs-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.cs-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.cs-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
     document.getElementById('cs-' + id).classList.add('active');
     tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
   }
 
   // ── CHAT WIDGET ──
@@ -1702,9 +1709,9 @@
       const wrap = document.createElement('div');
       wrap.className = 'chat-contact-wrap';
       const name  = document.createElement('input');
-      name.type = 'text';  name.placeholder = 'Your name';
+      name.type = 'text';  name.placeholder = 'Your name'; name.setAttribute('aria-label', 'Your name');
       const email = document.createElement('input');
-      email.type = 'email'; email.placeholder = 'Your email';
+      email.type = 'email'; email.placeholder = 'Your email'; email.setAttribute('aria-label', 'Your email');
       const btn = document.createElement('button');
       btn.className = 'chat-submit';
       btn.textContent = 'Send it';
@@ -1794,7 +1801,7 @@
     var blur     = t < 0.40 ? ((0.40 - t) / 0.40 * 1.0).toFixed(1) : '0';
 
     var style = 'left:' + leftPct.toFixed(1) + '%;font-size:' + fontSize + 'px;animation-duration:' + dur.toFixed(1) + 's;animation-delay:' + delay + 's;--op-d:' + opD + ';--op-l:' + opL;
-    if (blur !== '0') style += ';filter:blur(' + blur + 'px)';
+    if (blur !== '0' && window.innerWidth > 640) style += ';filter:blur(' + blur + 'px)';
     col.style.cssText = style;
     container.appendChild(col);
   }
