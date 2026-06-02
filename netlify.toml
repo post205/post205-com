@@ -8,6 +8,23 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
+# Keep the shareable AIOS links page out of search engines
+[[headers]]
+  for = "/aios"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/aios.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# Let the uppercase /AIOS the user shares resolve to the page
+[[redirects]]
+  from = "/AIOS"
+  to = "/aios"
+  status = 301
+
 [[redirects]]
   from = "/p/:slug"
   to = "/p/index.html"
