@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Features, Ranked — POST 205</title>
+  <meta name="description" content="Every Claude feature ranked D to S — the top 12 that change your day-to-day.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+  <script>
+    (function() {
+      const stored = localStorage.getItem('theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', stored || system);
+    })();
+  </script>
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black:        #18181A;
+      --surface:      #1a2424;
+      --surface-2:    #252f2f;
+      --border:       #1f3535;
+      --border-2:     #2a4040;
+      --text:         #f0f0f2;
+      --text-2:       #7aacac;
+      --text-3:       #629a9a;
+      --accent:       #3BD1D3;
+      --on-accent:    #021616;
+      --nav-bg:       rgba(24, 24, 26, 0.96);
+      --logo-filter:  none;
+      --logo-blend:   screen;
+    }
+
+    [data-theme="light"] {
+      --black:        #f2f8f8;
+      --surface:      #f4fefe;
+      --surface-2:    #e0fffe;
+      --border:       #c8eeed;
+      --border-2:     #b0e0df;
+      --text:         #0a1a1a;
+      --text-2:       #4a6262;
+      --text-3:       #4a7070;
+      --accent:       #2db8ba;
+      --on-accent:    #021616;
+      --nav-bg:       rgba(242, 248, 248, 0.96);
+      --logo-filter:  none;
+      --logo-blend:   darken;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Nav */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 48px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img {
+      height: 26px; width: auto;
+      mix-blend-mode: var(--logo-blend);
+      filter: var(--logo-filter);
+      opacity: 0.9;
+    }
+    .nav-cta {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--on-accent);
+      background: var(--accent);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: opacity 0.15s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* Content */
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      text-decoration: none;
+      margin-bottom: 28px;
+      transition: color 0.15s;
+    }
+    .back:hover { color: var(--accent); }
+
+    .eyebrow {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: clamp(30px, 5.5vw, 46px);
+      font-weight: 800;
+      line-height: 1.12;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .lede {
+      font-size: clamp(18px, 2.3vw, 21px);
+      color: var(--text-2);
+      line-height: 1.6;
+      max-width: 62ch;
+      margin: 22px 0 8px;
+    }
+    .lede strong { color: var(--text); font-weight: 700; }
+    .lede .hl { color: var(--accent); font-weight: 700; }
+
+    /* Groups */
+    .group { margin-top: 52px; }
+    .group-label {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--text-3);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .group-label .count { color: var(--accent); }
+
+    /* Top 12 — numbered cards (whole card is clickable to expand) */
+    .rank {
+      display: block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s cubic-bezier(0.22, 1, 0.36, 1), background 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .rank:hover { border-color: var(--border-2); background: var(--surface-2); }
+    .rank[open] { border-color: var(--border-2); }
+    .rank-summary {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .rank-summary::-webkit-details-marker { display: none; }
+    .rank-num {
+      flex-shrink: 0;
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: ui-monospace, monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--black);
+      border: 1px solid var(--border-2);
+      border-radius: 8px;
+    }
+    .rank-1 .rank-num { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+    .rank-body { flex: 1; min-width: 0; }
+    .rank-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .rank-name code {
+      font-family: ui-monospace, monospace;
+      font-size: 13.5px;
+      color: var(--accent);
+      background: var(--black);
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 8px;
+      font-weight: 500;
+    }
+    .rank-desc {
+      color: var(--text-2);
+      font-size: 14.5px;
+      line-height: 1.55;
+      margin-top: 5px;
+    }
+    .rank-chev {
+      flex-shrink: 0;
+      align-self: center;
+      font-family: ui-monospace, monospace;
+      font-size: 14px;
+      color: var(--accent);
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      animation: chev-pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes chev-pulse {
+      0%, 100% { opacity: 0.3; }
+      50%      { opacity: 1; }
+    }
+    .rank:hover .rank-chev { animation: none; opacity: 1; }
+    .rank[open] .rank-chev { transform: rotate(90deg); animation: none; opacity: 1; }
+    @media (prefers-reduced-motion: reduce) {
+      .rank-chev { animation: none; opacity: 0.7; }
+    }
+
+    /* Expandable how-to — spec-sheet rows */
+    .how-body {
+      margin: 0 18px 6px;
+      padding-top: 2px;
+      border-top: 1px solid var(--border);
+    }
+    .how-body p {
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      gap: 16px;
+      align-items: start;
+      margin: 0;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .how-body p:last-child { border-bottom: none; }
+    .how-k {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding-top: 3px;
+    }
+    .how-v {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+    .how-body code {
+      font-family: ui-monospace, monospace;
+      font-size: 12.5px;
+      color: var(--text);
+      background: var(--black);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    .how-body p.how-caveat .how-k { color: var(--text-3); }
+    .how-body p.how-caveat .how-v {
+      color: var(--text-3);
+      font-size: 13px;
+      font-style: italic;
+    }
+    @media (max-width: 560px) {
+      .how-body p { grid-template-columns: 62px 1fr; gap: 12px; }
+    }
+
+    /* Lower tiers — compact rows */
+    .tier {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+    }
+    .tier-head {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .tier-badge {
+      font-family: ui-monospace, monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--on-accent);
+      background: var(--accent);
+      padding: 2px 9px;
+      border-radius: 5px;
+    }
+    .tier-A .tier-badge { background: var(--accent); }
+    .tier-B .tier-badge { background: var(--text-2); }
+    .tier-C .tier-badge { background: var(--text-3); }
+    .tier-D .tier-badge { background: var(--border-2); color: var(--text-2); }
+    .tier-cap {
+      font-size: 13.5px;
+      color: var(--text-3);
+      font-style: italic;
+    }
+    .tier-list {
+      color: var(--text-2);
+      font-size: 14.5px;
+      line-height: 1.7;
+    }
+    .tier-list b { color: var(--text); font-weight: 600; }
+
+    /* Takeaways */
+    .takeaways { list-style: none; }
+    .takeaways li {
+      position: relative;
+      padding-left: 26px;
+      margin-bottom: 14px;
+      color: var(--text-2);
+      font-size: 15.5px;
+      line-height: 1.6;
+    }
+    .takeaways li::before {
+      content: "\2192";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-family: ui-monospace, monospace;
+    }
+    .takeaways b { color: var(--text); font-weight: 700; }
+
+    /* Closing */
+    .outro {
+      margin-top: 60px;
+      padding-top: 36px;
+      border-top: 1px solid var(--border);
+      color: var(--text-2);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    .outro a { color: var(--accent); text-decoration: none; }
+    .outro a:hover { text-decoration: underline; }
+
+    /* Footer */
+    footer {
+      padding: 32px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo img {
+      height: 20px; width: auto;
+      mix-blend-mode: var(--logo-blend);
+      filter: var(--logo-filter);
+      opacity: 0.5;
+    }
+    .footer-right {
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      color: var(--text-3);
+      text-align: right;
+      line-height: 1.8;
+    }
+    .footer-right a { color: var(--accent); text-decoration: none; }
+    .footer-right a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      .wrap { padding: 40px 20px 56px; }
+      footer { padding: 24px 20px; flex-direction: column; gap: 12px; align-items: flex-start; }
+      .footer-right { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png" alt="POST 205">
+  </a>
+  <a href="/#contact" class="nav-cta">Let's talk</a>
+</nav>
+
+<div class="wrap">
+
+  <a href="/aios.html" class="back">&#8592; Back to the crash course</a>
+
+  <div class="eyebrow">AIOS Crash Course</div>
+  <h1>Claude features, ranked</h1>
+
+  <div class="lede">
+    I run my whole operation through Claude Code. So I ranked every feature by one test: <strong>how much it changes my day</strong>. The scale runs from D (skip it) up to S (can&rsquo;t work without it). The twelve up top are my S tier, the ones I open daily. Everything else ranks below them.
+  </div>
+
+  <!-- TOP 12 -->
+  <div class="group">
+    <div class="group-label">The daily drivers &mdash; <span class="count">my S tier</span></div>
+
+    <details class="rank rank-1">
+      <summary class="rank-summary">
+        <div class="rank-num">1</div>
+        <div class="rank-body">
+          <div class="rank-name">Skills</div>
+          <div class="rank-desc">The #1 leverage unlock. A skill is a reusable recipe (a markdown file) for anything you do more than once. Build your own, pull others&rsquo;, chain them together. Works in Code, Chat, and Co-work.</div>
+        </div>
+        <span class="rank-chev">&#9656;</span>
+      </summary>
+      <div class="how-body">
+        <p><span class="how-k">How</span><span class="how-v">Drop a markdown file in <code>.claude/skills/</code> (or grab someone else&rsquo;s), then call it with <code>/skill-name</code> &mdash; or let Claude trigger it automatically when it&rsquo;s relevant.</span></p>
+        <p><span class="how-k">Why</span><span class="how-v">Anything you find yourself explaining to Claude more than once becomes a one-line command instead.</span></p>
+        <p><span class="how-k">Awesome</span><span class="how-v">It&rsquo;s just markdown &mdash; easy to write, share with your team, and chain skills into each other.</span></p>
+      </div>
+    </details>
+
+    <details class="rank">
+      <summary class="rank-summary">
+        <div class="rank-num">2</div>
+        <div class="rank-body">
+          <div class="rank-name">Status line <code>/statusline</code></div>
+          <div class="rank-desc">The most slept-on feature. Always-on view of your model, effort level, and how much of the context window you&rsquo;ve used &mdash; so you know exactly when to clear, compact, or hand off.</div>
+        </div>
+        <span class="rank-chev">&#9656;</span>
+      </summary>
+      <div class="how-body">
+        <p><span class="how-k">How</span><span class="how-v">Run <code>/statusline</code> and describe what you want shown &mdash; or run it bare to auto-configure from your shell prompt.</span></p>
+        <p><span class="how-k">Why</span><span class="how-v">You always know your model, effort level, and how full your context window is, at a glance.</span></p>
+        <p><span class="how-k">Awesome</span><span class="how-v">One tiny line tells you exactly when to clear, compact, or hand off &mdash; no more guessing.</span></p>
+      </div>
+    </details>
+
+    <details class="rank">
+      <summary class="rank-summary">
+        <div class="rank-num">3</div>
+        <div class="rank-body">
+          <div class="rank-name">Routines <code>/schedule</code></div>
+          <div class="rank-desc">Schedule an actual agent on a recurring basis &mdash; not just a deterministic script. Set it once and it runs on its own.</div>
+        </div>
+        <span class="rank-chev">&#9656;</span>
+      </summary>
+      <div class="how-body">
+        <p><span class="how-k">How</span><span class="how-v">Run <code>/schedule</code> and describe the task and how often &mdash; Claude walks you through the setup.</span></p>
+        <p><span class="how-k">Why</span><span class="how-v">Recurring work (daily reviews, status checks) runs without you having to remember or be at your machine.</span></p>
+        <p><span class="how-k">Awesome</span><span class="how-v">You&rsquo;re scheduling a real agent that thinks each run &mdash; not a dumb script.</span></p>
+        <p class="how-caveat"><span class="how-k">Heads up</span><span class="how-v">runs on Anthropic&rsquo;s cloud &mdash; that&rsquo;s what separates it from the session-bound <code>/loop</code>.</span></p>
+      </div>
+    </details>
+
+    <details class="rank">
+      <summary class="rank-summary">
+        <div class="rank-num">4</div>
+        <div class="rank-body">
+          <div class="rank-name">Remote control <code>/remote-control</code></div>
+          <div class="rank-desc">Keep your local Claude Code session going from your phone or the web. Step away, keep building.</div>
+        </div>
+        <span class="rank-chev">&#9656;</span>
+      </summary>
+      <div class="how-body">
+        <p><span class="how-k">How</span><span class="how-v">Run <code>/remote-control</code>, then open the link or scan the QR code on your phone or at claude.ai/code.</span></p>
+        <p><span class="how-k">Why</span><span class="how-v">Continue a session on the go without moving the work off your machine.</span></p>
+        <p><span class="how-k">Awesome</span><span class="how-v">The work stays local &mdash; all your tools and project config come with it.</span></p>
+        <p class="how-caveat"><span class="how-k">Heads up</span><span class="how-v">your computer has to stay running, and it can&rsquo;t be used at the same time as Ultraplan.</span></p>
+      </div>
+    </details>
+
+    <details class="rank">
+      <summary class="rank-summary">
+        <div class="rank-num">5</div>
+        <div class="rank-body">
+          <div class="rank-name">Loop <code>/loop</code></div>
+          <div class="rank-desc">Repeat a prompt on an interval (it sets up a cron under the hood). Session-bound; auto-expires after about seven days.</div>
+        </div>
+        <span class="rank-chev">&#9656;</span>
+      </summary>
+      <div class="how-body">
+        <p><span class="how-k">How</span><span class="how-v"><code>/loop 5m check the build</code> repeats every five minutes; drop the interval and Claude paces itself.</span></p>
+        <p><span class="how-k">Why</span><span class="how-v">Re-run a check, build, or watch task on a timer while the session stays open.</span></p>
+        <p><span class="how-k">Awesome</span><span class="how-v">Set it once and forget it &mdash; it cleans up after itself in about a week.</span></p>
+        <p class="how-caveat"><span class="how-k">Heads up</span><span class="how-v">tied to that terminal &mdash; close it and the loop stops.</span></p>
+      </div>
+    </details>
+
+    <details class="rank">
+      <summary class="rank-summary">
+        <div class="rank-num">6</div>
+        <div class="rank-body">
+          <div class="rank-name">Sub-agents <code>/agents</code></div>
+          <div class="rank-desc">Parallel workers that report back to your main session. Defined as markdown files, invoked like skills. Great for fanning out independent work.</div>
+        </div>
+        <span class="rank-chev">&#9656;</span>
+      </summary>
+      <div class="how-body">
+        <p><span class="how-k">How</span><span class="how-v">Run <code>/agents</code> to manage them, or define one as a markdown file in <code>.claude/agents/</code> &mdash; then Claude fans tasks out to them.</span></p>
+        <p><span class="how-k">Why</span><span class="how-v">Run focused side tasks (testing, review, research) in parallel without cluttering your main chat.</span></p>
+        <p><span class="how-k">Awesome</span><span class="how-v">Each gets its own context window and hands a clean summary back.</span></p>
+      </div>
+    </details>
+
+    <details class="rank">
+      <summary class="rank-summary">
+        <div class="rank-num">7</div>
+        <div class="rank-body">
+          <div class="rank-name">Rewind <code>/rewind</code></div>
+          <div class="rank-desc">Roll code and the conversation back to an earlier checkpoint. When Claude gets something wrong, rewinding beats correcting it inline &mdash; cleaner context, fewer tokens.</div>
+        </div>
+        <span class="rank-chev">&#9656;</span>
+      </summary>
+      <div class="how-body">
+        <p><span class="how-k">How</span><span class="how-v">Run <code>/rewind</code>, then pick the earlier point in the timeline you want to jump back to.</span></p>
+        <p><span class="how-k">Why</span><span class="how-v">Undo a wrong turn instead of arguing with Claude to fix it.</span></p>
+        <p><span class="how-k">Awesome</span><span class="how-v">It rolls back your code and the conversation together, in lockstep.</span></p>
+      </div>
+    </details>
+
+    <details class="rank">
+      <summary class="rank-summary">
+        <div class="rank-num">8</div>
+        <div class="rank-body">
+          <div class="rank-name">Agent teams</div>
+          <div class="rank-desc">Personas that debate each other to consensus &mdash; panels, devil&rsquo;s advocates, brainstorms. Unlike sub-agents, teammates talk to each other and share a task list.</div>
+        </div>
+        <span class="rank-chev">&#9656;</span>
+      </summary>
+      <div class="how-body">
+        <p><span class="how-k">How</span><span class="how-v">Turn on the experimental flag, then ask Claude in plain English to &ldquo;create a team&rdquo; of personas to explore or debate something.</span></p>
+        <p><span class="how-k">Why</span><span class="how-v">Hear several perspectives argue to a conclusion &mdash; a built-in panel for a tough call.</span></p>
+        <p><span class="how-k">Awesome</span><span class="how-v">The teammates message each other and coordinate, not just report back.</span></p>
+        <p class="how-caveat"><span class="how-k">Heads up</span><span class="how-v">experimental &mdash; set <code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1</code> first, and expect heavy token use.</span></p>
+      </div>
+    </details>
+
+    <details class="rank">
+      <summary class="rank-summary">
+        <div class="rank-num">9</div>
+        <div class="rank-body">
+          <div class="rank-name">Auto-memory <code>/memory</code></div>
+          <div class="rank-desc">Claude periodically reviews past sessions and updates its own memory without being asked &mdash; it gets smarter on its own.</div>
+        </div>
+        <span class="rank-chev">&#9656;</span>
+      </summary>
+      <div class="how-body">
+        <p><span class="how-k">How</span><span class="how-v">Run <code>/memory</code> and switch auto-memory on.</span></p>
+        <p><span class="how-k">Why</span><span class="how-v">Claude learns your corrections and patterns over time without you hand-editing CLAUDE.md.</span></p>
+        <p><span class="how-k">Awesome</span><span class="how-v">It quietly gets sharper between sessions &mdash; no prompting required.</span></p>
+        <p class="how-caveat"><span class="how-k">Heads up</span><span class="how-v">stored per-repo in <code>.git/claude-memory.json</code> &mdash; don&rsquo;t commit it.</span></p>
+      </div>
+    </details>
+
+    <details class="rank">
+      <summary class="rank-summary">
+        <div class="rank-num">10</div>
+        <div class="rank-body">
+          <div class="rank-name">Insights <code>/insights</code></div>
+          <div class="rank-desc">A 30-day report on how you use Claude Code &mdash; what&rsquo;s working, what&rsquo;s slowing you down, quick wins, and skills worth building.</div>
+        </div>
+        <span class="rank-chev">&#9656;</span>
+      </summary>
+      <div class="how-body">
+        <p><span class="how-k">How</span><span class="how-v">Run <code>/insights</code> in any session.</span></p>
+        <p><span class="how-k">Why</span><span class="how-v">See how you&rsquo;ve actually been working over the last 30 days, not how you think you have.</span></p>
+        <p><span class="how-k">Awesome</span><span class="how-v">It points out quick wins and skills worth building &mdash; fuel for your next automation.</span></p>
+        <p class="how-caveat"><span class="how-k">Heads up</span><span class="how-v">paid plans also get a cost and per-tool breakdown.</span></p>
+      </div>
+    </details>
+
+    <details class="rank">
+      <summary class="rank-summary">
+        <div class="rank-num">11</div>
+        <div class="rank-body">
+          <div class="rank-name">Ultra plan <code>/ultraplan</code></div>
+          <div class="rank-desc">Offload planning for a big task to the cloud with multiple planning agents &mdash; and keep working locally while it thinks.</div>
+        </div>
+        <span class="rank-chev">&#9656;</span>
+      </summary>
+      <div class="how-body">
+        <p><span class="how-k">How</span><span class="how-v">Run <code>/ultraplan</code> with your big task, review the plan in the browser, then execute it.</span></p>
+        <p><span class="how-k">Why</span><span class="how-v">Get a serious, multi-step plan for a large job without burning your local token budget.</span></p>
+        <p><span class="how-k">Awesome</span><span class="how-v">Cloud agents do the planning while you keep working in the terminal.</span></p>
+        <p class="how-caveat"><span class="how-k">Heads up</span><span class="how-v">can&rsquo;t run at the same time as Remote control.</span></p>
+      </div>
+    </details>
+
+    <details class="rank">
+      <summary class="rank-summary">
+        <div class="rank-num">12</div>
+        <div class="rank-body">
+          <div class="rank-name">Goal <code>/goal</code></div>
+          <div class="rank-desc">Run until a clear definition-of-done is met, with verification built in. Set objective criteria, then walk away &mdash; it doesn&rsquo;t have to run for hours to be useful.</div>
+        </div>
+        <span class="rank-chev">&#9656;</span>
+      </summary>
+      <div class="how-body">
+        <p><span class="how-k">How</span><span class="how-v"><code>/goal "tests pass and no type errors"</code> &mdash; Claude works and verifies until that&rsquo;s true.</span></p>
+        <p><span class="how-k">Why</span><span class="how-v">Set a clear definition of done and let it run unattended.</span></p>
+        <p><span class="how-k">Awesome</span><span class="how-v">It checks its own work, so you can walk away and trust the result.</span></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- THE REST -->
+  <div class="group">
+    <div class="group-label">Everything else &mdash; <span class="count">A (best of the rest) down to D</span></div>
+
+    <div class="tier tier-A">
+      <div class="tier-head">
+        <span class="tier-badge">A</span>
+        <span class="tier-cap">honorable mentions &mdash; nearly made the cut</span>
+      </div>
+      <div class="tier-list">
+        <b>Google Workspace CLI</b> (agent reaches Gmail/Docs/Sheets/Calendar/Drive &mdash; he rates it top-12) &middot; <b>Dispatch</b> (talk to Claude from your phone) &middot; <b>Desktop app</b> (manage routines, multi-project sidebar, clean copy/paste) &middot; <b>Claude Design</b> (shared design systems, fast PoCs) &middot; Auto mode &middot; Hooks &middot; Effort levels &middot; Agent view &middot; <code>/context</code> &middot; Prompt caching
+      </div>
+    </div>
+
+    <div class="tier tier-B">
+      <div class="tier-head">
+        <span class="tier-badge">B</span>
+        <span class="tier-cap">very useful, just outside the rotation</span>
+      </div>
+      <div class="tier-list">
+        <b>Dynamic workflows</b> (strong parallel processing) &middot; <b>Deep research</b> <code>/deep-research</code> &middot; <b>Git worktrees</b> (isolated parallel copies) &middot; <b>Ultra review</b> (cloud code review) &middot; Interactive charts &middot; Session recap &middot; Claude for M365 &middot; Claude in Chrome &middot; Computer use
+      </div>
+    </div>
+
+    <div class="tier tier-C">
+      <div class="tier-head">
+        <span class="tier-badge">C</span>
+        <span class="tier-cap">great, just used less often</span>
+      </div>
+      <div class="tier-list">
+        Voice mode <code>/voice</code> (or a tool like Glaido) &middot; Co-work &middot; Interactive connectors &middot; Local file access
+      </div>
+    </div>
+
+    <div class="tier tier-D">
+      <div class="tier-head">
+        <span class="tier-badge">D</span>
+        <span class="tier-cap">the groundwork &mdash; essential, just not exciting</span>
+      </div>
+      <div class="tier-list">
+        CLAUDE.md &middot; Context lifecycle (<code>/clear</code>, <code>/compact</code>, resume) &middot; Web search &amp; fetch &middot; File uploads &middot; Fast mode &middot; Permissions &middot; Custom themes <code>/theme</code> &middot; IDE extension
+      </div>
+    </div>
+  </div>
+
+  <!-- TAKEAWAYS -->
+  <div class="group">
+    <div class="group-label">What to actually take from this</div>
+    <ul class="takeaways">
+      <li><b>Rankings are personal.</b> Sort by how much a feature changes <i>your</i> day-to-day, not by what&rsquo;s popular.</li>
+      <li><b>You don&rsquo;t have to write software to live in Claude Code.</b> It works just as well as an executive assistant and an operating system for knowledge work.</li>
+      <li><b>Skills are where the compounding is.</b> Every prompt you repeat is a skill waiting to be written.</li>
+      <li><b>Get token-aware.</b> The status line, <code>/context</code>, rewinding, and prompt caching all come back to spending your context window deliberately.</li>
+    </ul>
+  </div>
+
+  <div class="outro">
+    This is the stack behind my own AIOS. Want one built around how your business actually runs? <a href="/#contact">Let&rsquo;s talk</a>.
+  </div>
+
+</div>
+
+<footer>
+  <a href="/" class="footer-logo">
+    <img src="/images/logo.png" alt="POST 205">
+  </a>
+  <div class="footer-right">
+    © 2026 · POST205, Inc.<br>
+    <a href="/privacy.html">Privacy Policy</a>
+  </div>
+</footer>
+
+<script src="/js/cookie-banner.js"></script>
+
+</body>
+</html>

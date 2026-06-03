@@ -19,6 +19,22 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
+[[headers]]
+  for = "/aios/claude-features"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/aios/claude-features.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# Keep /aios resolving to the crash-course page even though an /aios/ folder now exists
+[[redirects]]
+  from = "/aios"
+  to = "/aios.html"
+  status = 200
+
 # Let the uppercase /AIOS the user shares resolve to the page
 [[redirects]]
   from = "/AIOS"
