@@ -283,6 +283,44 @@
     }
     .invite-grid dd { color: #e6f7f7; font-size: 15px; font-weight: 600; line-height: 1.4; }
 
+    /* Architecture line-art banner (drawn, not stock — on-brand for a code shop) */
+    .invite-art { margin: -10px -10px 24px; border-radius: 6px; overflow: hidden; background: #0a2020; border: 1px solid #163a3a; }
+    .invite-art svg { display: block; width: 100%; height: auto; }
+
+    /* Speaker */
+    .speaker { display: flex; align-items: center; gap: 14px; margin: 4px 0 26px; }
+    .speaker-photo { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 1px solid #2f6a6a; background: #0a2020; flex-shrink: 0; }
+    .speaker-name { color: #f0fbfb; font-weight: 700; font-size: 16px; letter-spacing: -0.01em; }
+    .speaker-role { color: #7fc4c4; font-size: 13px; margin-top: 2px; }
+
+    /* Invite action links (Zoom details + Add to calendar) */
+    .invite-actions { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 26px; padding-top: 22px; border-top: 1px solid #163a3a; }
+    .link-cal { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; background: none; border: none; cursor: pointer; padding: 0; color: #8fd0d0; font-family: ui-monospace, monospace; font-size: 12px; letter-spacing: 0.04em; text-decoration: none; transition: color 0.15s; -webkit-tap-highlight-color: transparent; }
+    .link-cal:hover { color: #cfeeee; text-decoration: none; }
+    .link-cal:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+    .link-cal svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* Zoom details dialog */
+    .zdlg { width: min(440px, calc(100vw - 32px)); border: 1px solid var(--border-2); background: var(--surface); color: var(--text); border-radius: 10px; padding: 0; }
+    .zdlg::backdrop { background: rgba(2, 12, 12, 0.64); }
+    .zdlg-in { padding: 28px 26px 24px; position: relative; }
+    .zdlg-x { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--border-2); border-radius: 6px; background: transparent; color: var(--text-2); font-size: 18px; line-height: 1; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .zdlg-x:hover { color: var(--text); border-color: var(--text-3); }
+    .zdlg-eyebrow { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .zdlg h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; margin-bottom: 10px; }
+    .zdlg p { color: var(--text-2); font-size: 14px; line-height: 1.6; margin-bottom: 18px; max-width: 46ch; }
+    .zdlg-meta { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
+    .zdlg-meta > div { display: flex; justify-content: space-between; gap: 16px; padding: 11px 14px; border-bottom: 1px solid var(--border); }
+    .zdlg-meta > div:last-child { border-bottom: none; }
+    .zdlg-meta dt { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
+    .zdlg-meta dd { font-family: ui-monospace, monospace; font-size: 13px; color: var(--text); }
+    .zdlg-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .zdlg-actions .btn-primary, .zdlg-actions .btn-ghost { font-size: 13px; padding: 12px 18px; }
+
+    /* Questionnaire architectural motif */
+    .q-motif { margin: 2px 0 22px; }
+    .q-motif svg { display: block; width: 100%; max-width: 480px; height: auto; }
+
     /* Form */
     .field { margin-bottom: 20px; }
     .field > label {
@@ -548,17 +586,112 @@
   <!-- ===== PANEL 1: INVITE ===== -->
   <section class="panel" role="tabpanel" id="panel-invite" aria-labelledby="tab-invite">
     <div class="invite" id="invite">
-      <div class="kicker">You're invited · Continuing Professional Development</div>
+
+      <!-- Architectural elevation, drawn in SVG: a tropical pavilion on stilts with
+           a deep roof overhang and brise-soleil louvers, sun and cross-ventilation
+           lines marking the passive-cooling theme. -->
+      <div class="invite-art">
+        <svg viewBox="0 0 640 300" role="img" aria-label="Line drawing of a tropical pavilion on stilts with a deep roof overhang and brise-soleil louvers, marked with sun and cross-ventilation lines.">
+          <defs>
+            <pattern id="bp" width="32" height="32" patternUnits="userSpaceOnUse">
+              <path d="M32 0H0V32" fill="none" stroke="#143636" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect x="0" y="0" width="640" height="300" fill="url(#bp)" opacity="0.55"/>
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <!-- ground + dimension line -->
+            <line x1="60" y1="250" x2="582" y2="250" stroke="#6fbfbf" stroke-width="1.6"/>
+            <g stroke="#3f7d7d" stroke-width="1">
+              <line x1="180" y1="270" x2="462" y2="270"/>
+              <line x1="180" y1="265" x2="180" y2="275"/>
+              <line x1="462" y1="265" x2="462" y2="275"/>
+            </g>
+            <!-- stilts -->
+            <g stroke="#4f9a9a" stroke-width="1.4">
+              <line x1="196" y1="206" x2="196" y2="250"/>
+              <line x1="252" y1="206" x2="252" y2="250"/>
+              <line x1="388" y1="206" x2="388" y2="250"/>
+              <line x1="444" y1="206" x2="444" y2="250"/>
+            </g>
+            <!-- floor slab -->
+            <line x1="178" y1="206" x2="462" y2="206" stroke="#6fbfbf" stroke-width="1.6"/>
+            <!-- walls -->
+            <line x1="200" y1="120" x2="200" y2="206" stroke="#6fbfbf" stroke-width="1.6"/>
+            <line x1="440" y1="120" x2="440" y2="206" stroke="#6fbfbf" stroke-width="1.6"/>
+            <!-- brise-soleil louvers -->
+            <g stroke="#3f7d7d" stroke-width="1">
+              <line x1="214" y1="126" x2="214" y2="200"/>
+              <line x1="232" y1="126" x2="232" y2="200"/>
+              <line x1="250" y1="126" x2="250" y2="200"/>
+              <line x1="268" y1="126" x2="268" y2="200"/>
+              <line x1="372" y1="126" x2="372" y2="200"/>
+              <line x1="390" y1="126" x2="390" y2="200"/>
+              <line x1="408" y1="126" x2="408" y2="200"/>
+              <line x1="426" y1="126" x2="426" y2="200"/>
+            </g>
+            <!-- doorway -->
+            <path d="M302 206 V152 H338 V206" stroke="#6fbfbf" stroke-width="1.4"/>
+            <!-- roof with deep overhang -->
+            <path d="M148 120 L320 84 L492 120" stroke="#6fbfbf" stroke-width="1.8"/>
+            <line x1="148" y1="120" x2="492" y2="120" stroke="#4f9a9a" stroke-width="1.2"/>
+            <!-- height dimension -->
+            <g stroke="#3f7d7d" stroke-width="1">
+              <line x1="120" y1="120" x2="120" y2="206"/>
+              <path d="M116 126 L120 120 L124 126"/>
+              <path d="M116 200 L120 206 L124 200"/>
+            </g>
+            <!-- sun -->
+            <g stroke="#3BD1D3" stroke-width="1.6">
+              <circle cx="548" cy="74" r="16"/>
+              <line x1="548" y1="44" x2="548" y2="52"/>
+              <line x1="548" y1="96" x2="548" y2="104"/>
+              <line x1="518" y1="74" x2="526" y2="74"/>
+              <line x1="570" y1="74" x2="578" y2="74"/>
+              <line x1="527" y1="53" x2="532" y2="58"/>
+              <line x1="564" y1="90" x2="569" y2="95"/>
+              <line x1="569" y1="53" x2="564" y2="58"/>
+              <line x1="532" y1="90" x2="527" y2="95"/>
+            </g>
+            <!-- cross-ventilation airflow -->
+            <g stroke="#3BD1D3" stroke-width="1.6">
+              <path d="M104 168 C 168 150, 250 186, 320 166 S 462 148, 520 170"/>
+              <path d="M520 170 L510 165 M520 170 L512 178"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="kicker">You're invited &middot; Continuing Professional Development</div>
       <h2 id="inv-title"></h2>
       <p class="topic" id="inv-topic"></p>
+
+      <div class="speaker">
+        <img class="speaker-photo" id="inv-speaker-photo" src="" alt="" width="56" height="56" loading="lazy">
+        <div>
+          <div class="speaker-name" id="inv-speaker-name"></div>
+          <div class="speaker-role" id="inv-speaker-role"></div>
+        </div>
+      </div>
+
       <dl class="invite-grid">
         <div><dt>Date</dt><dd id="inv-date"></dd></div>
         <div><dt>Time</dt><dd id="inv-time"></dd></div>
-        <div><dt>Venue</dt><dd id="inv-venue"></dd></div>
+        <div><dt>Format</dt><dd id="inv-format"></dd></div>
         <div><dt>CPD Credit</dt><dd id="inv-units"></dd></div>
-        <div><dt>Speaker</dt><dd id="inv-speaker"></dd></div>
         <div><dt>Accredited by</dt><dd id="inv-body"></dd></div>
+        <div><dt>Fee</dt><dd id="inv-fee"></dd></div>
       </dl>
+
+      <div class="invite-actions">
+        <button type="button" class="link-cal" id="openZoom">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="13" height="12" rx="2.5"/><path d="M15 10l6-3.5v11L15 14"/></svg>
+          Zoom details
+        </button>
+        <a class="link-cal" id="addCal" target="_blank" rel="noopener" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>
+          Add to calendar
+        </a>
+      </div>
     </div>
   </section>
 
@@ -567,7 +700,26 @@
       <div class="stage-head" style="margin-top:0">
         <h2>Post-session questionnaire</h2>
       </div>
-      <p class="lede" style="margin-bottom:32px">The questions an accredited provider actually asks: your PRC details for the certificate, plus quick feedback on the session.</p>
+      <p class="lede" style="margin-bottom:20px">The questions an accredited provider actually asks: your PRC details for the certificate, plus quick feedback on the session.</p>
+
+      <!-- Thin elevation strip: keeps the architecture motif present without competing with the form. -->
+      <div class="q-motif" aria-hidden="true">
+        <svg viewBox="0 0 480 34" fill="none" stroke="#3f7d7d" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="0" y1="30" x2="480" y2="30" stroke="#4f9a9a"/>
+          <path d="M14 30 V14 L34 6 L54 14 V30"/>
+          <g stroke="#33686a"><line x1="22" y1="18" x2="22" y2="30"/><line x1="30" y1="18" x2="30" y2="30"/><line x1="38" y1="18" x2="38" y2="30"/><line x1="46" y1="18" x2="46" y2="30"/></g>
+          <path d="M76 30 V12 H120 V30"/>
+          <g stroke="#33686a"><line x1="86" y1="16" x2="86" y2="30"/><line x1="98" y1="16" x2="98" y2="30"/><line x1="110" y1="16" x2="110" y2="30"/></g>
+          <path d="M142 30 V18 L160 10 L178 18 V30"/>
+          <line x1="210" y1="30" x2="210" y2="9"/>
+          <circle cx="210" cy="9" r="4" stroke="#3BD1D3"/>
+          <g stroke="#2c5a5c"><line x1="250" y1="30" x2="250" y2="20"/><line x1="262" y1="30" x2="262" y2="16"/><line x1="274" y1="30" x2="274" y2="22"/><line x1="286" y1="30" x2="286" y2="18"/></g>
+          <path d="M312 30 V14 H356 V30 M334 14 V30"/>
+          <path d="M380 30 V16 L400 8 L420 16 V30"/>
+          <g stroke="#33686a"><line x1="390" y1="20" x2="390" y2="30"/><line x1="400" y1="20" x2="400" y2="30"/><line x1="410" y1="20" x2="410" y2="30"/></g>
+          <line x1="446" y1="30" x2="446" y2="12"/>
+        </svg>
+      </div>
 
       <form id="cpdForm" novalidate>
         <fieldset>
@@ -728,6 +880,24 @@
 
 </div>
 
+<dialog class="zdlg" id="zoomDialog" aria-labelledby="zdlg-title">
+  <div class="zdlg-in">
+    <button type="button" class="zdlg-x" id="closeZoom" aria-label="Close">&times;</button>
+    <div class="zdlg-eyebrow">Online session</div>
+    <h3 id="zdlg-title">This runs on Zoom</h3>
+    <p>No travel, no venue. The join link is emailed to registered attendees the day before the session. For this demo, here are the meeting details:</p>
+    <dl class="zdlg-meta">
+      <div><dt>Platform</dt><dd>Zoom Webinar</dd></div>
+      <div><dt>Meeting ID</dt><dd id="z-id"></dd></div>
+      <div><dt>Passcode</dt><dd id="z-pass"></dd></div>
+    </dl>
+    <div class="zdlg-actions">
+      <a class="btn-primary" id="zoomCal" target="_blank" rel="noopener" href="#">Add to Google Calendar</a>
+      <button type="button" class="btn-ghost" id="dlIcs">Download .ics</button>
+    </div>
+  </div>
+</dialog>
+
 <footer>
   <a href="/" class="footer-logo"><img src="/images/logo.png" alt="POST 205"></a>
   <div class="footer-right">© 2026 · POST205, Inc.<br>This is a demo. No data leaves your browser.</div>
@@ -740,14 +910,22 @@
 
   // ---- Event config (single source of truth for invite + certificate + email) ----
   var EVENT = {
-    title:    "Designing for Climate: Passive Cooling in Philippine Architecture",
-    date:     "May 28, 2026",
-    time:     "1:00 PM to 5:00 PM",
-    venue:    "UAP National Headquarters, Scout Rallos, Quezon City",
-    body:     "United Architects of the Philippines, PRC-Accredited CPD Provider",
-    cpdUnits: "3 CPD units",
-    speaker:  "Ar. Maria Lourdes Santos, fUAP",
-    topic:    "Passive cooling strategies for tropical residential design, from orientation and cross-ventilation to material choices that cut cooling load."
+    title:       "Designing for Climate: Passive Cooling in Philippine Architecture",
+    date:        "Thursday, July 16, 2026",
+    time:        "2:00 PM to 5:00 PM (PHT)",
+    format:      "Online · Zoom webinar",
+    fee:         "Free, by registration",
+    body:        "United Architects of the Philippines, PRC-Accredited CPD Provider",
+    cpdUnits:    "3 CPD units",
+    speaker:     "Ar. Maria Lourdes Santos, fUAP",
+    speakerRole: "Principal Architect, Santos + Reyes Studio",
+    speakerPhoto:"https://randomuser.me/api/portraits/women/68.jpg",
+    topic:       "Passive cooling strategies for tropical residential design, from orientation and cross-ventilation to material choices that cut cooling load.",
+    zoomId:      "871 2345 6789",
+    zoomPasscode:"CPD2026",
+    calStart:    "20260716T140000",
+    calEnd:      "20260716T170000",
+    tz:          "Asia/Manila"
   };
 
   var STORE_KEY = "post205_cpd_submissions";
@@ -757,10 +935,10 @@
 
   function seedData() {
     return [
-      { name: "Ramon Aguilar", email: "ramon.aguilar@aguilararq.com", prcNumber: "0041288", profession: "Architect", licenseValidity: "2027-09-30", speakerRating: 5, relevanceRating: 5, takeaway: "Orientation first, mechanical cooling last. Reworking our default site studies.", futureTopics: "Embodied carbon in local materials", submittedAt: "2026-05-28T17:12:00+08:00" },
-      { name: "Bianca Reyes", email: "b.reyes@studionorth.ph", prcNumber: "0052910", profession: "Architect", licenseValidity: "2026-12-31", speakerRating: 4, relevanceRating: 5, takeaway: "The cross-ventilation rules of thumb are immediately usable for our walk-up projects.", futureTopics: "Daylighting for deep floor plates", submittedAt: "2026-05-28T17:24:00+08:00" },
-      { name: "Carlito Mendoza", email: "carlito@mendozadesign.com", prcNumber: "0038475", profession: "Architect", licenseValidity: "2028-03-15", speakerRating: 5, relevanceRating: 4, takeaway: "Material thermal mass matters more than I credited. Will test on the next residence.", futureTopics: "", submittedAt: "2026-05-28T17:41:00+08:00" },
-      { name: "Bianca Reyes", email: "b.reyes@studionorth.ph", prcNumber: "0052910", profession: "Architect", licenseValidity: "2026-12-31", speakerRating: 5, relevanceRating: 5, takeaway: "Came back to log a second session note: the case studies were the best part.", futureTopics: "More PH case studies", submittedAt: "2026-05-28T18:03:00+08:00" }
+      { name: "Ramon Aguilar", email: "ramon.aguilar@aguilararq.com", prcNumber: "0041288", profession: "Architect", licenseValidity: "2027-09-30", speakerRating: 5, relevanceRating: 5, takeaway: "Orientation first, mechanical cooling last. Reworking our default site studies.", futureTopics: "Embodied carbon in local materials", submittedAt: "2026-07-16T17:12:00+08:00" },
+      { name: "Bianca Reyes", email: "b.reyes@studionorth.ph", prcNumber: "0052910", profession: "Architect", licenseValidity: "2026-12-31", speakerRating: 4, relevanceRating: 5, takeaway: "The cross-ventilation rules of thumb are immediately usable for our walk-up projects.", futureTopics: "Daylighting for deep floor plates", submittedAt: "2026-07-16T17:24:00+08:00" },
+      { name: "Carlito Mendoza", email: "carlito@mendozadesign.com", prcNumber: "0038475", profession: "Architect", licenseValidity: "2028-03-15", speakerRating: 5, relevanceRating: 4, takeaway: "Material thermal mass matters more than I credited. Will test on the next residence.", futureTopics: "", submittedAt: "2026-07-16T17:41:00+08:00" },
+      { name: "Bianca Reyes", email: "b.reyes@studionorth.ph", prcNumber: "0052910", profession: "Architect", licenseValidity: "2026-12-31", speakerRating: 5, relevanceRating: 5, takeaway: "Came back to log a second session note: the case studies were the best part.", futureTopics: "More PH case studies", submittedAt: "2026-07-16T18:03:00+08:00" }
     ];
   }
 
@@ -809,16 +987,63 @@
     return d.toLocaleString("en-PH", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
   }
 
+  // ---- Calendar helpers ----
+  function gcalUrl() {
+    var details = EVENT.topic + "\n\nZoom Meeting ID: " + EVENT.zoomId +
+      "\nPasscode: " + EVENT.zoomPasscode + "\n\n" + EVENT.cpdUnits + " · " + EVENT.body;
+    var p = new URLSearchParams({
+      action: "TEMPLATE",
+      text: EVENT.title,
+      dates: EVENT.calStart + "/" + EVENT.calEnd,
+      ctz: EVENT.tz,
+      location: "Online via Zoom",
+      details: details
+    });
+    return "https://calendar.google.com/calendar/render?" + p.toString();
+  }
+  function icsEsc(s) { return String(s).replace(/([\\;,])/g, "\\$1").replace(/\n/g, "\\n"); }
+  function downloadIcs() {
+    var stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+    var lines = [
+      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//POST205//CPD Demo//EN", "CALSCALE:GREGORIAN",
+      "BEGIN:VEVENT",
+      "UID:cpd-demo-" + EVENT.calStart + "@post205.com",
+      "DTSTAMP:" + stamp,
+      "DTSTART;TZID=" + EVENT.tz + ":" + EVENT.calStart,
+      "DTEND;TZID=" + EVENT.tz + ":" + EVENT.calEnd,
+      "SUMMARY:" + icsEsc(EVENT.title),
+      "LOCATION:Online via Zoom",
+      "DESCRIPTION:" + icsEsc(EVENT.topic + " Zoom ID " + EVENT.zoomId + " Passcode " + EVENT.zoomPasscode + ". " + EVENT.cpdUnits + ", " + EVENT.body),
+      "END:VEVENT", "END:VCALENDAR"
+    ];
+    var blob = new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = "cpd-session.ics";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
   // ---- Invite render ----
   function renderInvite() {
     $("inv-title").textContent = EVENT.title;
     $("inv-topic").textContent = EVENT.topic;
     $("inv-date").textContent = EVENT.date;
     $("inv-time").textContent = EVENT.time;
-    $("inv-venue").textContent = EVENT.venue;
+    $("inv-format").textContent = EVENT.format;
     $("inv-units").textContent = EVENT.cpdUnits;
-    $("inv-speaker").textContent = EVENT.speaker;
     $("inv-body").textContent = EVENT.body;
+    $("inv-fee").textContent = EVENT.fee;
+    $("inv-speaker-name").textContent = EVENT.speaker;
+    $("inv-speaker-role").textContent = EVENT.speakerRole;
+    var ph = $("inv-speaker-photo");
+    ph.src = EVENT.speakerPhoto;
+    ph.alt = "Portrait of " + EVENT.speaker + ", session speaker";
+    $("z-id").textContent = EVENT.zoomId;
+    $("z-pass").textContent = EVENT.zoomPasscode;
+    var gc = gcalUrl();
+    $("addCal").href = gc;
+    $("zoomCal").href = gc;
   }
 
   // ---- Certificate render (one submission) ----
@@ -1019,6 +1244,15 @@
     $("goToForm").addEventListener("click", function () { activateTab("panel-form"); });
     $("downloadCert").addEventListener("click", function () { window.print(); });
     $("downloadCsv").addEventListener("click", exportCsv);
+
+    // Zoom details dialog
+    var dlg = $("zoomDialog");
+    function openDlg() { if (dlg.showModal) { try { dlg.showModal(); return; } catch (e) {} } dlg.setAttribute("open", ""); }
+    function closeDlg() { if (dlg.close) { try { dlg.close(); return; } catch (e) {} } dlg.removeAttribute("open"); }
+    $("openZoom").addEventListener("click", openDlg);
+    $("closeZoom").addEventListener("click", closeDlg);
+    dlg.addEventListener("click", function (e) { if (e.target === dlg) closeDlg(); });
+    $("dlIcs").addEventListener("click", downloadIcs);
   }
 
   if (document.readyState === "loading") {
