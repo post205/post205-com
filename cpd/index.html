@@ -283,9 +283,10 @@
     }
     .invite-grid dd { color: #e6f7f7; font-size: 15px; font-weight: 600; line-height: 1.4; }
 
-    /* Architecture line-art banner (drawn, not stock — on-brand for a code shop) */
-    .invite-art { margin: -10px -10px 24px; border-radius: 6px; overflow: hidden; background: #0a2020; border: 1px solid #163a3a; }
-    .invite-art svg { display: block; width: 100%; height: auto; }
+    /* Real architectural blueprint, duotoned toward teal so it sits in the dark system */
+    .invite-art { position: relative; margin: -10px -10px 24px; border-radius: 6px; overflow: hidden; background: #0a2020; border: 1px solid #163a3a; }
+    .invite-art img { display: block; width: 100%; height: 210px; object-fit: cover; filter: grayscale(1) brightness(0.72) contrast(1.12) sepia(0.4) hue-rotate(135deg) saturate(2.4); }
+    .invite-art::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, rgba(13,40,40,0.55), rgba(13,40,40,0.05) 62%); }
 
     /* Speaker */
     .speaker { display: flex; align-items: center; gap: 14px; margin: 4px 0 26px; }
@@ -317,9 +318,9 @@
     .zdlg-actions { display: flex; flex-wrap: wrap; gap: 10px; }
     .zdlg-actions .btn-primary, .zdlg-actions .btn-ghost { font-size: 13px; padding: 12px 18px; }
 
-    /* Questionnaire architectural motif */
-    .q-motif { margin: 2px 0 22px; }
-    .q-motif svg { display: block; width: 100%; max-width: 480px; height: auto; }
+    /* Questionnaire architectural motif: faint real-blueprint strip */
+    .q-motif { margin: 2px 0 24px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+    .q-motif img { display: block; width: 100%; height: 64px; object-fit: cover; filter: grayscale(1) brightness(0.7) contrast(1.1) sepia(0.4) hue-rotate(135deg) saturate(2.2); opacity: 0.5; }
 
     /* Form */
     .field { margin-bottom: 20px; }
@@ -587,78 +588,11 @@
   <section class="panel" role="tabpanel" id="panel-invite" aria-labelledby="tab-invite">
     <div class="invite" id="invite">
 
-      <!-- Architectural elevation, drawn in SVG: a tropical pavilion on stilts with
-           a deep roof overhang and brise-soleil louvers, sun and cross-ventilation
-           lines marking the passive-cooling theme. -->
+      <!-- Real architectural blueprint (Unsplash), duotoned to the brand teal in CSS. -->
       <div class="invite-art">
-        <svg viewBox="0 0 640 300" role="img" aria-label="Line drawing of a tropical pavilion on stilts with a deep roof overhang and brise-soleil louvers, marked with sun and cross-ventilation lines.">
-          <defs>
-            <pattern id="bp" width="32" height="32" patternUnits="userSpaceOnUse">
-              <path d="M32 0H0V32" fill="none" stroke="#143636" stroke-width="1"/>
-            </pattern>
-          </defs>
-          <rect x="0" y="0" width="640" height="300" fill="url(#bp)" opacity="0.55"/>
-          <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <!-- ground + dimension line -->
-            <line x1="60" y1="250" x2="582" y2="250" stroke="#6fbfbf" stroke-width="1.6"/>
-            <g stroke="#3f7d7d" stroke-width="1">
-              <line x1="180" y1="270" x2="462" y2="270"/>
-              <line x1="180" y1="265" x2="180" y2="275"/>
-              <line x1="462" y1="265" x2="462" y2="275"/>
-            </g>
-            <!-- stilts -->
-            <g stroke="#4f9a9a" stroke-width="1.4">
-              <line x1="196" y1="206" x2="196" y2="250"/>
-              <line x1="252" y1="206" x2="252" y2="250"/>
-              <line x1="388" y1="206" x2="388" y2="250"/>
-              <line x1="444" y1="206" x2="444" y2="250"/>
-            </g>
-            <!-- floor slab -->
-            <line x1="178" y1="206" x2="462" y2="206" stroke="#6fbfbf" stroke-width="1.6"/>
-            <!-- walls -->
-            <line x1="200" y1="120" x2="200" y2="206" stroke="#6fbfbf" stroke-width="1.6"/>
-            <line x1="440" y1="120" x2="440" y2="206" stroke="#6fbfbf" stroke-width="1.6"/>
-            <!-- brise-soleil louvers -->
-            <g stroke="#3f7d7d" stroke-width="1">
-              <line x1="214" y1="126" x2="214" y2="200"/>
-              <line x1="232" y1="126" x2="232" y2="200"/>
-              <line x1="250" y1="126" x2="250" y2="200"/>
-              <line x1="268" y1="126" x2="268" y2="200"/>
-              <line x1="372" y1="126" x2="372" y2="200"/>
-              <line x1="390" y1="126" x2="390" y2="200"/>
-              <line x1="408" y1="126" x2="408" y2="200"/>
-              <line x1="426" y1="126" x2="426" y2="200"/>
-            </g>
-            <!-- doorway -->
-            <path d="M302 206 V152 H338 V206" stroke="#6fbfbf" stroke-width="1.4"/>
-            <!-- roof with deep overhang -->
-            <path d="M148 120 L320 84 L492 120" stroke="#6fbfbf" stroke-width="1.8"/>
-            <line x1="148" y1="120" x2="492" y2="120" stroke="#4f9a9a" stroke-width="1.2"/>
-            <!-- height dimension -->
-            <g stroke="#3f7d7d" stroke-width="1">
-              <line x1="120" y1="120" x2="120" y2="206"/>
-              <path d="M116 126 L120 120 L124 126"/>
-              <path d="M116 200 L120 206 L124 200"/>
-            </g>
-            <!-- sun -->
-            <g stroke="#3BD1D3" stroke-width="1.6">
-              <circle cx="548" cy="74" r="16"/>
-              <line x1="548" y1="44" x2="548" y2="52"/>
-              <line x1="548" y1="96" x2="548" y2="104"/>
-              <line x1="518" y1="74" x2="526" y2="74"/>
-              <line x1="570" y1="74" x2="578" y2="74"/>
-              <line x1="527" y1="53" x2="532" y2="58"/>
-              <line x1="564" y1="90" x2="569" y2="95"/>
-              <line x1="569" y1="53" x2="564" y2="58"/>
-              <line x1="532" y1="90" x2="527" y2="95"/>
-            </g>
-            <!-- cross-ventilation airflow -->
-            <g stroke="#3BD1D3" stroke-width="1.6">
-              <path d="M104 168 C 168 150, 250 186, 320 166 S 462 148, 520 170"/>
-              <path d="M520 170 L510 165 M520 170 L512 178"/>
-            </g>
-          </g>
-        </svg>
+        <img src="https://images.unsplash.com/photo-1542621334-a254cf47733d?auto=format&fit=crop&w=1280&h=520&q=80"
+             alt="Architect's blueprint: a dimensioned floor plan with a pencil and scale ruler"
+             width="1280" height="520" loading="eager" decoding="async">
       </div>
 
       <div class="kicker">You're invited &middot; Continuing Professional Development</div>
@@ -702,23 +636,9 @@
       </div>
       <p class="lede" style="margin-bottom:20px">The questions an accredited provider actually asks: your PRC details for the certificate, plus quick feedback on the session.</p>
 
-      <!-- Thin elevation strip: keeps the architecture motif present without competing with the form. -->
+      <!-- Thin real-blueprint strip: keeps the architecture motif present without competing with the form. -->
       <div class="q-motif" aria-hidden="true">
-        <svg viewBox="0 0 480 34" fill="none" stroke="#3f7d7d" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="0" y1="30" x2="480" y2="30" stroke="#4f9a9a"/>
-          <path d="M14 30 V14 L34 6 L54 14 V30"/>
-          <g stroke="#33686a"><line x1="22" y1="18" x2="22" y2="30"/><line x1="30" y1="18" x2="30" y2="30"/><line x1="38" y1="18" x2="38" y2="30"/><line x1="46" y1="18" x2="46" y2="30"/></g>
-          <path d="M76 30 V12 H120 V30"/>
-          <g stroke="#33686a"><line x1="86" y1="16" x2="86" y2="30"/><line x1="98" y1="16" x2="98" y2="30"/><line x1="110" y1="16" x2="110" y2="30"/></g>
-          <path d="M142 30 V18 L160 10 L178 18 V30"/>
-          <line x1="210" y1="30" x2="210" y2="9"/>
-          <circle cx="210" cy="9" r="4" stroke="#3BD1D3"/>
-          <g stroke="#2c5a5c"><line x1="250" y1="30" x2="250" y2="20"/><line x1="262" y1="30" x2="262" y2="16"/><line x1="274" y1="30" x2="274" y2="22"/><line x1="286" y1="30" x2="286" y2="18"/></g>
-          <path d="M312 30 V14 H356 V30 M334 14 V30"/>
-          <path d="M380 30 V16 L400 8 L420 16 V30"/>
-          <g stroke="#33686a"><line x1="390" y1="20" x2="390" y2="30"/><line x1="400" y1="20" x2="400" y2="30"/><line x1="410" y1="20" x2="410" y2="30"/></g>
-          <line x1="446" y1="30" x2="446" y2="12"/>
-        </svg>
+        <img src="https://images.unsplash.com/photo-1542621334-a254cf47733d?auto=format&fit=crop&w=1280&h=120&q=80" alt="" width="1280" height="120" loading="lazy" decoding="async">
       </div>
 
       <form id="cpdForm" novalidate>
@@ -919,7 +839,7 @@
     cpdUnits:    "3 CPD units",
     speaker:     "Ar. Maria Lourdes Santos, fUAP",
     speakerRole: "Principal Architect, Santos + Reyes Studio",
-    speakerPhoto:"https://randomuser.me/api/portraits/women/68.jpg",
+    speakerPhoto:"https://images.unsplash.com/photo-1581065178047-8ee15951ede6?auto=format&fit=crop&w=160&h=160&q=80",
     topic:       "Passive cooling strategies for tropical residential design, from orientation and cross-ventilation to material choices that cut cooling load.",
     zoomId:      "871 2345 6789",
     zoomPasscode:"CPD2026",
