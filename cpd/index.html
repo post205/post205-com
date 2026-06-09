@@ -160,10 +160,58 @@
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    /* The page reads as a vertical sequence of demo "stages" */
-    .stage { border-top: 1px solid var(--border); }
-    .stage:first-of-type { border-top: none; }
-    .stage-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 26px; }
+    .page-head { margin-bottom: 28px; }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 5px;
+      margin-bottom: 28px;
+      scroll-margin-top: 72px;
+    }
+    .tab {
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      padding: 11px 6px;
+      cursor: pointer;
+      color: var(--text-2);
+      transition: background 0.15s, color 0.15s;
+    }
+    .tab:hover { color: var(--text); }
+    .tab .t-num {
+      font-family: ui-monospace, monospace;
+      font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-3);
+    }
+    .tab .t-name {
+      font-family: ui-monospace, monospace;
+      font-size: clamp(10px, 2.7vw, 12px);
+      letter-spacing: 0.04em; text-transform: uppercase; font-weight: 500;
+      white-space: nowrap;
+    }
+    .tab[aria-selected="true"] { background: var(--surface-2); color: var(--text); }
+    .tab[aria-selected="true"] .t-num { color: var(--accent); }
+    .tab[aria-selected="true"] .t-name { color: var(--text); }
+    .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .panel[hidden] { display: none; }
+    .panel { animation: fade 0.18s ease; }
+    @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .panel { animation: none; } }
+
+    .stage-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .stage-head:not(:first-child) { margin-top: 48px; }
     .stage-num {
       font-family: ui-monospace, monospace;
       font-size: 11px;
@@ -171,6 +219,15 @@
       color: var(--accent);
       text-transform: uppercase;
     }
+    .results-empty {
+      border: 1px dashed var(--border-2);
+      border-radius: 8px;
+      padding: 40px 28px;
+      text-align: center;
+      color: var(--text-2);
+    }
+    .results-empty .re-title { color: var(--text); font-weight: 700; font-size: 17px; margin-bottom: 8px; }
+    .results-empty .btn-ghost { margin-top: 18px; }
 
     /* Invite card */
     .invite {
@@ -310,9 +367,6 @@
       border-radius: 6px; padding: 10px 14px; margin-top: 14px;
     }
 
-    /* Results stage (hidden until submit) */
-    #results { display: none; }
-    #results.shown { display: block; }
     .preview-flag {
       font-family: ui-monospace, monospace;
       font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
@@ -445,13 +499,20 @@
 
 <div class="wrap">
 
-  <!-- ===== STAGE 1: INVITE ===== -->
-  <section class="stage" id="stage-invite">
-    <div class="section-label">Live demo · one page, end to end</div>
+  <header class="page-head">
+    <div class="section-label">Live demo · invite, questionnaire, certificate</div>
     <h1>How a CPD event runs itself</h1>
-    <p class="lede">Three things on one page. The invite goes out. Your attendees answer a short questionnaire. The moment they submit, they get a certificate and a notification email, and you get a dashboard you can export. Try it below, it is fully working.</p>
+    <p class="lede">Three tabs, one flow. Send the invite, collect a short questionnaire, and the moment an attendee submits they get a certificate and a notification email, while you get an exportable dashboard. Switch between the tabs, it is fully working.</p>
+  </header>
 
-    <div style="height:32px"></div>
+  <div class="tabs" role="tablist" aria-label="CPD demo steps">
+    <button class="tab" role="tab" id="tab-invite" aria-controls="panel-invite" aria-selected="true"><span class="t-num">01</span><span class="t-name">Invite</span></button>
+    <button class="tab" role="tab" id="tab-form" aria-controls="panel-form" aria-selected="false" tabindex="-1"><span class="t-num">02</span><span class="t-name">Questionnaire</span></button>
+    <button class="tab" role="tab" id="tab-results" aria-controls="panel-results" aria-selected="false" tabindex="-1"><span class="t-num">03</span><span class="t-name">Results</span></button>
+  </div>
+
+  <!-- ===== PANEL 1: INVITE ===== -->
+  <section class="panel" role="tabpanel" id="panel-invite" aria-labelledby="tab-invite">
     <div class="invite" id="invite">
       <div class="kicker">You're invited · Continuing Professional Development</div>
       <h2 id="inv-title"></h2>
@@ -467,11 +528,9 @@
     </div>
   </section>
 
-  <!-- ===== STAGE 2: QUESTIONNAIRE ===== -->
-  <section class="stage" id="stage-form">
-    <div class="wrap" style="padding:56px 0 0;max-width:none">
-      <div class="stage-head">
-        <span class="stage-num">Step 2</span>
+  <!-- ===== PANEL 2: QUESTIONNAIRE ===== -->
+  <section class="panel" role="tabpanel" id="panel-form" aria-labelledby="tab-form" hidden>
+      <div class="stage-head" style="margin-top:0">
         <h2>Post-session questionnaire</h2>
       </div>
       <p class="lede" style="margin-bottom:32px">The questions an accredited provider actually asks: your PRC details for the certificate, plus quick feedback on the session.</p>
@@ -550,15 +609,22 @@
         <button type="submit" class="btn-primary">Submit and get my certificate</button>
         <div class="notice" id="storageNotice" hidden>Heads up: your browser is blocking local storage, so this run is kept in memory only and will reset when you reload. The demo still works.</div>
       </form>
-    </div>
   </section>
 
-  <!-- ===== STAGE 3: RESULTS ===== -->
-  <section class="stage" id="results">
-    <div class="wrap" style="padding:56px 0 0;max-width:none">
+  <!-- ===== PANEL 3: RESULTS ===== -->
+  <section class="panel" role="tabpanel" id="panel-results" aria-labelledby="tab-results" hidden>
 
+      <!-- Empty state, before any submission this session -->
+      <div class="results-empty" id="resultsEmpty">
+        <div class="re-title">No submission yet</div>
+        <p>Fill out the questionnaire and a certificate and notification email appear here instantly. The organizer dashboard below is already live with sample submissions.</p>
+        <button type="button" class="btn-ghost" id="goToForm">Go to the questionnaire</button>
+      </div>
+
+      <!-- Certificate + email, shown once a submission exists -->
+      <div id="latestWrap" hidden>
       <!-- Certificate -->
-      <div class="stage-head"><span class="stage-num">Step 3 · Instantly</span><h2>Your certificate</h2></div>
+      <div class="stage-head" style="margin-top:0"><span class="stage-num">Instantly</span><h2>Your certificate</h2></div>
       <div id="certificate">
         <div class="cert-frame">
           <div class="cert-seal">Certificate of Completion</div>
@@ -582,7 +648,7 @@
       </div>
 
       <!-- Email preview -->
-      <div class="stage-head" style="margin-top:48px"><span class="stage-num">Step 3 · Also</span><h2>The email they receive</h2></div>
+      <div class="stage-head"><span class="stage-num">Also</span><h2>The email they receive</h2></div>
       <span class="preview-flag">Preview · this is what gets sent</span>
       <div class="email">
         <div class="email-head">
@@ -602,9 +668,10 @@
           <p style="margin-top:16px">Warm regards,<br>The CPD Office</p>
         </div>
       </div>
+      </div><!-- /#latestWrap -->
 
       <!-- Dashboard -->
-      <div class="stage-head" style="margin-top:48px"><span class="stage-num">For the organizer</span><h2>Submissions dashboard</h2></div>
+      <div class="stage-head"><span class="stage-num">For the organizer</span><h2>Submissions dashboard</h2></div>
       <p class="lede" style="margin-bottom:24px">Every submission lands here. Repeat emails stack as their own rows, exactly like a real attendee list. Export the whole thing to CSV in one click.</p>
       <div class="stat-grid">
         <div class="stat"><div class="num" id="st-total">0</div><div class="lbl">Submissions</div></div>
@@ -623,7 +690,6 @@
         <span style="font-size:13px;color:var(--text-3)" id="rowCount"></span>
       </div>
 
-    </div>
   </section>
 
 </div>
@@ -843,8 +909,45 @@
     };
   }
 
+  // ---- Tabs ----
+  var TABS = [
+    { tab: "tab-invite",  panel: "panel-invite" },
+    { tab: "tab-form",    panel: "panel-form" },
+    { tab: "tab-results", panel: "panel-results" }
+  ];
+  function activateTab(panelId, opts) {
+    opts = opts || {};
+    TABS.forEach(function (t) {
+      var selected = t.panel === panelId;
+      var tabEl = $(t.tab), panelEl = $(t.panel);
+      tabEl.setAttribute("aria-selected", selected ? "true" : "false");
+      tabEl.tabIndex = selected ? 0 : -1;
+      panelEl.hidden = !selected;
+    });
+    if (opts.focus) $(TABS.filter(function (t) { return t.panel === panelId; })[0].tab).focus();
+    if (opts.scroll !== false) {
+      var bar = document.querySelector(".tabs");
+      if (bar && bar.scrollIntoView) bar.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+  function wireTabs() {
+    TABS.forEach(function (t, i) {
+      var el = $(t.tab);
+      el.addEventListener("click", function () { activateTab(t.panel); });
+      el.addEventListener("keydown", function (e) {
+        var dir = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!dir) return;
+        e.preventDefault();
+        var next = (i + dir + TABS.length) % TABS.length;
+        activateTab(TABS[next].panel, { focus: true, scroll: false });
+      });
+    });
+  }
+
   function init() {
     renderInvite();
+    renderDashboard(load()); // dashboard is live with seeded data from the start
+    wireTabs();
 
     var form = $("cpdForm");
     form.addEventListener("submit", function (e) {
@@ -857,9 +960,9 @@
       renderEmail(rec);
       renderDashboard(load());
 
-      var results = $("results");
-      results.classList.add("shown");
-      results.scrollIntoView({ behavior: "smooth", block: "start" });
+      $("resultsEmpty").hidden = true;
+      $("latestWrap").hidden = false;
+      activateTab("panel-results");
     });
 
     // Clear a field's error state as the user fixes it.
@@ -868,6 +971,7 @@
       if (fe) fe.classList.remove("invalid");
     });
 
+    $("goToForm").addEventListener("click", function () { activateTab("panel-form"); });
     $("downloadCert").addEventListener("click", function () { window.print(); });
     $("downloadCsv").addEventListener("click", exportCsv);
   }
