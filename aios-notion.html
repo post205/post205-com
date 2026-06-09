@@ -328,6 +328,48 @@
     .tree .d { color: var(--accent); }
     .tree .n { color: var(--text-3); }
 
+    /* Card as button (opens the kit modal) */
+    button.card { width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+    button.card:hover { border-color: var(--accent); transform: translateY(-2px); background: var(--surface-2); }
+    button.card:hover .card-arrow { transform: translate(2px, -2px); }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: 12px;
+      max-width: 460px;
+      width: 100%;
+      padding: 28px 28px 24px;
+    }
+    .modal h3 { font-size: 18px; letter-spacing: -0.01em; margin-bottom: 12px; color: var(--text); }
+    .modal p { color: var(--text-2); font-size: 15px; line-height: 1.6; }
+    .modal p + p { margin-top: 12px; }
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: none;
+      border: none;
+      color: var(--text-3);
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .modal-close:hover { color: var(--text); }
+
     /* Footer */
     footer {
       padding: 32px 48px;
@@ -426,13 +468,13 @@
   <div class="group">
     <div class="group-label">Start here</div>
 
-    <a class="card" href="https://github.com/post205/notion-aios-starter" target="_blank" rel="noopener">
+    <button class="card" id="getKit" type="button">
       <div class="card-head">
-        <span class="card-name">notion-aios-starter</span>
-        <span class="card-arrow">&#8599;</span>
+        <span class="card-name">Notion AIOS starter</span>
+        <span class="card-arrow">&#43;</span>
       </div>
-      <div class="card-desc">The free repo. Clone it, run <code>/onboard</code>, add your Notion token, and you're running.</div>
-    </a>
+      <div class="card-desc">The kit you'll set up in our session. Click to see how you get it.</div>
+    </button>
   </div>
 
   <!-- THE TWO FRAMEWORKS -->
@@ -545,6 +587,15 @@
 
 </div>
 
+<div class="modal-overlay" id="kitModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="kitModalTitle">
+    <button class="modal-close" id="kitModalClose" aria-label="Close">&times;</button>
+    <h3 id="kitModalTitle">Getting the starter kit</h3>
+    <p>The Notion AIOS starter comes with the session, not as a public download. We set it up together on your machine: clone it, connect your Notion, run the first onboard, and it's tuned to your business before we finish the call.</p>
+    <p>Message me and we'll find a time.</p>
+  </div>
+</div>
+
 <footer>
   <a href="/" class="footer-logo">
     <img src="/images/logo.png" alt="POST 205">
@@ -555,6 +606,20 @@
   </div>
 </footer>
 
+<script>
+  (function () {
+    var open = document.getElementById('getKit');
+    var modal = document.getElementById('kitModal');
+    var close = document.getElementById('kitModalClose');
+    if (!open || !modal) return;
+    var show = function () { modal.classList.add('open'); };
+    var hide = function () { modal.classList.remove('open'); };
+    open.addEventListener('click', show);
+    close.addEventListener('click', hide);
+    modal.addEventListener('click', function (e) { if (e.target === modal) hide(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
+  })();
+</script>
 <script src="/js/theme-toggle.js"></script>
 <script src="/js/cookie-banner.js"></script>
 
