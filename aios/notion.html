@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AIOS Crash Course — POST 205</title>
-  <meta name="description" content="The links from the AIOS crash course, in one place.">
+  <title>AIOS · Notion — POST 205</title>
+  <meta name="description" content="An AIOS powered by Notion. What's in the kit, in one place.">
   <meta name="robots" content="noindex, nofollow">
 
   <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="AIOS Crash Course — POST205">
+  <meta property="og:title" content="AIOS · Notion — POST205">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://post205.com/aios">
+  <meta property="og:url" content="https://post205.com/aios/notion">
   <meta property="og:image" content="https://post205.com/images/og-aios.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="POST205 — AIOS Crash Course">
-  <meta property="og:description" content="Everything from the AIOS crash course in one place: the starter repo, the skills, and the connections to build your own AI operating system.">
+  <meta property="og:image:alt" content="POST205 — AIOS · Notion">
+  <meta property="og:description" content="An AI Operating System wired to Notion the token-light way — no MCP. The frameworks, the skills, the connection.">
   <meta property="og:site_name" content="POST205">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AIOS Crash Course — POST205">
-  <meta name="twitter:description" content="Everything from the AIOS crash course in one place — build your own AI operating system.">
+  <meta name="twitter:title" content="AIOS · Notion — POST205">
+  <meta name="twitter:description" content="An AI Operating System wired to Notion — no MCP, no token tax.">
   <meta name="twitter:image" content="https://post205.com/images/og-aios.png">
-  <meta name="twitter:image:alt" content="POST205 — AIOS Crash Course">
+  <meta name="twitter:image:alt" content="POST205 — AIOS · Notion">
   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
@@ -168,6 +168,18 @@
       padding: 64px 24px 80px;
     }
 
+    .back {
+      display: inline-block;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      text-decoration: none;
+      margin-bottom: 28px;
+    }
+    .back:hover { color: var(--accent); }
+
     .eyebrow {
       font-family: ui-monospace, monospace;
       font-size: 11px;
@@ -197,7 +209,7 @@
     }
     .lede strong { color: var(--text); font-weight: 700; }
 
-    /* Link groups */
+    /* Link / info groups */
     .group { margin-top: 52px; }
     .group-label {
       font-family: ui-monospace, monospace;
@@ -208,6 +220,12 @@
       margin-bottom: 16px;
       padding-bottom: 10px;
       border-bottom: 1px solid var(--border);
+    }
+    .group-intro {
+      color: var(--text-2);
+      font-size: 14.5px;
+      margin: -4px 0 18px;
+      max-width: 64ch;
     }
 
     .card {
@@ -221,7 +239,7 @@
       margin-bottom: 12px;
       transition: border-color 0.15s, transform 0.15s, background 0.15s;
     }
-    .card:hover {
+    a.card:hover {
       border-color: var(--accent);
       transform: translateY(-2px);
       background: var(--surface-2);
@@ -238,6 +256,14 @@
       color: var(--text);
       letter-spacing: -0.01em;
     }
+    .card-tag {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      flex-shrink: 0;
+    }
     .card-arrow {
       font-family: ui-monospace, monospace;
       color: var(--accent);
@@ -245,13 +271,13 @@
       flex-shrink: 0;
       transition: transform 0.15s;
     }
-    .card:hover .card-arrow { transform: translate(2px, -2px); }
+    a.card:hover .card-arrow { transform: translate(2px, -2px); }
     .card-desc {
       color: var(--text-2);
       font-size: 14.5px;
       line-height: 1.55;
       margin-top: 4px;
-      max-width: 60ch;
+      max-width: 62ch;
     }
     .card-cmd {
       display: block;
@@ -268,17 +294,39 @@
     }
     .card-cmd .c { color: var(--accent); }
 
-    /* Closing */
-    .outro {
-      margin-top: 60px;
-      padding-top: 36px;
-      border-top: 1px solid var(--border);
-      color: var(--text-2);
-      font-size: 16px;
-      line-height: 1.65;
+    /* Callout */
+    .callout {
+      margin-top: 52px;
+      padding: 22px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: 10px;
     }
-    .outro a { color: var(--accent); text-decoration: none; }
-    .outro a:hover { text-decoration: underline; }
+    .callout h3 {
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .callout p { color: var(--text-2); font-size: 14.5px; line-height: 1.6; }
+    .callout strong { color: var(--text); }
+
+    /* Repo tree */
+    .tree {
+      font-family: ui-monospace, monospace;
+      font-size: 12.5px;
+      line-height: 1.85;
+      color: var(--text-2);
+      background: var(--black);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 22px;
+      margin-top: 16px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .tree .d { color: var(--accent); }
+    .tree .n { color: var(--text-3); }
 
     /* Footer */
     footer {
@@ -337,104 +385,135 @@
 
 <div class="wrap">
 
-  <div class="eyebrow">AIOS Crash Course</div>
-  <h1>Build your own AI Operating System</h1>
+  <a href="/aios" class="back">&larr; AIOS</a>
+
+  <div class="eyebrow">AIOS · Notion</div>
+  <h1>An AIOS, powered by Notion</h1>
 
   <div class="lede">
-    <strong>For Father Ody and Drea</strong> — from our June 3 session. Everything we covered, in one place: the starter repo, the skills, the connection. Clone it, make it yours, and let it learn how you work.
+    Same AI Operating System — but the connection is <strong>Notion</strong>, wired the token-light way. <strong>No MCP, no token tax.</strong> Clone the kit, point it at your Notion, and let AI actually operate the workspace you already live in. This page is the map of what's inside.
   </div>
 
-  <!-- START HERE -->
+  <!-- THE REPO -->
   <div class="group">
     <div class="group-label">Start here</div>
 
-    <a class="card" href="https://github.com/post205/aios-starter" target="_blank" rel="noopener">
+    <a class="card" href="https://github.com/post205/notion-aios-starter" target="_blank" rel="noopener">
       <div class="card-head">
-        <span class="card-name">AIOS Starter</span>
+        <span class="card-name">notion-aios-starter</span>
         <span class="card-arrow">&#8599;</span>
       </div>
-      <div class="card-desc">The free repo. Clone this — your AIOS starts here.</div>
-    </a>
-
-    <a class="card" href="https://code.visualstudio.com" target="_blank" rel="noopener">
-      <div class="card-head">
-        <span class="card-name">VS Code</span>
-        <span class="card-arrow">&#8599;</span>
-      </div>
-      <div class="card-desc">The workspace where Claude lives. Install it first.</div>
-    </a>
-
-    <a class="card" href="https://claude.ai" target="_blank" rel="noopener">
-      <div class="card-head">
-        <span class="card-name">Claude / Anthropic</span>
-        <span class="card-arrow">&#8599;</span>
-      </div>
-      <div class="card-desc">Your account for Claude Code — the brain of the whole thing.</div>
+      <div class="card-desc">The free repo. Clone it, run <code>/onboard</code>, add your Notion token, and you're running.</div>
     </a>
   </div>
 
-  <!-- THE SKILLS STACK -->
+  <!-- THE TWO FRAMEWORKS -->
   <div class="group">
-    <div class="group-label">The skills stack</div>
+    <div class="group-label">The two frameworks</div>
+    <div class="group-intro">The brain rewire first, the architecture second. Without the way of thinking, the folders are just folders.</div>
 
-    <a class="card" href="https://github.com/anthropics/skills" target="_blank" rel="noopener">
+    <div class="card">
       <div class="card-head">
-        <span class="card-name">skill-creator</span>
-        <span class="card-arrow">&#8599;</span>
+        <span class="card-name">The Shift</span>
+        <span class="card-tag">how you think</span>
       </div>
-      <div class="card-desc">Anthropic's official skills. Use it to build your own skills.</div>
-    </a>
+      <div class="card-desc"><strong style="color:var(--text)">Question · Cut · Build.</strong> Before any task: <em>can AI do this faster than me?</em> Not better — faster. Then cut what shouldn't exist, and build the smallest thing that runs without you.</div>
+    </div>
 
-    <a class="card" href="https://github.com/mksglu/claude-context-mode" target="_blank" rel="noopener">
+    <div class="card">
       <div class="card-head">
-        <span class="card-name">context-mode</span>
-        <span class="card-arrow">&#8599;</span>
+        <span class="card-name">The Stack</span>
+        <span class="card-tag">what you build</span>
       </div>
-      <div class="card-desc">Saves tokens — keeps your AIOS sharp and cheap to run.</div>
-      <code class="card-cmd"><span class="c">/plugin</span> marketplace add mksglu/claude-context-mode</code>
-    </a>
+      <div class="card-desc"><strong style="color:var(--text)">Context · Connections · Capabilities · Cadence.</strong> Four layers. It knows your business, reaches your tools, does the work, then runs without being asked. Build them in that order.</div>
+    </div>
   </div>
 
-  <!-- CONNECTIONS -->
+  <!-- WHAT SHIPS -->
   <div class="group">
-    <div class="group-label">Connections</div>
+    <div class="group-label">What ships — 4 skills</div>
+    <div class="group-intro">Three thinking tools and one live connection. Lean by design — you build on top.</div>
 
-    <a class="card" href="https://github.com/googleworkspace/cli" target="_blank" rel="noopener">
+    <div class="card">
       <div class="card-head">
-        <span class="card-name">Google Workspace CLI (gws)</span>
-        <span class="card-arrow">&#8599;</span>
+        <span class="card-name">/onboard</span>
+        <span class="card-tag">setup · once</span>
       </div>
-      <div class="card-desc">Lets your AIOS reach Gmail, Docs, Sheets, Slides, Calendar, and Drive.</div>
-      <code class="card-cmd"><span class="c">npm</span> i -g @googleworkspace/cli</code>
-    </a>
+      <div class="card-desc">A 7-question interview that fills in who you are, what you sell, what matters this quarter, and how you sound. Generates your Day-1 files.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">/audit</span>
+        <span class="card-tag">weekly</span>
+      </div>
+      <div class="card-desc">Scores your setup across The Stack out of 100. Read-only. Run it weekly and watch the number climb.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">/level-up</span>
+        <span class="card-tag">weekly</span>
+      </div>
+      <div class="card-desc">The Shift interview — Question, Cut, Build. Finds one automation, scopes it, ships it. One run = one artifact.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">/notion</span>
+        <span class="card-tag">live connection</span>
+      </div>
+      <div class="card-desc">Reads and writes your Notion via <code>curl</code> — search, query a database, create or update rows, read or append page content. No MCP. Only the data you ask for ever enters context.</div>
+    </div>
   </div>
 
-  <!-- TOOLS -->
+  <!-- REFERENCES -->
   <div class="group">
-    <div class="group-label">Tools</div>
+    <div class="group-label">References</div>
+    <div class="group-intro">The two docs the skills read from. Open them to go deep.</div>
 
-    <a class="card" href="https://app.glaido.com/signup?ref=GLAIDO-38BB7106DF" target="_blank" rel="noopener">
+    <div class="card">
       <div class="card-head">
-        <span class="card-name">Glaido</span>
-        <span class="card-arrow">&#8599;</span>
+        <span class="card-name">the-shift.md</span>
+        <span class="card-tag">operator brain</span>
       </div>
-      <div class="card-desc">Voice dictation — type by talking. This is what I use (sign up via my link).</div>
-    </a>
+      <div class="card-desc">The full framework — Question, Cut, Build — with the principles underneath: boring wins, default to the lowest autonomy that works, context before tools, kill what doesn't earn its keep.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="card-name">notion-cli.md</span>
+        <span class="card-tag">connection guide</span>
+      </div>
+      <div class="card-desc">The whole Notion API surface in five moves, with the 2-minute token setup. Researched once, saved forever.</div>
+    </div>
   </div>
 
-  <!-- GO DEEPER -->
+  <!-- WHY NO MCP -->
+  <div class="callout">
+    <h3>Why no MCP</h3>
+    <p>An MCP loads its entire toolset into <strong>every</strong> conversation, used or not — you pay that token tax up front. The Notion API is small, so we skip the middleman: call it on demand with <code>curl</code> and pay only for what you use. <strong>Pay per use, not rent forever.</strong> It's cheaper, leaner, and yours.</p>
+  </div>
+
+  <!-- WHAT'S IN THE BOX -->
   <div class="group">
-    <div class="group-label">Go deeper</div>
-
-    <a class="card" href="/aios/claude-features.html">
-      <div class="card-head">
-        <span class="card-name">Claude features, ranked</span>
-        <span class="card-arrow">&#8594;</span>
-      </div>
-      <div class="card-desc">Every Claude feature sorted D tier to S tier — and the top 12 that change your day-to-day.</div>
-    </a>
+    <div class="group-label">What's in the box</div>
+    <div class="tree"><span class="d">notion-aios-starter/</span>
+├── CLAUDE.md              <span class="n">your operating manual</span>
+├── README.md             <span class="n">the overview + quick start</span>
+├── aios-intake.md        <span class="n">source for /onboard</span>
+├── connections.md        <span class="n">registry of what it can reach</span>
+├── context/              <span class="n">about you + your business</span>
+├── references/
+│   ├── the-shift.md      <span class="n">the operator brain</span>
+│   └── notion-cli.md     <span class="n">Notion without an MCP</span>
+├── decisions/log.md      <span class="n">what you decided, and why</span>
+└── .claude/skills/
+    ├── onboard/          <span class="n">setup wizard</span>
+    ├── audit/            <span class="n">the Stack scoreboard</span>
+    ├── level-up/         <span class="n">the Shift interview</span>
+    └── notion/           <span class="n">the live connection</span></div>
   </div>
-
 
 </div>
 

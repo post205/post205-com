@@ -29,10 +29,26 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
+[[headers]]
+  for = "/aios/notion"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/aios/notion.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
 # Keep /aios resolving to the crash-course page even though an /aios/ folder now exists
 [[redirects]]
   from = "/aios"
   to = "/aios.html"
+  status = 200
+
+# Clean URL for the Notion AIOS page (serve /aios/notion without the .html)
+[[redirects]]
+  from = "/aios/notion"
+  to = "/aios/notion.html"
   status = 200
 
 # Let the uppercase /AIOS the user shares resolve to the page
