@@ -79,6 +79,11 @@
        sticky nav. iOS ignores overflow-x:hidden on html/body; clip is honored. */
     html, body { overflow-x: clip; }
 
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
     body {
       background: var(--black);
       color: var(--text);
@@ -260,7 +265,7 @@
     .invite .topic { color: #9fd4d4; font-size: 16px; margin-bottom: 28px; max-width: 56ch; }
     .invite-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 1px;
       background: #163a3a;
       border: 1px solid #163a3a;
@@ -314,12 +319,14 @@
     .field textarea { -webkit-appearance: none; appearance: none; }
     .field textarea { resize: vertical; min-height: 88px; line-height: 1.6; }
     .field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
+    .field input:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
     .field .err { display: none; color: #ff6b6b; font-size: 13px; margin-top: 6px; }
     .field.invalid input, .field.invalid textarea { border-color: #ff6b6b; }
     .field.invalid .err { display: block; }
     [data-theme="light"] .field .err, [data-theme="light"] .field.invalid input { color: #cc2b2b; border-color: #cc2b2b; }
 
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; }
+    .grid-2 > * { min-width: 0; }
 
     fieldset { border: none; margin-bottom: 8px; }
     fieldset legend {
@@ -346,6 +353,7 @@
     .likert input:checked + span { color: var(--on-accent); }
     .likert label:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
     .likert label:hover { border-color: var(--text-3); }
+    .likert label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
     .scale-ends {
       display: flex; justify-content: space-between;
       font-family: ui-monospace, monospace;
@@ -366,6 +374,8 @@
       transition: opacity 0.15s;
     }
     .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:active { opacity: 0.76; }
+    .btn-primary:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
     .btn-ghost {
       display: inline-flex; align-items: center; justify-content: center;
       min-height: 44px;                       /* touch target */
@@ -380,6 +390,8 @@
       transition: border-color 0.15s, color 0.15s;
     }
     .btn-ghost:hover { border-color: var(--text-3); color: var(--accent); }
+    .btn-ghost:active { background: var(--surface-2); }
+    .btn-ghost:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     .notice {
       font-size: 13px; color: var(--text-3);
@@ -451,7 +463,8 @@
     }
 
     /* Dashboard */
-    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 7px; overflow: hidden; margin-bottom: 24px; }
+    .stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 7px; overflow: hidden; margin-bottom: 24px; }
+    .stat-grid > * { min-width: 0; }
     .stat { background: var(--surface); padding: 20px 18px; }
     .stat .num { font-size: 30px; font-weight: 800; letter-spacing: -0.01em; color: var(--text); }
     .stat .lbl { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-top: 4px; }
@@ -484,7 +497,8 @@
       .invite { padding: 28px 22px; }
       .invite-grid { grid-template-columns: 1fr; }
       .grid-2 { grid-template-columns: 1fr; }
-      .stat-grid { grid-template-columns: 1fr 1fr; }
+      .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .btn-primary { width: 100%; }
       #certificate { padding: 22px; }
       #certificate .cert-frame { padding: 22px 16px; }
       #certificate .cert-foot { flex-direction: column; gap: 12px; }
@@ -559,32 +573,32 @@
         <fieldset>
           <legend>Your PRC details</legend>
           <div class="field" data-name="name">
-            <label>Full name <span class="req">*</span></label>
-            <input type="text" name="name" autocomplete="name" placeholder="Juan dela Cruz">
-            <div class="err">Please enter your full name.</div>
+            <label for="f-name">Full name <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="f-name" name="name" autocomplete="name" placeholder="Juan dela Cruz" required aria-describedby="e-name">
+            <div class="err" id="e-name">Please enter your full name.</div>
           </div>
           <div class="grid-2">
             <div class="field" data-name="email">
-              <label>Email <span class="req">*</span></label>
-              <input type="email" name="email" autocomplete="email" placeholder="you@firm.com">
-              <div class="err">Please enter a valid email.</div>
+              <label for="f-email">Email <span class="req" aria-hidden="true">*</span></label>
+              <input type="email" id="f-email" name="email" autocomplete="email" placeholder="you@firm.com" required aria-describedby="e-email">
+              <div class="err" id="e-email">Please enter a valid email.</div>
             </div>
             <div class="field" data-name="prcNumber">
-              <label>PRC license no. <span class="req">*</span></label>
-              <input type="text" name="prcNumber" inputmode="numeric" placeholder="0012345">
-              <div class="err">Please enter your PRC number.</div>
+              <label for="f-prc">PRC license no. <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="f-prc" name="prcNumber" inputmode="numeric" placeholder="0012345" required aria-describedby="e-prc">
+              <div class="err" id="e-prc">Please enter your PRC number.</div>
             </div>
           </div>
           <div class="grid-2">
             <div class="field" data-name="profession">
-              <label>Profession <span class="req">*</span></label>
-              <input type="text" name="profession" placeholder="Architect" value="Architect">
-              <div class="err">Please enter your profession.</div>
+              <label for="f-profession">Profession <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="f-profession" name="profession" placeholder="Architect" value="Architect" required aria-describedby="e-profession">
+              <div class="err" id="e-profession">Please enter your profession.</div>
             </div>
             <div class="field" data-name="licenseValidity">
-              <label>License valid until <span class="req">*</span></label>
-              <input type="date" name="licenseValidity">
-              <div class="err">Please choose your license validity date.</div>
+              <label for="f-validity">License valid until <span class="req" aria-hidden="true">*</span></label>
+              <input type="date" id="f-validity" name="licenseValidity" required aria-describedby="e-validity">
+              <div class="err" id="e-validity">Please choose your license validity date.</div>
             </div>
           </div>
         </fieldset>
@@ -592,8 +606,8 @@
         <fieldset style="margin-top:18px">
           <legend>Session feedback</legend>
           <div class="field" data-name="speakerRating">
-            <label>How would you rate the speaker? <span class="req">*</span></label>
-            <div class="likert" role="radiogroup" aria-label="Speaker rating">
+            <label id="l-speaker">How would you rate the speaker? <span class="req" aria-hidden="true">*</span></label>
+            <div class="likert" role="radiogroup" aria-labelledby="l-speaker" aria-describedby="e-speaker">
               <label><input type="radio" name="speakerRating" value="1"><span>1</span></label>
               <label><input type="radio" name="speakerRating" value="2"><span>2</span></label>
               <label><input type="radio" name="speakerRating" value="3"><span>3</span></label>
@@ -601,11 +615,11 @@
               <label><input type="radio" name="speakerRating" value="5"><span>5</span></label>
             </div>
             <div class="scale-ends"><span>Poor</span><span>Excellent</span></div>
-            <div class="err">Please rate the speaker.</div>
+            <div class="err" id="e-speaker">Please rate the speaker.</div>
           </div>
           <div class="field" data-name="relevanceRating">
-            <label>How relevant was the topic to your work? <span class="req">*</span></label>
-            <div class="likert" role="radiogroup" aria-label="Relevance rating">
+            <label id="l-relevance">How relevant was the topic to your work? <span class="req" aria-hidden="true">*</span></label>
+            <div class="likert" role="radiogroup" aria-labelledby="l-relevance" aria-describedby="e-relevance">
               <label><input type="radio" name="relevanceRating" value="1"><span>1</span></label>
               <label><input type="radio" name="relevanceRating" value="2"><span>2</span></label>
               <label><input type="radio" name="relevanceRating" value="3"><span>3</span></label>
@@ -613,16 +627,16 @@
               <label><input type="radio" name="relevanceRating" value="5"><span>5</span></label>
             </div>
             <div class="scale-ends"><span>Not relevant</span><span>Very relevant</span></div>
-            <div class="err">Please rate the relevance.</div>
+            <div class="err" id="e-relevance">Please rate the relevance.</div>
           </div>
           <div class="field" data-name="takeaway">
-            <label>Your key takeaway <span class="req">*</span></label>
-            <textarea name="takeaway" placeholder="The one thing you'll apply from this session."></textarea>
-            <div class="err">Please share one takeaway.</div>
+            <label for="f-takeaway">Your key takeaway <span class="req" aria-hidden="true">*</span></label>
+            <textarea id="f-takeaway" name="takeaway" placeholder="The one thing you'll apply from this session." required aria-describedby="e-takeaway"></textarea>
+            <div class="err" id="e-takeaway">Please share one takeaway.</div>
           </div>
           <div class="field" data-name="futureTopics">
-            <label>Topics you'd like next time <span style="color:var(--text-3)">(optional)</span></label>
-            <textarea name="futureTopics" placeholder="Optional"></textarea>
+            <label for="f-future">Topics you'd like next time <span style="color:var(--text-3)">(optional)</span></label>
+            <textarea id="f-future" name="futureTopics" placeholder="Optional"></textarea>
           </div>
         </fieldset>
 
@@ -897,17 +911,25 @@
     return (el.value || "").trim();
   }
 
+  function setFieldInvalid(fe, bad) {
+    if (!fe) return;
+    fe.classList.toggle("invalid", bad);
+    // aria-invalid belongs on the control (text/textarea) or the radiogroup.
+    var control = fe.querySelector("input:not([type=radio]), textarea") || fe.querySelector(".likert");
+    if (control) control.setAttribute("aria-invalid", bad ? "true" : "false");
+  }
+
   function validate(form) {
     var ok = true;
     REQUIRED.forEach(function (name) {
       var val = getVal(form, name);
       var bad = !val || (name === "email" && !isEmail(val));
       var fe = fieldEl(name);
-      if (fe) fe.classList.toggle("invalid", bad);
+      setFieldInvalid(fe, bad);
       if (bad && ok) {
         ok = false;
-        var focusEl = form.elements[name];
-        if (focusEl && focusEl.focus) { try { focusEl.focus(); } catch (e) {} }
+        var focusEl = fe ? fe.querySelector("input, textarea, select") : null;
+        if (focusEl && focusEl.focus) { try { focusEl.focus({ preventScroll: true }); } catch (e) {} }
         if (fe && fe.scrollIntoView) fe.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     });
@@ -985,11 +1007,14 @@
       activateTab("panel-results");
     });
 
-    // Clear a field's error state as the user fixes it.
-    form.addEventListener("input", function (e) {
+    // Clear a field's error state as the user fixes it (input covers typing,
+    // change covers radio selection).
+    function clearOnInteract(e) {
       var fe = e.target.closest(".field");
-      if (fe) fe.classList.remove("invalid");
-    });
+      if (fe && fe.classList.contains("invalid")) setFieldInvalid(fe, false);
+    }
+    form.addEventListener("input", clearOnInteract);
+    form.addEventListener("change", clearOnInteract);
 
     $("goToForm").addEventListener("click", function () { activateTab("panel-form"); });
     $("downloadCert").addEventListener("click", function () { window.print(); });
