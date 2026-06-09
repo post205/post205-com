@@ -30,12 +30,12 @@
     X-Robots-Tag = "noindex, nofollow"
 
 [[headers]]
-  for = "/aios/notion"
+  for = "/aios-notion"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
 [[headers]]
-  for = "/aios/notion.html"
+  for = "/aios-notion.html"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
@@ -45,11 +45,17 @@
   to = "/aios.html"
   status = 200
 
-# Clean URL for the Notion AIOS page (serve /aios/notion without the .html)
+# Clean URL for the Notion AIOS page (its own home, separate from /aios)
+[[redirects]]
+  from = "/aios-notion"
+  to = "/aios-notion.html"
+  status = 200
+
+# Old nested path → new standalone home (in case the earlier link was shared)
 [[redirects]]
   from = "/aios/notion"
-  to = "/aios/notion.html"
-  status = 200
+  to = "/aios-notion"
+  status = 301
 
 # Let the uppercase /AIOS the user shares resolve to the page
 [[redirects]]
