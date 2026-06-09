@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CPD Event Demo — POST 205</title>
+  <meta name="description" content="A working demo of a PRC-style CPD flow: event invite, post-session questionnaire, auto-generated certificate, notification email, and an organizer dashboard. Built by POST205.">
+  <link rel="canonical" href="https://post205.com/cpd">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Pre-paint theme init (prevents flash). See DESIGN.md -->
+  <script>(function(){var t=localStorage.getItem('post205-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black:        #18181A;
+      --surface:      #1a2424;
+      --surface-2:    #252f2f;
+      --surface-deep: #0D2828;
+      --border:       #1f3535;
+      --border-2:     #2a4040;
+      --text:         #f0f0f2;
+      --text-2:       #7aacac;
+      --text-3:       #629a9a;
+      --accent:       #3BD1D3;
+      --on-accent:    #021616;
+      --green:        #2ecc71;
+      --nav-bg:       rgba(24, 24, 26, 0.96);
+      --logo-blend:   screen;
+    }
+
+    [data-theme="light"] {
+      --black:        #f2f8f8;
+      --surface:      #f4fefe;
+      --surface-2:    #e0fffe;
+      --surface-deep: #0D2828;
+      --border:       #c8eeed;
+      --border-2:     #b0e0df;
+      --text:         #0a1a1a;
+      --text-2:       #4a6262;
+      --text-3:       #4a7070;
+      --accent:       #2db8ba;
+      --on-accent:    #021616;
+      --green:        #1f9d57;
+      --nav-bg:       rgba(242, 248, 248, 0.96);
+      --logo-blend:   darken;
+    }
+
+    @media (prefers-color-scheme: light) {
+      [data-theme="system"] {
+        --black:        #f2f8f8;
+        --surface:      #f4fefe;
+        --surface-2:    #e0fffe;
+        --surface-deep: #0D2828;
+        --border:       #c8eeed;
+        --border-2:     #b0e0df;
+        --text:         #0a1a1a;
+        --text-2:       #4a6262;
+        --text-3:       #4a7070;
+        --accent:       #2db8ba;
+        --on-accent:    #021616;
+        --green:        #1f9d57;
+        --nav-bg:       rgba(242, 248, 248, 0.96);
+        --logo-blend:   darken;
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Nav */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 48px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img {
+      height: 26px; width: auto;
+      mix-blend-mode: var(--logo-blend);
+      opacity: 0.9;
+    }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .theme-toggle {
+      width: 40px; height: 40px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent;
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      color: var(--text-3);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .theme-toggle:hover { border-color: var(--text-3); color: var(--text-2); }
+    .theme-toggle .ti { display: none; }
+    [data-theme="dark"]   .theme-toggle .ti-dark   { display: block; }
+    [data-theme="light"]  .theme-toggle .ti-light  { display: block; }
+    [data-theme="system"] .theme-toggle .ti-system { display: block; }
+    .nav-cta {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--on-accent);
+      background: var(--accent);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: opacity 0.15s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* Layout */
+    .wrap { max-width: 760px; margin: 0 auto; padding: 56px 24px; }
+    .section-label {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--text-3);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: clamp(30px, 6vw, 52px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+    }
+    h2 {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+    h3 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+    .lede { color: var(--text-2); font-size: 17px; max-width: 60ch; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* The page reads as a vertical sequence of demo "stages" */
+    .stage { border-top: 1px solid var(--border); }
+    .stage:first-of-type { border-top: none; }
+    .stage-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 26px; }
+    .stage-num {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    /* Invite card */
+    .invite {
+      background: var(--surface-deep);
+      border: 1px solid var(--border-2);
+      border-radius: 8px;
+      padding: 40px;
+      color: #cfeeee;
+    }
+    .invite .kicker {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #5fbcbc;
+      margin-bottom: 18px;
+    }
+    .invite h2 { color: #f0fbfb; margin-bottom: 18px; }
+    .invite .topic { color: #9fd4d4; font-size: 16px; margin-bottom: 28px; max-width: 56ch; }
+    .invite-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: #163a3a;
+      border: 1px solid #163a3a;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .invite-grid div { background: var(--surface-deep); padding: 16px 18px; }
+    .invite-grid dt {
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5fbcbc;
+      margin-bottom: 5px;
+    }
+    .invite-grid dd { color: #e6f7f7; font-size: 15px; font-weight: 600; line-height: 1.4; }
+
+    /* Form */
+    .field { margin-bottom: 20px; }
+    .field > label {
+      display: block;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 8px;
+    }
+    .field .req { color: var(--accent); }
+    .field input[type="text"],
+    .field input[type="email"],
+    .field input[type="date"],
+    .field textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      padding: 12px 14px;
+      transition: border-color 0.15s;
+    }
+    .field textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+    .field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
+    .field .err { display: none; color: #ff6b6b; font-size: 13px; margin-top: 6px; }
+    .field.invalid input, .field.invalid textarea { border-color: #ff6b6b; }
+    .field.invalid .err { display: block; }
+    [data-theme="light"] .field .err, [data-theme="light"] .field.invalid input { color: #cc2b2b; border-color: #cc2b2b; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+
+    fieldset { border: none; margin-bottom: 8px; }
+    fieldset legend {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 10px;
+    }
+    .likert { display: flex; gap: 8px; flex-wrap: wrap; }
+    .likert label {
+      flex: 1; min-width: 52px;
+      text-align: center;
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      padding: 10px 0;
+      cursor: pointer;
+      font-size: 15px; font-weight: 700;
+      color: var(--text-2);
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+    .likert input { position: absolute; opacity: 0; pointer-events: none; }
+    .likert input:checked + span { color: var(--on-accent); }
+    .likert label:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .likert label:hover { border-color: var(--text-3); }
+    .scale-ends {
+      display: flex; justify-content: space-between;
+      font-family: ui-monospace, monospace;
+      font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-3); margin-top: 6px;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--on-accent);
+      font-size: 15px; font-weight: 700;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-ghost {
+      display: inline-block;
+      background: transparent;
+      color: var(--text);
+      font-family: ui-monospace, monospace;
+      font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 11px 18px;
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-ghost:hover { border-color: var(--text-3); color: var(--accent); }
+
+    .notice {
+      font-size: 13px; color: var(--text-3);
+      border: 1px dashed var(--border-2);
+      border-radius: 6px; padding: 10px 14px; margin-top: 14px;
+    }
+
+    /* Results stage (hidden until submit) */
+    #results { display: none; }
+    #results.shown { display: block; }
+    .preview-flag {
+      font-family: ui-monospace, monospace;
+      font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-3);
+      border: 1px solid var(--border-2);
+      border-radius: 3px; padding: 3px 7px;
+      display: inline-block; margin-bottom: 12px;
+    }
+
+    /* Certificate */
+    #certificate {
+      background: #fbfdfd;
+      color: #0a1a1a;
+      border: 1px solid var(--border-2);
+      border-radius: 8px;
+      padding: 44px;
+      text-align: center;
+      position: relative;
+    }
+    #certificate .cert-frame { border: 2px solid #0D2828; padding: 32px 28px; }
+    #certificate .cert-seal {
+      font-family: ui-monospace, monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #2db8ba; margin-bottom: 10px;
+    }
+    #certificate .cert-title { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; color: #0D2828; margin-bottom: 22px; }
+    #certificate .cert-sub { font-size: 13px; color: #4a6262; margin-bottom: 6px; }
+    #certificate .cert-name { font-size: 30px; font-weight: 800; color: #0a1a1a; margin: 6px 0 4px; letter-spacing: -0.01em; }
+    #certificate .cert-prc { font-family: ui-monospace, monospace; font-size: 12px; letter-spacing: 0.06em; color: #4a6262; margin-bottom: 22px; }
+    #certificate .cert-event { font-size: 17px; font-weight: 700; color: #0D2828; margin-bottom: 4px; max-width: 48ch; margin-left: auto; margin-right: auto; }
+    #certificate .cert-units { font-size: 14px; color: #4a6262; margin-bottom: 26px; }
+    #certificate .cert-foot {
+      display: flex; justify-content: space-between; gap: 24px;
+      margin-top: 28px; padding-top: 20px; border-top: 1px solid #c8eeed;
+      font-size: 12px; color: #4a6262; text-align: left;
+    }
+    #certificate .cert-foot .lbl { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #6a8a8a; display: block; margin-bottom: 3px; }
+    #certificate .cert-issued { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.06em; color: #6a8a8a; margin-top: 16px; }
+
+    .cert-actions { margin-top: 18px; }
+
+    /* Email preview */
+    .email {
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .email-head { padding: 18px 22px; border-bottom: 1px solid var(--border); }
+    .email-row { display: flex; gap: 10px; font-size: 13px; margin-bottom: 4px; }
+    .email-row .k { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); width: 64px; flex-shrink: 0; padding-top: 2px; }
+    .email-row .v { color: var(--text); }
+    .email-body { padding: 22px; color: var(--text-2); font-size: 14px; line-height: 1.7; }
+    .email-body p { margin-bottom: 12px; }
+    .email-body strong { color: var(--text); }
+    .email-attach {
+      display: flex; align-items: center; gap: 10px;
+      margin-top: 16px; padding: 12px 14px;
+      border: 1px solid var(--border-2); border-radius: 6px;
+      background: var(--surface-2);
+      font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.04em; color: var(--text-2);
+    }
+
+    /* Dashboard */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 7px; overflow: hidden; margin-bottom: 24px; }
+    .stat { background: var(--surface); padding: 20px 18px; }
+    .stat .num { font-size: 30px; font-weight: 800; letter-spacing: -0.01em; color: var(--text); }
+    .stat .lbl { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-top: 4px; }
+
+    .table-wrap { border: 1px solid var(--border); border-radius: 7px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 640px; }
+    thead th {
+      text-align: left; font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-3); padding: 12px 14px; border-bottom: 1px solid var(--border); background: var(--surface);
+      position: sticky; top: 0;
+    }
+    tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody td .nm { color: var(--text); font-weight: 600; }
+    .rating-pill { font-family: ui-monospace, monospace; font-size: 11px; color: var(--text); }
+
+    .dash-actions { margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+    footer {
+      padding: 32px 48px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo img { height: 20px; width: auto; mix-blend-mode: var(--logo-blend); opacity: 0.5; }
+    .footer-right { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.06em; color: var(--text-3); text-align: right; line-height: 1.8; }
+
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      .wrap { padding: 40px 20px; }
+      .invite { padding: 28px 22px; }
+      .invite-grid { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+      #certificate { padding: 22px; }
+      #certificate .cert-frame { padding: 22px 16px; }
+      #certificate .cert-foot { flex-direction: column; gap: 12px; }
+      footer { padding: 24px 20px; flex-direction: column; gap: 12px; align-items: flex-start; }
+      .footer-right { text-align: left; }
+    }
+
+    /* Print: isolate the certificate only */
+    @media print {
+      @page { size: A4 landscape; margin: 12mm; }
+      body * { visibility: hidden; }
+      #certificate, #certificate * { visibility: visible; }
+      #certificate { position: absolute; inset: 0; border: none; border-radius: 0; padding: 0; }
+      #certificate .cert-frame { border: 3px solid #0D2828; }
+      .cert-actions { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo"><img src="/images/logo.png" alt="POST 205"></a>
+  <div class="nav-right">
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+      <svg class="ti ti-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="ti ti-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="ti ti-system" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+    </button>
+    <a href="/#contact" class="nav-cta">Let's talk</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ===== STAGE 1: INVITE ===== -->
+  <section class="stage" id="stage-invite">
+    <div class="section-label">Live demo · one page, end to end</div>
+    <h1>How a CPD event runs itself</h1>
+    <p class="lede">Three things on one page. The invite goes out. Your attendees answer a short questionnaire. The moment they submit, they get a certificate and a notification email, and you get a dashboard you can export. Try it below, it is fully working.</p>
+
+    <div style="height:32px"></div>
+    <div class="invite" id="invite">
+      <div class="kicker">You're invited · Continuing Professional Development</div>
+      <h2 id="inv-title"></h2>
+      <p class="topic" id="inv-topic"></p>
+      <dl class="invite-grid">
+        <div><dt>Date</dt><dd id="inv-date"></dd></div>
+        <div><dt>Time</dt><dd id="inv-time"></dd></div>
+        <div><dt>Venue</dt><dd id="inv-venue"></dd></div>
+        <div><dt>CPD Credit</dt><dd id="inv-units"></dd></div>
+        <div><dt>Speaker</dt><dd id="inv-speaker"></dd></div>
+        <div><dt>Accredited by</dt><dd id="inv-body"></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===== STAGE 2: QUESTIONNAIRE ===== -->
+  <section class="stage" id="stage-form">
+    <div class="wrap" style="padding:56px 0 0;max-width:none">
+      <div class="stage-head">
+        <span class="stage-num">Step 2</span>
+        <h2>Post-session questionnaire</h2>
+      </div>
+      <p class="lede" style="margin-bottom:32px">The questions an accredited provider actually asks: your PRC details for the certificate, plus quick feedback on the session.</p>
+
+      <form id="cpdForm" novalidate>
+        <fieldset>
+          <legend>Your PRC details</legend>
+          <div class="field" data-name="name">
+            <label>Full name <span class="req">*</span></label>
+            <input type="text" name="name" autocomplete="name" placeholder="Juan dela Cruz">
+            <div class="err">Please enter your full name.</div>
+          </div>
+          <div class="grid-2">
+            <div class="field" data-name="email">
+              <label>Email <span class="req">*</span></label>
+              <input type="email" name="email" autocomplete="email" placeholder="you@firm.com">
+              <div class="err">Please enter a valid email.</div>
+            </div>
+            <div class="field" data-name="prcNumber">
+              <label>PRC license no. <span class="req">*</span></label>
+              <input type="text" name="prcNumber" inputmode="numeric" placeholder="0012345">
+              <div class="err">Please enter your PRC number.</div>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field" data-name="profession">
+              <label>Profession <span class="req">*</span></label>
+              <input type="text" name="profession" placeholder="Architect" value="Architect">
+              <div class="err">Please enter your profession.</div>
+            </div>
+            <div class="field" data-name="licenseValidity">
+              <label>License valid until <span class="req">*</span></label>
+              <input type="date" name="licenseValidity">
+              <div class="err">Please choose your license validity date.</div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset style="margin-top:18px">
+          <legend>Session feedback</legend>
+          <div class="field" data-name="speakerRating">
+            <label>How would you rate the speaker? <span class="req">*</span></label>
+            <div class="likert" role="radiogroup" aria-label="Speaker rating">
+              <label><input type="radio" name="speakerRating" value="1"><span>1</span></label>
+              <label><input type="radio" name="speakerRating" value="2"><span>2</span></label>
+              <label><input type="radio" name="speakerRating" value="3"><span>3</span></label>
+              <label><input type="radio" name="speakerRating" value="4"><span>4</span></label>
+              <label><input type="radio" name="speakerRating" value="5"><span>5</span></label>
+            </div>
+            <div class="scale-ends"><span>Poor</span><span>Excellent</span></div>
+            <div class="err">Please rate the speaker.</div>
+          </div>
+          <div class="field" data-name="relevanceRating">
+            <label>How relevant was the topic to your work? <span class="req">*</span></label>
+            <div class="likert" role="radiogroup" aria-label="Relevance rating">
+              <label><input type="radio" name="relevanceRating" value="1"><span>1</span></label>
+              <label><input type="radio" name="relevanceRating" value="2"><span>2</span></label>
+              <label><input type="radio" name="relevanceRating" value="3"><span>3</span></label>
+              <label><input type="radio" name="relevanceRating" value="4"><span>4</span></label>
+              <label><input type="radio" name="relevanceRating" value="5"><span>5</span></label>
+            </div>
+            <div class="scale-ends"><span>Not relevant</span><span>Very relevant</span></div>
+            <div class="err">Please rate the relevance.</div>
+          </div>
+          <div class="field" data-name="takeaway">
+            <label>Your key takeaway <span class="req">*</span></label>
+            <textarea name="takeaway" placeholder="The one thing you'll apply from this session."></textarea>
+            <div class="err">Please share one takeaway.</div>
+          </div>
+          <div class="field" data-name="futureTopics">
+            <label>Topics you'd like next time <span style="color:var(--text-3)">(optional)</span></label>
+            <textarea name="futureTopics" placeholder="Optional"></textarea>
+          </div>
+        </fieldset>
+
+        <button type="submit" class="btn-primary">Submit and get my certificate</button>
+        <div class="notice" id="storageNotice" hidden>Heads up: your browser is blocking local storage, so this run is kept in memory only and will reset when you reload. The demo still works.</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== STAGE 3: RESULTS ===== -->
+  <section class="stage" id="results">
+    <div class="wrap" style="padding:56px 0 0;max-width:none">
+
+      <!-- Certificate -->
+      <div class="stage-head"><span class="stage-num">Step 3 · Instantly</span><h2>Your certificate</h2></div>
+      <div id="certificate">
+        <div class="cert-frame">
+          <div class="cert-seal">Certificate of Completion</div>
+          <div class="cert-title">Continuing Professional Development</div>
+          <div class="cert-sub">This certifies that</div>
+          <div class="cert-name" id="cert-name"></div>
+          <div class="cert-prc" id="cert-prc"></div>
+          <div class="cert-sub">has completed the CPD activity</div>
+          <div class="cert-event" id="cert-event"></div>
+          <div class="cert-units" id="cert-units"></div>
+          <div class="cert-foot">
+            <div><span class="lbl">Date Completed</span><span id="cert-date"></span></div>
+            <div><span class="lbl">Speaker</span><span id="cert-speaker"></span></div>
+            <div><span class="lbl">Accredited Provider</span><span id="cert-body"></span></div>
+          </div>
+          <div class="cert-issued" id="cert-issued"></div>
+        </div>
+      </div>
+      <div class="cert-actions">
+        <button type="button" class="btn-ghost" id="downloadCert">Download certificate (PDF)</button>
+      </div>
+
+      <!-- Email preview -->
+      <div class="stage-head" style="margin-top:48px"><span class="stage-num">Step 3 · Also</span><h2>The email they receive</h2></div>
+      <span class="preview-flag">Preview · this is what gets sent</span>
+      <div class="email">
+        <div class="email-head">
+          <div class="email-row"><span class="k">From</span><span class="v">CPD Office &lt;cpd@yourprovider.org&gt;</span></div>
+          <div class="email-row"><span class="k">To</span><span class="v" id="em-to"></span></div>
+          <div class="email-row"><span class="k">Subject</span><span class="v" id="em-subject"></span></div>
+        </div>
+        <div class="email-body">
+          <p>Hi <strong id="em-name"></strong>,</p>
+          <p>Thank you for attending <strong id="em-event"></strong>. Your attendance has been recorded and your certificate is approved.</p>
+          <p id="em-line-units"></p>
+          <p>Your certificate is attached. Keep it for your PRC CPD records.</p>
+          <div class="email-attach">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            <span id="em-attach"></span>
+          </div>
+          <p style="margin-top:16px">Warm regards,<br>The CPD Office</p>
+        </div>
+      </div>
+
+      <!-- Dashboard -->
+      <div class="stage-head" style="margin-top:48px"><span class="stage-num">For the organizer</span><h2>Submissions dashboard</h2></div>
+      <p class="lede" style="margin-bottom:24px">Every submission lands here. Repeat emails stack as their own rows, exactly like a real attendee list. Export the whole thing to CSV in one click.</p>
+      <div class="stat-grid">
+        <div class="stat"><div class="num" id="st-total">0</div><div class="lbl">Submissions</div></div>
+        <div class="stat"><div class="num" id="st-unique">0</div><div class="lbl">Unique attendees</div></div>
+        <div class="stat"><div class="num" id="st-speaker">0</div><div class="lbl">Avg speaker</div></div>
+        <div class="stat"><div class="num" id="st-relevance">0</div><div class="lbl">Avg relevance</div></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>PRC No.</th><th>Email</th><th>Submitted</th><th>Speaker</th><th>Relevance</th></tr></thead>
+          <tbody id="subTable"></tbody>
+        </table>
+      </div>
+      <div class="dash-actions">
+        <button type="button" class="btn-ghost" id="downloadCsv">Download CSV</button>
+        <span style="font-size:13px;color:var(--text-3)" id="rowCount"></span>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <a href="/" class="footer-logo"><img src="/images/logo.png" alt="POST 205"></a>
+  <div class="footer-right">© 2026 · POST205, Inc.<br>This is a demo. No data leaves your browser.</div>
+</footer>
+
+<script src="/js/theme-toggle.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  // ---- Event config (single source of truth for invite + certificate + email) ----
+  var EVENT = {
+    title:    "Designing for Climate: Passive Cooling in Philippine Architecture",
+    date:     "May 28, 2026",
+    time:     "1:00 PM to 5:00 PM",
+    venue:    "UAP National Headquarters, Scout Rallos, Quezon City",
+    body:     "United Architects of the Philippines, PRC-Accredited CPD Provider",
+    cpdUnits: "3 CPD units",
+    speaker:  "Ar. Maria Lourdes Santos, fUAP",
+    topic:    "Passive cooling strategies for tropical residential design, from orientation and cross-ventilation to material choices that cut cooling load."
+  };
+
+  var STORE_KEY = "post205_cpd_submissions";
+
+  // ---- Store: localStorage with in-memory fallback (private mode) ----
+  var memFallback = null; // becomes an array if localStorage is unavailable
+
+  function seedData() {
+    return [
+      { name: "Ramon Aguilar", email: "ramon.aguilar@aguilararq.com", prcNumber: "0041288", profession: "Architect", licenseValidity: "2027-09-30", speakerRating: 5, relevanceRating: 5, takeaway: "Orientation first, mechanical cooling last. Reworking our default site studies.", futureTopics: "Embodied carbon in local materials", submittedAt: "2026-05-28T17:12:00+08:00" },
+      { name: "Bianca Reyes", email: "b.reyes@studionorth.ph", prcNumber: "0052910", profession: "Architect", licenseValidity: "2026-12-31", speakerRating: 4, relevanceRating: 5, takeaway: "The cross-ventilation rules of thumb are immediately usable for our walk-up projects.", futureTopics: "Daylighting for deep floor plates", submittedAt: "2026-05-28T17:24:00+08:00" },
+      { name: "Carlito Mendoza", email: "carlito@mendozadesign.com", prcNumber: "0038475", profession: "Architect", licenseValidity: "2028-03-15", speakerRating: 5, relevanceRating: 4, takeaway: "Material thermal mass matters more than I credited. Will test on the next residence.", futureTopics: "", submittedAt: "2026-05-28T17:41:00+08:00" },
+      { name: "Bianca Reyes", email: "b.reyes@studionorth.ph", prcNumber: "0052910", profession: "Architect", licenseValidity: "2026-12-31", speakerRating: 5, relevanceRating: 5, takeaway: "Came back to log a second session note: the case studies were the best part.", futureTopics: "More PH case studies", submittedAt: "2026-05-28T18:03:00+08:00" }
+    ];
+  }
+
+  function load() {
+    if (memFallback) return memFallback.slice();
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      if (raw === null) {
+        var seeded = seedData();
+        localStorage.setItem(STORE_KEY, JSON.stringify(seeded));
+        return seeded;
+      }
+      return JSON.parse(raw);
+    } catch (e) {
+      // Private mode or storage blocked: fall back to in-memory.
+      memFallback = seedData();
+      var n = document.getElementById("storageNotice");
+      if (n) n.hidden = false;
+      return memFallback.slice();
+    }
+  }
+
+  function append(rec) {
+    if (memFallback) { memFallback.push(rec); return; }
+    try {
+      var arr = load();
+      arr.push(rec);
+      localStorage.setItem(STORE_KEY, JSON.stringify(arr));
+    } catch (e) {
+      memFallback = load();
+      memFallback.push(rec);
+      var n = document.getElementById("storageNotice");
+      if (n) n.hidden = false;
+    }
+  }
+
+  // ---- Helpers ----
+  function $(id) { return document.getElementById(id); }
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  function fmtStamp(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
+    return d.toLocaleString("en-PH", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+  }
+
+  // ---- Invite render ----
+  function renderInvite() {
+    $("inv-title").textContent = EVENT.title;
+    $("inv-topic").textContent = EVENT.topic;
+    $("inv-date").textContent = EVENT.date;
+    $("inv-time").textContent = EVENT.time;
+    $("inv-venue").textContent = EVENT.venue;
+    $("inv-units").textContent = EVENT.cpdUnits;
+    $("inv-speaker").textContent = EVENT.speaker;
+    $("inv-body").textContent = EVENT.body;
+  }
+
+  // ---- Certificate render (one submission) ----
+  function renderCertificate(rec) {
+    $("cert-name").textContent = rec.name;
+    $("cert-prc").textContent = "PRC License No. " + rec.prcNumber + " · " + rec.profession;
+    $("cert-event").textContent = EVENT.title;
+    $("cert-units").textContent = EVENT.cpdUnits + " · " + EVENT.date;
+    $("cert-date").textContent = EVENT.date;
+    $("cert-speaker").textContent = EVENT.speaker;
+    $("cert-body").textContent = EVENT.body;
+    $("cert-issued").textContent = "Issued " + fmtStamp(rec.submittedAt);
+  }
+
+  // ---- Email preview render (one submission) ----
+  function renderEmail(rec) {
+    $("em-to").textContent = rec.name + " <" + rec.email + ">";
+    $("em-subject").textContent = "Your CPD certificate: " + EVENT.title;
+    $("em-name").textContent = rec.name.split(" ")[0];
+    $("em-event").textContent = EVENT.title;
+    $("em-line-units").innerHTML = "Activity credit: <strong>" + esc(EVENT.cpdUnits) +
+      "</strong> from " + esc(EVENT.body) + ".";
+    var slug = rec.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    $("em-attach").textContent = "CPD-Certificate-" + (slug || "attendee") + ".pdf";
+  }
+
+  // ---- Dashboard render (all submissions) ----
+  function avg(arr, key) {
+    if (!arr.length) return 0;
+    var sum = 0, n = 0;
+    arr.forEach(function (r) { var v = Number(r[key]); if (!isNaN(v)) { sum += v; n++; } });
+    return n ? (sum / n) : 0;
+  }
+  function renderDashboard(arr) {
+    $("st-total").textContent = arr.length;
+    var emails = {};
+    arr.forEach(function (r) { emails[String(r.email || "").trim().toLowerCase()] = true; });
+    $("st-unique").textContent = Object.keys(emails).filter(function (e) { return e; }).length;
+    $("st-speaker").textContent = avg(arr, "speakerRating").toFixed(1);
+    $("st-relevance").textContent = avg(arr, "relevanceRating").toFixed(1);
+
+    var rows = arr.slice().sort(function (a, b) {
+      return new Date(b.submittedAt) - new Date(a.submittedAt);
+    }).map(function (r) {
+      return "<tr><td><span class='nm'>" + esc(r.name) + "</span></td>" +
+        "<td>" + esc(r.prcNumber) + "</td>" +
+        "<td>" + esc(r.email) + "</td>" +
+        "<td>" + esc(fmtStamp(r.submittedAt)) + "</td>" +
+        "<td><span class='rating-pill'>" + esc(r.speakerRating) + "/5</span></td>" +
+        "<td><span class='rating-pill'>" + esc(r.relevanceRating) + "/5</span></td></tr>";
+    }).join("");
+    $("subTable").innerHTML = rows;
+    $("rowCount").textContent = arr.length + (arr.length === 1 ? " submission" : " submissions") + ", including seeded samples.";
+  }
+
+  // ---- CSV export (RFC-4180) ----
+  var CSV_COLS = ["name","email","prcNumber","profession","licenseValidity","speakerRating","relevanceRating","takeaway","futureTopics","submittedAt"];
+  function csvCell(v) {
+    var s = String(v == null ? "" : v);
+    if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+  function exportCsv() {
+    var arr = load();
+    var lines = [CSV_COLS.join(",")];
+    arr.forEach(function (r) {
+      lines.push(CSV_COLS.map(function (c) { return csvCell(r[c]); }).join(","));
+    });
+    var blob = new Blob([lines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = "cpd-submissions.csv";
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
+  // ---- Validation + submit ----
+  function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  var REQUIRED = ["name","email","prcNumber","profession","licenseValidity","speakerRating","relevanceRating","takeaway"];
+
+  function fieldEl(name) { return document.querySelector('.field[data-name="' + name + '"]'); }
+  function getVal(form, name) {
+    var el = form.elements[name];
+    if (!el) return "";
+    if (el instanceof RadioNodeList || (el.length && el[0] && el[0].type === "radio")) {
+      var checked = form.querySelector('input[name="' + name + '"]:checked');
+      return checked ? checked.value : "";
+    }
+    return (el.value || "").trim();
+  }
+
+  function validate(form) {
+    var ok = true;
+    REQUIRED.forEach(function (name) {
+      var val = getVal(form, name);
+      var bad = !val || (name === "email" && !isEmail(val));
+      var fe = fieldEl(name);
+      if (fe) fe.classList.toggle("invalid", bad);
+      if (bad && ok) {
+        ok = false;
+        var focusEl = form.elements[name];
+        if (focusEl && focusEl.focus) { try { focusEl.focus(); } catch (e) {} }
+        if (fe && fe.scrollIntoView) fe.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+    return ok;
+  }
+
+  function buildRecord(form) {
+    return {
+      name: getVal(form, "name"),
+      email: getVal(form, "email"),
+      prcNumber: getVal(form, "prcNumber"),
+      profession: getVal(form, "profession"),
+      licenseValidity: getVal(form, "licenseValidity"),
+      speakerRating: Number(getVal(form, "speakerRating")),
+      relevanceRating: Number(getVal(form, "relevanceRating")),
+      takeaway: getVal(form, "takeaway"),
+      futureTopics: getVal(form, "futureTopics"),
+      submittedAt: new Date().toISOString()
+    };
+  }
+
+  function init() {
+    renderInvite();
+
+    var form = $("cpdForm");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!validate(form)) return;
+      var rec = buildRecord(form);
+      append(rec);
+
+      renderCertificate(rec);
+      renderEmail(rec);
+      renderDashboard(load());
+
+      var results = $("results");
+      results.classList.add("shown");
+      results.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    // Clear a field's error state as the user fixes it.
+    form.addEventListener("input", function (e) {
+      var fe = e.target.closest(".field");
+      if (fe) fe.classList.remove("invalid");
+    });
+
+    $("downloadCert").addEventListener("click", function () { window.print(); });
+    $("downloadCsv").addEventListener("click", exportCsv);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</body>
+</html>
