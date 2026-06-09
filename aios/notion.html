@@ -15,11 +15,11 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="POST205 — AIOS · Notion">
-  <meta property="og:description" content="An AI Operating System wired to Notion the token-light way — no MCP. The frameworks, the skills, the connection.">
+  <meta property="og:description" content="An AI Operating System wired to Notion through curl instead of an MCP, so it stays cheap to run.">
   <meta property="og:site_name" content="POST205">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="AIOS · Notion — POST205">
-  <meta name="twitter:description" content="An AI Operating System wired to Notion — no MCP, no token tax.">
+  <meta name="twitter:description" content="An AI Operating System wired to Notion through curl, not an MCP.">
   <meta name="twitter:image" content="https://post205.com/images/og-aios.png">
   <meta name="twitter:image:alt" content="POST205 — AIOS · Notion">
   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
@@ -391,7 +391,7 @@
   <h1>An AIOS, powered by Notion</h1>
 
   <div class="lede">
-    Same AI Operating System — but the connection is <strong>Notion</strong>, wired the token-light way. <strong>No MCP, no token tax.</strong> Clone the kit, point it at your Notion, and let AI actually operate the workspace you already live in. This page is the map of what's inside.
+    The same AI Operating System, wired to <strong>Notion</strong>. It talks to Notion through <code>curl</code> instead of an MCP, so it costs almost nothing to run. Clone it, point it at your workspace, and let AI do the work in the tool you already use. This page maps what's inside.
   </div>
 
   <!-- THE REPO -->
@@ -417,7 +417,7 @@
         <span class="card-name">The Shift</span>
         <span class="card-tag">how you think</span>
       </div>
-      <div class="card-desc"><strong style="color:var(--text)">Question · Cut · Build.</strong> Before any task: <em>can AI do this faster than me?</em> Not better — faster. Then cut what shouldn't exist, and build the smallest thing that runs without you.</div>
+      <div class="card-desc"><strong style="color:var(--text)">Question · Cut · Build.</strong> Before any task: <em>can AI do this faster than me?</em> Not better. Faster. Then cut what shouldn't exist, and build the smallest thing that runs without you.</div>
     </div>
 
     <div class="card">
@@ -431,8 +431,8 @@
 
   <!-- WHAT SHIPS -->
   <div class="group">
-    <div class="group-label">What ships — 4 skills</div>
-    <div class="group-intro">Three thinking tools and one live connection. Lean by design — you build on top.</div>
+    <div class="group-label">What ships · 4 skills</div>
+    <div class="group-intro">Three thinking tools and one live connection. You build the rest on top.</div>
 
     <div class="card">
       <div class="card-head">
@@ -447,7 +447,7 @@
         <span class="card-name">/audit</span>
         <span class="card-tag">weekly</span>
       </div>
-      <div class="card-desc">Scores your setup across The Stack out of 100. Read-only. Run it weekly and watch the number climb.</div>
+      <div class="card-desc">Scores your setup across The Stack out of 100. Read-only. Run it weekly to see what's missing.</div>
     </div>
 
     <div class="card">
@@ -455,7 +455,7 @@
         <span class="card-name">/level-up</span>
         <span class="card-tag">weekly</span>
       </div>
-      <div class="card-desc">The Shift interview — Question, Cut, Build. Finds one automation, scopes it, ships it. One run = one artifact.</div>
+      <div class="card-desc">The Shift interview: Question, Cut, Build. Finds one automation, scopes it, ships it. One run, one artifact.</div>
     </div>
 
     <div class="card">
@@ -463,21 +463,21 @@
         <span class="card-name">/notion</span>
         <span class="card-tag">live connection</span>
       </div>
-      <div class="card-desc">Reads and writes your Notion via <code>curl</code> — search, query a database, create or update rows, read or append page content. No MCP. Only the data you ask for ever enters context.</div>
+      <div class="card-desc">Reads and writes your Notion through <code>curl</code>: search, query a database, create or update rows, read or append page content. No MCP, so only the data you ask for enters context.</div>
     </div>
   </div>
 
   <!-- REFERENCES -->
   <div class="group">
     <div class="group-label">References</div>
-    <div class="group-intro">The two docs the skills read from. Open them to go deep.</div>
+    <div class="group-intro">The two docs the skills read from. Open them for the detail.</div>
 
     <div class="card">
       <div class="card-head">
         <span class="card-name">the-shift.md</span>
         <span class="card-tag">operator brain</span>
       </div>
-      <div class="card-desc">The full framework — Question, Cut, Build — with the principles underneath: boring wins, default to the lowest autonomy that works, context before tools, kill what doesn't earn its keep.</div>
+      <div class="card-desc">The full framework: Question, Cut, Build. Plus the principles underneath it: boring wins, lowest autonomy that works, context before tools, and kill what doesn't earn its keep.</div>
     </div>
 
     <div class="card">
@@ -485,14 +485,14 @@
         <span class="card-name">notion-cli.md</span>
         <span class="card-tag">connection guide</span>
       </div>
-      <div class="card-desc">The whole Notion API surface in five moves, with the 2-minute token setup. Researched once, saved forever.</div>
+      <div class="card-desc">The whole Notion API in five moves, with the 2-minute token setup.</div>
     </div>
   </div>
 
   <!-- WHY NO MCP -->
   <div class="callout">
     <h3>Why no MCP</h3>
-    <p>An MCP loads its entire toolset into <strong>every</strong> conversation, used or not — you pay that token tax up front. The Notion API is small, so we skip the middleman: call it on demand with <code>curl</code> and pay only for what you use. <strong>Pay per use, not rent forever.</strong> It's cheaper, leaner, and yours.</p>
+    <p>An MCP loads its whole toolset into <strong>every</strong> conversation, whether you use it or not. You pay that token cost up front, every time. The Notion API is small, so the kit skips the MCP and calls it directly with <code>curl</code>. You pay for what you use, nothing more. It's cheaper to run, and it's yours.</p>
   </div>
 
   <!-- WHAT'S IN THE BOX -->
