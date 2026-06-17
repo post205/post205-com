@@ -1173,6 +1173,41 @@
 
     /* ===== v2 ribbon ===== */
     .v2-ribbon { position:fixed; top:8px; left:50%; transform: translateX(-50%); z-index:300; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; background:#3BD1D3; color:#021616; padding:4px 12px; border-radius:999px; text-decoration:none; box-shadow:0 2px 10px rgba(0,0,0,.3); }
+    /* ===== v2: live demos ===== */
+    .demo-panel { display:none; grid-template-columns:1fr 1fr; gap:44px; align-items:center; max-width:1000px; margin:0 auto; }
+    .demo-panel.active { display:grid; }
+    .demo-copy h3 { font-size: clamp(20px,2.6vw,28px); font-weight:800; letter-spacing:-0.01em; line-height:1.14; color:var(--text); margin-bottom:14px; }
+    .demo-copy > p { color:var(--text-2); font-size:15px; line-height:1.65; margin-bottom:16px; }
+    @media (max-width:768px){ .demo-panel { grid-template-columns:1fr; gap:24px; } }
+
+    .dep { padding:16px; }
+    .dep-title { font-family: ui-monospace,monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:14px; }
+    .dep-field { display:block; margin-bottom:12px; }
+    .dep-field span { display:block; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); margin-bottom:5px; }
+    .dep-field input, .dep-field select { width:100%; padding:10px 12px; border:1px solid var(--border-2); border-radius:7px; background:var(--surface); color:var(--text); font-size:16px; font-family:inherit; }
+    .dep-field input:focus, .dep-field select:focus { outline:none; border-color:var(--accent); }
+    .dep-upload { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; padding:11px; border:1px dashed var(--border-2); border-radius:7px; background:transparent; color:var(--text-2); font-size:13px; cursor:pointer; margin-bottom:14px; transition: border-color .15s, color .15s; }
+    .dep-upload:hover { border-color:var(--accent); color:var(--accent-text); }
+    .dep-upload.has { border-style:solid; border-color:var(--accent); color:var(--accent-text); }
+    .dep-submit { width:100%; padding:13px; border:none; border-radius:7px; background:var(--accent); color:var(--on-accent); font-family: ui-monospace,monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:700; cursor:pointer; transition: opacity .15s; }
+    .dep-submit:hover { opacity:.9; } .dep-submit:disabled { opacity:.6; cursor:default; }
+    .dep-done { padding:20px 16px; text-align:center; }
+    .dep-check { width:46px; height:46px; border-radius:50%; background:var(--accent); color:var(--on-accent); display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto 12px; }
+    .dep-done-h { font-size:18px; font-weight:800; color:var(--text); }
+    .dep-done-sub { font-size:13px; color:var(--text-3); margin-top:4px; }
+    .dep-done-sub b { color:var(--accent-text); }
+    .dep-email { text-align:left; margin-top:18px; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--surface); animation: depSlide .5s cubic-bezier(.22,1,.36,1); }
+    @keyframes depSlide { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform:none; } }
+    @media (prefers-reduced-motion: reduce){ .dep-email { animation:none; } }
+    .dep-email-bar { background:var(--surface-2); padding:8px 12px; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); display:flex; align-items:center; gap:6px; }
+    .dep-email-body { padding:16px; }
+    .dep-email-logo { font-weight:800; letter-spacing:-.02em; color:var(--text); margin-bottom:10px; }
+    .dep-email-h { font-size:15px; font-weight:700; color:var(--text); margin-bottom:8px; }
+    .dep-email-row { font-size:13px; color:var(--text-2); line-height:1.6; }
+    .dep-email-row b { color:var(--text); }
+    .dep-email-meta { font-family: ui-monospace,monospace; font-size:11px; color:var(--text-3); margin-top:10px; }
+    .dep-reset { margin-top:14px; background:none; border:none; color:var(--accent-text); font-size:13px; cursor:pointer; }
+    .dep-soon { padding:48px 16px; text-align:center; color:var(--text-3); font-family: ui-monospace,monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; }
   </style>
 </head>
 <body>
@@ -1203,42 +1238,84 @@
   </div>
 </section>
 
-<!-- ── LIVE PREVIEW (industry switcher) ── -->
+<!-- ── LIVE DEMOS ── -->
 <section class="case-studies" id="work">
   <div class="case-studies-inner">
     <div class="lp-head">
-      <div class="lp-eyebrow">Live preview</div>
-      <h2>One system. Whatever your business runs on.</h2>
-      <p class="lp-lede">Pick a business. The same front office re-skins around it, live: the data changes, the rules change, the AI already knows the next move.</p>
+      <div class="lp-eyebrow">Live demos</div>
+      <h2>Don't take our word for it. Click around.</h2>
+      <p class="lp-lede">These aren't screenshots. They're the kinds of systems we build, running right here. Try one.</p>
     </div>
 
-    <div class="lp-tabs" role="tablist" aria-label="Choose a business">
-      <button class="lp-tab active" data-ind="salon" role="tab" aria-selected="true">Salon</button>
-      <button class="lp-tab" data-ind="firm" role="tab" aria-selected="false">Law firm</button>
-      <button class="lp-tab" data-ind="park" role="tab" aria-selected="false">Theme park</button>
-      <button class="lp-tab" data-ind="resto" role="tab" aria-selected="false">Restaurant</button>
+    <div class="lp-tabs" role="tablist" aria-label="Choose a demo">
+      <button class="lp-tab active" data-demo="deposit" role="tab" aria-selected="true">Bank deposit + email</button>
+      <button class="lp-tab" data-demo="proposal" role="tab" aria-selected="false">Proposal &amp; e-sign</button>
     </div>
 
-    <div class="lp-stage">
-      <div class="lp-copy" id="lpCopy">
-        <h3 id="lpHead"></h3>
-        <p id="lpBody"></p>
-        <div class="lp-built" id="lpBuilt"></div>
-        <div class="cs-industry" id="lpInd"></div>
+    <!-- DEMO: bank deposit + email confirmation -->
+    <div class="demo-panel active" id="demo-deposit" role="tabpanel">
+      <div class="demo-copy">
+        <h3>Your customer paid by bank transfer. Now what?</h3>
+        <p>Most businesses chase a screenshot over chat, key it in by hand, then forget to confirm it. The customer is left wondering if it went through.</p>
+        <div class="lp-built">They report the payment in 20 seconds. The receipt lands in their inbox and yours, automatically. Try it on the right.</div>
+        <div class="cs-industry">Any business that takes bank or e-wallet payments</div>
       </div>
-      <div class="lp-demo">
-        <div class="mock-win" id="lpWin">
+      <div class="demo-stage-r">
+        <div class="mock-win">
           <div class="mock-bar">
             <div class="m-dot m-r"></div>
             <div class="m-dot m-y"></div>
             <div class="m-dot m-g"></div>
-            <div class="mock-url" id="lpUrl"></div>
+            <div class="mock-url">report a payment</div>
           </div>
-          <div class="lp-screen" id="lpScreen"></div>
-          <div class="mock-ai">
-            <div class="mock-ai-icon"><svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0.5L7.4 4.6L11.5 6L7.4 7.4L6 11.5L4.6 7.4L0.5 6L4.6 4.6Z"/></svg></div>
-            <div class="mock-ai-text" id="lpAi"></div>
+          <div class="dep">
+            <div class="dep-step" id="depForm">
+              <div class="dep-title">Report your payment</div>
+              <label class="dep-field"><span>Amount</span><input id="depAmt" type="text" inputmode="numeric" value="₱3,500"></label>
+              <label class="dep-field"><span>Paid via</span>
+                <select id="depBank"><option>BPI</option><option>BDO</option><option>GCash</option><option>Maya</option><option>UnionBank</option></select>
+              </label>
+              <label class="dep-field"><span>Reference no.</span><input id="depRef" type="text" value="0093 4471 22"></label>
+              <button class="dep-upload" id="depUpload" type="button"><span class="dep-up-ic" aria-hidden="true">⭡</span> <span id="depUpTxt">Attach deposit slip</span></button>
+              <button class="dep-submit" id="depSubmit" type="button">Submit payment</button>
+            </div>
+            <div class="dep-step dep-done" id="depDone" hidden>
+              <div class="dep-check" aria-hidden="true">✓</div>
+              <div class="dep-done-h">Payment recorded</div>
+              <div class="dep-done-sub">Ref <b id="depRefOut">P205-4471</b> · <span id="depWhen">just now</span></div>
+              <div class="dep-email" id="depEmail">
+                <div class="dep-email-bar"><span aria-hidden="true">✉</span> Confirmation sent to you</div>
+                <div class="dep-email-body">
+                  <div class="dep-email-logo">POST205</div>
+                  <div class="dep-email-h">Payment received</div>
+                  <div class="dep-email-row">We've recorded your payment of <b id="depEmAmt">₱3,500</b> via <span id="depEmBank">BPI</span>. Nothing else for you to do.</div>
+                  <div class="dep-email-meta">Ref <span id="depEmRef">0093 4471 22</span> · <span id="depEmDate"></span></div>
+                </div>
+              </div>
+              <button class="dep-reset" id="depReset" type="button">↺ Run it again</button>
+            </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO: proposal & e-sign (teaser, full build next) -->
+    <div class="demo-panel" id="demo-proposal" role="tabpanel" hidden>
+      <div class="demo-copy">
+        <h3>The proposal that signs itself.</h3>
+        <p>Your client opens a link and sees their own system mapped out, picks a tier, and signs, on the same page. No PDF, no email tag, no chasing.</p>
+        <div class="lp-built">This is how every POST205 agreement goes out today. The clickable demo lands here next.</div>
+        <div class="cs-industry">sign.post205.com</div>
+      </div>
+      <div class="demo-stage-r">
+        <div class="mock-win">
+          <div class="mock-bar">
+            <div class="m-dot m-r"></div>
+            <div class="m-dot m-y"></div>
+            <div class="m-dot m-g"></div>
+            <div class="mock-url">service agreement</div>
+          </div>
+          <div class="dep-soon">Interactive demo in progress</div>
         </div>
       </div>
     </div>
@@ -1499,65 +1576,53 @@
 </footer>
 
 <script>
-  // ── LIVE PREVIEW switcher: one front office, re-skinned per industry ──
+  // ── LIVE DEMOS: tab switching + the bank-deposit clickable flow ──
   (function(){
-    var LP = {
-      salon: { url:'reception · today', ind:'Salon · Spa · Skin clinic',
-        head:'Your salon, where every guest feels like a VIP.',
-        body:'Bianca has come here two years. When her stylist is off, whoever greets her starts from zero, and the visit starts over.',
-        built:'We built a front desk that opens her whole history the moment her name is typed.',
-        search:'Bianca R.', name:'Bianca Reyes', badge:'VIP · 14 visits',
-        rows:[['Stylist','Marco C.'],['Drink','Oat latte, no sugar'],['Last visit','Apr 15 · Balayage']],
-        slot:'11:00 AM · Booked',
-        ai:"Hasn't colored in 3 visits. She mentioned a tint refresh in March, offer it today." },
-      firm: { url:'firm portal', ind:'Accounting · Law office · Consulting',
-        head:'Your firm, where no two clients ever see each other.',
-        body:"You manage five companies whose numbers can't mix. Right now you're the one filtering every file before it goes out.",
-        built:'We built a portal where each client logs in and sees only itself.',
-        search:'Altair Group', name:'Altair Group', badge:'1 of 5 entities',
-        rows:[['Monthly','₱28,000'],['Access','Altair only'],['Status','Books current']],
-        slot:'Logs in → sees 1 entity',
-        ai:'Altair raised a billing concern. Routing to M. Cruz, who handled their account in Q1.' },
-      park: { url:'gate scanner', ind:'Theme park · Events · Resort',
-        head:'Your gate, where staff always has the answer.',
-        body:'A child was too short for the main ride. Nobody knew what to offer or who approves it, so everyone waited for a manager.',
-        built:'We built a scanner that shows the offer and the approver the instant a ticket scans.',
-        search:'Ticket #4821', name:'Reyes family', badge:'Valid · 2A 1C',
-        rows:[['Pass','General day'],['Flag','Height not confirmed'],['Approver','Pre-cleared']],
-        slot:'Issue junior pass + ₱200',
-        ai:'Child under 120cm. Junior pass and ₱200 credit are pre-approved, no manager needed.' },
-      resto: { url:'service line', ind:'Restaurant · Café · Bar',
-        head:'Your floor, where the kitchen knows before the order does.',
-        body:'A regular with a shellfish allergy sits down. The new server has no idea, and the kitchen only finds out if someone remembers.',
-        built:"We built a service line that flags the table's history the moment they're seated.",
-        search:'Table 12', name:'Reyes party', badge:'Table 12 · 4pax',
-        rows:[['Allergy','Shellfish (1 guest)'],['Usual','Corner booth'],['Avg spend','₱3,200']],
-        slot:'Kitchen flagged: no shellfish',
-        ai:'Repeat guest, allergy on file. Kitchen was flagged before the first order fired.' }
-    };
-    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-    function screenHTML(d){
-      var rows = d.rows.map(function(r){ return '<div class="book-detail-row"><span class="book-key">'+esc(r[0])+'</span><span class="book-val">'+esc(r[1])+'</span></div>'; }).join('');
-      return '<div class="book-search"><span class="book-search-icon">⌕</span><span>'+esc(d.search)+'</span></div>'+
-        '<div class="book-client-card"><div class="book-client-top"><div class="book-client-name">'+esc(d.name)+'</div><span class="book-tag">'+esc(d.badge)+'</span></div>'+
-        '<div class="book-detail">'+rows+'</div><div class="book-slot">'+esc(d.slot)+'</div></div>';
+    var tabs = document.querySelectorAll('.lp-tab[data-demo]');
+    function showDemo(key){
+      document.querySelectorAll('.demo-panel').forEach(function(p){ p.classList.remove('active'); p.hidden = true; });
+      var panel = document.getElementById('demo-' + key);
+      if (panel){ panel.hidden = false; panel.classList.add('active'); }
     }
-    function render(key){
-      var d = LP[key]; if(!d) return;
-      var set=function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
-      set('lpHead',d.head); set('lpBody',d.body); set('lpBuilt',d.built); set('lpInd',d.ind); set('lpUrl',d.url); set('lpAi',d.ai);
-      var screen=document.getElementById('lpScreen'); if(screen) screen.innerHTML=screenHTML(d);
-      var win=document.getElementById('lpWin'); if(win){ win.classList.remove('lp-flip'); void win.offsetWidth; win.classList.add('lp-flip'); }
-      var copy=document.getElementById('lpCopy'); if(copy){ copy.classList.remove('lp-fade'); void copy.offsetWidth; copy.classList.add('lp-fade'); }
-    }
-    document.querySelectorAll('.lp-tab').forEach(function(t){
+    tabs.forEach(function(t){
       t.addEventListener('click', function(){
-        document.querySelectorAll('.lp-tab').forEach(function(x){ x.classList.remove('active'); x.setAttribute('aria-selected','false'); });
+        tabs.forEach(function(x){ x.classList.remove('active'); x.setAttribute('aria-selected','false'); });
         t.classList.add('active'); t.setAttribute('aria-selected','true');
-        render(t.dataset.ind);
+        showDemo(t.dataset.demo);
       });
     });
-    render('salon');
+
+    // bank deposit + email confirmation
+    var slip = false;
+    var up = document.getElementById('depUpload');
+    if (up) up.addEventListener('click', function(){
+      slip = !slip;
+      up.classList.toggle('has', slip);
+      document.getElementById('depUpTxt').textContent = slip ? 'Deposit slip attached ✓' : 'Attach deposit slip';
+    });
+    var submit = document.getElementById('depSubmit');
+    if (submit) submit.addEventListener('click', function(){
+      submit.disabled = true; submit.textContent = 'Verifying…';
+      setTimeout(function(){
+        var amt  = (document.getElementById('depAmt').value || '₱0').trim();
+        var bank = document.getElementById('depBank').value;
+        var ref  = (document.getElementById('depRef').value || '—').trim();
+        var refDigits = ref.replace(/\D/g,'').slice(-4) || '0001';
+        document.getElementById('depRefOut').textContent = 'P205-' + refDigits;
+        document.getElementById('depEmAmt').textContent  = amt;
+        document.getElementById('depEmBank').textContent = bank;
+        document.getElementById('depEmRef').textContent  = ref;
+        document.getElementById('depEmDate').textContent = new Date().toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+        document.getElementById('depForm').hidden = true;
+        document.getElementById('depDone').hidden = false;
+      }, 900);
+    });
+    var reset = document.getElementById('depReset');
+    if (reset) reset.addEventListener('click', function(){
+      document.getElementById('depDone').hidden = true;
+      document.getElementById('depForm').hidden = false;
+      submit.disabled = false; submit.textContent = 'Submit payment';
+    });
   })();
 
   // ── transparent header → solid dark once the hero scrolls away ──
