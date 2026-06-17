@@ -1,6 +1,16 @@
 [build]
   publish = "."
 
+[functions]
+  directory = "netlify/functions"
+
+# Chat lead pipeline (submit-lead): client calls /api/submit-lead.
+# Inert until TELEGRAM_BOT_TOKEN / OPS_LEAD_ENDPOINT env vars are set in Netlify.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
