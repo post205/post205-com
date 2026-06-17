@@ -1277,6 +1277,11 @@
     .sa-legal { font-size:11px; line-height:1.5; color:var(--text-3); margin-top:10px; }
     .sa-legal-done { margin:0 auto 14px; max-width:34ch; }
     @media (prefers-reduced-motion: reduce){ .sa-sign { animation:none; } }
+
+    /* pulse — invites the click */
+    @keyframes p205pulse { 0%,100%{ box-shadow:0 0 0 0 rgba(14,154,157,0); } 50%{ box-shadow:0 0 0 6px rgba(14,154,157,.14); } }
+    .pulse { animation: p205pulse 1.8s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce){ .pulse { animation:none; } }
   </style>
 </head>
 <body>
@@ -1288,7 +1293,7 @@
     <img src="/images/logo.png" alt="POST205">
   </a>
   <div class="nav-right">
-    <a href="#contact" class="nav-cta">Let's talk</a>
+    <a href="#contact" class="nav-cta" data-talk>Let's talk</a>
   </div>
 </nav>
 
@@ -1298,8 +1303,8 @@
   <div class="hero-fade"></div>
   <div class="hero-inner">
     <div class="hero-text">
-      <div class="hero-eyebrow">Custom software for Filipino business owners</div>
-      <h1>Your business.<br>Your system.</h1>
+      <div class="hero-eyebrow">For Filipino business owners</div>
+      <h1>Your business<br>software.</h1>
       <div class="hero-descriptor">Built from scratch for how you work, and simple enough that the whole team uses it. Since 2015.</div>
       <a href="#work" class="hero-ghost">See what we build</a>
     </div>
@@ -1327,7 +1332,7 @@
     <div class="lp-head">
       <div class="lp-eyebrow">See the software work</div>
       <h2>Built to fit how you work.</h2>
-      <p class="lp-lede">The systems we build for clients, running right here on the page. Go ahead and use them.</p>
+      <p class="lp-lede">Real and running. Click anything.</p>
     </div>
 
     <div class="lp-tabs" role="tablist" aria-label="Choose a demo">
@@ -1339,10 +1344,9 @@
     <!-- DEMO: bank deposit + email confirmation -->
     <div class="demo-panel active" id="demo-deposit" role="tabpanel">
       <div class="demo-copy">
-        <h3>Your customer pays. Then they wait to hear back.</h3>
-        <p>The payment comes in over Viber as a screenshot. You log it by hand later, and the customer sits there wondering if it went through.</p>
-        <div class="lp-built">Here they log it themselves, and the receipt hits both inboxes the same second.</div>
-        <div class="cs-industry">For any business paid by bank transfer or GCash</div>
+        <h3>Your customer pays. Then waits.</h3>
+        <div class="lp-built">They log it themselves. The receipt hits both inboxes instantly.</div>
+        <div class="cs-industry">Bank transfer or GCash</div>
       </div>
       <div class="demo-stage-r">
         <div class="mock-win">
@@ -1361,7 +1365,7 @@
               </label>
               <label class="dep-field"><span>Reference no.</span><input id="depRef" type="text" value="0093 4471 22"></label>
               <button class="dep-upload" id="depUpload" type="button"><span class="dep-up-ic" aria-hidden="true">⭡</span> <span id="depUpTxt">Attach deposit slip</span></button>
-              <button class="dep-submit" id="depSubmit" type="button">Submit payment</button>
+              <button class="dep-submit pulse" id="depSubmit" type="button">Submit payment</button>
             </div>
             <div class="dep-step dep-done" id="depDone" hidden>
               <div class="dep-check" aria-hidden="true">✓</div>
@@ -1393,10 +1397,9 @@
     <!-- DEMO: CPD module → certificate → email → PRC-ready -->
     <div class="demo-panel" id="demo-cpd" role="tabpanel" hidden>
       <div class="demo-copy">
-        <h3>Pass the module. Certificate's in your inbox before you close the tab.</h3>
-        <p>Your members sit a short quiz, and the certificate generates itself, numbered and dated. The CPD units are logged the way PRC wants them.</p>
-        <div class="lp-built">No printing, no manual logbook. Take the quiz on the right and watch it issue.</div>
-        <div class="cs-industry">For PRC-accredited CPD providers and professional associations</div>
+        <h3>Quiz in. Certificate out.</h3>
+        <div class="lp-built">PRC units logged automatically. No printing, no logbook.</div>
+        <div class="cs-industry">PRC-accredited CPD providers</div>
       </div>
       <div class="demo-stage-r">
         <div class="mock-win">
@@ -1427,7 +1430,7 @@
                 <label class="cpd-opt"><input type="radio" name="cq2"> Public Practice Exam</label>
               </div>
               <div class="cpd-score" id="cpdScore" hidden></div>
-              <button class="dep-submit" id="cpdSubmit" type="button">Submit answers</button>
+              <button class="dep-submit pulse" id="cpdSubmit" type="button">Submit answers</button>
             </div>
             <div class="cpd-step" id="cpdDone" hidden>
               <div class="cert">
@@ -1459,9 +1462,8 @@
     <!-- DEMO: proposal & e-sign (interactive) -->
     <div class="demo-panel" id="demo-proposal" role="tabpanel" hidden>
       <div class="demo-copy">
-        <h3>Your client signs on the same page they read.</h3>
-        <p>They open one link, see their own setup laid out, choose a tier, and sign right there. You watch it land in ops.</p>
-        <div class="lp-built">Pick a tier and sign on the right. Typing your name and accepting is a binding signature under RA 8792, the Philippine E-Commerce Act. It's how every agreement I send already goes out.</div>
+        <h3>Read it. Sign it. Same page.</h3>
+        <div class="lp-built">A typed name is a binding signature under RA 8792.</div>
         <div class="cs-industry">sign.post205.com</div>
       </div>
       <div class="demo-stage-r">
@@ -1481,7 +1483,7 @@
                   <div class="sa-tier-p">₱45,000</div>
                   <div class="sa-tier-d">Landing site + one form</div>
                 </button>
-                <button class="sa-tier" data-tier="Standard" data-price="₱90,000" type="button">
+                <button class="sa-tier pulse" data-tier="Standard" data-price="₱90,000" type="button">
                   <div class="sa-tier-tag">Most pick this</div>
                   <div class="sa-tier-n">Standard</div>
                   <div class="sa-tier-p">₱90,000</div>
@@ -1784,6 +1786,7 @@
     });
     var submit = document.getElementById('depSubmit');
     if (submit) submit.addEventListener('click', function(){
+      submit.classList.remove('pulse');
       submit.disabled = true; submit.textContent = 'Verifying…';
       setTimeout(function(){
         var amt  = (document.getElementById('depAmt').value || '₱0').trim();
@@ -1827,6 +1830,7 @@
       return { correct: correct, total: qs.length, answered: answered };
     }
     if (cpdSubmit) cpdSubmit.addEventListener('click', function(){
+      cpdSubmit.classList.remove('pulse');
       var score = document.getElementById('cpdScore');
       var r = gradeCpd();
       if (r.answered < r.total) {
@@ -1872,7 +1876,7 @@
     var saTier = null, saPrice = null;
     document.querySelectorAll('.sa-tier').forEach(function(t){
       t.addEventListener('click', function(){
-        document.querySelectorAll('.sa-tier').forEach(function(x){ x.classList.remove('sel'); });
+        document.querySelectorAll('.sa-tier').forEach(function(x){ x.classList.remove('sel','pulse'); });
         t.classList.add('sel');
         saTier = t.dataset.tier; saPrice = t.dataset.price;
         document.getElementById('saSign').hidden = false;
