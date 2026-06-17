@@ -1402,9 +1402,10 @@
     .case-studies-inner, .promises-inner, .about-inner { padding-left:48px; padding-right:48px; }
     @media (max-width:768px){ .case-studies-inner, .promises-inner, .about-inner { padding-left:20px; padding-right:20px; } }
     /* hero: keep the headline pinned while the chat scrolls (same idea as the demo copy) */
-    @media (min-width:900px){ .hero-text { position:sticky; top:120px; } }
-    /* chat header with a restart toggle */
-    .chat-head { display:flex; align-items:center; padding:9px 12px; border-bottom:1px solid var(--border); flex-shrink:0; }
+    @media (min-width:900px){ .hero-chat { position:sticky; top:96px; } }
+    /* chat restart toggle — bottom footer, shown only after the visitor starts talking */
+    .chat-foot { padding:8px 12px; border-top:1px solid var(--border); justify-content:center; flex-shrink:0; }
+    .chat-foot:not([hidden]) { display:flex; }
     .chat-restart { display:inline-flex; align-items:center; gap:6px; background:none; border:none; cursor:pointer; color:var(--text-3); font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; padding:2px 4px; }
     .chat-restart:hover { color:var(--accent-text); }
     .chat-restart svg { width:13px; height:13px; }
@@ -1435,11 +1436,11 @@
     </div>
     <div class="hero-chat">
       <div class="chat-widget">
-        <div class="chat-head"><button class="chat-restart" id="chatRestart" type="button" aria-label="Restart conversation"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Restart</button></div>
         <button class="chat-min" id="chatMin" type="button" aria-label="Minimize chat"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
         <button class="chat-dock-close" id="chatDockClose" type="button" aria-label="Collapse chat"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h12"/></svg></button>
         <div class="chat-log" id="chatLog" aria-live="polite" aria-atomic="false"></div>
         <div class="chat-input-area" id="chatInput"></div>
+        <div class="chat-foot" id="chatFoot" hidden><button class="chat-restart" id="chatRestart" type="button" aria-label="Restart conversation"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Restart conversation</button></div>
       </div>
       <form id="nlForm" name="contact" netlify data-netlify="true" data-netlify-honeypot="bot-field" hidden>
         <input type="hidden" name="form-name" value="contact">
@@ -2248,6 +2249,8 @@
       if (side === 'bot') wrap.innerHTML = '<span class="chat-sender">205</span><span class="chat-bubble">' + html + '</span>';
       else                wrap.innerHTML = '<span class="chat-bubble">' + html + '</span>';
       log.appendChild(wrap);
+      // reveal the restart toggle once the visitor has actually started talking
+      if (side === 'user') { var _f = document.getElementById('chatFoot'); if (_f) _f.hidden = false; }
       scrollDown();
       return wrap;
     }
@@ -2335,6 +2338,7 @@
     answers = {};
     try { sessionStorage.removeItem('p205_lead_sent'); } catch(e){}
     log.innerHTML = ''; input.innerHTML = '';
+    var _ft = document.getElementById('chatFoot'); if (_ft) _ft.hidden = true;
     botSay("'Musta? What's the biggest headache in your business right now?", 500).then(function() {
       chips(['Chasing payments', 'Encoding by hand', 'Bookings and schedules', 'Reports and compliance', 'Something else'], function(v) {
         answers.pain = v;
