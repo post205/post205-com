@@ -1294,7 +1294,7 @@
     .annotated { padding: 44px 0; line-height: 1.5; }
     .ann { position: relative; white-space: nowrap; }
     .ann::before { content:""; position:absolute; left:0; right:0; height:7px; border:1px solid var(--accent-text); opacity:.5; }
-    .ann::after { content: attr(data-label); position:absolute; left:50%; transform:translateX(-50%); white-space:nowrap; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.14em; color:var(--accent-text); }
+    .ann::after { content: attr(data-label); position:absolute; left:50%; transform:translateX(-50%); white-space:nowrap; font-family: ui-monospace,monospace; font-size:10px; font-weight:400; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-text); }
     .ann-top::before { bottom:100%; margin-bottom:5px; border-bottom:none; }
     .ann-top::after  { bottom:100%; margin-bottom:17px; }
     .ann-bot::before { top:100%; margin-top:5px; border-top:none; }
@@ -1368,7 +1368,6 @@
 <section class="case-studies" id="work">
   <div class="case-studies-inner">
     <div class="lp-head">
-      <div class="lp-eyebrow">See the software work</div>
       <h2 class="annotated"><span class="ann ann-top" data-label="BESPOKE">Built to fit</span> <span class="ann ann-bot" data-label="YOUR BUSINESS">how you work</span>.</h2>
       <p class="lp-lede">Each one below is a working demo. Click any of them to try it.</p>
     </div>
