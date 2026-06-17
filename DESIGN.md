@@ -2,19 +2,22 @@
 name: POST205
 description: Custom systems for Philippine businesses, built from scratch since 2015.
 colors:
-  accent-teal: "#3BD1D3"
-  page-bg: "#18181A"
-  surface: "#1a2424"
-  surface-2: "#252f2f"
-  surface-deep: "#0D2828"
-  border: "#1f3535"
-  border-2: "#2a4040"
-  text-primary: "#f0f0f2"
-  text-secondary: "#7aacac"
-  text-tertiary: "#629a9a"
-  on-accent: "#021616"
-  status-green: "#2ecc71"
-  status-red: "#ff4d4d"
+  accent-teal: "#0e9a9d"        # body accent on the light field
+  accent-bright: "#3BD1D3"      # masthead / on-dark contexts only
+  page-bg: "#e7efee"            # light teal field (single theme)
+  surface: "#f7fcfc"
+  surface-2: "#dce8e7"
+  surface-deep: "#0D2828"       # stays dark: masthead, mockup chrome, high-contrast blocks
+  border: "#c7d9d7"
+  border-2: "#b1c8c5"
+  text-primary: "#0b1b1b"
+  text-secondary: "#41585a"
+  text-tertiary: "#5a7473"
+  on-accent: "#ffffff"
+  masthead-bg: "#141416"        # dark header over the light body
+  nav-ink: "#7aacac"            # nav links on the dark masthead
+  status-green: "#198a4c"
+  status-red: "#c0392b"
 typography:
   display:
     fontFamily: "system-ui, -apple-system, sans-serif"
@@ -76,13 +79,14 @@ components:
 
 Filipino craftwork: precise, unpretentious, built to last. This is not a showroom. There is no gallery lighting, no polished chrome, no glass surfaces that exist only to reflect themselves. The POST205 aesthetic is what you find when someone has been doing the work for eleven years and has nothing left to prove about it. Every element justifies its place or doesn't appear.
 
-The palette is dark by necessity, not affectation. A founder evaluating a back-office system is often doing it at night, between tasks, on a phone. Teal-tinted dark surfaces read as technical depth without the anxiety of pure black. The single accent — a precise aqua-teal — appears only where it matters. Its scarcity is the point.
+The flagship surface is a light teal field under a dark masthead, a single committed theme with no toggle. A founder evaluating the page reads it in daylight on a phone as often as at night; the cool off-white field stays legible on mid-range Android screens without the glare of pure white, and the dark masthead anchors the brand at the top. Every neutral is tinted toward the same teal hue. The accent appears only where it matters; its scarcity is the point.
 
 System fonts make the same argument. No external typeface was imported, no variable font loaded. The 800-weight system-ui renders sharp and native on whatever screen the user has. The monospace labels carry the technical credibility. Together they say: we write code, we don't dress it up.
 
 **Key Characteristics:**
-- Dark-first with a dual-mode toggle; both modes derive from the same teal hue family
-- One primary accent (#3BD1D3); all other surfaces are field, not figure
+- Single theme, no toggle: dark masthead (`#141416` + bright-teal underline) over a light teal field
+- Two accents from one family: `#0e9a9d` on the light body, `#3BD1D3` reserved for on-dark contexts (masthead, deep blocks)
+- All surfaces are field, not figure; the accent is never a large fill
 - System-ui headers (weight 800) paired with ui-monospace labels; no external fonts
 - Flat surfaces with tonal depth; no decorative shadows
 - Uppercase monospace for every label, eyebrow, badge, and nav element
@@ -93,27 +97,29 @@ System fonts make the same argument. No external typeface was imported, no varia
 One accent. Everything else is the field it stands on.
 
 ### Primary
-- **Teal Strike** (`#3BD1D3`): The single accent. Nav CTA background, active state indicators, icon highlights in promise cards, link hover states, and badge text in key contexts. Never used as a large surface fill. Light mode equivalent: `#2db8ba`.
+- **Body Teal** (`#0e9a9d`): The accent on the light field. Active state indicators, icon highlights in promise cards, link colors, and badge text. Never a large surface fill. Darker than the bright teal on purpose, for contrast against the off-white body.
+- **Teal Strike** (`#3BD1D3`): The bright accent, reserved for on-dark contexts only: the masthead underline, the nav CTA, and anything sitting on `--surface-deep`. Too light to read as an accent on the body field.
 
 ### Neutral
-- **Off-Dark** (`#18181A`): Page background in dark mode. Near-black, very slightly warm to avoid pure void. Light mode equivalent: `#f2f8f8` (cool off-white, never pure white).
-- **Teal Surface** (`#1a2424`): Elevated cards, promise card backgrounds, promise section background (`--surface`). The primary teal tint at low lightness.
-- **Surface 2** (`#252f2f`): Secondary elevation — chat bubbles in mockups, nested card backgrounds (`--surface-2`).
-- **Deep Teal** (`#0D2828`): Full-bleed section backgrounds for the about section and high-contrast blocks (`--surface-deep`). Always paired with hardcoded light text; do not use semantic text variables on this background.
-- **Border Teal** (`#1f3535`): Primary border, card outlines, dividers (`--border`).
-- **Border 2** (`#2a4040`): Secondary borders for tabs, inputs, nested elements (`--border-2`).
-- **Text Primary** (`#f0f0f2`): Headings and primary copy on dark surfaces.
-- **Text Secondary** (`#7aacac`): Body copy, descriptors, secondary content on dark.
-- **Text Tertiary** (`#629a9a`): Labels, section eyebrows, muted metadata.
-- **On Accent** (`#021616`): Text rendered on the teal accent background. Near-black with a strong teal tint.
+- **Field Off-White** (`#e7efee`): Page background (`--black`, legacy token name). Cool off-white tinted teal, never pure white.
+- **Surface** (`#f7fcfc`): Elevated cards, promise card backgrounds (`--surface`).
+- **Surface 2** (`#dce8e7`): Secondary elevation — nested cards, chat bubbles in mockups (`--surface-2`).
+- **Deep Teal** (`#0D2828`): The dark anchor — masthead, mockup browser chrome, and any full-bleed high-contrast block (`--surface-deep`). Always paired with hardcoded light text; do not use semantic text variables on this background.
+- **Border** (`#c7d9d7`): Primary border, card outlines, dividers (`--border`).
+- **Border 2** (`#b1c8c5`): Secondary borders for tabs, inputs, nested elements (`--border-2`).
+- **Text Primary** (`#0b1b1b`): Headings and primary copy on the light field.
+- **Text Secondary** (`#41585a`): Body copy, descriptors, secondary content.
+- **Text Tertiary** (`#5a7473`): Labels, section eyebrows, muted metadata.
+- **On Accent** (`#ffffff`): Text on the body-teal accent. (On the bright `#3BD1D3` masthead CTA, use near-black `#021616`.)
+- **Nav Ink** (`#7aacac`): Nav links on the dark masthead; hover lifts to `#f0f0f2`.
 
 ### Status (mockup/data use only)
-- **Signal Green** (`#2ecc71`): Positive status indicators in client mockups.
-- **Signal Red** (`#ff4d4d`): Error or alert states in client mockups.
+- **Signal Green** (`#198a4c`): Positive status indicators in client mockups.
+- **Signal Red** (`#c0392b`): Error or alert states in client mockups.
 
 ### Named Rules
 
-**The Economy Rule.** `#3BD1D3` appears on at most 10% of any given screen surface. Its scarcity is the signal. A layout with three teal elements is already too much.
+**The Economy Rule.** The accent appears on at most 10% of any given screen surface. Its scarcity is the signal. A layout with three teal elements is already too much.
 
 **The Tinted Field Rule.** Every neutral surface derives from the accent hue (approximately hue 181°, chroma 0.03–0.12). No pure gray neutrals. No warm cream. No slate. The field and the figure come from the same hue family; the figure is simply brighter.
 
@@ -187,22 +193,19 @@ Browser and mobile device shells used in the case study section. These are edito
 - **Radius:** 8px (browser frames), 20px+ (mobile frames)
 - **Rule:** Mockup content uses real data-like copy. No "Lorem ipsum." No generic placeholder names.
 
-### Theme Toggle (standard on every page)
-**Every page ships the theme toggle. No exceptions.** A visitor who set light or dark on one page expects it to hold everywhere; a page with theme CSS but no button is a bug.
+### Theme Toggle (deprecated — single theme is canonical)
+**The toggle is being retired. The canonical direction is one committed theme: dark masthead over a light teal field, no toggle.** This is live on the flagship `index.html` (2026-06-17). Do not add the toggle to new pages.
 
-- **Style:** `1px solid --border-2`, 6px radius, icon-only, no label, 40×40px
-- **Hover:** `border-color` shifts to `--text-3`, color lifts to `--text-2`
-- **Behavior:** 3-state cycle — dark → light → system. Persists to `localStorage('post205-theme')`. The `system` state follows the OS via `@media (prefers-color-scheme)`.
-- **Placement:** in `nav`, inside a `.nav-right` flex wrapper, left of the CTA.
+**Migration status:** legacy pages (`faq.html`, `privacy.html`, `aios.html`, `cpd/index.html`) still carry the old dark-first toggle pending a site-wide cutover. `admin/` may stay dark indefinitely (back-office tool, not a brand surface). When migrating a legacy page, strip all four toggle pieces and fold the light-teal palette into a single `:root` — see `index.html` as the reference implementation.
 
-**The four pieces a page needs** (copy from `index.html` or `aios.html`):
-1. **Pre-paint init** in `<head>` (prevents flash):
-   `<script>(function(){var t=localStorage.getItem('post205-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>`
-2. **The `.theme-toggle` CSS** (button + the `[data-theme=...] .icon-*` visibility rules).
-3. **The `[data-theme="system"]` light-vars block** inside `@media (prefers-color-scheme: light)`.
-4. **The button markup** in `<nav>` (3 SVG icons: dark/light/system) + `<script src="/js/theme-toggle.js"></script>` before `</body>`.
+**To retire the toggle on a page (what `index.html` did):**
+1. Delete the **pre-paint init** `<script>` in `<head>`.
+2. Delete the **`.theme-toggle` CSS** and every `[data-theme=...]` selector.
+3. Delete the **`[data-theme="system"]` light-vars block** and the `[data-theme="light"]` block; fold the light-teal values into a single `:root`.
+4. Delete the **button markup** in `<nav>`, the inline click handler, and any `<script src="/js/theme-toggle.js">` include.
+5. Keep the **masthead dark**: hardcode nav background `#141416`-ish + a 2px `#3BD1D3` underline, and give nav links their own on-dark ink tokens (`--nav-ink` / `--nav-ink-hi`) since `--text` is now dark.
 
-The click logic is shared in `/js/theme-toggle.js` — never re-implement it inline. The toggle is a no-op if `#themeToggle` is absent, so the script is safe to include everywhere.
+`/js/theme-toggle.js` remains only for not-yet-migrated legacy pages; do not use it on new work.
 
 ## 6. Do's and Don'ts
 

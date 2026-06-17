@@ -49,49 +49,30 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      /* dark theme — Netlify-inspired teal surfaces */
-      --black:        #18181A;
-      --surface:      #1a2424;
-      --surface-2:    #252f2f;
-      --surface-deep: #0D2828;
-      --border:       #1f3535;
-      --border-2:     #2a4040;
-      --text:         #f0f0f2;
-      --text-2:       #7aacac;
-      --text-3:       #629a9a;
-      --accent:       #3BD1D3;
-      --accent-text:  #3BD1D3;
-      --accent-dim:   rgba(59, 209, 211, 0.12);
-      --accent-border: rgba(59, 209, 211, 0.25);
-      --on-accent:    #021616;
-      --green:        #2ecc71;
-      --red:          #ff4d4d;
-      --nav-bg:       rgba(24, 24, 26, 0.96);
-      --logo-filter:  none;
-      --logo-blend:   screen;
-      --promise-bg:   #1a2424;
-    }
-
-    [data-theme="light"] {
-      /* light theme — cool off-white + teal tints */
-      --black:        #f2f8f8;
-      --surface:      #f4fefe;
-      --surface-2:    #e0fffe;
-      --surface-deep: #024A4B;
-      --border:       #c8eeed;
-      --border-2:     #b0e0df;
-      --text:         #0a1a1a;
-      --text-2:       #4a6262;
-      --text-3:       #4a7070;
-      --accent:       #2db8ba;
+      /* single theme — dark masthead over a light teal field (the "little-way" SA look) */
+      --black:        #e7efee;
+      --surface:      #f7fcfc;
+      --surface-2:    #dce8e7;
+      --surface-deep: #0D2828;   /* stays dark: mockup chrome + high-contrast blocks */
+      --border:       #c7d9d7;
+      --border-2:     #b1c8c5;
+      --text:         #0b1b1b;
+      --text-2:       #41585a;
+      --text-3:       #5a7473;
+      --accent:       #0e9a9d;
       --accent-text:  #0f7476;
-      --accent-dim:   rgba(45, 184, 186, 0.12);
-      --accent-border: rgba(45, 184, 186, 0.25);
-      --on-accent:    #021616;
-      --nav-bg:       rgba(242, 248, 248, 0.96);
+      --accent-dim:   rgba(14, 154, 157, 0.10);
+      --accent-border: rgba(14, 154, 157, 0.28);
+      --on-accent:    #ffffff;
+      --green:        #198a4c;
+      --red:          #c0392b;
+      --nav-bg:       rgba(20, 20, 22, 0.96);  /* dark masthead, always */
       --logo-filter:  none;
-      --logo-blend:   darken;
-      --promise-bg:   #e0fffe;
+      --logo-blend:   screen;                  /* logo sits on the dark masthead */
+      --promise-bg:   #f7fcfc;
+      --nav-ink:      #7aacac;   /* nav link on the dark masthead */
+      --nav-ink-hi:   #f0f0f2;   /* nav link hover on the dark masthead */
+      --nav-accent:   #3BD1D3;   /* bright teal reads better on dark than the body accent */
     }
 
     html { scroll-behavior: smooth; }
@@ -116,7 +97,7 @@
       padding: 16px 48px;
       background: var(--nav-bg);
       backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 2px solid var(--nav-accent);
     }
 
     .nav-logo {
@@ -143,19 +124,19 @@
       font-size: 10px;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--text-3);
+      color: var(--nav-ink);
       text-decoration: none;
       transition: color 0.15s;
     }
-    .nav-link:hover { color: var(--text); }
+    .nav-link:hover { color: var(--nav-ink-hi); }
 
     .nav-cta {
       font-family: ui-monospace, monospace;
       font-size: 10px;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--on-accent);
-      background: var(--accent);
+      color: #021616;
+      background: var(--nav-accent);
       text-decoration: none;
       padding: 10px 14px;
       border-radius: 4px;
@@ -163,58 +144,6 @@
       transition: opacity 0.15s;
     }
     .nav-cta:hover { opacity: 0.85; }
-
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--border-2);
-      color: var(--text-3);
-      cursor: pointer;
-      width: 40px;
-      height: 40px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: border-color 0.15s, color 0.15s;
-      flex-shrink: 0;
-    }
-    .theme-toggle:hover { border-color: var(--text-3); color: var(--text-2); }
-    .theme-toggle svg { width: 14px; height: 14px; }
-    .theme-toggle .icon-dark   { display: none; }
-    .theme-toggle .icon-light  { display: none; }
-    .theme-toggle .icon-system { display: block; }
-    [data-theme="dark"]   .theme-toggle .icon-dark   { display: block; }
-    [data-theme="dark"]   .theme-toggle .icon-light  { display: none; }
-    [data-theme="dark"]   .theme-toggle .icon-system { display: none; }
-    [data-theme="light"]  .theme-toggle .icon-dark   { display: none; }
-    [data-theme="light"]  .theme-toggle .icon-light  { display: block; }
-    [data-theme="light"]  .theme-toggle .icon-system { display: none; }
-    [data-theme="system"] .theme-toggle .icon-dark   { display: none; }
-    [data-theme="system"] .theme-toggle .icon-light  { display: none; }
-    [data-theme="system"] .theme-toggle .icon-system { display: block; }
-
-    @media (prefers-color-scheme: light) {
-      [data-theme="system"] {
-        --black:        #f2f8f8;
-        --surface:      #f4fefe;
-        --surface-2:    #e0fffe;
-        --surface-deep: #024A4B;
-        --border:       #c8eeed;
-        --border-2:     #b0e0df;
-        --text:         #0a1a1a;
-        --text-2:       #4a6262;
-        --text-3:       #4a7070;
-        --accent:       #2db8ba;
-        --accent-text:  #0f7476;
-        --accent-dim:   rgba(45, 184, 186, 0.12);
-        --accent-border: rgba(45, 184, 186, 0.25);
-        --on-accent:    #021616;
-        --nav-bg:       rgba(242, 248, 248, 0.96);
-        --logo-filter:  none;
-        --logo-blend:   darken;
-        --promise-bg:   #e0fffe;
-      }
-    }
 
     /* ── HERO ── */
     .hero {
@@ -238,11 +167,7 @@
       will-change: transform;
       user-select: none;
       animation: binfall linear infinite;
-      opacity: var(--op-d, 0.1);
-    }
-    [data-theme="light"] .bin-col { opacity: var(--op-l, 0.28); }
-    @media (prefers-color-scheme: light) {
-      [data-theme="system"] .bin-col { opacity: var(--op-l, 0.28); }
+      opacity: var(--op-l, 0.22);
     }
     @keyframes binfall {
       from { transform: translateY(-100%); }
@@ -1188,9 +1113,6 @@
     }
 
   </style>
-<script>
-  (function(){var t=localStorage.getItem('post205-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();
-</script>
 </head>
 <body>
 
@@ -1200,17 +1122,6 @@
     <img src="/images/logo.png" alt="POST205">
   </a>
   <div class="nav-right">
-    <button class="theme-toggle" id="themeToggle" title="Toggle theme">
-      <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-      </svg>
-      <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-      </svg>
-      <svg class="icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
-      </svg>
-    </button>
     <a href="#contact" class="nav-cta">Let's talk</a>
   </div>
 </nav>
@@ -1763,15 +1674,6 @@
     });
   })();
 
-  document.getElementById('themeToggle').addEventListener('click', function() {
-    const cycle = { dark: 'light', light: 'system', system: 'dark' };
-    const current = document.documentElement.getAttribute('data-theme') || 'dark';
-    const next = cycle[current] || 'system';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('post205-theme', next);
-    const labels = { dark: 'Dark', light: 'Light', system: 'System' };
-    this.title = 'Theme: ' + labels[next] + ' — click to change';
-  });
 </script>
 
 <script>
