@@ -246,7 +246,7 @@
 
     /* ── CASE STUDIES ── */
     .case-studies {
-      padding: 80px 48px;
+      padding: 80px 0;
       border-top: 1px solid var(--border);
     }
     .case-studies-inner {
@@ -632,7 +632,7 @@
 
     /* ── PROMISES ── */
     .promises {
-      padding: 80px 48px;
+      padding: 80px 0;
       border-top: 1px solid var(--border);
     }
     .promises-inner { max-width: 1200px; margin: 0 auto; }
@@ -773,7 +773,7 @@
 
     /* ── ABOUT ── */
     .about {
-      padding: 80px 48px;
+      padding: 80px 0;
       border-top: 1px solid var(--border);
       position: relative;
       overflow: hidden;
@@ -866,7 +866,7 @@
 
     /* ── CTA ── */
     .cta {
-      padding: 80px 48px;
+      padding: 80px 0;
       border-top: 1px solid var(--border);
     }
     .cta-inner {
@@ -1082,18 +1082,18 @@
       nav { padding: 16px 20px; }
       .nav-link { display: none; }
       .hero-inner { padding: 110px 20px 56px; }
-      .case-studies { padding: 32px 20px 56px; }
+      .case-studies { padding: 32px 0 56px; }
       .cs-tabs { margin-bottom: 0; }
       .cs-panel.active { grid-template-columns: 1fr; }
       .cs-panel { border-radius: 0 0 6px 6px; }
       .cs-content { padding: 24px 20px; border-right: none; border-bottom: 1px solid var(--border); }
       .cs-mockup { padding: 20px; }
-      .promises { padding: 56px 20px; }
+      .promises { padding: 56px 0; }
       .promises-cards { grid-template-columns: 1fr; }
       .promise-card:first-child { border-radius: 7px 7px 0 0; }
       .promise-card:last-child  { border-radius: 0 0 7px 7px; }
       .promise-card-body { padding: 24px 20px; }
-      .about { padding: 56px 20px; }
+      .about { padding: 56px 0; }
       .about-inner { flex-direction: column; }
       .about-graphic { display: none; }
 
@@ -1238,7 +1238,7 @@
     /* ===== v2 ribbon ===== */
     .v2-ribbon { position:fixed; top:8px; left:50%; transform: translateX(-50%); z-index:300; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; background:#3BD1D3; color:#021616; padding:4px 12px; border-radius:999px; text-decoration:none; box-shadow:0 2px 10px rgba(0,0,0,.3); }
     /* ===== v2: live demos ===== */
-    .demo-panel { display:none; grid-template-columns:1fr 1fr; gap:44px; align-items:start; max-width:1000px; margin:0 auto; }
+    .demo-panel { display:none; grid-template-columns:1fr 1fr; gap:44px; align-items:start; }
     .demo-panel.active { display:grid; }
     @media (min-width:769px){ .demo-copy { position:sticky; top:96px; } }
     .demo-copy h3 { font-size: clamp(20px,2.6vw,28px); font-weight:800; letter-spacing:-0.01em; line-height:1.14; color:var(--text); margin-bottom:14px; }
@@ -1398,6 +1398,16 @@
     .cc-meta { font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; color:#5a7473; }
     .cc-meta a { color:#5a7473; text-decoration:none; }
     .cc-meta a:hover { color:#a7c4c4; }
+    /* consistent section margins — hero is the reference (48px inner padding) */
+    .case-studies-inner, .promises-inner, .about-inner { padding-left:48px; padding-right:48px; }
+    @media (max-width:768px){ .case-studies-inner, .promises-inner, .about-inner { padding-left:20px; padding-right:20px; } }
+    /* hero: keep the headline pinned while the chat scrolls (same idea as the demo copy) */
+    @media (min-width:900px){ .hero-text { position:sticky; top:120px; } }
+    /* chat header with a restart toggle */
+    .chat-head { display:flex; align-items:center; padding:9px 12px; border-bottom:1px solid var(--border); flex-shrink:0; }
+    .chat-restart { display:inline-flex; align-items:center; gap:6px; background:none; border:none; cursor:pointer; color:var(--text-3); font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; padding:2px 4px; }
+    .chat-restart:hover { color:var(--accent-text); }
+    .chat-restart svg { width:13px; height:13px; }
   </style>
 </head>
 <body>
@@ -1425,6 +1435,7 @@
     </div>
     <div class="hero-chat">
       <div class="chat-widget">
+        <div class="chat-head"><button class="chat-restart" id="chatRestart" type="button" aria-label="Restart conversation"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Restart</button></div>
         <button class="chat-min" id="chatMin" type="button" aria-label="Minimize chat"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
         <button class="chat-dock-close" id="chatDockClose" type="button" aria-label="Collapse chat"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h12"/></svg></button>
         <div class="chat-log" id="chatLog" aria-live="polite" aria-atomic="false"></div>
@@ -1554,15 +1565,30 @@
               <div class="cert">
                 <div class="cert-frame">
                   <div class="cert-seal" aria-hidden="true">
-                    <svg viewBox="0 0 56 64" width="50" height="58">
-                      <defs><linearGradient id="p205gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6dd86"/><stop offset=".45" stop-color="#dcb44e"/><stop offset="1" stop-color="#b58a2b"/></linearGradient></defs>
-                      <path d="M21 40 L17 61 L25 55 L28 61 L26 40 Z" fill="#c2952f"/>
-                      <path d="M35 40 L39 61 L31 55 L28 61 L30 40 Z" fill="#a87f29"/>
-                      <g transform="translate(28,25)">
-                        <circle r="21" fill="url(#p205gold)"/>
-                        <circle r="21" fill="none" stroke="#9a7416" stroke-width="1.5"/>
-                        <circle r="15.5" fill="none" stroke="#fff3c4" stroke-width="1.1" opacity=".7"/>
-                        <path d="M0,-8.5 L2.4,-2.6 L8.6,-2.6 L3.5,1 L5.4,7 L0,3.4 L-5.4,7 L-3.5,1 L-8.6,-2.6 L-2.4,-2.6 Z" fill="#7a5c12"/>
+                    <svg viewBox="0 0 64 78" width="56" height="68">
+                      <defs><linearGradient id="p205gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e08c"/><stop offset=".5" stop-color="#d9b14a"/><stop offset="1" stop-color="#a9801f"/></linearGradient></defs>
+                      <path d="M24 45 L18 73 L30 64 L34 73 L33 45 Z" fill="#b8902f"/>
+                      <path d="M40 45 L46 73 L34 64 L30 73 L31 45 Z" fill="#9c7826"/>
+                      <g transform="translate(32,31)">
+                        <circle r="23" fill="url(#p205gold)"/>
+                        <circle r="23" fill="none" stroke="#8a6712" stroke-width="1.5"/>
+                        <circle r="18.5" fill="#f1d27c"/>
+                        <circle r="18.5" fill="none" stroke="#b8902f" stroke-width="1"/>
+                        <g fill="#9a7416">
+                          <ellipse cx="-12" cy="7" rx="3.6" ry="1.7" transform="rotate(48 -12 7)"/>
+                          <ellipse cx="-14" cy="1" rx="3.8" ry="1.8" transform="rotate(24 -14 1)"/>
+                          <ellipse cx="-13.5" cy="-5" rx="3.6" ry="1.7" transform="rotate(3 -13.5 -5)"/>
+                          <ellipse cx="-11" cy="-10.5" rx="3.1" ry="1.5" transform="rotate(-22 -11 -10.5)"/>
+                          <ellipse cx="-6.5" cy="-14.5" rx="2.7" ry="1.3" transform="rotate(-48 -6.5 -14.5)"/>
+                        </g>
+                        <g fill="#9a7416" transform="scale(-1,1)">
+                          <ellipse cx="-12" cy="7" rx="3.6" ry="1.7" transform="rotate(48 -12 7)"/>
+                          <ellipse cx="-14" cy="1" rx="3.8" ry="1.8" transform="rotate(24 -14 1)"/>
+                          <ellipse cx="-13.5" cy="-5" rx="3.6" ry="1.7" transform="rotate(3 -13.5 -5)"/>
+                          <ellipse cx="-11" cy="-10.5" rx="3.1" ry="1.5" transform="rotate(-22 -11 -10.5)"/>
+                          <ellipse cx="-6.5" cy="-14.5" rx="2.7" ry="1.3" transform="rotate(-48 -6.5 -14.5)"/>
+                        </g>
+                        <path d="M0,-8 L2.1,-2.4 L8,-2.4 L3.2,1.1 L4.9,6.8 L0,3.3 L-4.9,6.8 L-3.2,1.1 L-8,-2.4 L-2.1,-2.4 Z" fill="#7a5c12"/>
                       </g>
                     </svg>
                   </div>
@@ -1573,7 +1599,7 @@
                   <div class="cert-units" id="cpdCertUnits">3 CPD units</div>
                   <div class="cert-foot">
                     <div class="cert-sig">
-                      <svg class="cert-sig-mark" viewBox="0 0 130 40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 27 C10 9 15 8 18 24 C20 35 25 15 30 21 C34 26 30 35 38 30 C48 24 44 12 54 16 C61 19 55 31 66 28 C79 25 83 10 97 17 C106 21 101 31 111 26"/><path d="M34 34 C58 30 92 29 124 32"/></svg>
+                      <svg class="cert-sig-mark" viewBox="0 0 152 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 35 C7 15 19 7 24 16 C28 23 21 32 16 29 C12 26.5 16 18 27 20.5 C37 22.7 33 32 42 30 C52 27.8 49 17 57 20 C63 22 58 30 65 30 C75 29 79 15 90 19.5 C97 22.3 90 31 99 30 C109 29 113 18 125 21 C132 22.8 129 29 137 27"/><path d="M66 39 C98 34 126 35 148 40"/></svg>
                       <span class="cert-sig-cap">Program Director</span>
                     </div>
                     <div class="cert-ref">No. <b id="cpdCertNo">CPD-2026-0418</b><br><span id="cpdCertDate"></span></div>
@@ -2304,7 +2330,11 @@
     }
 
     var answers = {};
-
+    var restartBtn = document.getElementById('chatRestart');
+    function startConvo(){
+    answers = {};
+    try { sessionStorage.removeItem('p205_lead_sent'); } catch(e){}
+    log.innerHTML = ''; input.innerHTML = '';
     botSay("'Musta? What's the biggest headache in your business right now?", 500).then(function() {
       chips(['Chasing payments', 'Encoding by hand', 'Bookings and schedules', 'Reports and compliance', 'Something else'], function(v) {
         answers.pain = v;
@@ -2348,6 +2378,9 @@
         });
       });
     });
+    }
+    if (restartBtn) restartBtn.addEventListener('click', startConvo);
+    startConvo();
   })();
 
 </script>
