@@ -1180,13 +1180,47 @@
     @media (max-width:768px){ .lp-stage { grid-template-columns:1fr; gap:24px; } }
 
     /* ===== v2: sticky talk bar ===== */
-    .talk-bar { position:fixed; z-index:200; display:flex; align-items:center; gap:14px; opacity:0; visibility:hidden; transform: translateY(14px); transition: opacity .3s ease, transform .3s cubic-bezier(.22,1,.36,1), visibility .3s; }
-    .talk-bar.show { opacity:1; visibility:visible; transform:none; }
-    .talk-bar-txt { color:#cfe3e3; font-size:13px; }
-    .talk-bar-cta { font-family: ui-monospace,monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; font-weight:700; background:#3BD1D3; color:#021616; border:none; border-radius:999px; padding:10px 18px; cursor:pointer; white-space:nowrap; }
-    .talk-bar-cta:hover { opacity:.9; }
-    @media (min-width:769px){ .talk-bar { right:28px; bottom:28px; background:#141416; border:1px solid var(--border-2); border-radius:999px; padding:12px 14px 12px 20px; box-shadow:0 10px 40px rgba(8,20,20,.22); } }
-    @media (max-width:768px){ .talk-bar { left:0; right:0; bottom:0; background:#141416; border-top:2px solid var(--nav-accent); padding:12px 16px; justify-content:space-between; } }
+    /* ===== persistent chat: desktop dock (>=769) ===== */
+    @media (min-width:769px){
+      .chat-widget.is-docked {
+        position:fixed; right:24px; bottom:24px; top:auto; left:auto;
+        width:380px; max-width:calc(100vw - 48px); max-height:min(560px, calc(100vh - 110px));
+        z-index:200; margin:0; box-shadow:0 24px 64px rgba(0,0,0,.5), 0 4px 16px rgba(0,0,0,.35);
+        animation:p205dockin .26s ease;
+      }
+      .chat-widget.is-docked .chat-log { flex:1; min-height:0; overflow-y:auto; max-height:none; }
+    }
+    @keyframes p205dockin { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+    @media(prefers-reduced-motion:reduce){ .chat-widget.is-docked { animation:none; } }
+
+    /* ===== persistent chat: mobile focus sheet (<=768) ===== */
+    .chat-min { display:none; }
+    @media (max-width:768px){
+      .chat-widget.is-focus { position:fixed; inset:0; z-index:300; width:100%; max-width:none; height:100dvh; margin:0; border:none; border-radius:0; box-shadow:none; display:flex; flex-direction:column; }
+      .chat-widget.is-focus .chat-log { flex:1; min-height:0; max-height:none; }
+      .chat-widget.is-focus .chat-input-area { flex-shrink:0; }
+      .chat-widget.is-focus .chat-min { display:flex; align-items:center; justify-content:center; position:absolute; top:10px; right:12px; width:34px; height:34px; border-radius:50%; border:1px solid var(--border-2); background:var(--surface); color:var(--text-2); cursor:pointer; z-index:1; }
+    }
+    html.chat-locked { overflow:hidden; }
+
+    /* ===== persistent chat: mobile sticky bar (<=768) ===== */
+    .talk-bar {
+      position:fixed; left:0; right:0; bottom:0; width:100%; box-sizing:border-box; z-index:150;
+      display:none; align-items:center; gap:12px; text-align:left; cursor:pointer; border:0;
+      border-top:2px solid var(--nav-accent); background:#141416; color:#fff;
+      padding:13px 18px calc(13px + env(safe-area-inset-bottom,0px));
+      box-shadow:0 -8px 28px rgba(0,0,0,.28);
+      transform:translateY(115%); transition:transform .32s cubic-bezier(.22,1,.36,1);
+      font-family:inherit; -webkit-tap-highlight-color:transparent;
+    }
+    @media (max-width:768px){ .talk-bar { display:flex; } }
+    .talk-bar.show { transform:translateY(0); }
+    .talk-bar-tx { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+    .talk-bar-t { font-size:15px; font-weight:700; letter-spacing:-.01em; line-height:1.15; }
+    .talk-bar-s { font-size:12px; color:#cfe3e3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .talk-bar-ic { flex:none; width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.16); display:grid; place-items:center; }
+    .talk-bar-ic svg { width:20px; height:20px; }
+    @media(prefers-reduced-motion:reduce){ .talk-bar { transition:none; } }
 
     /* ===== v2 ribbon ===== */
     .v2-ribbon { position:fixed; top:8px; left:50%; transform: translateX(-50%); z-index:300; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; background:#3BD1D3; color:#021616; padding:4px 12px; border-radius:999px; text-decoration:none; box-shadow:0 2px 10px rgba(0,0,0,.3); }
@@ -1357,6 +1391,7 @@
     </div>
     <div class="hero-chat">
       <div class="chat-widget">
+        <button class="chat-min" id="chatMin" type="button" aria-label="Minimize chat"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="chat-log" id="chatLog" aria-live="polite" aria-atomic="false"></div>
         <div class="chat-input-area" id="chatInput"></div>
       </div>
@@ -1792,6 +1827,15 @@
 <!-- contact chat now lives in the hero -->
 <span id="contact" aria-hidden="true"></span>
 
+<!-- mobile sticky: brings the chat back once the hero scrolls off -->
+<button type="button" class="talk-bar" id="talkBar" aria-label="Continue the chat">
+  <span class="talk-bar-tx">
+    <span class="talk-bar-t">What's slowing your business down?</span>
+    <span class="talk-bar-s">Mabilis lang, we reply within a day.</span>
+  </span>
+  <span class="talk-bar-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+</button>
+
 <!-- ── FOOTER ── -->
 <footer>
   <div class="cc-card">
@@ -1968,29 +2012,74 @@
     }, { rootMargin: '-70px 0px 0px 0px', threshold: 0 }).observe(hero);
   })();
 
-  // ── TALK CTA: sticky bar jumps back up to the hero chat ──
+  // ── persistent chat: mobile focus sheet + window hook (ported from All Stars) ──
   (function(){
+    var chat = document.querySelector('.chat-widget');
+    var composer = document.getElementById('chatInput');
+    if (!chat || !composer) return;
+    var home = chat.parentNode, homeNext = chat.nextSibling;
+    var minBtn = document.getElementById('chatMin');
+    var FOCUS_MQ = window.matchMedia('(max-width:768px)');
+    function enterFocus(){
+      if (!FOCUS_MQ.matches) return;
+      if (chat.parentNode !== document.body) document.body.appendChild(chat);
+      chat.classList.add('is-focus');
+      document.documentElement.classList.add('chat-locked');
+    }
+    function exitFocus(){
+      chat.classList.remove('is-focus');
+      document.documentElement.classList.remove('chat-locked');
+      if (home && chat.parentNode === document.body && !chat.classList.contains('is-docked')) home.insertBefore(chat, homeNext);
+    }
+    // tap an answer field -> raise the sheet (real tap, not programmatic focus)
+    composer.addEventListener('click', function(e){
+      var f = e.target && e.target.closest && e.target.closest('input, textarea');
+      if (!f || chat.classList.contains('is-focus')) return;
+      enterFocus(); try { f.focus(); } catch(_){}
+    });
+    if (minBtn) minBtn.addEventListener('click', function(){ var a = composer.querySelector('input, textarea'); if (a) a.blur(); exitFocus(); });
+    document.addEventListener('click', function(e){
+      if (!chat.classList.contains('is-focus')) return;
+      if (e.target && e.target.isConnected === false) return;   // in-chat control removed itself
+      if (chat.contains(e.target)) return;
+      var a = composer.querySelector('input, textarea'); if (a) a.blur();
+      exitFocus();
+    });
+    if (FOCUS_MQ.addEventListener) FOCUS_MQ.addEventListener('change', function(e){ if (!e.matches) exitFocus(); });
+    window.P205Chat = { open:function(){ enterFocus(); var a = composer.querySelector('input, textarea'); if (a){ try{ a.focus(); }catch(_){} } }, close:exitFocus, isOpen:function(){ return chat.classList.contains('is-focus'); } };
+  })();
+
+  // ── persistent chat: desktop dock (>=769) ──
+  (function(){
+    var DOCK_MQ = window.matchMedia('(min-width:769px)');
+    var chat = document.querySelector('.chat-widget');
+    var hero = document.querySelector('.hero');
+    if (!chat || !hero || !('IntersectionObserver' in window)) return;
+    var home = chat.parentNode, homeNext = chat.nextSibling, docked = false, io = null;
+    function dock(){ if (docked || !DOCK_MQ.matches || chat.classList.contains('is-focus')) return; docked = true; if (chat.parentNode !== document.body) document.body.appendChild(chat); chat.classList.add('is-docked'); }
+    function undock(){ if (!docked) return; docked = false; chat.classList.remove('is-docked'); if (home && chat.parentNode === document.body) home.insertBefore(chat, homeNext); }
+    function start(){ if (io) return; io = new IntersectionObserver(function(es){ if (!DOCK_MQ.matches) return; if (es[0].isIntersecting) undock(); else dock(); }, { threshold: 0 }); io.observe(hero); }
+    function stop(){ if (io){ io.disconnect(); io = null; } }
+    function apply(){ if (DOCK_MQ.matches) start(); else { stop(); undock(); } }
+    if (DOCK_MQ.addEventListener) DOCK_MQ.addEventListener('change', apply);
+    apply();
+  })();
+
+  // ── persistent chat: mobile sticky bar (<=768) ──
+  (function(){
+    var BAR_MQ = window.matchMedia('(max-width:768px)');
     var bar = document.getElementById('talkBar');
     var hero = document.querySelector('.hero');
-    function goTalk(){
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setTimeout(function(){
-        var first = document.querySelector('#chatInput button, #chatInput textarea, #chatInput input');
-        if (first) first.focus();
-      }, 550);
-    }
-    document.querySelectorAll('[data-talk]').forEach(function(b){
-      b.addEventListener('click', function(e){ e.preventDefault(); goTalk(); });
-    });
-    if (bar && hero && 'IntersectionObserver' in window) {
-      new IntersectionObserver(function(es){
-        es.forEach(function(en){
-          var show = !en.isIntersecting && sessionStorage.getItem('p205_lead_sent') !== '1';
-          bar.classList.toggle('show', show);
-          bar.setAttribute('aria-hidden', show ? 'false' : 'true');
-        });
-      }, { threshold: 0 }).observe(hero);
-    }
+    var chat = document.querySelector('.chat-widget');
+    if (!bar || !hero || !chat || !('IntersectionObserver' in window)) return;
+    var heroAway = false;
+    function focusOpen(){ return chat.classList.contains('is-focus'); }
+    function done(){ try { return sessionStorage.getItem('p205_lead_sent') === '1'; } catch(e){ return false; } }
+    function refresh(){ bar.classList.toggle('show', BAR_MQ.matches && heroAway && !focusOpen() && !done()); }
+    new IntersectionObserver(function(es){ heroAway = !es[0].isIntersecting; refresh(); }, { threshold: 0 }).observe(hero);
+    new MutationObserver(refresh).observe(chat, { attributes:true, attributeFilter:['class'] });
+    bar.addEventListener('click', function(e){ e.stopPropagation(); if (window.P205Chat) window.P205Chat.open(); });
+    if (BAR_MQ.addEventListener) BAR_MQ.addEventListener('change', refresh);
   })();
 
   // ── CHAT WIDGET ──
@@ -2090,14 +2179,14 @@
 
     var answers = {};
 
-    botSay("Kumusta? What's the biggest headache in your business right now?", 500).then(function() {
+    botSay("'Musta? What's the biggest headache in your business right now?", 500).then(function() {
       chips(['Chasing payments', 'Encoding by hand', 'Bookings and schedules', 'Reports and compliance', 'Something else'], function(v) {
         answers.pain = v;
-        botSay("Got it, that's a common one. What kind of business is it?").then(function() {
+        botSay("Got it, common 'yan. What kind of business?").then(function() {
           chips(['Clinic · Spa', 'Retail · Store', 'Events · Venue', 'Professional firm', 'Something else'], function(v) {
             answers.business = v;
             answers.timeline = '';
-            botSay("Sige, drop your name and email and I'll show you how we'd fix it.").then(function() {
+            botSay("Sige, name and email mo, and I'll show you how we'd fix it.").then(function() {
               contactInput(function(name, email) {
                 answers.name  = name;
                 answers.email = email;
