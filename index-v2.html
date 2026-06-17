@@ -1290,9 +1290,16 @@
     .pulse { animation: p205pulse 1.8s ease-in-out infinite; }
     @media (prefers-reduced-motion: reduce){ .pulse { animation:none; } }
 
-    /* calling-card bracket motif: eyebrows get a tie-line bracket */
-    .hero-eyebrow, .lp-eyebrow { display:inline-block; position:relative; padding-bottom:12px; }
-    .hero-eyebrow::after, .lp-eyebrow::after { content:""; position:absolute; left:0; right:0; bottom:0; height:6px; border:1px solid currentColor; border-top:none; opacity:.4; }
+    /* calling-card bracket motif: decode the headline parts (label = the techy meaning) */
+    .annotated { padding: 44px 0; line-height: 1.5; }
+    .ann { position: relative; white-space: nowrap; }
+    .ann::before { content:""; position:absolute; left:0; right:0; height:7px; border:1px solid var(--accent-text); opacity:.5; }
+    .ann::after { content: attr(data-label); position:absolute; left:50%; transform:translateX(-50%); white-space:nowrap; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.14em; color:var(--accent-text); }
+    .ann-top::before { bottom:100%; margin-bottom:5px; border-bottom:none; }
+    .ann-top::after  { bottom:100%; margin-bottom:17px; }
+    .ann-bot::before { top:100%; margin-top:5px; border-top:none; }
+    .ann-bot::after  { top:100%; margin-top:17px; }
+    @media (max-width:768px){ .annotated { padding:38px 0; } }
 
     /* demo "reality" note — the honest, no-gimmick context */
     .demo-real { margin-top:20px; font-size:12.5px; line-height:1.65; color:var(--text-3); max-width:42ch; }
@@ -1362,7 +1369,7 @@
   <div class="case-studies-inner">
     <div class="lp-head">
       <div class="lp-eyebrow">See the software work</div>
-      <h2>Built to fit how you work.</h2>
+      <h2 class="annotated"><span class="ann ann-top" data-label="BESPOKE">Built to fit</span> <span class="ann ann-bot" data-label="YOUR BUSINESS">how you work</span>.</h2>
       <p class="lp-lede">Each one below is a working demo. Click any of them to try it.</p>
     </div>
 
