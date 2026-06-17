@@ -1141,6 +1141,17 @@
     }
     .hero-ghost:hover { color:#f4f7f7; }
 
+    /* hero with the live chat beside it */
+    .hero-text { min-width: 0; }
+    .hero-ghost { display:inline-block; margin-top:20px; }
+    .hero-chat { width:100%; margin-top:28px; }
+    .hero-chat .chat-widget { width:100%; max-width:460px; margin:0 auto; box-shadow: 0 24px 60px rgba(0,0,0,.38); }
+    @media (min-width: 900px){
+      .hero-inner { display:grid; grid-template-columns: 1.05fr 0.95fr; gap:52px; align-items:center; }
+      .hero-chat { margin-top:0; }
+      .hero-chat .chat-widget { margin:0 0 0 auto; }
+    }
+
     /* ===== v2: live-preview switcher ===== */
     .lp-head { max-width:760px; margin:0 auto 26px; text-align:center; }
     .lp-eyebrow { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-text); margin-bottom:12px; }
@@ -1262,7 +1273,9 @@
     .sa-sign { margin-top:14px; border-top:1px solid var(--border); padding-top:14px; animation: depSlide .4s ease-out; }
     .sa-signline { border-bottom:1px solid var(--border-2); padding:4px 2px 8px; margin:6px 0 14px; font-family:'Snell Roundhand','Segoe Script',cursive; font-size:24px; color:var(--text); min-height:34px; }
     .sa-done { text-align:center; }
-    .sa-signed-name { font-family:'Snell Roundhand','Segoe Script',cursive; font-size:26px; color:var(--text); margin:4px 0 16px; }
+    .sa-signed-name { font-family:'Snell Roundhand','Segoe Script',cursive; font-size:26px; color:var(--text); margin:4px 0 10px; }
+    .sa-legal { font-size:11px; line-height:1.5; color:var(--text-3); margin-top:10px; }
+    .sa-legal-done { margin:0 auto 14px; max-width:34ch; }
     @media (prefers-reduced-motion: reduce){ .sa-sign { animation:none; } }
   </style>
 </head>
@@ -1284,12 +1297,26 @@
   <div class="hero-binary" aria-hidden="true"></div>
   <div class="hero-fade"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow">Custom software for Filipino business owners</div>
-    <h1>Software built around<br>how your business runs.</h1>
-    <div class="hero-descriptor">Most owners make do with spreadsheets and a group chat. We build one system instead, custom to how you work and simple enough that the whole team uses it without training. Since 2015.</div>
-    <div class="hero-actions">
-      <a href="#contact" class="hero-cta" data-talk>Let's talk</a>
+    <div class="hero-text">
+      <div class="hero-eyebrow">Custom software for Filipino business owners</div>
+      <h1>Your business.<br>Your system.</h1>
+      <div class="hero-descriptor">Built from scratch for how you work, and simple enough that the whole team uses it. Since 2015.</div>
       <a href="#work" class="hero-ghost">See what we build</a>
+    </div>
+    <div class="hero-chat">
+      <div class="chat-widget">
+        <div class="chat-log" id="chatLog" aria-live="polite" aria-atomic="false"></div>
+        <div class="chat-input-area" id="chatInput"></div>
+      </div>
+      <form id="nlForm" name="contact" netlify data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+        <input type="hidden" name="form-name" value="contact">
+        <p style="display:none"><input name="bot-field"></p>
+        <input type="hidden" name="business" id="nl_business">
+        <input type="hidden" name="pain_point" id="nl_pain">
+        <input type="hidden" name="timeline" id="nl_timeline">
+        <input type="text"  name="name"  id="nl_name">
+        <input type="email" name="email" id="nl_email">
+      </form>
     </div>
   </div>
 </section>
@@ -1298,15 +1325,15 @@
 <section class="case-studies" id="work">
   <div class="case-studies-inner">
     <div class="lp-head">
-      <div class="lp-eyebrow">Live demos</div>
-      <h2>Try it yourself.</h2>
-      <p class="lp-lede">Two of the systems we build for clients, running right here on the page. Go ahead and use them.</p>
+      <div class="lp-eyebrow">See the software work</div>
+      <h2>Built to fit how you work.</h2>
+      <p class="lp-lede">The systems we build for clients, running right here on the page. Go ahead and use them.</p>
     </div>
 
     <div class="lp-tabs" role="tablist" aria-label="Choose a demo">
       <button class="lp-tab active" data-demo="deposit" role="tab" aria-selected="true">Bank deposit + email</button>
       <button class="lp-tab" data-demo="cpd" role="tab" aria-selected="false">CPD + certificate</button>
-      <button class="lp-tab" data-demo="proposal" role="tab" aria-selected="false">Proposal &amp; e-sign</button>
+      <button class="lp-tab" data-demo="proposal" role="tab" aria-selected="false">Proposal &amp; signature</button>
     </div>
 
     <!-- DEMO: bank deposit + email confirmation -->
@@ -1434,7 +1461,7 @@
       <div class="demo-copy">
         <h3>Your client signs on the same page they read.</h3>
         <p>They open one link, see their own setup laid out, choose a tier, and sign right there. You watch it land in ops.</p>
-        <div class="lp-built">Pick a tier and sign it on the right. This is how every agreement I send already goes out.</div>
+        <div class="lp-built">Pick a tier and sign on the right. Typing your name and accepting is a binding signature under RA 8792, the Philippine E-Commerce Act. It's how every agreement I send already goes out.</div>
         <div class="cs-industry">sign.post205.com</div>
       </div>
       <div class="demo-stage-r">
@@ -1470,6 +1497,7 @@
                 <label class="dep-field"><span>Type your full name to sign</span><input id="saName" type="text" placeholder="Juan dela Cruz"></label>
                 <div class="sa-signline"><span id="saSigShow">Your signature</span></div>
                 <button class="dep-submit" id="saSubmit" type="button">Sign &amp; accept</button>
+                <div class="sa-legal">Typing your name and accepting is a valid electronic signature under RA 8792 (E-Commerce Act).</div>
               </div>
             </div>
             <div class="sa-step sa-done" id="saDone" hidden>
@@ -1477,6 +1505,7 @@
               <div class="dep-done-h">Agreement signed</div>
               <div class="dep-done-sub"><b id="saDoneTier">Standard</b> · <span id="saDoneDate"></span></div>
               <div class="sa-signed-name" id="saDoneName">Juan dela Cruz</div>
+              <div class="sa-legal sa-legal-done">Signed electronically, binding under RA 8792 (E-Commerce Act of 2000). Timestamp recorded.</div>
               <div class="dep-tg">
                 <span class="dep-tg-ic dep-tg-mail" aria-hidden="true">✉</span>
                 <div class="dep-tg-body"><div class="dep-tg-h">Emailed</div><div class="dep-tg-msg">Signed copy sent to both sides</div></div>
@@ -1708,27 +1737,8 @@
 </script>
 
 <!-- ── CTA ── -->
-<section class="cta" id="contact">
-  <div class="cta-inner">
-    <div class="cta-left">
-      <h2>Tell us<br>what's not<br>working.</h2>
-      <p class="cta-sub">We reply within a day.</p>
-    </div>
-    <div class="chat-widget">
-      <div class="chat-log" id="chatLog" aria-live="polite" aria-atomic="false"></div>
-      <div class="chat-input-area" id="chatInput"></div>
-    </div>
-    <form id="nlForm" name="contact" netlify data-netlify="true" data-netlify-honeypot="bot-field" hidden>
-      <input type="hidden" name="form-name" value="contact">
-      <p style="display:none"><input name="bot-field"></p>
-      <input type="hidden" name="business" id="nl_business">
-      <input type="hidden" name="pain_point" id="nl_pain">
-      <input type="hidden" name="timeline" id="nl_timeline">
-      <input type="text"  name="name"  id="nl_name">
-      <input type="email" name="email" id="nl_email">
-    </form>
-  </div>
-</section>
+<!-- contact chat now lives in the hero -->
+<span id="contact" aria-hidden="true"></span>
 
 <!-- ── STICKY TALK BAR (appears after the live preview) ── -->
 <div class="talk-bar" id="talkBar" aria-hidden="true">
@@ -1912,38 +1922,28 @@
     }, { rootMargin: '-70px 0px 0px 0px', threshold: 0 }).observe(hero);
   })();
 
-  // ── TALK CTA: hero button + sticky bar jump to the chat ──
+  // ── TALK CTA: sticky bar jumps back up to the hero chat ──
   (function(){
     var bar = document.getElementById('talkBar');
-    var work = document.getElementById('work');
-    var contact = document.getElementById('contact');
+    var hero = document.querySelector('.hero');
     function goTalk(){
-      if (contact) contact.scrollIntoView({ behavior:'smooth', block:'start' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       setTimeout(function(){
         var first = document.querySelector('#chatInput button, #chatInput textarea, #chatInput input');
         if (first) first.focus();
-      }, 600);
+      }, 550);
     }
     document.querySelectorAll('[data-talk]').forEach(function(b){
       b.addEventListener('click', function(e){ e.preventDefault(); goTalk(); });
     });
-    if (bar && work && 'IntersectionObserver' in window) {
-      var pastWork = false, contactVisible = false;
-      function update(){
-        var show = pastWork && !contactVisible && sessionStorage.getItem('p205_lead_sent') !== '1';
-        bar.classList.toggle('show', show);
-        bar.setAttribute('aria-hidden', show ? 'false' : 'true');
-      }
+    if (bar && hero && 'IntersectionObserver' in window) {
       new IntersectionObserver(function(es){
-        es.forEach(function(en){ pastWork = (!en.isIntersecting && en.boundingClientRect.top < 0); });
-        update();
-      }, { threshold: 0 }).observe(work);
-      if (contact) {
-        new IntersectionObserver(function(es){
-          es.forEach(function(en){ contactVisible = en.isIntersecting; });
-          update();
-        }, { threshold: 0.15 }).observe(contact);
-      }
+        es.forEach(function(en){
+          var show = !en.isIntersecting && sessionStorage.getItem('p205_lead_sent') !== '1';
+          bar.classList.toggle('show', show);
+          bar.setAttribute('aria-hidden', show ? 'false' : 'true');
+        });
+      }, { threshold: 0 }).observe(hero);
     }
   })();
 
