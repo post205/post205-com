@@ -1282,6 +1282,14 @@
     @keyframes p205pulse { 0%,100%{ box-shadow:0 0 0 0 rgba(14,154,157,0); } 50%{ box-shadow:0 0 0 6px rgba(14,154,157,.14); } }
     .pulse { animation: p205pulse 1.8s ease-in-out infinite; }
     @media (prefers-reduced-motion: reduce){ .pulse { animation:none; } }
+
+    /* about section — dark band (matches the hero + footer) */
+    .about { background:#0f1416; border-top:none; }
+    .about-mission-hl { color:#f4f7f7; }
+    .about-mission-body { color:#a7c4c4; }
+    .about-mission-body strong { color:#f4f7f7; }
+    .about-mission-close { color:#e7efee; }
+    .about-star-bg, .about-graphic svg { color:#3BD1D3; }
   </style>
 </head>
 <body>
@@ -1292,9 +1300,6 @@
   <a href="/" class="nav-logo">
     <img src="/images/logo.png" alt="POST205">
   </a>
-  <div class="nav-right">
-    <a href="#contact" class="nav-cta" data-talk>Let's talk</a>
-  </div>
 </nav>
 
 <!-- ── HERO ── -->
@@ -1305,7 +1310,7 @@
     <div class="hero-text">
       <div class="hero-eyebrow">For Filipino business owners</div>
       <h1>Your business<br>software.</h1>
-      <div class="hero-descriptor">Built from scratch for how you work, simple enough for the whole team.</div>
+      <div class="hero-descriptor">Built from scratch for how you work. Easy to use, so the whole team uses it.</div>
     </div>
     <div class="hero-chat">
       <div class="chat-widget">
@@ -1331,7 +1336,7 @@
     <div class="lp-head">
       <div class="lp-eyebrow">See the software work</div>
       <h2>Built to fit how you work.</h2>
-      <p class="lp-lede">Real and running. Click anything.</p>
+      <p class="lp-lede">Each one below is a working demo. Click any of them to try it.</p>
     </div>
 
     <div class="lp-tabs" role="tablist" aria-label="Choose a demo">
@@ -1344,7 +1349,7 @@
     <div class="demo-panel active" id="demo-deposit" role="tabpanel">
       <div class="demo-copy">
         <h3>Your customer pays. Then waits.</h3>
-        <div class="lp-built">They log it themselves. The receipt hits both inboxes instantly.</div>
+        <div class="lp-built">The customer logs the payment, and a receipt is emailed to them and to you.</div>
         <div class="cs-industry">Bank transfer or GCash</div>
       </div>
       <div class="demo-stage-r">
@@ -1397,7 +1402,7 @@
     <div class="demo-panel" id="demo-cpd" role="tabpanel" hidden>
       <div class="demo-copy">
         <h3>Quiz in. Certificate out.</h3>
-        <div class="lp-built">PRC units logged automatically. No printing, no logbook.</div>
+        <div class="lp-built">They pass the quiz, get the certificate by email, and the units are recorded for PRC.</div>
         <div class="cs-industry">PRC-accredited CPD providers</div>
       </div>
       <div class="demo-stage-r">
@@ -1462,7 +1467,7 @@
     <div class="demo-panel" id="demo-proposal" role="tabpanel" hidden>
       <div class="demo-copy">
         <h3>Read it. Sign it. Same page.</h3>
-        <div class="lp-built">A typed name is a binding signature under RA 8792.</div>
+        <div class="lp-built">A typed name counts as a signature under Philippine law (RA 8792).</div>
         <div class="cs-industry">sign.post205.com</div>
       </div>
       <div class="demo-stage-r">
@@ -1740,12 +1745,6 @@
 <!-- ── CTA ── -->
 <!-- contact chat now lives in the hero -->
 <span id="contact" aria-hidden="true"></span>
-
-<!-- ── STICKY TALK BAR (appears after the live preview) ── -->
-<div class="talk-bar" id="talkBar" aria-hidden="true">
-  <span class="talk-bar-txt">See something your business needs?</span>
-  <button class="talk-bar-cta" data-talk type="button">Let's talk</button>
-</div>
 
 <!-- ── FOOTER ── -->
 <footer>
@@ -2047,50 +2046,43 @@
 
     var answers = {};
 
-    botSay('‘Musta? What’s your business?', 500).then(function() {
-      chips(['Clinic · Spa', 'Retail · Store', 'Events · Venue', 'Professional firm', 'Something else'], function(v) {
-        answers.business = v;
-        botSay("What's taking the most time right now?").then(function() {
-          textInput('e.g. we re-enter every booking manually…', function(v) {
-            answers.pain = v;
-            botSay('When do you need to sort this out?').then(function() {
-              chips(['Now', 'Next few months', 'Still figuring it out'], function(v) {
-                answers.timeline = v;
-                botSay('Name and email.').then(function() {
-                  contactInput(function(name, email) {
-                    answers.name  = name;
-                    answers.email = email;
-                    document.getElementById('nl_business').value = answers.business;
-                    document.getElementById('nl_pain').value     = answers.pain;
-                    document.getElementById('nl_timeline').value = answers.timeline;
-                    document.getElementById('nl_name').value     = answers.name;
-                    document.getElementById('nl_email').value    = answers.email;
+    botSay('Be honest, ha. What eats up most of your week?', 500).then(function() {
+      chips(['Chasing payments', 'Encoding by hand', 'Bookings and schedules', 'Reports and compliance', 'Something else'], function(v) {
+        answers.pain = v;
+        botSay("Ay, that's a common one. What kind of business is it?").then(function() {
+          chips(['Clinic · Spa', 'Retail · Store', 'Events · Venue', 'Professional firm', 'Something else'], function(v) {
+            answers.business = v;
+            answers.timeline = '';
+            botSay("Leave your name and email, and I'll show you how we'd fix it.").then(function() {
+              contactInput(function(name, email) {
+                answers.name  = name;
+                answers.email = email;
+                document.getElementById('nl_business').value = answers.business;
+                document.getElementById('nl_pain').value     = answers.pain;
+                document.getElementById('nl_timeline').value = answers.timeline || '';
+                document.getElementById('nl_name').value     = answers.name;
+                document.getElementById('nl_email').value    = answers.email;
 
-                    // ── cheap anti-abuse guards: honeypot + min-fill-time + dedupe ──
-                    var hp        = document.querySelector('#nlForm [name="bot-field"]');
-                    var tooFast   = (typeof performance !== 'undefined' && performance.now() < 3000);
-                    var already   = sessionStorage.getItem('p205_lead_sent') === '1';
-                    var suspicious = (hp && hp.value) || tooFast;
+                // ── cheap anti-abuse guards: honeypot + min-fill-time + dedupe ──
+                var hp         = document.querySelector('#nlForm [name="bot-field"]');
+                var tooFast    = (typeof performance !== 'undefined' && performance.now() < 3000);
+                var already    = sessionStorage.getItem('p205_lead_sent') === '1';
+                var suspicious = (hp && hp.value) || tooFast;
 
-                    if (!suspicious && !already) {
-                      // 1) Netlify Forms — dashboard record + backstop
-                      var fd = new FormData(document.getElementById('nlForm'));
-                      fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(fd).toString() }).catch(function(){});
-                      // 2) Ops + Telegram via edge function (inert until deployed + env set)
-                      fetch('/api/submit-lead', {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ source:'post205.com', business:answers.business, pain:answers.pain, timeline:answers.timeline, name:answers.name, email:answers.email })
-                      }).catch(function(){});
-                      sessionStorage.setItem('p205_lead_sent', '1');
-                    }
-                    // retire the sticky CTA — this visitor is done
-                    var tb = document.getElementById('talkBar');
-                    if (tb) { tb.classList.remove('show'); tb.setAttribute('aria-hidden','true'); }
+                if (!suspicious && !already) {
+                  // 1) Netlify Forms — dashboard record + backstop
+                  var fd = new FormData(document.getElementById('nlForm'));
+                  fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(fd).toString() }).catch(function(){});
+                  // 2) Ops + Telegram via edge function (inert until deployed + env set)
+                  fetch('/api/submit-lead', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ source:'post205.com', business:answers.business, pain:answers.pain, timeline:answers.timeline, name:answers.name, email:answers.email })
+                  }).catch(function(){});
+                  sessionStorage.setItem('p205_lead_sent', '1');
+                }
 
-                    input.innerHTML = '';
-                    botSay("We'll be in touch within a day.", 800);
-                  });
-                });
+                input.innerHTML = '';
+                botSay('Salamat! I\'ll be in touch within a day.', 800);
               });
             });
           });
