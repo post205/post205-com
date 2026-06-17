@@ -1349,7 +1349,12 @@
     .sa-sign { margin-top:14px; border-top:1px solid var(--border); padding-top:14px; animation: depSlide .4s ease-out; }
     .sa-signline { border-bottom:1px solid var(--border-2); padding:8px 2px; margin:6px 0 14px; font-family: ui-monospace, monospace; font-size:15px; letter-spacing:.02em; color:var(--text); word-break:break-all; }
     .sa-done { text-align:center; }
-    .sa-signed-name { font-family: ui-monospace, monospace; font-size:15px; color:var(--text); margin:4px 0 10px; word-break:break-all; }
+    .sa-signed-name { font-family: ui-monospace, monospace; font-size:15px; color:var(--text); margin:2px 0 10px; word-break:break-all; }
+    .sa-sig-mark { width:110px; height:auto; color:var(--text); display:block; margin:6px auto 2px; }
+    .sa-intro { display:flex; gap:11px; align-items:flex-start; padding:12px 13px; margin-bottom:14px; border:1px solid var(--border); border-radius:9px; background:var(--surface-2); }
+    .sa-intro-ava { flex:none; width:32px; height:32px; border-radius:50%; background:var(--accent); color:var(--on-accent); display:flex; align-items:center; justify-content:center; font-family: ui-monospace,monospace; font-size:11px; font-weight:700; }
+    .sa-intro-from { font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:3px; }
+    .sa-intro-msg { font-size:13px; color:var(--text-2); line-height:1.5; }
     .sa-legal { font-size:11px; line-height:1.5; color:var(--text-3); margin-top:10px; }
     .sa-legal-done { margin:0 auto 14px; max-width:34ch; }
     @media (prefers-reduced-motion: reduce){ .sa-sign { animation:none; } }
@@ -1615,6 +1620,13 @@
           </div>
           <div class="sa">
             <div class="sa-step" id="saPick">
+              <div class="sa-intro">
+                <span class="sa-intro-ava" aria-hidden="true">YB</span>
+                <div class="sa-intro-tx">
+                  <div class="sa-intro-from">Your Business · proposal</div>
+                  <div class="sa-intro-msg">Hi! Here's what we discussed. Pick a package and sign below, takes a minute.</div>
+                </div>
+              </div>
               <div class="dep-title">Leadership Workshop · choose a package</div>
               <div class="sa-tiers">
                 <button class="sa-tier" data-tier="Half-day" data-price="₱40,000" type="button">
@@ -1646,6 +1658,7 @@
               <div class="dep-check" aria-hidden="true">✓</div>
               <div class="dep-done-h">Agreement signed</div>
               <div class="dep-done-sub"><b id="saDoneTier">Standard</b> · <span id="saDoneDate"></span></div>
+              <svg class="sa-sig-mark" viewBox="0 0 130 40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 27 C10 9 15 8 18 24 C20 35 25 15 30 21 C34 26 30 35 38 30 C48 24 44 12 54 16 C61 19 55 31 66 28 C79 25 83 10 97 17 C106 21 101 31 111 26"/><path d="M34 34 C58 30 92 29 124 32"/></svg>
               <div class="sa-signed-name" id="saDoneName">juan.delacruz@gmail.com</div>
               <div class="sa-legal sa-legal-done">Signed electronically, binding under RA 8792 (E-Commerce Act of 2000). Timestamp recorded.</div>
               <div class="dep-tg">
@@ -1655,6 +1668,11 @@
               <div class="dep-tg">
                 <span class="dep-tg-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg></span>
                 <div class="dep-tg-body"><div class="dep-tg-h">Telegram · your team</div><div class="dep-tg-msg" id="saTgMsg">Signed: Standard</div></div>
+              </div>
+              <div class="cpd-ledger">
+                <div class="cpd-ledger-h">Your dashboard · agreement recorded</div>
+                <div class="cpd-ledger-row"><span id="saDashTier">Full-day · ₱75,000</span><span>Signed · today</span></div>
+                <button class="cpd-csv" id="saBill" type="button">Next step: send the bill →</button>
               </div>
               <button class="dep-reset" id="saReset" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Try again</button>
             </div>
@@ -2073,12 +2091,18 @@
         document.getElementById('saDoneName').textContent = email;
         document.getElementById('saDoneDate').textContent = new Date().toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
         document.getElementById('saTgMsg').textContent = 'Signed: ' + saTier + ' (' + saPrice + ') by ' + email;
+        document.getElementById('saDashTier').textContent = saTier + ' · ' + saPrice;
         document.getElementById('saPick').hidden = true;
         document.getElementById('saDone').hidden = false;
       }, 850);
     });
+    var saBill = document.getElementById('saBill');
+    if (saBill) saBill.addEventListener('click', function(){
+      saBill.disabled = true; saBill.textContent = 'Invoice sent ✓';
+    });
     var saReset = document.getElementById('saReset');
     if (saReset) saReset.addEventListener('click', function(){
+      var sb = document.getElementById('saBill'); if (sb) { sb.disabled = false; sb.textContent = 'Next step: send the bill →'; }
       document.getElementById('saDone').hidden = true;
       document.getElementById('saPick').hidden = false;
       document.getElementById('saSign').hidden = true;
