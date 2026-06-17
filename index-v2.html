@@ -1283,6 +1283,14 @@
     .pulse { animation: p205pulse 1.8s ease-in-out infinite; }
     @media (prefers-reduced-motion: reduce){ .pulse { animation:none; } }
 
+    /* calling-card bracket motif: eyebrows get a tie-line bracket */
+    .hero-eyebrow, .lp-eyebrow { display:inline-block; position:relative; padding-bottom:12px; }
+    .hero-eyebrow::after, .lp-eyebrow::after { content:""; position:absolute; left:0; right:0; bottom:0; height:6px; border:1px solid currentColor; border-top:none; opacity:.4; }
+
+    /* demo "reality" note — the honest, no-gimmick context */
+    .demo-real { margin-top:20px; font-size:12.5px; line-height:1.65; color:var(--text-3); max-width:42ch; }
+    .demo-real::before { content:"[ REALITY ]"; display:block; font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.14em; color:var(--accent-text); margin-bottom:7px; }
+
     /* about section — dark band (matches the hero + footer) */
     .about { background:#0f1416; border-top:none; }
     .about-mission-hl { color:#f4f7f7; }
@@ -1290,6 +1298,18 @@
     .about-mission-body strong { color:#f4f7f7; }
     .about-mission-close { color:#e7efee; }
     .about-star-bg, .about-graphic svg { color:#3BD1D3; }
+
+    /* calling-card footer: the bracket-decode device (privacy-safe) */
+    footer { background:#0f1416; border-top:none; flex-direction:column; gap:26px; padding:60px 20px 44px; }
+    .cc-card { display:inline-block; text-align:center; }
+    .cc-lbl { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.18em; color:#6fc9ca; }
+    .cc-bracket { width:100%; height:8px; border:1px solid rgba(255,255,255,.32); }
+    .cc-bracket-top { border-bottom:none; margin:6px 0 0; }
+    .cc-bracket-bot { border-top:none; margin:0 0 6px; }
+    .cc-string { font-size: clamp(22px,4vw,34px); font-weight:600; letter-spacing:.18em; color:#f4f7f7; padding:3px 8px; }
+    .cc-meta { font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; color:#5a7473; }
+    .cc-meta a { color:#5a7473; text-decoration:none; }
+    .cc-meta a:hover { color:#a7c4c4; }
   </style>
 </head>
 <body>
@@ -1351,6 +1371,7 @@
         <h3>Your customer pays. Then waits.</h3>
         <div class="lp-built">The customer logs the payment, and a receipt is emailed to them and to you.</div>
         <div class="cs-industry">Bank transfer or GCash</div>
+        <p class="demo-real">Card gateways are overkill for a lot of businesses, and most people here still pay by GCash or bank transfer. We make that path easy. Want online cards too? We plug in PayMongo. Tech that fits how you already get paid, not the other way around.</p>
       </div>
       <div class="demo-stage-r">
         <div class="mock-win">
@@ -1404,6 +1425,7 @@
         <h3>Quiz in. Certificate out.</h3>
         <div class="lp-built">They pass the quiz, get the certificate by email, and the units are recorded for PRC.</div>
         <div class="cs-industry">PRC-accredited CPD providers</div>
+        <p class="demo-real">PRC just needs the units logged and the proof on file. We make that part automatic, so nobody's retyping certificates by hand at renewal time.</p>
       </div>
       <div class="demo-stage-r">
         <div class="mock-win">
@@ -1469,6 +1491,7 @@
         <h3>Read it. Sign it. Same page.</h3>
         <div class="lp-built">A typed name counts as a signature under Philippine law (RA 8792).</div>
         <div class="cs-industry">sign.post205.com</div>
+        <p class="demo-real">No DocuSign subscription, no printing and scanning. The proposal and the signing live on one page, binding under RA 8792.</p>
       </div>
       <div class="demo-stage-r">
         <div class="mock-win">
@@ -1748,13 +1771,14 @@
 
 <!-- ── FOOTER ── -->
 <footer>
-  <a href="/" class="footer-logo">
-    <img src="/images/logo.png" alt="POST205">
-  </a>
-  <div class="footer-right">
-    © 2026 · POST205, Inc.<br>
-    <a href="/faq">FAQ</a> · <a href="/privacy.html">Privacy Policy</a>
+  <div class="cc-card">
+    <div class="cc-lbl cc-lbl-top">THE WORK</div>
+    <div class="cc-bracket cc-bracket-top"></div>
+    <div class="cc-string">POST205.COM</div>
+    <div class="cc-bracket cc-bracket-bot"></div>
+    <div class="cc-lbl cc-lbl-bot">@POST205 · INSTAGRAM</div>
   </div>
+  <div class="cc-meta">© 2026 POST205, Inc. · <a href="/faq">FAQ</a> · <a href="/privacy.html">Privacy</a></div>
 </footer>
 
 <script>
