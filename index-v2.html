@@ -1125,7 +1125,7 @@
     .hero-descriptor { color: #a7c4c4; }
     /* transparent header that blends into the dark hero (rain shows through);
        gains a solid dark backdrop only after the hero scrolls away */
-    nav { background: transparent; backdrop-filter: none; border-bottom: none; box-shadow: none; transition: background .3s ease, backdrop-filter .3s ease, box-shadow .3s ease; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: transparent; backdrop-filter: none; border-bottom: none; box-shadow: none; transition: background .3s ease, backdrop-filter .3s ease, box-shadow .3s ease; }
     nav.nav-solid { background: rgba(15,20,22,0.92); backdrop-filter: blur(10px); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
 
     .hero-actions { display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:4px; }
