@@ -1283,17 +1283,31 @@
     .cpd-opt { display:flex; align-items:center; gap:9px; padding:8px 11px; border:1px solid var(--border-2); border-radius:7px; margin-bottom:6px; font-size:13.5px; color:var(--text-2); cursor:pointer; transition: border-color .15s; }
     .cpd-opt:hover { border-color:var(--accent); }
     .cpd-opt input { accent-color: var(--accent); }
-    .cert { border:1px solid var(--border-2); border-radius:10px; overflow:hidden; background:var(--surface); animation: depSlide .5s cubic-bezier(.22,1,.36,1); }
-    .cert-band { background:var(--surface-deep); color:#dff5f5; text-align:center; padding:9px; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; }
-    .cert-body { padding:22px 18px; text-align:center; }
-    .cert-name { font-size:21px; font-weight:800; letter-spacing:-.01em; color:var(--text); }
-    .cert-line { font-size:12px; color:var(--text-3); margin:6px 0; }
+    /* certificate — meant to look like a real, downloadable document */
+    .cert { background:var(--surface); border-radius:10px; padding:7px; box-shadow:0 6px 22px rgba(8,20,20,.10); animation: depSlide .5s cubic-bezier(.22,1,.36,1); }
+    .cert-frame { position:relative; border:1px solid var(--accent-border); border-radius:7px; padding:24px 18px 18px; text-align:center; box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--border); }
+    .cert-seal { width:42px; height:42px; border-radius:50%; background:var(--accent); color:var(--on-accent); display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-family: ui-monospace,monospace; font-size:11px; font-weight:700; letter-spacing:.04em; box-shadow:0 0 0 4px var(--accent-dim); }
+    .cert-band { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--text-3); margin-bottom:14px; }
+    .cert-name { font-size:22px; font-weight:800; letter-spacing:-.01em; color:var(--text); }
+    .cert-line { font-size:12px; color:var(--text-3); margin:7px 0; }
     .cert-activity { font-size:15px; font-weight:600; color:var(--text); }
     .cert-units { display:inline-block; margin-top:12px; background:var(--accent-dim); color:var(--accent-text); font-family: ui-monospace,monospace; font-size:12px; font-weight:700; letter-spacing:.04em; padding:5px 12px; border-radius:999px; }
-    .cert-meta { display:flex; justify-content:space-between; gap:10px; margin-top:16px; font-family: ui-monospace,monospace; font-size:10px; color:var(--text-3); border-top:1px solid var(--border); padding-top:12px; }
-    .cert-meta b { color:var(--text-2); }
-    .cert-accred { margin-top:8px; font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); }
-    .cpd-prc { display:flex; align-items:center; gap:8px; margin-top:12px; font-size:13px; color:var(--text-2); }
+    .cert-foot { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; margin-top:20px; padding-top:14px; border-top:1px solid var(--border); text-align:left; }
+    .cert-sig-name { display:block; font-family:'Snell Roundhand','Segoe Script',cursive; font-size:19px; color:var(--text); line-height:1; }
+    .cert-sig-cap { font-family: ui-monospace,monospace; font-size:8.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); }
+    .cert-ref { font-family: ui-monospace,monospace; font-size:9px; color:var(--text-3); text-align:right; line-height:1.6; }
+    .cert-ref b { color:var(--text-2); }
+    .cert-accred { margin-top:12px; font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); }
+    .cpd-dl { margin-top:12px; width:100%; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px; border:1px solid var(--border-2); border-radius:7px; background:transparent; color:var(--text); font-size:13px; font-weight:600; cursor:pointer; transition:border-color .15s,color .15s; }
+    .cpd-dl:hover { border-color:var(--accent); color:var(--accent-text); }
+    /* back office: auto-logged, PRC-ready export */
+    .cpd-ledger { margin-top:14px; border:1px solid var(--border); border-radius:8px; background:var(--surface-2); padding:13px 14px; }
+    .cpd-ledger-h { font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:9px; }
+    .cpd-ledger-row { display:flex; justify-content:space-between; gap:10px; font-size:13px; color:var(--text-2); padding-bottom:11px; margin-bottom:11px; border-bottom:1px solid var(--border); }
+    .cpd-ledger-row b { color:var(--text); }
+    .cpd-csv { width:100%; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px; border:none; border-radius:7px; background:var(--accent); color:var(--on-accent); font-family: ui-monospace,monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; font-weight:700; cursor:pointer; transition:opacity .15s; }
+    .cpd-csv:hover { opacity:.9; }
+    .cpd-prc { display:flex; align-items:flex-start; gap:8px; margin-top:14px; font-size:12.5px; line-height:1.55; color:var(--text-2); text-align:left; }
     .cpd-prc-tick { width:20px; height:20px; flex-shrink:0; border-radius:50%; background:var(--accent); color:var(--on-accent); display:flex; align-items:center; justify-content:center; font-size:12px; }
     @media (prefers-reduced-motion: reduce){ .cert { animation:none; } }
 
@@ -1428,7 +1442,7 @@
         <h3>They pay, then send you a screenshot.</h3>
         <div class="lp-built">Give them one place to log it, so you verify every payment from a single screen, not from your Messenger.</div>
         <div class="cs-industry">Bank transfer or GCash</div>
-        <p class="demo-real">Card gateways are overkill for a lot of businesses, and most people here still pay by GCash or bank transfer. We make that path easy. Want online cards too? We plug in PayMongo. Tech that fits how you already get paid, not the other way around.</p>
+        <p class="demo-real">Card gateways are overkill for a lot of businesses, and most people here still pay by GCash or bank transfer. We make that path easy. Want online cards too? We plug in PayMongo or Xendit. Tech that fits how you already get paid, not the other way around.</p>
       </div>
       <div class="demo-stage-r">
         <div class="mock-win">
@@ -1480,9 +1494,9 @@
     <div class="demo-panel" id="demo-cpd" role="tabpanel" hidden>
       <div class="demo-copy">
         <h3>Quiz in. Certificate out.</h3>
-        <div class="lp-built">They pass the quiz, get the certificate by email, and the units are recorded for PRC.</div>
+        <div class="lp-built">They pass the quiz, get a real certificate by email, and the units are logged, PRC-ready.</div>
         <div class="cs-industry">PRC-accredited CPD providers</div>
-        <p class="demo-real">PRC just needs the units logged and the proof on file. We make that part automatic, so nobody's retyping certificates by hand at renewal time.</p>
+        <p class="demo-real">PRC needs the units logged with proof on file. We're not PRC, we just keep your records PRC-ready, so at renewal you export the list and submit. No retyping certificates by hand.</p>
       </div>
       <div class="demo-stage-r">
         <div class="mock-win">
@@ -1517,24 +1531,34 @@
             </div>
             <div class="cpd-step" id="cpdDone" hidden>
               <div class="cert">
-                <div class="cert-band">Certificate of Completion</div>
-                <div class="cert-body">
+                <div class="cert-frame">
+                  <div class="cert-seal" aria-hidden="true">CPD</div>
+                  <div class="cert-band">Certificate of Completion</div>
                   <div class="cert-name" id="cpdCertName">Maria Santos, RN</div>
                   <div class="cert-line">has completed</div>
                   <div class="cert-activity" id="cpdCertActivity">Infection Control Updates 2026</div>
                   <div class="cert-units" id="cpdCertUnits">3 CPD units</div>
-                  <div class="cert-meta"><span>Cert No. <b id="cpdCertNo">CPD-2026-0418</b></span><span id="cpdCertDate"></span></div>
+                  <div class="cert-foot">
+                    <div class="cert-sig"><span class="cert-sig-name">A. Reyes</span><span class="cert-sig-cap">Program Director</span></div>
+                    <div class="cert-ref">No. <b id="cpdCertNo">CPD-2026-0418</b><br><span id="cpdCertDate"></span></div>
+                  </div>
                   <div class="cert-accred">PRC-Accredited CPD Provider No. 2024-0731</div>
                 </div>
               </div>
+              <button class="cpd-dl" id="cpdDl" type="button"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg> Download certificate</button>
               <div class="dep-tg" id="cpdEmail">
                 <span class="dep-tg-ic dep-tg-mail" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
                 <div class="dep-tg-body">
-                  <div class="dep-tg-h">Emailed</div>
-                  <div class="dep-tg-msg">Certificate sent to <span id="cpdEmailTo">maria.santos</span>@email.com</div>
+                  <div class="dep-tg-h">Emailed to the member</div>
+                  <div class="dep-tg-msg">Sent to <span id="cpdEmailTo">maria.santos</span>@email.com</div>
                 </div>
               </div>
-              <div class="cpd-prc"><span class="cpd-prc-tick" aria-hidden="true">✓</span> PRC-ready. <span id="cpdPrcUnits">3 CPD units</span> logged to the member's record.</div>
+              <div class="cpd-ledger">
+                <div class="cpd-ledger-h">Your CPD log · 1 new entry</div>
+                <div class="cpd-ledger-row"><span id="cpdLedgerName">Maria Santos, RN</span><span><b id="cpdLedgerUnits">3</b> units · today</span></div>
+                <button class="cpd-csv" id="cpdCsv" type="button"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg> Export PRC list (CSV)</button>
+              </div>
+              <div class="cpd-prc"><span class="cpd-prc-tick" aria-hidden="true">✓</span> PRC-ready. Logged to your records and formatted for submission, you stay in control.</div>
               <button class="dep-reset" id="cpdReset" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Try again</button>
             </div>
           </div>
@@ -1556,27 +1580,27 @@
             <div class="m-dot m-r"></div>
             <div class="m-dot m-y"></div>
             <div class="m-dot m-g"></div>
-            <div class="mock-url">service agreement</div>
+            <div class="mock-url">workshop proposal</div>
           </div>
           <div class="sa">
             <div class="sa-step" id="saPick">
-              <div class="dep-title">Choose your scope</div>
+              <div class="dep-title">Leadership Workshop · choose a package</div>
               <div class="sa-tiers">
-                <button class="sa-tier" data-tier="Starter" data-price="₱45,000" type="button">
-                  <div class="sa-tier-n">Starter</div>
-                  <div class="sa-tier-p">₱45,000</div>
-                  <div class="sa-tier-d">Landing site + one form</div>
+                <button class="sa-tier" data-tier="Half-day" data-price="₱40,000" type="button">
+                  <div class="sa-tier-n">Half-day</div>
+                  <div class="sa-tier-p">₱40,000</div>
+                  <div class="sa-tier-d">One 4-hour session, up to 20 pax</div>
                 </button>
-                <button class="sa-tier pulse" data-tier="Standard" data-price="₱90,000" type="button">
+                <button class="sa-tier pulse" data-tier="Full-day" data-price="₱75,000" type="button">
                   <div class="sa-tier-tag">Most pick this</div>
-                  <div class="sa-tier-n">Standard</div>
-                  <div class="sa-tier-p">₱90,000</div>
-                  <div class="sa-tier-d">Site + booking + admin</div>
+                  <div class="sa-tier-n">Full-day</div>
+                  <div class="sa-tier-p">₱75,000</div>
+                  <div class="sa-tier-d">Two sessions + workbook + certificates</div>
                 </button>
-                <button class="sa-tier" data-tier="Complete" data-price="₱150,000" type="button">
-                  <div class="sa-tier-n">Complete</div>
+                <button class="sa-tier" data-tier="Series" data-price="₱150,000" type="button">
+                  <div class="sa-tier-n">Workshop series</div>
                   <div class="sa-tier-p">₱150,000</div>
-                  <div class="sa-tier-d">Full back-office build</div>
+                  <div class="sa-tier-d">Four sessions + coaching + CPD units</div>
                 </button>
               </div>
               <div class="sa-sign" id="saSign" hidden>
@@ -1903,6 +1927,7 @@
 
     // CPD module → score → certificate → email → PRC-ready
     var cpdSubmit = document.getElementById('cpdSubmit');
+    var cpdEntry = null;
     function gradeCpd(){
       var qs = document.querySelectorAll('#cpdQuiz .cpd-q');
       var correct = 0, answered = 0;
@@ -1940,17 +1965,42 @@
         var act = (document.getElementById('cpdActivity').value || 'CPD activity').trim();
         var u   = (document.getElementById('cpdUnits').value || '1').trim();
         var unitsTxt = u + ' CPD unit' + (u === '1' ? '' : 's');
+        var certNo = 'CPD-2026-' + String(new Date().getTime()).slice(-4);
+        var dateStr = new Date().toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
         document.getElementById('cpdCertName').textContent = nm;
         document.getElementById('cpdCertActivity').textContent = act;
         document.getElementById('cpdCertUnits').textContent = unitsTxt;
-        document.getElementById('cpdPrcUnits').textContent = unitsTxt;
+        document.getElementById('cpdCertNo').textContent = certNo;
+        document.getElementById('cpdCertDate').textContent = dateStr;
+        document.getElementById('cpdLedgerName').textContent = nm;
+        document.getElementById('cpdLedgerUnits').textContent = u;
         var handle = nm.toLowerCase().replace(/,.*$/, '').replace(/[^a-z]+/g, '.').replace(/^\.|\.$/g, '') || 'member';
         document.getElementById('cpdEmailTo').textContent = handle;
-        document.getElementById('cpdCertNo').textContent = 'CPD-2026-' + String(new Date().getTime()).slice(-4);
-        document.getElementById('cpdCertDate').textContent = new Date().toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+        cpdEntry = { name:nm, units:u, activity:act, certNo:certNo, date:dateStr };
         document.getElementById('cpdQuiz').hidden = true;
         document.getElementById('cpdDone').hidden = false;
       }, 850);
+    });
+    // download certificate (demo affordance)
+    var cpdDl = document.getElementById('cpdDl');
+    if (cpdDl) cpdDl.addEventListener('click', function(){
+      var t = cpdDl.innerHTML; cpdDl.disabled = true; cpdDl.textContent = 'Saved to your device ✓';
+      setTimeout(function(){ cpdDl.innerHTML = t; cpdDl.disabled = false; }, 1600);
+    });
+    // export the PRC compliance list as a real CSV (the back-office benefit)
+    var cpdCsv = document.getElementById('cpdCsv');
+    if (cpdCsv) cpdCsv.addEventListener('click', function(){
+      var e = cpdEntry || {};
+      var rows = [
+        ['Name','CPD Units','Activity','Certificate No.','Date Completed','Provider Accreditation'],
+        [e.name||'', e.units||'', e.activity||'', e.certNo||'', e.date||'', 'PRC CPD Provider No. 2024-0731']
+      ];
+      var csv = rows.map(function(r){ return r.map(function(c){ return '"' + String(c).replace(/"/g,'""') + '"'; }).join(','); }).join('\r\n');
+      var blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a'); a.href = url; a.download = 'cpd-prc-list.csv';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
     });
     var cpdReset = document.getElementById('cpdReset');
     if (cpdReset) cpdReset.addEventListener('click', function(){
