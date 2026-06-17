@@ -212,9 +212,9 @@
 
     .hero h1 {
       font-family: system-ui, -apple-system, sans-serif;
-      font-size: clamp(44px, 8vw, 88px);
+      font-size: clamp(34px, 5.6vw, 64px);
       font-weight: 800;
-      line-height: 0.92;
+      line-height: 1.0;
       letter-spacing: -0.01em;
       color: var(--text);
       margin-bottom: 36px;
@@ -1123,6 +1123,11 @@
     .hero-eyebrow { color: #6fc9ca; }
     .hero h1 { color: #f4f7f7; }
     .hero-descriptor { color: #a7c4c4; }
+    /* hero headline with side-bracket decode (Filipino / easy to use) */
+    .hero-annotated { display:flex; flex-direction:column; gap:8px; }
+    .hl-line { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+    .hl-tag { display:inline-flex; align-items:center; gap:9px; font-family: ui-monospace,monospace; font-size:11px; font-weight:400; letter-spacing:.12em; text-transform:uppercase; color:#6fc9ca; white-space:nowrap; }
+    .hl-tag::before { content:""; width:7px; height:22px; border:1px solid rgba(255,255,255,.4); border-left:none; flex-shrink:0; }
     /* transparent header that blends into the dark hero (rain shows through);
        gains a solid dark backdrop only after the hero scrolls away */
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: transparent; backdrop-filter: none; border-bottom: none; box-shadow: none; transition: background .3s ease, backdrop-filter .3s ease, box-shadow .3s ease; }
@@ -1342,9 +1347,11 @@
   <div class="hero-fade"></div>
   <div class="hero-inner">
     <div class="hero-text">
-      <div class="hero-eyebrow">For Filipino business owners</div>
-      <h1>Your business<br>software.</h1>
-      <div class="hero-descriptor">Built from scratch for how you work. Easy to use, so the whole team uses it.</div>
+      <h1 class="hero-annotated">
+        <span class="hl-line"><span class="hl-word">Your business</span><span class="hl-tag">Filipino</span></span>
+        <span class="hl-line"><span class="hl-word">software.</span><span class="hl-tag">easy to use</span></span>
+      </h1>
+      <div class="hero-descriptor">Built from scratch for how you work.</div>
     </div>
     <div class="hero-chat">
       <div class="chat-widget">
