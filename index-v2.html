@@ -1390,8 +1390,8 @@
     <!-- DEMO: bank deposit + email confirmation -->
     <div class="demo-panel active" id="demo-deposit" role="tabpanel">
       <div class="demo-copy">
-        <h3>Confirmed the moment they pay.</h3>
-        <div class="lp-built">The customer logs the payment, and a receipt is emailed to them and to you.</div>
+        <h3>They pay, then send you a screenshot.</h3>
+        <div class="lp-built">Give them one place to log it, so you verify every payment from a single screen, not from your Messenger.</div>
         <div class="cs-industry">Bank transfer or GCash</div>
         <p class="demo-real">Card gateways are overkill for a lot of businesses, and most people here still pay by GCash or bank transfer. We make that path easy. Want online cards too? We plug in PayMongo. Tech that fits how you already get paid, not the other way around.</p>
       </div>
@@ -2090,10 +2090,10 @@
 
     var answers = {};
 
-    botSay('Be honest, ha. What eats up most of your week?', 500).then(function() {
+    botSay("What's the biggest headache in your business right now?", 500).then(function() {
       chips(['Chasing payments', 'Encoding by hand', 'Bookings and schedules', 'Reports and compliance', 'Something else'], function(v) {
         answers.pain = v;
-        botSay("Ay, that's a common one. What kind of business is it?").then(function() {
+        botSay("Got it, that's a common one. What kind of business is it?").then(function() {
           chips(['Clinic · Spa', 'Retail · Store', 'Events · Venue', 'Professional firm', 'Something else'], function(v) {
             answers.business = v;
             answers.timeline = '';
