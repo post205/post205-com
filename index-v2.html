@@ -1210,20 +1210,27 @@
     .dep-email { text-align:left; margin-top:18px; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--surface); animation: depSlide .5s cubic-bezier(.22,1,.36,1); }
     @keyframes depSlide { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform:none; } }
     @media (prefers-reduced-motion: reduce){ .dep-email { animation:none; } }
-    .dep-email-bar { background:var(--surface-2); padding:8px 12px; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); display:flex; align-items:center; gap:6px; }
+    .dep-email-bar { background:var(--surface-2); padding:8px 12px; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); display:flex; align-items:center; gap:7px; }
+    .dep-email-ic { display:inline-flex; color:var(--accent-text); }
+    .dep-email-ic svg { width:15px; height:15px; }
     .dep-email-body { padding:16px; }
     .dep-email-logo { font-weight:800; letter-spacing:-.02em; color:var(--text); margin-bottom:10px; }
     .dep-email-h { font-size:15px; font-weight:700; color:var(--text); margin-bottom:8px; }
     .dep-email-row { font-size:13px; color:var(--text-2); line-height:1.6; }
     .dep-email-row b { color:var(--text); }
     .dep-email-meta { font-family: ui-monospace,monospace; font-size:11px; color:var(--text-3); margin-top:10px; }
-    .dep-reset { margin-top:14px; background:none; border:none; color:var(--accent-text); font-size:13px; cursor:pointer; }
+    .dep-reset { margin-top:16px; background:none; border:none; color:var(--accent-text); font-size:13px; cursor:pointer; display:inline-flex; align-items:center; gap:7px; }
+    .dep-reset svg { width:15px; height:15px; }
+    .dep-up-ic { display:inline-flex; align-items:center; }
+    .dep-up-ic svg { width:16px; height:16px; }
     .dep-soon { padding:48px 16px; text-align:center; color:var(--text-3); font-family: ui-monospace,monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; }
 
     /* Telegram + email mini-alerts (shared by deposit + cpd) */
     .dep-tg { display:flex; gap:10px; align-items:flex-start; margin-top:12px; padding:11px 13px; border:1px solid var(--border); border-radius:8px; background:var(--surface); animation: depSlide .5s cubic-bezier(.22,1,.36,1) .16s both; }
-    .dep-tg-ic { width:28px; height:28px; flex-shrink:0; border-radius:50%; background:#229ED9; color:#fff; display:flex; align-items:center; justify-content:center; }
-    .dep-tg-mail { background:var(--accent); color:var(--on-accent); font-size:14px; }
+    .dep-tg-ic { width:38px; height:38px; flex-shrink:0; border-radius:50%; background:#229ED9; color:#fff; display:flex; align-items:center; justify-content:center; }
+    .dep-tg-ic svg { width:21px; height:21px; }
+    .dep-tg-mail { background:var(--accent); color:var(--on-accent); }
+    .dep-tg-mail svg { width:18px; height:18px; }
     .dep-tg-h { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); margin-bottom:3px; }
     .dep-tg-msg { font-size:13px; color:var(--text-2); line-height:1.5; }
     .dep-tg-msg b { color:var(--text); }
@@ -1271,9 +1278,9 @@
     .sa-tier-d { font-size:12.5px; color:var(--text-3); }
     .sa-tier-tag { position:absolute; top:-9px; right:12px; background:var(--accent); color:var(--on-accent); font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:999px; }
     .sa-sign { margin-top:14px; border-top:1px solid var(--border); padding-top:14px; animation: depSlide .4s ease-out; }
-    .sa-signline { border-bottom:1px solid var(--border-2); padding:4px 2px 8px; margin:6px 0 14px; font-family:'Snell Roundhand','Segoe Script',cursive; font-size:24px; color:var(--text); min-height:34px; }
+    .sa-signline { border-bottom:1px solid var(--border-2); padding:8px 2px; margin:6px 0 14px; font-family: ui-monospace, monospace; font-size:15px; letter-spacing:.02em; color:var(--text); word-break:break-all; }
     .sa-done { text-align:center; }
-    .sa-signed-name { font-family:'Snell Roundhand','Segoe Script',cursive; font-size:26px; color:var(--text); margin:4px 0 10px; }
+    .sa-signed-name { font-family: ui-monospace, monospace; font-size:15px; color:var(--text); margin:4px 0 10px; word-break:break-all; }
     .sa-legal { font-size:11px; line-height:1.5; color:var(--text-3); margin-top:10px; }
     .sa-legal-done { margin:0 auto 14px; max-width:34ch; }
     @media (prefers-reduced-motion: reduce){ .sa-sign { animation:none; } }
@@ -1368,7 +1375,7 @@
     <!-- DEMO: bank deposit + email confirmation -->
     <div class="demo-panel active" id="demo-deposit" role="tabpanel">
       <div class="demo-copy">
-        <h3>Your customer pays. Then waits.</h3>
+        <h3>Confirmed the moment they pay.</h3>
         <div class="lp-built">The customer logs the payment, and a receipt is emailed to them and to you.</div>
         <div class="cs-industry">Bank transfer or GCash</div>
         <p class="demo-real">Card gateways are overkill for a lot of businesses, and most people here still pay by GCash or bank transfer. We make that path easy. Want online cards too? We plug in PayMongo. Tech that fits how you already get paid, not the other way around.</p>
@@ -1389,7 +1396,7 @@
                 <select id="depBank"><option>BPI</option><option>BDO</option><option>GCash</option><option>Maya</option><option>UnionBank</option></select>
               </label>
               <label class="dep-field"><span>Reference no.</span><input id="depRef" type="text" value="0093 4471 22"></label>
-              <button class="dep-upload" id="depUpload" type="button"><span class="dep-up-ic" aria-hidden="true">⭡</span> <span id="depUpTxt">Attach deposit slip</span></button>
+              <button class="dep-upload" id="depUpload" type="button"><span class="dep-up-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0L8 8m4-4 4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span> <span id="depUpTxt">Attach deposit slip</span></button>
               <button class="dep-submit pulse" id="depSubmit" type="button">Submit payment</button>
             </div>
             <div class="dep-step dep-done" id="depDone" hidden>
@@ -1397,7 +1404,7 @@
               <div class="dep-done-h">Payment recorded</div>
               <div class="dep-done-sub">Ref <b id="depRefOut">P205-4471</b> · <span id="depWhen">just now</span></div>
               <div class="dep-email" id="depEmail">
-                <div class="dep-email-bar"><span aria-hidden="true">✉</span> Confirmation sent to you</div>
+                <div class="dep-email-bar"><span class="dep-email-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span> Confirmation sent to you</div>
                 <div class="dep-email-body">
                   <div class="dep-email-logo">POST205</div>
                   <div class="dep-email-h">Payment received</div>
@@ -1406,13 +1413,13 @@
                 </div>
               </div>
               <div class="dep-tg" id="depTg">
-                <span class="dep-tg-ic" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 2.9 11.6c-1 .4-1 1.4 0 1.7l4.8 1.5 1.8 5.7c.2.6.6.7 1.1.3l2.7-2.2 4.7 3.5c.7.4 1.3.2 1.5-.7l3.1-15c.2-1-.4-1.5-1.5-1.1Z"/></svg></span>
+                <span class="dep-tg-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg></span>
                 <div class="dep-tg-body">
                   <div class="dep-tg-h">Telegram · POST205 bot</div>
                   <div class="dep-tg-msg">New payment in, <b id="depTgAmt">₱3,500</b> via <span id="depTgBank">BPI</span> · Ref <span id="depTgRef">0093 4471 22</span></div>
                 </div>
               </div>
-              <button class="dep-reset" id="depReset" type="button">↺ Run it again</button>
+              <button class="dep-reset" id="depReset" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Run it again</button>
             </div>
           </div>
         </div>
@@ -1471,14 +1478,14 @@
                 </div>
               </div>
               <div class="dep-tg" id="cpdEmail">
-                <span class="dep-tg-ic dep-tg-mail" aria-hidden="true">✉</span>
+                <span class="dep-tg-ic dep-tg-mail" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
                 <div class="dep-tg-body">
                   <div class="dep-tg-h">Emailed</div>
                   <div class="dep-tg-msg">Certificate sent to <span id="cpdEmailTo">maria.santos</span>@email.com</div>
                 </div>
               </div>
               <div class="cpd-prc"><span class="cpd-prc-tick" aria-hidden="true">✓</span> PRC-ready. <span id="cpdPrcUnits">3 CPD units</span> logged to the member's record.</div>
-              <button class="dep-reset" id="cpdReset" type="button">↺ Try again</button>
+              <button class="dep-reset" id="cpdReset" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Try again</button>
             </div>
           </div>
         </div>
@@ -1489,7 +1496,7 @@
     <div class="demo-panel" id="demo-proposal" role="tabpanel" hidden>
       <div class="demo-copy">
         <h3>Read it. Sign it. Same page.</h3>
-        <div class="lp-built">A typed name counts as a signature under Philippine law (RA 8792).</div>
+        <div class="lp-built">Your email address counts as a signature under Philippine law (RA 8792).</div>
         <div class="cs-industry">sign.post205.com</div>
         <p class="demo-real">No DocuSign subscription, no printing and scanning. The proposal and the signing live on one page, binding under RA 8792.</p>
       </div>
@@ -1523,27 +1530,28 @@
                 </button>
               </div>
               <div class="sa-sign" id="saSign" hidden>
-                <label class="dep-field"><span>Type your full name to sign</span><input id="saName" type="text" placeholder="Juan dela Cruz"></label>
-                <div class="sa-signline"><span id="saSigShow">Your signature</span></div>
+                <label class="dep-field"><span>Your name</span><input id="saName" type="text" value="Juan dela Cruz"></label>
+                <label class="dep-field"><span>Your email — this is your signature</span><input id="saEmail" type="email" value="juan.delacruz@gmail.com"></label>
+                <div class="sa-signline" id="saSigShow">juan.delacruz@gmail.com</div>
                 <button class="dep-submit" id="saSubmit" type="button">Sign &amp; accept</button>
-                <div class="sa-legal">Typing your name and accepting is a valid electronic signature under RA 8792 (E-Commerce Act).</div>
+                <div class="sa-legal">Your email address is the signature, binding under RA 8792 (E-Commerce Act).</div>
               </div>
             </div>
             <div class="sa-step sa-done" id="saDone" hidden>
               <div class="dep-check" aria-hidden="true">✓</div>
               <div class="dep-done-h">Agreement signed</div>
               <div class="dep-done-sub"><b id="saDoneTier">Standard</b> · <span id="saDoneDate"></span></div>
-              <div class="sa-signed-name" id="saDoneName">Juan dela Cruz</div>
+              <div class="sa-signed-name" id="saDoneName">juan.delacruz@gmail.com</div>
               <div class="sa-legal sa-legal-done">Signed electronically, binding under RA 8792 (E-Commerce Act of 2000). Timestamp recorded.</div>
               <div class="dep-tg">
-                <span class="dep-tg-ic dep-tg-mail" aria-hidden="true">✉</span>
+                <span class="dep-tg-ic dep-tg-mail" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
                 <div class="dep-tg-body"><div class="dep-tg-h">Emailed</div><div class="dep-tg-msg">Signed copy sent to both sides</div></div>
               </div>
               <div class="dep-tg">
-                <span class="dep-tg-ic" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 2.9 11.6c-1 .4-1 1.4 0 1.7l4.8 1.5 1.8 5.7c.2.6.6.7 1.1.3l2.7-2.2 4.7 3.5c.7.4 1.3.2 1.5-.7l3.1-15c.2-1-.4-1.5-1.5-1.1Z"/></svg></span>
+                <span class="dep-tg-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg></span>
                 <div class="dep-tg-body"><div class="dep-tg-h">Telegram · POST205 bot</div><div class="dep-tg-msg" id="saTgMsg">Signed: Standard</div></div>
               </div>
-              <button class="dep-reset" id="saReset" type="button">↺ Try again</button>
+              <button class="dep-reset" id="saReset" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Try again</button>
             </div>
           </div>
         </div>
@@ -1903,24 +1911,23 @@
         saTier = t.dataset.tier; saPrice = t.dataset.price;
         document.getElementById('saSign').hidden = false;
         document.getElementById('saSubmit').textContent = 'Sign & accept · ' + saTier;
-        var nm = document.getElementById('saName'); if (nm) nm.focus();
       });
     });
-    var saNameEl = document.getElementById('saName');
-    if (saNameEl) saNameEl.addEventListener('input', function(){
-      document.getElementById('saSigShow').textContent = saNameEl.value.trim() || 'Your signature';
+    var saEmailEl = document.getElementById('saEmail');
+    if (saEmailEl) saEmailEl.addEventListener('input', function(){
+      document.getElementById('saSigShow').textContent = saEmailEl.value.trim() || 'your@email.com';
     });
     var saSubmit = document.getElementById('saSubmit');
     if (saSubmit) saSubmit.addEventListener('click', function(){
-      var nm = (saNameEl.value || '').trim();
+      var email = (saEmailEl.value || '').trim();
       if (!saTier) return;
-      if (!nm) { saNameEl.focus(); return; }
+      if (!email) { saEmailEl.focus(); return; }
       saSubmit.disabled = true; saSubmit.textContent = 'Signing…';
       setTimeout(function(){
         document.getElementById('saDoneTier').textContent = saTier + ' · ' + saPrice;
-        document.getElementById('saDoneName').textContent = nm;
+        document.getElementById('saDoneName').textContent = email;
         document.getElementById('saDoneDate').textContent = new Date().toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
-        document.getElementById('saTgMsg').textContent = 'Signed: ' + saTier + ' (' + saPrice + ') by ' + nm;
+        document.getElementById('saTgMsg').textContent = 'Signed: ' + saTier + ' (' + saPrice + ') by ' + email;
         document.getElementById('saPick').hidden = true;
         document.getElementById('saDone').hidden = false;
       }, 850);
@@ -1932,8 +1939,6 @@
       document.getElementById('saSign').hidden = true;
       document.querySelectorAll('.sa-tier').forEach(function(x){ x.classList.remove('sel'); });
       saTier = null; saPrice = null;
-      if (saNameEl) saNameEl.value = '';
-      document.getElementById('saSigShow').textContent = 'Your signature';
       saSubmit.disabled = false; saSubmit.textContent = 'Sign & accept';
     });
   })();
@@ -2028,7 +2033,7 @@
       ta.rows = 2;
       const send = document.createElement('button');
       send.className = 'chat-send';
-      send.innerHTML = '&#8594;';
+      send.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
       function submit() {
         const v = ta.value.trim();
         if (!v) return;
