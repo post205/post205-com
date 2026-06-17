@@ -1238,6 +1238,32 @@
     .cpd-prc { display:flex; align-items:center; gap:8px; margin-top:12px; font-size:13px; color:var(--text-2); }
     .cpd-prc-tick { width:20px; height:20px; flex-shrink:0; border-radius:50%; background:var(--accent); color:var(--on-accent); display:flex; align-items:center; justify-content:center; font-size:12px; }
     @media (prefers-reduced-motion: reduce){ .cert { animation:none; } }
+
+    /* CPD scoring + editable fields */
+    .cpd-row { display:flex; gap:12px; }
+    .cpd-row .dep-field { flex:1; margin-bottom:12px; }
+    .cpd-units-f { flex:0 0 92px !important; }
+    .cpd-opt.correct { border-color:var(--green); background:rgba(25,138,76,.10); color:var(--text); }
+    .cpd-opt.wrong { border-color:var(--red); background:rgba(192,57,43,.08); color:var(--text); }
+    .cpd-score { font-size:13px; line-height:1.5; padding:9px 12px; border-radius:7px; margin-bottom:12px; }
+    .cpd-score.fail { background:rgba(192,57,43,.08); color:#a8392f; }
+    .cpd-score.pass { background:rgba(25,138,76,.10); color:#157a43; }
+
+    /* Proposal: tiers + signature */
+    .sa { padding:16px; }
+    .sa-tiers { display:flex; flex-direction:column; gap:8px; }
+    .sa-tier { position:relative; text-align:left; width:100%; border:1px solid var(--border-2); border-radius:9px; background:var(--surface); padding:13px 15px; cursor:pointer; transition: border-color .15s, box-shadow .15s; }
+    .sa-tier:hover { border-color:var(--accent); }
+    .sa-tier.sel { border-color:var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+    .sa-tier-n { font-size:15px; font-weight:700; color:var(--text); }
+    .sa-tier-p { font-family: ui-monospace,monospace; font-size:14px; color:var(--accent-text); margin:2px 0; }
+    .sa-tier-d { font-size:12.5px; color:var(--text-3); }
+    .sa-tier-tag { position:absolute; top:-9px; right:12px; background:var(--accent); color:var(--on-accent); font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:999px; }
+    .sa-sign { margin-top:14px; border-top:1px solid var(--border); padding-top:14px; animation: depSlide .4s ease-out; }
+    .sa-signline { border-bottom:1px solid var(--border-2); padding:4px 2px 8px; margin:6px 0 14px; font-family:'Snell Roundhand','Segoe Script',cursive; font-size:24px; color:var(--text); min-height:34px; }
+    .sa-done { text-align:center; }
+    .sa-signed-name { font-family:'Snell Roundhand','Segoe Script',cursive; font-size:26px; color:var(--text); margin:4px 0 16px; }
+    @media (prefers-reduced-motion: reduce){ .sa-sign { animation:none; } }
   </style>
 </head>
 <body>
@@ -1355,8 +1381,12 @@
           </div>
           <div class="cpd">
             <div class="cpd-step" id="cpdQuiz">
-              <div class="dep-title">Infection Control Updates 2026</div>
-              <label class="dep-field"><span>Your name</span><input id="cpdName" type="text" value="Maria Santos, RN"></label>
+              <div class="dep-title">CPD module</div>
+              <label class="dep-field"><span>Activity</span><input id="cpdActivity" type="text" value="Infection Control Updates 2026"></label>
+              <div class="cpd-row">
+                <label class="dep-field"><span>Your name</span><input id="cpdName" type="text" value="Maria Santos, RN"></label>
+                <label class="dep-field cpd-units-f"><span>Units</span><input id="cpdUnits" type="number" min="1" max="40" value="3"></label>
+              </div>
               <div class="cpd-q">
                 <div class="cpd-q-t">1. When should hand hygiene be performed?</div>
                 <label class="cpd-opt"><input type="radio" name="cq1"> Once at the start of the shift</label>
@@ -1369,6 +1399,7 @@
                 <label class="cpd-opt"><input type="radio" name="cq2"> Patient Privacy Enclosure</label>
                 <label class="cpd-opt"><input type="radio" name="cq2"> Public Practice Exam</label>
               </div>
+              <div class="cpd-score" id="cpdScore" hidden></div>
               <button class="dep-submit" id="cpdSubmit" type="button">Submit answers</button>
             </div>
             <div class="cpd-step" id="cpdDone" hidden>
@@ -1377,8 +1408,8 @@
                 <div class="cert-body">
                   <div class="cert-name" id="cpdCertName">Maria Santos, RN</div>
                   <div class="cert-line">has completed</div>
-                  <div class="cert-activity">Infection Control Updates 2026</div>
-                  <div class="cert-units">3 CPD units</div>
+                  <div class="cert-activity" id="cpdCertActivity">Infection Control Updates 2026</div>
+                  <div class="cert-units" id="cpdCertUnits">3 CPD units</div>
                   <div class="cert-meta"><span>Cert No. <b id="cpdCertNo">P205-CPD-0418</b></span><span id="cpdCertDate"></span></div>
                   <div class="cert-accred">PRC-Accredited CPD Provider No. 2024-0731</div>
                 </div>
@@ -1390,7 +1421,7 @@
                   <div class="dep-tg-msg">Certificate sent to <span id="cpdEmailTo">maria.santos</span>@email.com</div>
                 </div>
               </div>
-              <div class="cpd-prc"><span class="cpd-prc-tick" aria-hidden="true">✓</span> PRC-ready. 3 CPD units logged to the member's record.</div>
+              <div class="cpd-prc"><span class="cpd-prc-tick" aria-hidden="true">✓</span> PRC-ready. <span id="cpdPrcUnits">3 CPD units</span> logged to the member's record.</div>
               <button class="dep-reset" id="cpdReset" type="button">↺ Try again</button>
             </div>
           </div>
@@ -1398,12 +1429,12 @@
       </div>
     </div>
 
-    <!-- DEMO: proposal & e-sign (teaser, full build next) -->
+    <!-- DEMO: proposal & e-sign (interactive) -->
     <div class="demo-panel" id="demo-proposal" role="tabpanel" hidden>
       <div class="demo-copy">
         <h3>Your client signs on the same page they read.</h3>
         <p>They open one link, see their own setup laid out, choose a tier, and sign right there. You watch it land in ops.</p>
-        <div class="lp-built">Every agreement I send already works this way. I'll wire the clickable demo here next.</div>
+        <div class="lp-built">Pick a tier and sign it on the right. This is how every agreement I send already goes out.</div>
         <div class="cs-industry">sign.post205.com</div>
       </div>
       <div class="demo-stage-r">
@@ -1414,7 +1445,49 @@
             <div class="m-dot m-g"></div>
             <div class="mock-url">service agreement</div>
           </div>
-          <div class="dep-soon">Interactive demo in progress</div>
+          <div class="sa">
+            <div class="sa-step" id="saPick">
+              <div class="dep-title">Choose your scope</div>
+              <div class="sa-tiers">
+                <button class="sa-tier" data-tier="Starter" data-price="₱45,000" type="button">
+                  <div class="sa-tier-n">Starter</div>
+                  <div class="sa-tier-p">₱45,000</div>
+                  <div class="sa-tier-d">Landing site + one form</div>
+                </button>
+                <button class="sa-tier" data-tier="Standard" data-price="₱90,000" type="button">
+                  <div class="sa-tier-tag">Most pick this</div>
+                  <div class="sa-tier-n">Standard</div>
+                  <div class="sa-tier-p">₱90,000</div>
+                  <div class="sa-tier-d">Site + booking + admin</div>
+                </button>
+                <button class="sa-tier" data-tier="Complete" data-price="₱150,000" type="button">
+                  <div class="sa-tier-n">Complete</div>
+                  <div class="sa-tier-p">₱150,000</div>
+                  <div class="sa-tier-d">Full back-office build</div>
+                </button>
+              </div>
+              <div class="sa-sign" id="saSign" hidden>
+                <label class="dep-field"><span>Type your full name to sign</span><input id="saName" type="text" placeholder="Juan dela Cruz"></label>
+                <div class="sa-signline"><span id="saSigShow">Your signature</span></div>
+                <button class="dep-submit" id="saSubmit" type="button">Sign &amp; accept</button>
+              </div>
+            </div>
+            <div class="sa-step sa-done" id="saDone" hidden>
+              <div class="dep-check" aria-hidden="true">✓</div>
+              <div class="dep-done-h">Agreement signed</div>
+              <div class="dep-done-sub"><b id="saDoneTier">Standard</b> · <span id="saDoneDate"></span></div>
+              <div class="sa-signed-name" id="saDoneName">Juan dela Cruz</div>
+              <div class="dep-tg">
+                <span class="dep-tg-ic dep-tg-mail" aria-hidden="true">✉</span>
+                <div class="dep-tg-body"><div class="dep-tg-h">Emailed</div><div class="dep-tg-msg">Signed copy sent to both sides</div></div>
+              </div>
+              <div class="dep-tg">
+                <span class="dep-tg-ic" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 2.9 11.6c-1 .4-1 1.4 0 1.7l4.8 1.5 1.8 5.7c.2.6.6.7 1.1.3l2.7-2.2 4.7 3.5c.7.4 1.3.2 1.5-.7l3.1-15c.2-1-.4-1.5-1.5-1.1Z"/></svg></span>
+                <div class="dep-tg-body"><div class="dep-tg-h">Telegram · POST205 bot</div><div class="dep-tg-msg" id="saTgMsg">Signed: Standard</div></div>
+              </div>
+              <button class="dep-reset" id="saReset" type="button">↺ Try again</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1726,13 +1799,48 @@
       submit.disabled = false; submit.textContent = 'Submit payment';
     });
 
-    // CPD module → certificate → email → PRC-ready
+    // CPD module → score → certificate → email → PRC-ready
     var cpdSubmit = document.getElementById('cpdSubmit');
+    function gradeCpd(){
+      var qs = document.querySelectorAll('#cpdQuiz .cpd-q');
+      var correct = 0, answered = 0;
+      qs.forEach(function(q){
+        q.querySelectorAll('.cpd-opt').forEach(function(o){ o.classList.remove('correct','wrong'); });
+        var chosen = q.querySelector('input:checked');
+        var okInput = q.querySelector('input[data-ok]');
+        if (chosen) {
+          answered++;
+          if (chosen.hasAttribute('data-ok')) { chosen.parentNode.classList.add('correct'); correct++; }
+          else { chosen.parentNode.classList.add('wrong'); if (okInput) okInput.parentNode.classList.add('correct'); }
+        }
+      });
+      return { correct: correct, total: qs.length, answered: answered };
+    }
     if (cpdSubmit) cpdSubmit.addEventListener('click', function(){
-      cpdSubmit.disabled = true; cpdSubmit.textContent = 'Checking…';
+      var score = document.getElementById('cpdScore');
+      var r = gradeCpd();
+      if (r.answered < r.total) {
+        score.hidden = false; score.className = 'cpd-score fail';
+        score.textContent = 'Answer both questions to continue.';
+        return;
+      }
+      if (r.correct < r.total) {
+        score.hidden = false; score.className = 'cpd-score fail';
+        score.textContent = 'You scored ' + r.correct + '/' + r.total + '. The correct answers are highlighted — fix and resubmit.';
+        return;
+      }
+      score.hidden = false; score.className = 'cpd-score pass';
+      score.textContent = 'Passed, ' + r.correct + '/' + r.total + '. Issuing your certificate…';
+      cpdSubmit.disabled = true; cpdSubmit.textContent = 'Issuing…';
       setTimeout(function(){
-        var nm = (document.getElementById('cpdName').value || 'Member').trim();
+        var nm  = (document.getElementById('cpdName').value || 'Member').trim();
+        var act = (document.getElementById('cpdActivity').value || 'CPD activity').trim();
+        var u   = (document.getElementById('cpdUnits').value || '1').trim();
+        var unitsTxt = u + ' CPD unit' + (u === '1' ? '' : 's');
         document.getElementById('cpdCertName').textContent = nm;
+        document.getElementById('cpdCertActivity').textContent = act;
+        document.getElementById('cpdCertUnits').textContent = unitsTxt;
+        document.getElementById('cpdPrcUnits').textContent = unitsTxt;
         var handle = nm.toLowerCase().replace(/,.*$/, '').replace(/[^a-z]+/g, '.').replace(/^\.|\.$/g, '') || 'member';
         document.getElementById('cpdEmailTo').textContent = handle;
         document.getElementById('cpdCertNo').textContent = 'P205-CPD-' + String(new Date().getTime()).slice(-4);
@@ -1745,7 +1853,52 @@
     if (cpdReset) cpdReset.addEventListener('click', function(){
       document.getElementById('cpdDone').hidden = true;
       document.getElementById('cpdQuiz').hidden = false;
+      var sc = document.getElementById('cpdScore'); sc.hidden = true; sc.textContent = '';
+      document.querySelectorAll('#cpdQuiz .cpd-opt').forEach(function(o){ o.classList.remove('correct','wrong'); });
       cpdSubmit.disabled = false; cpdSubmit.textContent = 'Submit answers';
+    });
+
+    // Proposal: pick a tier → sign → recorded
+    var saTier = null, saPrice = null;
+    document.querySelectorAll('.sa-tier').forEach(function(t){
+      t.addEventListener('click', function(){
+        document.querySelectorAll('.sa-tier').forEach(function(x){ x.classList.remove('sel'); });
+        t.classList.add('sel');
+        saTier = t.dataset.tier; saPrice = t.dataset.price;
+        document.getElementById('saSign').hidden = false;
+        document.getElementById('saSubmit').textContent = 'Sign & accept · ' + saTier;
+        var nm = document.getElementById('saName'); if (nm) nm.focus();
+      });
+    });
+    var saNameEl = document.getElementById('saName');
+    if (saNameEl) saNameEl.addEventListener('input', function(){
+      document.getElementById('saSigShow').textContent = saNameEl.value.trim() || 'Your signature';
+    });
+    var saSubmit = document.getElementById('saSubmit');
+    if (saSubmit) saSubmit.addEventListener('click', function(){
+      var nm = (saNameEl.value || '').trim();
+      if (!saTier) return;
+      if (!nm) { saNameEl.focus(); return; }
+      saSubmit.disabled = true; saSubmit.textContent = 'Signing…';
+      setTimeout(function(){
+        document.getElementById('saDoneTier').textContent = saTier + ' · ' + saPrice;
+        document.getElementById('saDoneName').textContent = nm;
+        document.getElementById('saDoneDate').textContent = new Date().toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+        document.getElementById('saTgMsg').textContent = 'Signed: ' + saTier + ' (' + saPrice + ') by ' + nm;
+        document.getElementById('saPick').hidden = true;
+        document.getElementById('saDone').hidden = false;
+      }, 850);
+    });
+    var saReset = document.getElementById('saReset');
+    if (saReset) saReset.addEventListener('click', function(){
+      document.getElementById('saDone').hidden = true;
+      document.getElementById('saPick').hidden = false;
+      document.getElementById('saSign').hidden = true;
+      document.querySelectorAll('.sa-tier').forEach(function(x){ x.classList.remove('sel'); });
+      saTier = null; saPrice = null;
+      if (saNameEl) saNameEl.value = '';
+      document.getElementById('saSigShow').textContent = 'Your signature';
+      saSubmit.disabled = false; saSubmit.textContent = 'Sign & accept';
     });
   })();
 
