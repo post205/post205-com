@@ -1123,7 +1123,10 @@
     .hero-eyebrow { color: #6fc9ca; }
     .hero h1 { color: #f4f7f7; }
     .hero-descriptor { color: #a7c4c4; }
-    nav { border-bottom: 1px solid rgba(255,255,255,0.06); }
+    /* transparent header that blends into the dark hero (rain shows through);
+       gains a solid dark backdrop only after the hero scrolls away */
+    nav { background: transparent; backdrop-filter: none; border-bottom: none; box-shadow: none; transition: background .3s ease, backdrop-filter .3s ease, box-shadow .3s ease; }
+    nav.nav-solid { background: rgba(15,20,22,0.92); backdrop-filter: blur(10px); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
 
     .hero-actions { display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:4px; }
     .hero-cta {
@@ -1555,6 +1558,16 @@
       });
     });
     render('salon');
+  })();
+
+  // ── transparent header → solid dark once the hero scrolls away ──
+  (function(){
+    var nav = document.querySelector('nav');
+    var hero = document.querySelector('.hero');
+    if (!nav || !hero || !('IntersectionObserver' in window)) return;
+    new IntersectionObserver(function(es){
+      es.forEach(function(en){ nav.classList.toggle('nav-solid', !en.isIntersecting); });
+    }, { rootMargin: '-70px 0px 0px 0px', threshold: 0 }).observe(hero);
   })();
 
   // ── TALK CTA: hero button + sticky bar jump to the chat ──
