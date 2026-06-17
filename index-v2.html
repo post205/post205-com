@@ -1208,6 +1208,36 @@
     .dep-email-meta { font-family: ui-monospace,monospace; font-size:11px; color:var(--text-3); margin-top:10px; }
     .dep-reset { margin-top:14px; background:none; border:none; color:var(--accent-text); font-size:13px; cursor:pointer; }
     .dep-soon { padding:48px 16px; text-align:center; color:var(--text-3); font-family: ui-monospace,monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; }
+
+    /* Telegram + email mini-alerts (shared by deposit + cpd) */
+    .dep-tg { display:flex; gap:10px; align-items:flex-start; margin-top:12px; padding:11px 13px; border:1px solid var(--border); border-radius:8px; background:var(--surface); animation: depSlide .5s cubic-bezier(.22,1,.36,1) .16s both; }
+    .dep-tg-ic { width:28px; height:28px; flex-shrink:0; border-radius:50%; background:#229ED9; color:#fff; display:flex; align-items:center; justify-content:center; }
+    .dep-tg-mail { background:var(--accent); color:var(--on-accent); font-size:14px; }
+    .dep-tg-h { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); margin-bottom:3px; }
+    .dep-tg-msg { font-size:13px; color:var(--text-2); line-height:1.5; }
+    .dep-tg-msg b { color:var(--text); }
+    @media (prefers-reduced-motion: reduce){ .dep-tg { animation:none; } }
+
+    /* CPD quiz + certificate */
+    .cpd { padding:16px; }
+    .cpd-q { margin-bottom:16px; }
+    .cpd-q-t { font-size:14px; font-weight:600; color:var(--text); margin-bottom:8px; }
+    .cpd-opt { display:flex; align-items:center; gap:9px; padding:8px 11px; border:1px solid var(--border-2); border-radius:7px; margin-bottom:6px; font-size:13.5px; color:var(--text-2); cursor:pointer; transition: border-color .15s; }
+    .cpd-opt:hover { border-color:var(--accent); }
+    .cpd-opt input { accent-color: var(--accent); }
+    .cert { border:1px solid var(--border-2); border-radius:10px; overflow:hidden; background:var(--surface); animation: depSlide .5s cubic-bezier(.22,1,.36,1); }
+    .cert-band { background:var(--surface-deep); color:#dff5f5; text-align:center; padding:9px; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; }
+    .cert-body { padding:22px 18px; text-align:center; }
+    .cert-name { font-size:21px; font-weight:800; letter-spacing:-.01em; color:var(--text); }
+    .cert-line { font-size:12px; color:var(--text-3); margin:6px 0; }
+    .cert-activity { font-size:15px; font-weight:600; color:var(--text); }
+    .cert-units { display:inline-block; margin-top:12px; background:var(--accent-dim); color:var(--accent-text); font-family: ui-monospace,monospace; font-size:12px; font-weight:700; letter-spacing:.04em; padding:5px 12px; border-radius:999px; }
+    .cert-meta { display:flex; justify-content:space-between; gap:10px; margin-top:16px; font-family: ui-monospace,monospace; font-size:10px; color:var(--text-3); border-top:1px solid var(--border); padding-top:12px; }
+    .cert-meta b { color:var(--text-2); }
+    .cert-accred { margin-top:8px; font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); }
+    .cpd-prc { display:flex; align-items:center; gap:8px; margin-top:12px; font-size:13px; color:var(--text-2); }
+    .cpd-prc-tick { width:20px; height:20px; flex-shrink:0; border-radius:50%; background:var(--accent); color:var(--on-accent); display:flex; align-items:center; justify-content:center; font-size:12px; }
+    @media (prefers-reduced-motion: reduce){ .cert { animation:none; } }
   </style>
 </head>
 <body>
@@ -1249,6 +1279,7 @@
 
     <div class="lp-tabs" role="tablist" aria-label="Choose a demo">
       <button class="lp-tab active" data-demo="deposit" role="tab" aria-selected="true">Bank deposit + email</button>
+      <button class="lp-tab" data-demo="cpd" role="tab" aria-selected="false">CPD + certificate</button>
       <button class="lp-tab" data-demo="proposal" role="tab" aria-selected="false">Proposal &amp; e-sign</button>
     </div>
 
@@ -1292,7 +1323,75 @@
                   <div class="dep-email-meta">Ref <span id="depEmRef">0093 4471 22</span> · <span id="depEmDate"></span></div>
                 </div>
               </div>
+              <div class="dep-tg" id="depTg">
+                <span class="dep-tg-ic" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 2.9 11.6c-1 .4-1 1.4 0 1.7l4.8 1.5 1.8 5.7c.2.6.6.7 1.1.3l2.7-2.2 4.7 3.5c.7.4 1.3.2 1.5-.7l3.1-15c.2-1-.4-1.5-1.5-1.1Z"/></svg></span>
+                <div class="dep-tg-body">
+                  <div class="dep-tg-h">Telegram · POST205 bot</div>
+                  <div class="dep-tg-msg">New payment in, <b id="depTgAmt">₱3,500</b> via <span id="depTgBank">BPI</span> · Ref <span id="depTgRef">0093 4471 22</span></div>
+                </div>
+              </div>
               <button class="dep-reset" id="depReset" type="button">↺ Run it again</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO: CPD module → certificate → email → PRC-ready -->
+    <div class="demo-panel" id="demo-cpd" role="tabpanel" hidden>
+      <div class="demo-copy">
+        <h3>Pass the module. Certificate's in your inbox before you close the tab.</h3>
+        <p>Your members sit a short quiz, and the certificate generates itself, numbered and dated. The CPD units are logged the way PRC wants them.</p>
+        <div class="lp-built">No printing, no manual logbook. Take the quiz on the right and watch it issue.</div>
+        <div class="cs-industry">For PRC-accredited CPD providers and professional associations</div>
+      </div>
+      <div class="demo-stage-r">
+        <div class="mock-win">
+          <div class="mock-bar">
+            <div class="m-dot m-r"></div>
+            <div class="m-dot m-y"></div>
+            <div class="m-dot m-g"></div>
+            <div class="mock-url">cpd module</div>
+          </div>
+          <div class="cpd">
+            <div class="cpd-step" id="cpdQuiz">
+              <div class="dep-title">Infection Control Updates 2026</div>
+              <label class="dep-field"><span>Your name</span><input id="cpdName" type="text" value="Maria Santos, RN"></label>
+              <div class="cpd-q">
+                <div class="cpd-q-t">1. When should hand hygiene be performed?</div>
+                <label class="cpd-opt"><input type="radio" name="cq1"> Once at the start of the shift</label>
+                <label class="cpd-opt"><input type="radio" name="cq1" data-ok> Before and after every patient contact</label>
+                <label class="cpd-opt"><input type="radio" name="cq1"> Only when hands look dirty</label>
+              </div>
+              <div class="cpd-q">
+                <div class="cpd-q-t">2. What does PPE stand for?</div>
+                <label class="cpd-opt"><input type="radio" name="cq2" data-ok> Personal Protective Equipment</label>
+                <label class="cpd-opt"><input type="radio" name="cq2"> Patient Privacy Enclosure</label>
+                <label class="cpd-opt"><input type="radio" name="cq2"> Public Practice Exam</label>
+              </div>
+              <button class="dep-submit" id="cpdSubmit" type="button">Submit answers</button>
+            </div>
+            <div class="cpd-step" id="cpdDone" hidden>
+              <div class="cert">
+                <div class="cert-band">Certificate of Completion</div>
+                <div class="cert-body">
+                  <div class="cert-name" id="cpdCertName">Maria Santos, RN</div>
+                  <div class="cert-line">has completed</div>
+                  <div class="cert-activity">Infection Control Updates 2026</div>
+                  <div class="cert-units">3 CPD units</div>
+                  <div class="cert-meta"><span>Cert No. <b id="cpdCertNo">P205-CPD-0418</b></span><span id="cpdCertDate"></span></div>
+                  <div class="cert-accred">PRC-Accredited CPD Provider No. 2024-0731</div>
+                </div>
+              </div>
+              <div class="dep-tg" id="cpdEmail">
+                <span class="dep-tg-ic dep-tg-mail" aria-hidden="true">✉</span>
+                <div class="dep-tg-body">
+                  <div class="dep-tg-h">Emailed</div>
+                  <div class="dep-tg-msg">Certificate sent to <span id="cpdEmailTo">maria.santos</span>@email.com</div>
+                </div>
+              </div>
+              <div class="cpd-prc"><span class="cpd-prc-tick" aria-hidden="true">✓</span> PRC-ready. 3 CPD units logged to the member's record.</div>
+              <button class="dep-reset" id="cpdReset" type="button">↺ Try again</button>
             </div>
           </div>
         </div>
@@ -1613,6 +1712,9 @@
         document.getElementById('depEmBank').textContent = bank;
         document.getElementById('depEmRef').textContent  = ref;
         document.getElementById('depEmDate').textContent = new Date().toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+        document.getElementById('depTgAmt').textContent  = amt;
+        document.getElementById('depTgBank').textContent = bank;
+        document.getElementById('depTgRef').textContent  = ref;
         document.getElementById('depForm').hidden = true;
         document.getElementById('depDone').hidden = false;
       }, 900);
@@ -1622,6 +1724,28 @@
       document.getElementById('depDone').hidden = true;
       document.getElementById('depForm').hidden = false;
       submit.disabled = false; submit.textContent = 'Submit payment';
+    });
+
+    // CPD module → certificate → email → PRC-ready
+    var cpdSubmit = document.getElementById('cpdSubmit');
+    if (cpdSubmit) cpdSubmit.addEventListener('click', function(){
+      cpdSubmit.disabled = true; cpdSubmit.textContent = 'Checking…';
+      setTimeout(function(){
+        var nm = (document.getElementById('cpdName').value || 'Member').trim();
+        document.getElementById('cpdCertName').textContent = nm;
+        var handle = nm.toLowerCase().replace(/,.*$/, '').replace(/[^a-z]+/g, '.').replace(/^\.|\.$/g, '') || 'member';
+        document.getElementById('cpdEmailTo').textContent = handle;
+        document.getElementById('cpdCertNo').textContent = 'P205-CPD-' + String(new Date().getTime()).slice(-4);
+        document.getElementById('cpdCertDate').textContent = new Date().toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+        document.getElementById('cpdQuiz').hidden = true;
+        document.getElementById('cpdDone').hidden = false;
+      }, 850);
+    });
+    var cpdReset = document.getElementById('cpdReset');
+    if (cpdReset) cpdReset.addEventListener('click', function(){
+      document.getElementById('cpdDone').hidden = true;
+      document.getElementById('cpdQuiz').hidden = false;
+      cpdSubmit.disabled = false; cpdSubmit.textContent = 'Submit answers';
     });
   })();
 
