@@ -3,54 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FAQ — POST 205</title>
+  <title>FAQ — POST205</title>
   <meta name="description" content="Common questions about how POST205 builds custom web systems for Philippine businesses.">
   <link rel="canonical" href="https://post205.com/faq">
   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
 
-  <script>
-    (function() {
-      const stored = localStorage.getItem('theme');
-      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', stored || system);
-    })();
-  </script>
-
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --black:        #18181A;
-      --surface:      #1a2424;
-      --surface-2:    #252f2f;
-      --border:       #1f3535;
-      --border-2:     #2a4040;
-      --text:         #f0f0f2;
-      --text-2:       #7aacac;
-      --text-3:       #629a9a;
-      --accent:       #3BD1D3;
-      --on-accent:    #021616;
-      --nav-bg:       rgba(24, 24, 26, 0.96);
-      --logo-filter:  none;
+      /* single theme — dark masthead/hero over a light teal field (matches the homepage) */
+      --black:        #e7efee;
+      --surface:      #f7fcfc;
+      --surface-2:    #dce8e7;
+      --border:       #c7d9d7;
+      --border-2:     #b1c8c5;
+      --text:         #0b1b1b;
+      --text-2:       #41585a;
+      --text-3:       #5a7473;
+      --accent:       #0e9a9d;
+      --accent-text:  #0f7476;
+      --on-accent:    #ffffff;
+      --hero-bg:      #0f1416;
+      --nav-accent:   #3BD1D3;
       --logo-blend:   screen;
-    }
-
-    [data-theme="light"] {
-      --black:        #f2f8f8;
-      --surface:      #f4fefe;
-      --surface-2:    #e0fffe;
-      --border:       #c8eeed;
-      --border-2:     #b0e0df;
-      --text:         #0a1a1a;
-      --text-2:       #4a6262;
-      --text-3:       #4a7070;
-      --accent:       #2db8ba;
-      --on-accent:    #021616;
-      --nav-bg:       rgba(242, 248, 248, 0.96);
       --logo-filter:  none;
-      --logo-blend:   darken;
     }
 
     html { scroll-behavior: smooth; }
@@ -64,19 +43,15 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Nav */
+    /* Nav — transparent over the dark hero, solid on scroll */
     nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 16px 48px;
-      background: var(--nav-bg);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
+      background: transparent; border-bottom: none; box-shadow: none;
+      transition: background .3s ease, box-shadow .3s ease;
     }
+    nav.nav-solid { background: rgba(15,20,22,0.97); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
     .nav-logo { display: flex; align-items: center; text-decoration: none; }
     .nav-logo img {
       height: 26px; width: auto;
@@ -99,43 +74,41 @@
     }
     .nav-cta:hover { opacity: 0.85; }
 
-    /* Content */
-    .faq-wrap {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 64px 24px 80px;
-    }
-
+    /* Dark hero band */
+    .page-hero { background: var(--hero-bg); padding: 120px 24px 60px; }
+    .page-hero-inner { max-width: 720px; margin: 0 auto; }
     .faq-label {
       font-family: ui-monospace, monospace;
       font-size: 11px;
       letter-spacing: 0.1em;
-      color: var(--accent);
+      color: var(--nav-accent);
       text-transform: uppercase;
       margin-bottom: 16px;
     }
-
-    h1 {
+    .page-hero h1 {
       font-size: clamp(28px, 5vw, 40px);
       font-weight: 800;
       line-height: 1.15;
       margin-bottom: 12px;
       letter-spacing: -0.01em;
+      color: #f4f7f7;
     }
-
     .faq-intro {
       font-size: 18px;
-      color: var(--text-2);
+      color: #b9d2d2;
       line-height: 1.6;
-      padding: 24px;
-      border-left: 3px solid var(--accent);
-      background: var(--surface);
-      border-radius: 0 6px 6px 0;
-      margin: 32px 0 16px;
+      margin-top: 18px;
+      max-width: 60ch;
     }
 
-    /* FAQ accordion */
-    .faq-list { margin-top: 16px; }
+    /* Content — light teal field */
+    .faq-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    .faq-list { margin-top: 0; }
 
     .faq-item { border-bottom: 1px solid var(--border); }
     .faq-item:first-child { border-top: 1px solid var(--border); }
@@ -175,7 +148,7 @@
     .faq-answer p { margin-bottom: 12px; }
     .faq-answer p:last-child { margin-bottom: 0; }
 
-    a { color: var(--accent); text-decoration: none; }
+    a { color: var(--accent-text); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
     /* Closing CTA */
@@ -191,6 +164,7 @@
       line-height: 1.1;
       letter-spacing: -0.01em;
       margin-bottom: 14px;
+      color: var(--text);
     }
     .faq-cta p {
       color: var(--text-2);
@@ -212,36 +186,36 @@
     }
     .btn-primary:hover { opacity: 0.88; text-decoration: none; }
 
-    /* Footer */
+    /* Footer — dark bookend, matches the homepage */
     footer {
-      padding: 32px 48px;
-      border-top: 1px solid var(--border);
+      background: var(--hero-bg);
+      padding: 40px 48px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
     .footer-logo img {
       height: 20px; width: auto;
-      mix-blend-mode: var(--logo-blend);
-      filter: var(--logo-filter);
-      opacity: 0.5;
+      mix-blend-mode: screen;
+      opacity: 0.6;
     }
     .footer-right {
       font-family: ui-monospace, monospace;
       font-size: 9px;
       letter-spacing: 0.06em;
-      color: var(--text-3);
+      color: #5a7473;
       text-align: right;
       line-height: 1.8;
     }
-    .footer-right a { color: var(--accent); text-decoration: none; }
+    .footer-right a { color: #6fc9ca; text-decoration: none; }
     .footer-right a:hover { text-decoration: underline; }
 
     @media (max-width: 640px) {
       nav { padding: 14px 20px; }
+      .page-hero { padding: 100px 20px 48px; }
       .faq-wrap { padding: 40px 20px 56px; }
       .faq-cta { padding: 56px 24px; }
-      footer { padding: 24px 20px; flex-direction: column; gap: 12px; align-items: flex-start; }
+      footer { padding: 28px 20px; flex-direction: column; gap: 12px; align-items: flex-start; }
       .footer-right { text-align: left; }
     }
   </style>
@@ -250,19 +224,20 @@
 
 <nav>
   <a href="/" class="nav-logo">
-    <img src="/images/logo.png" alt="POST 205">
+    <img src="/images/logo.png" alt="POST205">
   </a>
   <a href="/#contact" class="nav-cta">Let's talk</a>
 </nav>
 
-<div class="faq-wrap">
-
-  <div class="faq-label">Common Questions</div>
-  <h1>How we build, in plain answers</h1>
-
-  <div class="faq-intro">
-    People ask what's under the hood. Fair question. But the tooling matters less than what it's chosen for. Here are the things that actually decide whether a system works for you.
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="faq-label">Common Questions</div>
+    <h1>How we build, in plain answers</h1>
+    <p class="faq-intro">People ask what's under the hood. Fair question. But the tooling matters less than what it's chosen for. Here are the things that actually decide whether a system works for you.</p>
   </div>
+</section>
+
+<div class="faq-wrap">
 
   <div class="faq-list">
 
@@ -367,7 +342,7 @@
 
 <footer>
   <a href="/" class="footer-logo">
-    <img src="/images/logo.png" alt="POST 205">
+    <img src="/images/logo.png" alt="POST205">
   </a>
   <div class="footer-right">
     © 2026 · POST205, Inc.<br>
@@ -375,6 +350,12 @@
   </div>
 </footer>
 
+<script>
+  (function(){ var n = document.querySelector('nav'); if(!n) return;
+    var f = function(){ n.classList.toggle('nav-solid', window.scrollY > 10); };
+    f(); window.addEventListener('scroll', f, { passive: true });
+  })();
+</script>
 <script src="/js/cookie-banner.js"></script>
 
 </body>
