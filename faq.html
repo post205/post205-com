@@ -34,6 +34,12 @@
 
     html { scroll-behavior: smooth; }
 
+    .visually-hidden {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
     body {
       background: var(--black);
       color: var(--text);
@@ -47,6 +53,7 @@
     @keyframes pageReveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
     @media (prefers-reduced-motion: no-preference) {
       .page-hero, .faq-wrap, .faq-cta, footer { opacity: 0; animation: pageReveal .6s cubic-bezier(.22,1,.36,1) forwards; }
+      .faq-chat { opacity: 0; animation: pageReveal .6s cubic-bezier(.22,1,.36,1) forwards; animation-delay: .08s; }
       .faq-wrap { animation-delay: .12s; }
       .faq-cta { animation-delay: .20s; }
       footer { animation-delay: .28s; }
@@ -109,6 +116,129 @@
       margin-top: 18px;
       max-width: 60ch;
     }
+
+    /* Ask-anything chat — lives in the dark hero, mirrors the homepage chat
+       (mono "205" sender, rounded bubbles, teal accent, typing dots) but on
+       dark surfaces to sit on the hero band. */
+    .faq-chat {
+      max-width: 720px;
+      margin: 28px auto 0;
+    }
+    .faq-chat-label {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--nav-accent);
+      margin-bottom: 10px;
+    }
+    .chat-widget {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #141b1d;
+    }
+    .chat-log {
+      overflow-y: auto;
+      max-height: 360px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scroll-behavior: smooth;
+    }
+    .chat-log::-webkit-scrollbar { width: 3px; }
+    .chat-log::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 2px; }
+    .chat-msg { display: flex; flex-direction: column; gap: 3px; }
+    .chat-msg.bot { align-items: flex-start; }
+    .chat-msg.user { align-items: flex-end; }
+    .chat-sender {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #6fc9ca;
+      padding: 0 4px;
+    }
+    .chat-bubble {
+      max-width: 82%;
+      padding: 10px 14px;
+      font-size: 14px;
+      line-height: 1.55;
+      border-radius: 4px 12px 12px 12px;
+      white-space: pre-wrap;
+    }
+    .chat-msg.bot .chat-bubble {
+      background: #1d2628;
+      color: #e6efee;
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    .chat-msg.user .chat-bubble {
+      background: var(--accent);
+      color: var(--on-accent);
+      border-radius: 12px 4px 12px 12px;
+      font-weight: 500;
+    }
+    .chat-bubble a { color: var(--nav-accent); }
+    .chat-typing .chat-bubble {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      padding: 12px 16px;
+    }
+    .chat-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #6fc9ca;
+      animation: chatDot 1.2s infinite;
+    }
+    .chat-dot:nth-child(2) { animation-delay: 0.2s; }
+    .chat-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes chatDot {
+      0%,60%,100% { opacity: 0.25; transform: scale(0.8); }
+      30% { opacity: 1; transform: scale(1); }
+    }
+    .chat-input-area {
+      border-top: 1px solid rgba(255,255,255,0.10);
+      padding: 14px 20px;
+      background: #11181a;
+    }
+    .chat-text-wrap { display: flex; gap: 8px; align-items: flex-end; }
+    .chat-text-wrap textarea {
+      flex: 1;
+      background: #1d2628;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 16px;
+      color: #e6efee;
+      resize: none;
+      outline: none;
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.5;
+      transition: border-color 0.15s;
+    }
+    .chat-text-wrap textarea::placeholder { color: #6c8483; }
+    .chat-text-wrap textarea:focus { border-color: var(--nav-accent); }
+    .chat-send {
+      background: var(--accent);
+      color: var(--on-accent);
+      border: none;
+      border-radius: 8px;
+      width: 38px;
+      height: 38px;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: opacity 0.15s;
+    }
+    .chat-send:hover { opacity: 0.88; }
+    .chat-send:disabled { opacity: 0.5; cursor: default; }
 
     /* Content — light teal field */
     .faq-wrap {
@@ -195,37 +325,33 @@
     }
     .btn-primary:hover { opacity: 0.88; text-decoration: none; }
 
-    /* Footer — dark bookend, matches the homepage */
-    footer {
-      background: var(--hero-bg);
-      padding: 40px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .footer-logo img {
-      height: 20px; width: auto;
-      mix-blend-mode: screen;
-      opacity: 0.6;
-    }
-    .footer-right {
-      font-family: ui-monospace, monospace;
-      font-size: 9px;
-      letter-spacing: 0.06em;
-      color: #5a7473;
-      text-align: right;
-      line-height: 1.8;
-    }
-    .footer-right a { color: #6fc9ca; text-decoration: none; }
-    .footer-right a:hover { text-decoration: underline; }
+    /* Footer — calling-card bookend, matches the homepage */
+    footer { background:#0f1416; border-top:none; display:flex; flex-direction:column; align-items:center; gap:26px; padding:60px 20px 44px; }
+    .cc-card { display:inline-block; }
+    .cc-grid { display:inline-grid; grid-template-columns:auto auto auto; align-items:center; justify-items:center; row-gap:5px; }
+    .cc-lbl { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.18em; color:#6fc9ca; text-transform:uppercase; text-decoration:none; white-space:nowrap; }
+    a.cc-lbl:hover { color:#a7c4c4; }
+    .cc-lbl-ig  { grid-row:1; grid-column:1 / 3; }
+    .cc-br-top  { grid-row:2; grid-column:1 / 3; }
+    .cc-at   { grid-row:3; grid-column:1; }
+    .cc-core { grid-row:3; grid-column:2; }
+    .cc-tld  { grid-row:3; grid-column:3; }
+    .cc-br-bot  { grid-row:4; grid-column:2 / 4; }
+    .cc-lbl-web { grid-row:5; grid-column:2 / 4; }
+    .cc-bracket { width:100%; height:7px; border:1px solid rgba(255,255,255,.32); justify-self:stretch; }
+    .cc-br-top { border-bottom:none; }
+    .cc-br-bot { border-top:none; }
+    .cc-ch { font-size: clamp(17px,2.6vw,24px); font-weight:600; letter-spacing:.01em; color:#f4f7f7; }
+    .cc-meta { font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; color:#5a7473; text-align:center; }
+    .cc-meta a { color:#5a7473; text-decoration:none; }
+    .cc-meta a:hover { color:#a7c4c4; }
 
     @media (max-width: 640px) {
       nav { padding: 14px 20px; }
       .page-hero { padding: 100px 20px 48px; }
       .faq-wrap { padding: 40px 20px 56px; }
       .faq-cta { padding: 56px 24px; }
-      footer { padding: 28px 20px; flex-direction: column; gap: 12px; align-items: flex-start; }
-      .footer-right { text-align: left; }
+      footer { padding: 48px 20px 40px; }
     }
   </style>
 </head>
@@ -243,6 +369,20 @@
     <div class="faq-label">Common Questions</div>
     <h1>Questions we get a lot</h1>
     <p class="faq-intro">These are the things people ask us before they decide to work with us. If you're wondering about cost, security, who owns the code, or how long it takes, the answers are here. If your question isn't, just ask.</p>
+
+    <div class="faq-chat">
+      <div class="faq-chat-label">Ask anything</div>
+      <div class="chat-widget">
+        <div class="chat-log" id="faqChatLog" aria-live="polite" aria-atomic="false"></div>
+        <div class="chat-input-area">
+          <form class="chat-text-wrap" id="faqChatForm">
+            <label class="visually-hidden" for="faqChatInput">Ask a question about how we work</label>
+            <textarea id="faqChatInput" rows="1" placeholder="Ask a question about how we work…" maxlength="600"></textarea>
+            <button type="submit" class="chat-send" id="faqChatSend" aria-label="Send question">↑</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -350,19 +490,116 @@
 </section>
 
 <footer>
-  <a href="/" class="footer-logo">
-    <img src="/images/logo.png" alt="POST205">
-  </a>
-  <div class="footer-right">
-    © 2026 · POST205, Inc.<br>
-    <a href="/privacy.html">Privacy Policy</a>
+  <div class="cc-card">
+    <div class="cc-grid">
+      <a class="cc-lbl cc-lbl-ig" href="https://instagram.com/post205" target="_blank" rel="noopener">Instagram</a>
+      <div class="cc-bracket cc-br-top"></div>
+      <span class="cc-ch cc-at">@</span><span class="cc-ch cc-core">post205</span><span class="cc-ch cc-tld">.com</span>
+      <div class="cc-bracket cc-br-bot"></div>
+      <div class="cc-lbl cc-lbl-web">You're here</div>
+    </div>
   </div>
+  <div class="cc-meta">© 2026 POST205, Inc. · <a href="/faq">FAQ</a> · <a href="/privacy.html">Privacy</a></div>
 </footer>
 
 <script>
   (function(){ var n = document.querySelector('nav'); if(!n) return;
     var f = function(){ n.classList.toggle('nav-solid', window.scrollY > 10); };
     f(); window.addEventListener('scroll', f, { passive: true });
+  })();
+</script>
+<script>
+  (function(){
+    var form  = document.getElementById('faqChatForm');
+    var input = document.getElementById('faqChatInput');
+    var send  = document.getElementById('faqChatSend');
+    var log   = document.getElementById('faqChatLog');
+    if (!form || !input || !log) return;
+
+    var busy = false;
+
+    function esc(s){
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function addMsg(side, text){
+      var wrap = document.createElement('div');
+      wrap.className = 'chat-msg ' + side;
+      if (side === 'bot') {
+        wrap.innerHTML = '<span class="chat-sender">205</span><span class="chat-bubble">' + esc(text) + '</span>';
+      } else {
+        wrap.innerHTML = '<span class="chat-bubble">' + esc(text) + '</span>';
+      }
+      log.appendChild(wrap);
+      log.scrollTop = log.scrollHeight;
+      return wrap;
+    }
+
+    function showTyping(){
+      var w = document.createElement('div');
+      w.className = 'chat-msg bot chat-typing';
+      w.id = 'faqTyping';
+      w.innerHTML = '<span class="chat-sender">205</span><span class="chat-bubble"><span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span></span>';
+      log.appendChild(w);
+      log.scrollTop = log.scrollHeight;
+    }
+    function hideTyping(){
+      var t = document.getElementById('faqTyping');
+      if (t) t.remove();
+    }
+
+    function autosize(){
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+    }
+    input.addEventListener('input', autosize);
+
+    // greeting
+    addMsg('bot', 'Ask me anything about how we work. I answer from the FAQs below.');
+
+    async function ask(question){
+      if (busy) return;
+      busy = true;
+      send.disabled = true;
+      addMsg('user', question);
+      input.value = '';
+      autosize();
+      showTyping();
+      try {
+        var res = await fetch('/api/faq-answer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: question }),
+        });
+        var data = await res.json().catch(function(){ return {}; });
+        hideTyping();
+        if (data && data.answer) {
+          addMsg('bot', data.answer);
+        } else {
+          addMsg('bot', "I'm not sure on that one. Tap Let's talk and a human will reply within a day.");
+        }
+      } catch (e) {
+        hideTyping();
+        addMsg('bot', "Something went wrong on my end. Browse the FAQs below, or tap Let's talk and a human will reply within a day.");
+      } finally {
+        busy = false;
+        send.disabled = false;
+      }
+    }
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var q = input.value.trim();
+      if (q) ask(q);
+    });
+
+    // Enter to send, Shift+Enter for a newline
+    input.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', { cancelable: true }));
+      }
+    });
   })();
 </script>
 <script src="/js/cookie-banner.js"></script>
