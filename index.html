@@ -1446,7 +1446,7 @@
     .cc-meta a { color:#5a7473; text-decoration:none; }
     .cc-meta a:hover { color:#a7c4c4; }
     /* mobile: clear the fixed chat talk-bar so the footer + privacy links stay visible */
-    @media (max-width:768px){ footer { padding-bottom: calc(96px + env(safe-area-inset-bottom,0px)); } }
+    @media (max-width:768px){ footer { padding-bottom: calc(124px + env(safe-area-inset-bottom,0px)); } }
     /* consistent section margins — hero is the reference (48px inner padding) */
     .case-studies-inner, .promises-inner, .about-inner { padding-left:48px; padding-right:48px; }
     @media (max-width:768px){ .case-studies-inner, .promises-inner, .about-inner { padding-left:20px; padding-right:20px; } }
@@ -2246,18 +2246,17 @@
     var pastDemos = false;
     function focusOpen(){ return chat.classList.contains('is-focus'); }
     function done(){ try { return sessionStorage.getItem('p205_lead_sent') === '1'; } catch(e){ return false; } }
-    var foot = document.querySelector('footer');
     function refresh(){
       var show = BAR_MQ.matches && pastDemos && !focusOpen() && !done();
       bar.classList.toggle('show', show);
-      // keep the footer (privacy links) clear of the fixed bar — match its real height
-      if (foot) foot.style.paddingBottom = show ? (bar.offsetHeight + 28) + 'px' : '';
+      // footer clearance for the fixed bar is handled by static CSS padding
+      // (see the mobile @media footer rule) — no JS layout writes here, so iOS
+      // address-bar resize events can't thrash the layout.
     }
     new IntersectionObserver(function(es){ var e = es[0]; pastDemos = (!e.isIntersecting && e.boundingClientRect.top < 0); refresh(); }, { threshold: 0 }).observe(trigger);
     new MutationObserver(refresh).observe(chat, { attributes:true, attributeFilter:['class'] });
     bar.addEventListener('click', function(e){ e.stopPropagation(); if (window.P205Chat) window.P205Chat.open(); });
     if (BAR_MQ.addEventListener) BAR_MQ.addEventListener('change', refresh);
-    window.addEventListener('resize', refresh);
   })();
 
   // ── CHAT WIDGET ──
