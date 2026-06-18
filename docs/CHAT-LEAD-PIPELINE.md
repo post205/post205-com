@@ -30,16 +30,44 @@ which is the secure-submission pattern from `CLAUDE.md`.
 | `OPS_LEAD_SECRET` | shared bearer secret the ops receiver validates |
 | `RESEND_API_KEY` | (optional) email fallback to toffer@post205.com |
 
-## Open questions before this can go live
+## Resolved wiring (2026-06-18)
 
-1. **Ops ingest target.** Does ops.post205.com already have a leads table +
-   receiver endpoint, or do we build a `receive-lead` edge function + `leads`
-   table on the ops Supabase project? (Pattern exists: see
-   `post205-ops/temp/ops-integration-brief.md` `receive-piandre-error`.)
-2. **Telegram chat.** Reuse `TELEGRAM_OPS_CHAT_ID` from sign.post205.com, or a
-   dedicated leads channel?
-3. The post205.com Netlify site needs the env vars above (sign.post205.com is a
-   separate Netlify site, so its vars don't carry over).
+**Ops ingest target = the existing `register-lead` edge function** (no new build
+needed). It's ACTIVE on the shared Supabase project, `verify_jwt:false`,
+Bearer-secret auth, inserts into `public.leads`.
+
+- `OPS_LEAD_ENDPOINT` = `https://dikuhcaaxxsadlwepblf.supabase.co/functions/v1/register-lead`
+- `OPS_LEAD_SECRET`   = the `REGISTER_LEAD_SECRET` value set on the ops Supabase function
+- `submit-lead.js` maps the chat lead onto register-lead's schema:
+  `{ name, company:business||name, email, source:'post205.com', status:'new', notes:"Pain/Timeline/Source" }`
+
+**Telegram** is sent directly from `submit-lead.js` (register-lead does NOT ping
+Telegram itself), so set `TELEGRAM_BOT_TOKEN` + `TELEGRAM_OPS_CHAT_ID` on the
+post205.com Netlify site (reuse the sign.post205.com bot/chat or a dedicated
+leads channel).
+
+### To turn it on (set in post205.com Netlify → Site settings → Env vars)
+
+| Var | Value |
+|---|---|
+| `OPS_LEAD_ENDPOINT` | the register-lead URL above |
+| `OPS_LEAD_SECRET` | = `REGISTER_LEAD_SECRET` on the ops Supabase |
+| `TELEGRAM_BOT_TOKEN` | the bot token |
+| `TELEGRAM_OPS_CHAT_ID` | the chat/channel id for lead pings |
+| `RESEND_API_KEY` | (optional) email fallback |
+
+Each channel is independently env-gated, so the function stays inert until its
+vars exist. No browser-side anon INSERT is introduced — the privileged write
+happens inside register-lead (service role), per `CLAUDE.md`.
+
+### Caveat — register-lead dedupes on `name`
+
+`register-lead` is idempotent on `name` (built for SA creation, where client
+names are unique). Two website leads with the same first name would collapse to
+one `leads` row. The **Telegram ping fires regardless**, so no lead notification
+is missed; only the ops table row may dedupe. If website volume makes this a
+problem, switch the dedupe key to email (or add a `source`-scoped check) in
+`post205-ops/supabase/functions/register-lead/index.ts`.
 
 ## Files
 

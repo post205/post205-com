@@ -34,16 +34,29 @@ exports.handler = async (event) => {
   const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const sends = [];
 
-  // 1) Forward to ops.post205.com
+  // 1) Forward to ops.post205.com — the register-lead edge function inserts into
+  //    public.leads. Map our chat fields onto that function's schema.
   const opsUrl = process.env.OPS_LEAD_ENDPOINT, opsSecret = process.env.OPS_LEAD_SECRET;
   if (opsUrl) {
+    const notes = [
+      lead.pain ? `Pain: ${lead.pain}` : '',
+      lead.timeline ? `Timeline: ${lead.timeline}` : '',
+      'Source: post205.com homepage chat',
+    ].filter(Boolean).join('\n');
     sends.push(fetch(opsUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         ...(opsSecret ? { Authorization: `Bearer ${opsSecret}` } : {}),
       },
-      body: JSON.stringify({ ...lead, received_at: new Date().toISOString() }),
+      body: JSON.stringify({
+        name:    lead.name,
+        company: lead.business || lead.name,
+        email:   lead.email,
+        source:  'post205.com',
+        status:  'new',
+        notes,
+      }),
     }).catch((e) => console.error('Ops forward failed:', e)));
   } else {
     console.error('OPS_LEAD_ENDPOINT not set — ops forward skipped');
