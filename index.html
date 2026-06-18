@@ -1139,10 +1139,14 @@
     .hero-descriptor { color: #a7c4c4; margin-bottom: 0; }
     .hero-tagline { margin-top: 16px; font-family: ui-monospace, monospace; font-size: 12px; letter-spacing: .16em; color: #6fc9ca; }
     /* hero headline with side-bracket decode (Filipino / they actually use) */
-    .hero-annotated { display:flex; flex-direction:column; gap:8px; }
+    .hero-annotated { display:flex; flex-direction:column; gap:14px; }
     .hl-line { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
-    .hl-tag { display:inline-flex; align-items:center; gap:9px; font-family: ui-monospace,monospace; font-size:11px; font-weight:400; letter-spacing:.12em; text-transform:uppercase; color:#6fc9ca; white-space:nowrap; }
-    .hl-tag::before { content:""; width:7px; height:22px; border:1px solid rgba(255,255,255,.4); border-left:none; flex-shrink:0; }
+    /* line 1: a bracket covering the whole phrase "Your business", labelled below */
+    .hl-group { display:inline-flex; flex-direction:column; align-items:flex-start; }
+    .hl-cover { width:100%; height:11px; border:1.5px solid rgba(255,255,255,.42); border-top:none; border-radius:0 0 3px 3px; margin-top:10px; }
+    .hl-grouplabel { align-self:center; font-family: ui-monospace,monospace; font-size:12px; font-weight:400; letter-spacing:.16em; text-transform:uppercase; color:#6fc9ca; margin-top:10px; }
+    /* line 2: a dash annotation on "software" (no bracket) */
+    .hl-dash { font-family: ui-monospace,monospace; font-size:11px; font-weight:400; letter-spacing:.12em; text-transform:uppercase; color:#6fc9ca; white-space:nowrap; }
     /* transparent header that blends into the dark hero (rain shows through);
        gains a solid dark backdrop only after the hero scrolls away */
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: none; box-shadow: none; transition: background .3s ease, box-shadow .3s ease; }
@@ -1476,8 +1480,12 @@
   <div class="hero-inner">
     <div class="hero-text">
       <h1 class="hero-annotated">
-        <span class="hl-line"><span class="hl-word">Your business</span><span class="hl-tag">Filipino</span></span>
-        <span class="hl-line"><span class="hl-word">software.</span><span class="hl-tag">they actually use</span></span>
+        <span class="hl-group">
+          <span class="hl-word">Your business</span>
+          <span class="hl-cover" aria-hidden="true"></span>
+          <span class="hl-grouplabel">Filipino</span>
+        </span>
+        <span class="hl-line"><span class="hl-word">software</span><span class="hl-dash">&mdash; they actually use</span></span>
       </h1>
       <div class="hero-descriptor">Websites, inventory, and back-office systems.</div>
     </div>
