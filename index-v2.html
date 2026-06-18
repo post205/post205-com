@@ -962,6 +962,7 @@
     .cta-sub { font-size: 16px; color: var(--text-2); line-height: 1.6; max-width: 300px; }
     .chat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
     .chat-chip {
+      position: relative;
       background: none;
       border: 1px solid var(--text-3);
       border-radius: 20px;
@@ -969,10 +970,16 @@
       font-size: 13px;
       color: var(--text);
       cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
       font-family: system-ui, -apple-system, sans-serif;
     }
     .chat-chip:hover { border-color: var(--accent); background: var(--surface); }
+    /* idle ping: a ring blooms from a random chip so people know they're clickable */
+    .chat-chip::after { content:""; position:absolute; inset:-1px; border-radius:20px; pointer-events:none; border:1.5px solid var(--accent); opacity:0; }
+    .chat-chip.ping { border-color: var(--accent); color: var(--accent-text); }
+    .chat-chip.ping::after { animation: chipPing 1s cubic-bezier(.22,1,.36,1); }
+    @keyframes chipPing { 0% { opacity:.65; transform:scale(1); } 100% { opacity:0; transform:scale(1.18); } }
+    @media (prefers-reduced-motion: reduce){ .chat-chip.ping::after { animation:none; } }
     .chat-text-wrap { display: flex; gap: 8px; align-items: flex-end; }
     .chat-text-wrap textarea {
       flex: 1;
@@ -2256,17 +2263,33 @@
 
     function chips(options, cb) {
       input.innerHTML = '';
-      const wrap = document.createElement('div');
+      var wrap = document.createElement('div');
       wrap.className = 'chat-chips';
+      var pingTimer = null;
+      function stopPing(){ if (pingTimer) { clearInterval(pingTimer); pingTimer = null; } }
       options.forEach(function(opt) {
-        const btn = document.createElement('button');
+        var btn = document.createElement('button');
         btn.className = 'chat-chip';
+        btn.type = 'button';
         btn.textContent = opt;
-        btn.onclick = function() { wrap.remove(); addMsg('user', opt); cb(opt); };
+        btn.onclick = function() { stopPing(); wrap.remove(); addMsg('user', opt); cb(opt); };
         wrap.appendChild(btn);
       });
       log.appendChild(wrap);
       scrollDown();
+      // idle ping so people realise the options are tappable (Piandré pattern)
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduce) {
+        var ping = function() {
+          var cs = wrap.querySelectorAll('.chat-chip');
+          if (!cs.length) { stopPing(); return; }
+          var pick = cs[Math.floor(Math.random() * cs.length)];
+          pick.classList.add('ping');
+          setTimeout(function(){ pick.classList.remove('ping'); }, 1000);
+        };
+        pingTimer = setInterval(ping, 1700);
+        setTimeout(ping, 1400);
+      }
     }
 
     function textInput(placeholder, cb) {
