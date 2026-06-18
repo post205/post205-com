@@ -970,16 +970,22 @@
       font-size: 13px;
       color: var(--text);
       cursor: pointer;
-      transition: border-color 0.15s, background 0.15s, color 0.15s;
+      transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.12s ease;
       font-family: system-ui, -apple-system, sans-serif;
+      /* spring in, staggered one-by-one (Piandré chip-in) */
+      opacity: 0; transform: translateY(7px);
+      animation: chipIn .42s cubic-bezier(.34,1.56,.64,1) forwards;
+      animation-delay: calc(var(--chip-i, 0) * 55ms + 40ms);
     }
-    .chat-chip:hover { border-color: var(--accent); background: var(--surface); }
+    @keyframes chipIn { to { opacity: 1; transform: none; } }
+    .chat-chip:hover { border-color: var(--accent); background: var(--surface); transform: translateY(-1px); }
+    .chat-chip:active { transform: scale(.96); }
     /* idle ping: a ring blooms from a random chip so people know they're clickable */
     .chat-chip::after { content:""; position:absolute; inset:-1px; border-radius:20px; pointer-events:none; border:1.5px solid var(--accent); opacity:0; }
     .chat-chip.ping { border-color: var(--accent); color: var(--accent-text); }
     .chat-chip.ping::after { animation: chipPing 1s cubic-bezier(.22,1,.36,1); }
     @keyframes chipPing { 0% { opacity:.65; transform:scale(1); } 100% { opacity:0; transform:scale(1.18); } }
-    @media (prefers-reduced-motion: reduce){ .chat-chip.ping::after { animation:none; } }
+    @media (prefers-reduced-motion: reduce){ .chat-chip { animation:none; opacity:1; transform:none; } .chat-chip.ping::after { animation:none; } }
     .chat-text-wrap { display: flex; gap: 8px; align-items: flex-end; }
     .chat-text-wrap textarea {
       flex: 1;
@@ -2275,10 +2281,11 @@
       wrap.className = 'chat-chips';
       var pingTimer = null;
       function stopPing(){ if (pingTimer) { clearInterval(pingTimer); pingTimer = null; } }
-      options.forEach(function(opt) {
+      options.forEach(function(opt, i) {
         var btn = document.createElement('button');
         btn.className = 'chat-chip';
         btn.type = 'button';
+        btn.style.setProperty('--chip-i', i);
         btn.textContent = opt;
         btn.onclick = function() { stopPing(); wrap.remove(); addMsg('user', opt); cb(opt); };
         wrap.appendChild(btn);
