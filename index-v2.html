@@ -2343,14 +2343,14 @@
         answers.pain = v;
         if (v === 'Something else') {
           botSay("Ah, ano 'yan? Tell me more.").then(function() {
-            textInput("e.g. too many no-shows, payroll, inventory…", function(t) { answers.pain = t; askBusiness(); });
+            textInput("e.g. too many no-shows, payroll, inventory…", function(t) { answers.pain = t; askBusiness(false); });
           });
-        } else { askBusiness(); }
+        } else { askBusiness(true); }
       });
     });
 
-    function askBusiness() {
-      botSay("Got it, common 'yan. What kind of business?").then(function() {
+    function askBusiness(common) {
+      botSay((common ? "Got it, common 'yan. " : "Got it. ") + "What kind of business?").then(function() {
         chips(['Clinic · Spa', 'Retail · Store', 'Events · Venue', 'Professional firm', 'Something else'], function(v) {
           answers.business = v;
           answers.timeline = '';
