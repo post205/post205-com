@@ -1406,6 +1406,12 @@
     /* about section — dark band (matches the hero + footer) */
     .about { background:#0f1416; border-top:none; }
     .about-mission-hl { color:#f4f7f7; }
+    /* bracket-decode: a left bracket groups the two "We"s, labelled FILIPINOS */
+    .about-decode { display:flex; align-items:center; gap:14px; }
+    .ad-tag { font-family: ui-monospace,monospace; font-size:12px; font-weight:400; letter-spacing:.14em; text-transform:uppercase; color:#6fc9ca; white-space:nowrap; }
+    .ad-bracket { align-self:stretch; width:9px; flex-shrink:0; border:1.5px solid rgba(255,255,255,.38); border-right:none; border-radius:3px 0 0 3px; }
+    .ad-lines { display:flex; flex-direction:column; gap:2px; }
+    .ad-we { color:#6fc9ca; }
     .about-mission-body { color:#a7c4c4; }
     .about-mission-body strong { color:#f4f7f7; }
     .about-mission-close { color:#e7efee; }
@@ -1815,7 +1821,14 @@
   <svg id="about-star-bg" class="about-star-bg" viewBox="0 0 120 50" preserveAspectRatio="none" aria-hidden="true"></svg>
   <div class="about-inner">
     <div class="about-mission">
-      <h2 class="about-mission-hl">Filipinos don't march. We sway.</h2>
+      <h2 class="about-mission-hl about-decode">
+        <span class="ad-tag">Filipinos</span>
+        <span class="ad-bracket" aria-hidden="true"></span>
+        <span class="ad-lines">
+          <span><span class="ad-we">We</span> don't march.</span>
+          <span><span class="ad-we">We</span> sway.</span>
+        </span>
+      </h2>
       <p class="about-mission-body">Swaying means the system moves with you. Built around how Filipinos actually work.</p>
 
       <p class="about-mission-body"><em><strong>Hiya.</strong></em> Your staff will smile through a broken process before they tell you about it. We design around that.</p>
