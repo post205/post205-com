@@ -1416,6 +1416,8 @@
     .ad-bracket { align-self:stretch; width:9px; flex-shrink:0; border:1.5px solid rgba(255,255,255,.38); border-right:none; border-radius:3px 0 0 3px; }
     .ad-lines { display:flex; flex-direction:column; gap:2px; }
     .ad-we { color:#6fc9ca; }
+    /* mobile: stack the FILIPINOS label above so the headline gets full width */
+    @media (max-width:600px){ .about-decode { flex-wrap:wrap; row-gap:4px; } .ad-tag { flex-basis:100%; order:-1; } }
     .about-mission-body { color:#a7c4c4; }
     .about-mission-body strong { color:#f4f7f7; }
     .about-mission-close { color:#e7efee; }
