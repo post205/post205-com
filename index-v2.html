@@ -167,7 +167,6 @@
       line-height: 1.8;
       color: var(--accent);
       white-space: pre;
-      will-change: transform;
       user-select: none;
       animation: binfall linear infinite;
       opacity: var(--op-l, 0.22);
@@ -2414,7 +2413,7 @@
 (function() {
   var container = document.querySelector('.hero-binary');
   if (!container) return;
-  var COUNT = 150;
+  var COUNT = 64;
   for (var i = 0; i < COUNT; i++) {
     var col = document.createElement('div');
     col.className = 'bin-col';
@@ -2434,11 +2433,8 @@
     var opD      = Math.max(0.02, 0.04 + t * 0.12 + (Math.random() - 0.5) * 0.02).toFixed(2);
     var opL      = Math.max(0.05, 0.12 + t * 0.28 + (Math.random() - 0.5) * 0.03).toFixed(2);
     var delay    = (-(Math.random() * dur)).toFixed(1);
-    var blur     = t < 0.40 ? ((0.40 - t) / 0.40 * 1.0).toFixed(1) : '0';
 
-    var style = 'left:' + leftPct.toFixed(1) + '%;font-size:' + fontSize + 'px;animation-duration:' + dur.toFixed(1) + 's;animation-delay:' + delay + 's;--op-d:' + opD + ';--op-l:' + opL;
-    if (blur !== '0' && window.innerWidth > 640) style += ';filter:blur(' + blur + 'px)';
-    col.style.cssText = style;
+    col.style.cssText = 'left:' + leftPct.toFixed(1) + '%;font-size:' + fontSize + 'px;animation-duration:' + dur.toFixed(1) + 's;animation-delay:' + delay + 's;--op-d:' + opD + ';--op-l:' + opL;
     container.appendChild(col);
   }
 })();
