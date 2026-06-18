@@ -65,13 +65,36 @@ Q: Do you use AI to build?
 A: Yes, and we're not shy about it. AI is how we ship custom systems in weeks instead of months. A person designs the system, makes the calls, and reviews every line. AI does the heavy typing. It doesn't do the thinking.
 `.trim();
 
-const SYSTEM_PROMPT =
+const SYSTEM_PREAMBLE =
   `You are the FAQ assistant for POST205, a company that builds custom web systems for Philippine businesses. ` +
-  `Answer ONLY using the FAQs below. Be concise, plain, and warm, in POST205's voice. ` +
+  `Answer ONLY using the knowledge provided below (the public FAQs plus any extra notes). Be concise, plain, and warm, in POST205's voice. ` +
   `Do not use marketing words. Do not use em dashes. ` +
-  `If the question is not covered by the FAQs, say you are not sure and tell them to tap Let's talk to reach a human. ` +
-  `Never invent facts.\n\n` +
-  `FAQs:\n${FAQ_KB}`;
+  `If the question is not covered, say you are not sure and tell them to tap Let's talk to reach a human. ` +
+  `Never invent facts, especially prices or specifics that are not in the knowledge.`;
+
+// --- Extra knowledge base (private Supabase table, read server-side) ----------
+// Reads public.faq_kb via the service role. The table is RLS-locked (no anon
+// access), so this content is NOT public or indexable; only this function can
+// read it. Cached ~5 min per warm instance. If SUPABASE_URL /
+// SUPABASE_SERVICE_ROLE_KEY are absent or the fetch fails, we silently fall back
+// to just the on-page FAQs, so nothing breaks.
+let KB_CACHE = { at: 0, text: '' };
+async function loadExtraKB() {
+  const url = process.env.SUPABASE_URL, key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return '';
+  if (Date.now() - KB_CACHE.at < 5 * 60 * 1000) return KB_CACHE.text;
+  try {
+    const r = await fetch(`${url}/rest/v1/faq_kb?select=topic,content&enabled=eq.true`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    });
+    if (!r.ok) { console.error('faq_kb fetch status', r.status); return KB_CACHE.text || ''; }
+    const rows = await r.json();
+    const text = (Array.isArray(rows) ? rows : [])
+      .map((x) => `Topic: ${x.topic}\n${x.content}`).join('\n\n');
+    KB_CACHE = { at: Date.now(), text };
+    return text;
+  } catch (e) { console.error('faq_kb load failed:', e); return KB_CACHE.text || ''; }
+}
 
 const FALLBACK = `I can't answer that one right now. Browse the FAQs below, or tap Let's talk and a human will reply within a day.`;
 
@@ -206,6 +229,11 @@ exports.handler = async (event) => {
   }
 
   try {
+    const extraKB = await loadExtraKB();
+    const system = SYSTEM_PREAMBLE +
+      `\n\nPublic FAQs:\n${FAQ_KB}` +
+      (extraKB ? `\n\nExtra knowledge (not published on the page, use it to answer):\n${extraKB}` : '');
+
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -216,7 +244,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 400,
-        system: SYSTEM_PROMPT,
+        system,
         messages: [{ role: 'user', content: question }],
       }),
     });
