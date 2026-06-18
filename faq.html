@@ -43,6 +43,15 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* smooth load reveal — sections fade/slide in */
+    @keyframes pageReveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: no-preference) {
+      .page-hero, .faq-wrap, .faq-cta, footer { opacity: 0; animation: pageReveal .6s cubic-bezier(.22,1,.36,1) forwards; }
+      .faq-wrap { animation-delay: .12s; }
+      .faq-cta { animation-delay: .20s; }
+      footer { animation-delay: .28s; }
+    }
+
     /* Nav — transparent over the dark hero, solid on scroll */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 — POST 205</title>
+  <title>404 — POST205</title>
   <meta name="robots" content="noindex">
   <meta property="og:image" content="https://post205.com/images/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -18,267 +18,131 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --black:        #18181A;
-      --surface:      #1a2424;
-      --border:       #2a3a3a;
-      --text:         #f0f4f4;
-      --text-2:       #a8bfbf;
-      --text-3:       #5a7a7a;
-      --accent:       #3BD1D3;
-      --on-accent:    #0a1a1a;
-    }
-
-    [data-theme="light"] {
-      --black:        #f5f7f7;
-      --surface:      #eef2f2;
-      --border:       #d4e0e0;
-      --text:         #0f1f1f;
-      --text-2:       #3a5a5a;
-      --text-3:       #7a9a9a;
-      --accent:       #1aabae;
+      --black:        #e7efee;
+      --surface:      #f7fcfc;
+      --border:       #c7d9d7;
+      --text:         #0b1b1b;
+      --text-2:       #41585a;
+      --text-3:       #5a7473;
+      --accent:       #0e9a9d;
       --on-accent:    #ffffff;
+      --hero-bg:      #0f1416;
+      --nav-accent:   #3BD1D3;
     }
 
-    [data-theme="system"] {
-      --black:        #18181A;
-      --surface:      #1a2424;
-      --border:       #2a3a3a;
-      --text:         #f0f4f4;
-      --text-2:       #a8bfbf;
-      --text-3:       #5a7a7a;
-      --accent:       #3BD1D3;
-      --on-accent:    #0a1a1a;
-    }
-
-    @media (prefers-color-scheme: light) {
-      [data-theme="system"] {
-        --black:    #f5f7f7;
-        --surface:  #eef2f2;
-        --border:   #d4e0e0;
-        --text:     #0f1f1f;
-        --text-2:   #3a5a5a;
-        --text-3:   #7a9a9a;
-        --accent:   #1aabae;
-        --on-accent:#ffffff;
-      }
-    }
-
-    html, body {
-      height: 100%;
+    html, body { height: 100%; }
+    body {
       background: var(--black);
       color: var(--text);
       font-family: system-ui, -apple-system, sans-serif;
-    }
-
-    body {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
 
-    /* ── NAV ── */
+    /* smooth load reveal */
+    @keyframes pageReveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: no-preference) {
+      .page-hero, footer { opacity: 0; animation: pageReveal .6s cubic-bezier(.22,1,.36,1) forwards; }
+      footer { animation-delay: .18s; }
+    }
+
+    /* Nav — transparent over the dark hero, solid on scroll */
     nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 48px;
-      height: 60px;
-      background: var(--black);
-      border-bottom: 1px solid var(--border);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 60px;
+      background: transparent; border-bottom: none; box-shadow: none;
+      transition: background .3s ease, box-shadow .3s ease;
     }
-
-    .nav-logo img { height: 20px; display: block; }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-
-    .nav-link {
-      font-family: ui-monospace, monospace;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .nav-link:hover { color: var(--text-2); }
-
-    .theme-toggle {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-3);
-      padding: 4px;
-      display: flex;
-      align-items: center;
-    }
-    .theme-toggle svg { width: 16px; height: 16px; }
-    .theme-toggle .icon-dark,
-    .theme-toggle .icon-light  { display: none; }
-
-    [data-theme="dark"]   .theme-toggle .icon-dark   { display: block; }
-    [data-theme="dark"]   .theme-toggle .icon-light   { display: none; }
-    [data-theme="dark"]   .theme-toggle .icon-system  { display: none; }
-    [data-theme="light"]  .theme-toggle .icon-light   { display: block; }
-    [data-theme="light"]  .theme-toggle .icon-dark    { display: none; }
-    [data-theme="light"]  .theme-toggle .icon-system  { display: none; }
-    [data-theme="system"] .theme-toggle .icon-system  { display: block; }
-    [data-theme="system"] .theme-toggle .icon-dark    { display: none; }
-    [data-theme="system"] .theme-toggle .icon-light   { display: none; }
-
+    nav.nav-solid { background: rgba(15,20,22,0.97); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
+    .nav-logo img { height: 22px; display: block; mix-blend-mode: screen; opacity: 0.9; }
     .nav-cta {
       font-family: ui-monospace, monospace;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      text-decoration: none;
-      border: 1px solid var(--accent);
-      padding: 6px 14px;
-      border-radius: 4px;
-      transition: opacity 0.15s;
+      font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--on-accent); background: var(--accent);
+      text-decoration: none; padding: 8px 14px; border-radius: 4px;
+      font-weight: 500; transition: opacity 0.15s;
     }
-    .nav-cta:hover { opacity: 0.8; }
+    .nav-cta:hover { opacity: 0.85; }
 
-    /* ── 404 CONTENT ── */
-    .not-found {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 48px;
-      text-align: center;
-    }
-
-    .not-found-inner {
-      max-width: 480px;
-    }
-
+    /* Dark hero with the 404 message */
+    .page-hero { background: var(--hero-bg); padding: 150px 48px 110px; text-align: center; }
+    .not-found-inner { max-width: 480px; margin: 0 auto; }
     .not-found-code {
       font-family: ui-monospace, monospace;
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 24px;
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--nav-accent); margin-bottom: 24px;
     }
-
-    .not-found h1 {
-      font-size: clamp(28px, 4vw, 40px);
-      font-weight: 800;
-      letter-spacing: -0.01em;
-      line-height: 1.1;
-      color: var(--text);
-      margin-bottom: 16px;
+    .page-hero h1 {
+      font-size: clamp(28px, 4vw, 40px); font-weight: 800;
+      letter-spacing: -0.01em; line-height: 1.1; color: #f4f7f7; margin-bottom: 16px;
     }
-
-    .not-found p {
-      font-size: 16px;
-      color: var(--text-2);
-      line-height: 1.6;
-      margin-bottom: 40px;
-    }
-
+    .page-hero p { font-size: 16px; color: #b9d2d2; line-height: 1.6; margin-bottom: 40px; }
     .btn-primary {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--on-accent);
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      padding: 14px 28px;
-      border-radius: 6px;
-      text-decoration: none;
-      letter-spacing: 0.01em;
-      transition: opacity 0.15s;
+      display: inline-block; background: var(--accent); color: var(--on-accent);
+      font-size: 15px; font-weight: 700; padding: 14px 28px; border-radius: 6px;
+      text-decoration: none; letter-spacing: 0.01em; transition: opacity 0.15s;
     }
     .btn-primary:hover { opacity: 0.88; }
 
-    /* ── FOOTER ── */
+    /* teal field between hero and footer */
+    .grow { flex: 1; min-height: 40px; }
+
+    /* Footer — dark bookend */
     footer {
-      padding: 32px 48px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: var(--hero-bg);
+      padding: 40px 48px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-
-    .footer-logo img { height: 20px; display: block; }
-
+    .footer-logo img { height: 20px; display: block; mix-blend-mode: screen; opacity: 0.6; }
     .footer-right {
       font-family: ui-monospace, monospace;
-      font-size: 10px;
-      letter-spacing: 0.06em;
-      color: var(--text-3);
-      text-align: right;
+      font-size: 9px; letter-spacing: 0.06em; color: #5a7473; text-align: right; line-height: 1.8;
     }
 
     @media (max-width: 768px) {
-      nav { padding: 0 24px; }
-      .not-found { padding: 56px 24px; }
-      footer { padding: 28px 24px; flex-direction: column; gap: 12px; align-items: flex-start; }
+      nav { padding: 0 20px; }
+      .page-hero { padding: 120px 24px 80px; }
+      footer { padding: 28px 20px; flex-direction: column; gap: 12px; align-items: flex-start; }
       .footer-right { text-align: left; }
     }
   </style>
-
-  <script>
-    (function(){ var t = localStorage.getItem('post205-theme') || 'system'; document.documentElement.setAttribute('data-theme', t); })();
-  </script>
 </head>
 <body>
 
 <nav>
   <a href="/" class="nav-logo">
-    <img src="/images/logo.png" alt="POST 205">
+    <img src="/images/logo.png" alt="POST205">
   </a>
-  <div class="nav-right">
-    <button class="theme-toggle" id="themeToggle" title="Toggle theme">
-      <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-      </svg>
-      <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-      </svg>
-      <svg class="icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
-      </svg>
-    </button>
-    <a href="/#contact" class="nav-cta">Let's talk</a>
-  </div>
+  <a href="/#contact" class="nav-cta">Let's talk</a>
 </nav>
 
-<div class="not-found">
+<section class="page-hero">
   <div class="not-found-inner">
     <div class="not-found-code">404</div>
     <h1>This page isn't here anymore.</h1>
     <p>Like a good idea that didn't scale.</p>
     <a href="/" class="btn-primary">Back to home</a>
   </div>
-</div>
+</section>
+
+<div class="grow"></div>
 
 <footer>
   <a href="/" class="footer-logo">
-    <img src="/images/logo.png" alt="POST 205">
+    <img src="/images/logo.png" alt="POST205">
   </a>
   <div class="footer-right">
-    © 2026 · Post 205, Inc.<br>3/F LZF Building, 25A Timog Avenue<br>South Triangle, Quezon City 1103
+    © 2026 · POST205, Inc.<br>3/F LZF Building, 25A Timog Avenue<br>South Triangle, Quezon City 1103
   </div>
 </footer>
 
 <script>
-  document.getElementById('themeToggle').addEventListener('click', function() {
-    const cycle = { dark: 'light', light: 'system', system: 'dark' };
-    const current = document.documentElement.getAttribute('data-theme') || 'system';
-    const next = cycle[current] || 'system';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('post205-theme', next);
-  });
+  (function(){ var n = document.querySelector('nav'); if(!n) return;
+    var f = function(){ n.classList.toggle('nav-solid', window.scrollY > 10); };
+    f(); window.addEventListener('scroll', f, { passive: true });
+  })();
 </script>
 
 </body>
