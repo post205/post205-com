@@ -26,62 +26,26 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
 
-  <script>
-    (function(){var t=localStorage.getItem('post205-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();
-  </script>
-
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --black:        #18181A;
-      --surface:      #1a2424;
-      --surface-2:    #252f2f;
-      --border:       #1f3535;
-      --border-2:     #2a4040;
-      --text:         #f0f0f2;
-      --text-2:       #7aacac;
-      --text-3:       #629a9a;
-      --accent:       #3BD1D3;
-      --on-accent:    #021616;
-      --nav-bg:       rgba(24, 24, 26, 0.96);
+      /* single theme — dark masthead/hero over a light teal field (matches the homepage) */
+      --black:        #e7efee;
+      --surface:      #f7fcfc;
+      --surface-2:    #dce8e7;
+      --border:       #c7d9d7;
+      --border-2:     #b1c8c5;
+      --text:         #0b1b1b;
+      --text-2:       #41585a;
+      --text-3:       #5a7473;
+      --accent:       #0e9a9d;
+      --accent-text:  #0f7476;
+      --on-accent:    #ffffff;
+      --hero-bg:      #0f1416;
+      --nav-accent:   #3BD1D3;
       --logo-filter:  none;
       --logo-blend:   screen;
-    }
-
-    [data-theme="light"] {
-      --black:        #f2f8f8;
-      --surface:      #f4fefe;
-      --surface-2:    #e0fffe;
-      --border:       #c8eeed;
-      --border-2:     #b0e0df;
-      --text:         #0a1a1a;
-      --text-2:       #4a6262;
-      --text-3:       #4a7070;
-      --accent:       #2db8ba;
-      --on-accent:    #021616;
-      --nav-bg:       rgba(242, 248, 248, 0.96);
-      --logo-filter:  none;
-      --logo-blend:   darken;
-    }
-
-    /* data-theme="system" follows the OS setting */
-    @media (prefers-color-scheme: light) {
-      [data-theme="system"] {
-        --black:        #f2f8f8;
-        --surface:      #f4fefe;
-        --surface-2:    #e0fffe;
-        --border:       #c8eeed;
-        --border-2:     #b0e0df;
-        --text:         #0a1a1a;
-        --text-2:       #4a6262;
-        --text-3:       #4a7070;
-        --accent:       #2db8ba;
-        --on-accent:    #021616;
-        --nav-bg:       rgba(242, 248, 248, 0.96);
-        --logo-filter:  none;
-        --logo-blend:   darken;
-      }
     }
 
     html { scroll-behavior: smooth; }
@@ -95,19 +59,30 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Nav */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 48px;
-      background: var(--nav-bg);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
+    /* smooth load reveal */
+    @keyframes pageReveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: no-preference) {
+      .page-hero, .wrap, footer { opacity: 0; animation: pageReveal .6s cubic-bezier(.22,1,.36,1) forwards; }
+      .wrap { animation-delay: .12s; }
+      footer { animation-delay: .26s; }
     }
+
+    /* Dark hero band */
+    .page-hero { background: var(--hero-bg); padding: 120px 24px 56px; }
+    .page-hero-inner { max-width: 760px; margin: 0 auto; }
+    .page-hero .eyebrow { color: var(--nav-accent); }
+    .page-hero h1 { color: #f4f7f7; }
+    .page-hero .lede { color: #b9d2d2; background: none; border-left: none; padding: 0; margin-top: 18px; }
+
+    /* Nav — transparent over the dark hero, solid on scroll */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px;
+      background: transparent; border-bottom: none; box-shadow: none;
+      transition: background .3s ease, box-shadow .3s ease;
+    }
+    nav.nav-solid { background: rgba(15,20,22,0.97); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
     .nav-logo { display: flex; align-items: center; text-decoration: none; }
     .nav-logo img {
       height: 26px; width: auto;
@@ -372,27 +347,26 @@
 
     /* Footer */
     footer {
-      padding: 32px 48px;
-      border-top: 1px solid var(--border);
+      background: var(--hero-bg);
+      padding: 40px 48px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
     .footer-logo img {
       height: 20px; width: auto;
-      mix-blend-mode: var(--logo-blend);
-      filter: var(--logo-filter);
-      opacity: 0.5;
+      mix-blend-mode: screen;
+      opacity: 0.6;
     }
     .footer-right {
       font-family: ui-monospace, monospace;
       font-size: 9px;
       letter-spacing: 0.06em;
-      color: var(--text-3);
+      color: #5a7473;
       text-align: right;
       line-height: 1.8;
     }
-    .footer-right a { color: var(--accent); text-decoration: none; }
+    .footer-right a { color: #6fc9ca; text-decoration: none; }
     .footer-right a:hover { text-decoration: underline; }
 
     @media (max-width: 640px) {
@@ -410,29 +384,21 @@
     <img src="/images/logo.png" alt="POST 205">
   </a>
   <div class="nav-right">
-    <button class="theme-toggle" id="themeToggle" title="Toggle theme">
-      <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-      </svg>
-      <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-      </svg>
-      <svg class="icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
-      </svg>
-    </button>
     <a href="/#contact" class="nav-cta">Let's talk</a>
   </div>
 </nav>
 
-<div class="wrap">
-
-  <div class="eyebrow">AIOS · Notion</div>
-  <h1>An AI operating system for your Notion</h1>
-
-  <div class="lede">
-    An <strong>AI Operating System</strong> (AIOS) turns Claude into a working part of your business, not a chatbot you ask one-off questions. It learns how you operate, connects to the tools you already use, and does real work for you: finding information, drafting, updating records, even running tasks while you're away. This is the version built for <strong>Notion</strong>. Point it at your workspace, and Claude can read and write your Notion for you. Below is everything in the kit.
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="eyebrow">AIOS · Notion</div>
+    <h1>An AI operating system for your Notion</h1>
+    <div class="lede">
+      An <strong>AI Operating System</strong> (AIOS) turns Claude into a working part of your business, not a chatbot you ask one-off questions. It learns how you operate, connects to the tools you already use, and does real work for you: finding information, drafting, updating records, even running tasks while you're away. This is the version built for <strong>Notion</strong>. Point it at your workspace, and Claude can read and write your Notion for you. Below is everything in the kit.
+    </div>
   </div>
+</section>
+
+<div class="wrap">
 
   <!-- WHAT YOU'LL NEED -->
   <div class="group">
@@ -620,7 +586,12 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
   })();
 </script>
-<script src="/js/theme-toggle.js"></script>
+<script>
+  (function(){ var n = document.querySelector('nav'); if(!n) return;
+    var f = function(){ n.classList.toggle('nav-solid', window.scrollY > 10); };
+    f(); window.addEventListener('scroll', f, { passive: true });
+  })();
+</script>
 <script src="/js/cookie-banner.js"></script>
 
 </body>
