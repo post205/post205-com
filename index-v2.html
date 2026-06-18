@@ -2254,10 +2254,32 @@
     }
     function hideTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
 
+    var REDUCE = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Stream a bot message in letter-by-letter, for drama (vs popping in).
+    function streamBot(text) {
+      return new Promise(function(resolve) {
+        var wrap = document.createElement('div');
+        wrap.className = 'chat-msg bot';
+        wrap.innerHTML = '<span class="chat-sender">205</span><span class="chat-bubble"></span>';
+        var bubble = wrap.querySelector('.chat-bubble');
+        log.appendChild(wrap); scrollDown();
+        if (REDUCE) { bubble.textContent = text; scrollDown(); resolve(); return; }
+        var i = 0;
+        (function tick() {
+          if (i >= text.length) { resolve(); return; }
+          var ch = text.charAt(i); i++;
+          bubble.textContent += ch; scrollDown();
+          var d = ch === ' ' ? 12 : (/[.,?!]/.test(ch) ? 110 : 20);
+          setTimeout(tick, d);
+        })();
+      });
+    }
+
     function botSay(text, delay) {
       return new Promise(function(resolve) {
         showTyping();
-        setTimeout(function() { hideTyping(); addMsg('bot', text); resolve(); }, delay || 700);
+        setTimeout(function() { hideTyping(); streamBot(text).then(resolve); }, REDUCE ? 120 : (delay || 700));
       });
     }
 
@@ -2348,7 +2370,7 @@
     try { sessionStorage.removeItem('p205_lead_sent'); } catch(e){}
     log.innerHTML = ''; input.innerHTML = '';
     var _ft = document.getElementById('chatFoot'); if (_ft) _ft.hidden = true;
-    botSay("'Musta? What's the biggest headache in your business right now?", 500).then(function() {
+    botSay("'Musta? What's the biggest headache in your business right now?", 1100).then(function() {
       chips(['Chasing payments', 'Encoding by hand', 'Bookings and schedules', 'Reports and compliance', 'Something else'], function(v) {
         answers.pain = v;
         if (v === 'Something else') {
