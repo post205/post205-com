@@ -1352,6 +1352,15 @@
     .sa-done { text-align:center; }
     .sa-signed-name { font-family: ui-monospace, monospace; font-size:15px; color:var(--text); margin:2px 0 10px; word-break:break-all; }
     .sa-sig-mark { width:110px; height:auto; color:var(--text); display:block; margin:6px auto 2px; }
+    /* proposal document header — reads like a real proposal */
+    .sa-doc { border-bottom:1px solid var(--border); padding-bottom:15px; margin-bottom:16px; }
+    .sa-doc-top { display:flex; justify-content:space-between; align-items:center; font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--text-3); margin-bottom:10px; }
+    .sa-doc-kind { color:var(--accent-text); }
+    .sa-doc-title { font-size:18px; font-weight:800; letter-spacing:-.01em; line-height:1.2; color:var(--text); }
+    .sa-doc-party { display:flex; flex-wrap:wrap; gap:8px 28px; margin-top:13px; font-size:12.5px; color:var(--text-2); }
+    .sa-doc-lbl { display:block; font-family: ui-monospace,monospace; font-size:8.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:2px; }
+    .sa-doc-intro { font-size:13px; color:var(--text-2); line-height:1.55; margin-top:13px; }
+    .sa-pick-lbl { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:10px; }
     .sa-intro { display:flex; gap:11px; align-items:flex-start; padding:12px 13px; margin-bottom:14px; border:1px solid var(--border); border-radius:9px; background:var(--surface-2); }
     .sa-intro-ava { flex:none; width:32px; height:32px; border-radius:50%; background:var(--accent); color:var(--on-accent); display:flex; align-items:center; justify-content:center; font-family: ui-monospace,monospace; font-size:11px; font-weight:700; }
     .sa-intro-from { font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:3px; }
@@ -1648,14 +1657,16 @@
           </div>
           <div class="sa">
             <div class="sa-step" id="saPick">
-              <div class="sa-intro">
-                <span class="sa-intro-ava" aria-hidden="true">YB</span>
-                <div class="sa-intro-tx">
-                  <div class="sa-intro-from">Your Business · proposal</div>
-                  <div class="sa-intro-msg">Hi! Here's what we discussed. Pick a package and sign below, takes a minute.</div>
+              <div class="sa-doc">
+                <div class="sa-doc-top"><span class="sa-doc-kind">Service Proposal</span><span class="sa-doc-ref">No. SA-2026-0142</span></div>
+                <div class="sa-doc-title">Leadership Workshop for your team</div>
+                <div class="sa-doc-party">
+                  <div><span class="sa-doc-lbl">From</span> Your Business</div>
+                  <div><span class="sa-doc-lbl">Prepared for</span> Your Client · Jun 18, 2026</div>
                 </div>
+                <p class="sa-doc-intro">Here's what we discussed. Pick a package, then sign to accept.</p>
               </div>
-              <div class="dep-title">Leadership Workshop · choose a package</div>
+              <div class="sa-pick-lbl">Choose a package</div>
               <div class="sa-tiers">
                 <button class="sa-tier" data-tier="Half-day" data-price="₱40,000" type="button">
                   <div class="sa-tier-n">Half-day</div>
