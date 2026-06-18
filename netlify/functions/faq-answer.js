@@ -1,12 +1,30 @@
 // faq-answer — the FAQ page chat. A visitor asks a question in natural language;
 // we answer it grounded ONLY in the POST205 FAQ knowledge base below.
 //
-// Env var (set in the post205.com Netlify site, not committed):
-//   ANTHROPIC_API_KEY   Anthropic API key for the Messages API
+// Env vars (set in the post205.com Netlify site, not committed):
+//   ANTHROPIC_API_KEY   (required to go live) Anthropic API key for the Messages API
+//   TURNSTILE_SECRET    (optional) Cloudflare Turnstile secret. If set, the
+//                       function verifies a `turnstileToken` field on each
+//                       request against Cloudflare siteverify and rejects on
+//                       failure. If NOT set, Turnstile is skipped entirely so
+//                       nothing breaks today.
 //
 // Ships INERT and safe: if ANTHROPIC_API_KEY is missing we return a friendly
 // canned answer (200, inert:true) so there is no error and no cost. The feature
 // goes live the moment the key is set in Netlify.
+//
+// ABUSE / COST GUARDS (all active regardless of the key):
+//   1. Origin/Referer allowlist — only post205.com, *.netlify.app deploy
+//      previews, and localhost/127.0.0.1 (dev) may call this. Others get 403.
+//   2. Best-effort IP rate limit — ~10 requests / 60s per IP. Over that, 429.
+//      Per-warm-instance only (resets on cold start); a cheap throttle, not a
+//      hard guarantee.
+//   3. Bounded cost — max_tokens stays modest and the question length is capped.
+//
+// TO FULLY LOCK IT DOWN LATER: set TURNSTILE_SECRET in Netlify AND add the
+// Cloudflare Turnstile widget to faq.html (the widget posts a token the client
+// then sends as `turnstileToken`). Don't add the widget now — the hook stays
+// inert until the secret is present.
 //
 // NOTE: the FAQ_KB below is copied verbatim from faq.html. If you edit the FAQ
 // copy on the page, update FAQ_KB here too so the chat stays in sync.
@@ -57,15 +75,122 @@ const SYSTEM_PROMPT =
 
 const FALLBACK = `I can't answer that one right now. Browse the FAQs below, or tap Let's talk and a human will reply within a day.`;
 
+const json = (statusCode, obj) => ({
+  statusCode,
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(obj),
+});
+
+// --- Origin/Referer allowlist -------------------------------------------------
+// Browser fetches always send Origin on cross-origin POSTs, so we can reject
+// other sites and casual scripts. We allow post205.com (any subdomain),
+// *.netlify.app deploy previews, and localhost/127.0.0.1 for local dev. If both
+// Origin and Referer are entirely absent we allow it (same-origin server cases);
+// browsers never strip Origin on a cross-origin call, so this is safe.
+function hostFromHeader(value) {
+  if (!value) return null;
+  try { return new URL(value).hostname.toLowerCase(); } catch { return null; }
+}
+function isAllowedHost(host) {
+  if (!host) return false;
+  return (
+    host === 'post205.com' ||
+    host.endsWith('.post205.com') ||
+    host.endsWith('.netlify.app') ||
+    host === 'localhost' ||
+    host === '127.0.0.1'
+  );
+}
+function originAllowed(headers) {
+  // Netlify lowercases header keys, but normalize defensively.
+  const h = {};
+  for (const k in headers) h[k.toLowerCase()] = headers[k];
+  const origin = h['origin'];
+  const referer = h['referer'] || h['referrer'];
+  // No Origin and no Referer: treat as same-origin/server call, allow.
+  if (!origin && !referer) return true;
+  const oHost = hostFromHeader(origin);
+  if (oHost) return isAllowedHost(oHost);
+  // Fall back to Referer if Origin was unparseable/missing.
+  const rHost = hostFromHeader(referer);
+  return isAllowedHost(rHost);
+}
+
+// --- Best-effort IP rate limit ------------------------------------------------
+// Module-scoped Map of IP -> recent request timestamps. Allows ~10 requests per
+// 60s per IP. This is per-warm-instance and resets on cold start, so it's a
+// cheap throttle to blunt abuse and runaway cost, not a hard guarantee.
+const RATE_WINDOW_MS = 60 * 1000;
+const RATE_MAX = 10;
+const hits = new Map();
+function clientIp(headers) {
+  const h = {};
+  for (const k in headers) h[k.toLowerCase()] = headers[k];
+  const fwd = h['x-forwarded-for'];
+  return (
+    h['x-nf-client-connection-ip'] ||
+    (fwd ? fwd.split(',')[0].trim() : '') ||
+    'unknown'
+  );
+}
+function rateLimited(ip) {
+  const now = Date.now();
+  const recent = (hits.get(ip) || []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (recent.length >= RATE_MAX) {
+    hits.set(ip, recent);
+    return true;
+  }
+  recent.push(now);
+  hits.set(ip, recent);
+  return false;
+}
+
+// --- Optional Turnstile verification (env-gated, inert without the secret) -----
+async function turnstilePassed(token, ip) {
+  const secret = process.env.TURNSTILE_SECRET;
+  if (!secret) return true; // not configured: skip entirely so nothing breaks today
+  if (!token) return false;
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, response: token, ...(ip && ip !== 'unknown' ? { remoteip: ip } : {}) }),
+    });
+    const data = await res.json().catch(() => ({}));
+    return data && data.success === true;
+  } catch (e) {
+    console.error('Turnstile verify failed:', e);
+    return false;
+  }
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method not allowed' };
 
+  const headers = event.headers || {};
+
+  // Guard 1: only our own pages (and dev/preview hosts) may call this.
+  if (!originAllowed(headers)) {
+    return json(403, { error: 'forbidden' });
+  }
+
+  // Guard 2: cheap per-IP throttle.
+  const ip = clientIp(headers);
+  if (rateLimited(ip)) {
+    return json(429, { error: 'rate_limited', answer: 'Give me a sec — too many questions at once. Try again shortly.' });
+  }
+
   let body;
-  try { body = JSON.parse(event.body || '{}'); } catch { return { statusCode: 400, body: 'Bad request' }; }
+  try { body = JSON.parse(event.body || '{}'); } catch { return json(400, { error: 'bad request' }); }
 
   const question = String(body.question ?? '').trim();
   if (!question || question.length > 600) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'invalid question' }) };
+    return json(400, { error: 'invalid question' });
+  }
+
+  // Guard 3 (optional): Turnstile. Inert unless TURNSTILE_SECRET is set.
+  if (!(await turnstilePassed(body.turnstileToken, ip))) {
+    return json(403, { error: 'verification_failed', answer: "I couldn't verify that request. Refresh the page and try again." });
   }
 
   // Inert until the key is set in Netlify: no error, no cost.
