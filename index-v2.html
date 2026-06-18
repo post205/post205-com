@@ -20,10 +20,6 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
   <link rel="canonical" href="https://post205.com/">
-  <!-- signature font (decorative, certificate demo only) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
 
   <script type="application/ld+json">
   {
@@ -1251,6 +1247,8 @@
     .dep-field { display:block; margin-bottom:12px; }
     .dep-field span { display:block; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); margin-bottom:5px; }
     .dep-field input, .dep-field select { width:100%; padding:10px 12px; border:1px solid var(--border-2); border-radius:7px; background:var(--surface); color:var(--text); font-size:16px; font-family:inherit; }
+    .dep-field select { -webkit-appearance:none; appearance:none; padding-right:40px; cursor:pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235a7473' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position: right 14px center; background-size:15px; }
+    .dep-field select:focus { border-color:var(--accent); }
     .dep-field input:focus, .dep-field select:focus { outline:none; border-color:var(--accent); }
     .dep-upload { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; padding:11px; border:1px dashed var(--border-2); border-radius:7px; background:transparent; color:var(--text-2); font-size:13px; cursor:pointer; margin-bottom:14px; transition: border-color .15s, color .15s; }
     .dep-upload:hover { border-color:var(--accent); color:var(--accent-text); }
@@ -1304,7 +1302,7 @@
     .cert { background:var(--surface); border-radius:10px; padding:7px; box-shadow:0 6px 22px rgba(8,20,20,.10); animation: depSlide .5s cubic-bezier(.22,1,.36,1); }
     .cert-frame { position:relative; border:1px solid var(--accent-border); border-radius:7px; padding:24px 18px 18px; text-align:center; box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--border); background-image: repeating-linear-gradient(0deg, rgba(11,27,27,.02) 0 1px, transparent 1px 4px); }
     .cert-seal { display:flex; justify-content:center; margin:0 auto 10px; }
-    .cert-sig-name { font-family: 'Alex Brush', cursive; font-size:30px; line-height:1; color:var(--text); display:block; margin-bottom:2px; }
+    .cert-sig-img { width:112px; height:auto; display:block; margin:-6px 0 0; mix-blend-mode:multiply; }
     .cert-band { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--text-3); margin-bottom:14px; }
     .cert-name { font-size:22px; font-weight:800; letter-spacing:-.01em; color:var(--text); }
     .cert-line { font-size:12px; color:var(--text-3); margin:7px 0; }
@@ -1603,7 +1601,7 @@
                   <div class="cert-units" id="cpdCertUnits">3 CPD units</div>
                   <div class="cert-foot">
                     <div class="cert-sig">
-                      <span class="cert-sig-name">Andrea Reyes</span>
+                      <img class="cert-sig-img" src="/images/cert-signature.png" alt="" aria-hidden="true">
                       <span class="cert-sig-cap">Program Director</span>
                     </div>
                     <div class="cert-ref">No. <b id="cpdCertNo">CPD-2026-0418</b><br><span id="cpdCertDate"></span></div>
