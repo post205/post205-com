@@ -26,8 +26,13 @@
     @media (prefers-reduced-motion: no-preference) { #state-article { animation: pageReveal .55s cubic-bezier(.22,1,.36,1); } }
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 16px 48px; background: transparent; border-bottom: none; box-shadow: none; transition: background .3s ease, box-shadow .3s ease; }
     nav.nav-solid { background: rgba(15,20,22,0.97); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
-    .nav-faq { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #3BD1D3; text-decoration: none; padding: 7px 13px; border: 1px solid rgba(59,209,211,.4); border-radius: 6px; transition: background .15s; }
+    .nav-faq { display: inline-flex; align-items: center; height: 32px; padding: 0 10px; box-sizing: border-box; color: #3BD1D3; text-decoration: none; font-family: ui-monospace, monospace; font-weight: 600; border: 1px solid rgba(59,209,211,.4); border-radius: 999px; overflow: hidden; white-space: nowrap; transition: background .15s; }
     .nav-faq:hover { background: rgba(59,209,211,.12); }
+    .nav-faq-q { font-size: 16px; line-height: 1; max-width: 1.4em; opacity: 1; overflow: hidden; transition: max-width .28s ease, opacity .2s ease; }
+    .nav-faq-label { font-size: 13px; letter-spacing: .04em; max-width: 0; opacity: 0; overflow: hidden; transition: max-width .3s cubic-bezier(.22,1,.36,1), opacity .25s ease; }
+    .nav-faq:hover .nav-faq-q { max-width: 0; opacity: 0; }
+    .nav-faq:hover .nav-faq-label { max-width: 120px; opacity: 1; }
+    @media (prefers-reduced-motion: reduce){ .nav-faq-q, .nav-faq-label { transition: none; } }
     .nav-logo { display: flex; align-items: center; text-decoration: none; }
     .nav-logo img { height: 26px; width: auto; mix-blend-mode: var(--logo-blend); filter: var(--logo-filter); opacity: 0.9; }
     .nav-right { display: flex; align-items: center; gap: 24px; }
@@ -153,7 +158,7 @@
   </a>
   <div class="nav-right">
   </div>
-  <a href="/faq" class="nav-faq">FAQs</a>
+  <a href="/faq" class="nav-faq" aria-label="Questions"><span class="nav-faq-q" aria-hidden="true">?</span><span class="nav-faq-label">Questions?</span></a>
 </nav>
 
 <div id="state-loading" class="state-msg">Loading...</div>
