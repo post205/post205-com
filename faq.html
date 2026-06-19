@@ -294,8 +294,9 @@
     /* ===== persistent chat: mobile focus sheet (<=768) ===== */
     .chat-min { display:none; }
     @media (max-width:768px){
-      .chat-widget.is-focus { position:fixed; left:0; right:0; bottom:0; top:76px; z-index:300; width:100%; max-width:none; height:auto; margin:0; border:none; border-radius:18px 18px 0 0; box-shadow:0 -14px 44px rgba(0,0,0,.4); display:flex; flex-direction:column; }
-      .chat-widget.is-focus::after { content:""; position:absolute; top:8px; left:50%; transform:translateX(-50%); width:40px; height:4px; border-radius:2px; background:var(--border-2); pointer-events:none; }
+      /* full-screen sheet; JS sizes height/top to the visual viewport so the
+         keyboard never pushes the conversation off-screen (Claude-app feel) */
+      .chat-widget.is-focus { position:fixed; left:0; right:0; top:0; bottom:auto; z-index:300; width:100%; max-width:none; height:100dvh; margin:0; border:none; border-radius:0; box-shadow:none; display:flex; flex-direction:column; }
       html.chat-locked::before { content:""; position:fixed; inset:0; background:rgba(8,16,16,.5); z-index:299; }
       .chat-widget.is-focus .chat-log { flex:1; min-height:0; max-height:none; }
       .chat-widget.is-focus .chat-input-area { flex-shrink:0; }
@@ -621,16 +622,32 @@
     if (!chat || !composer) return;
     var home = chat.parentNode, homeNext = chat.nextSibling;
     var minBtn = document.getElementById('faqChatMin');
+    var logEl = document.getElementById('faqChatLog');
     var FOCUS_MQ = window.matchMedia('(max-width:768px)');
+    var vv = window.visualViewport;
+    function toBottom(){ if (logEl) logEl.scrollTop = logEl.scrollHeight; }
+    // Size the sheet to the area above the keyboard and keep the latest message
+    // pinned just above the input, so opening the keyboard never scrolls the
+    // conversation away (the iOS position:fixed + soft-keyboard problem).
+    function fitVV(){
+      if (!chat.classList.contains('is-focus') || !vv) return;
+      chat.style.height = vv.height + 'px';
+      chat.style.top = vv.offsetTop + 'px';
+      toBottom();
+    }
     function enterFocus(){
       if (!FOCUS_MQ.matches) return;
       if (chat.parentNode !== document.body) document.body.appendChild(chat);
       chat.classList.add('is-focus');
       document.documentElement.classList.add('chat-locked');
+      if (vv){ vv.addEventListener('resize', fitVV); vv.addEventListener('scroll', fitVV); }
+      fitVV(); setTimeout(fitVV, 250); setTimeout(toBottom, 350);
     }
     function exitFocus(){
       chat.classList.remove('is-focus');
       document.documentElement.classList.remove('chat-locked');
+      if (vv){ vv.removeEventListener('resize', fitVV); vv.removeEventListener('scroll', fitVV); }
+      chat.style.height = ''; chat.style.top = '';
       if (home && chat.parentNode === document.body && !chat.classList.contains('is-docked')) home.insertBefore(chat, homeNext);
     }
     // tap the field -> raise the sheet (real tap, not programmatic focus)
@@ -639,6 +656,8 @@
       if (!f || chat.classList.contains('is-focus')) return;
       enterFocus(); try { f.focus(); } catch(_){}
     });
+    // when the field gains focus (keyboard opening), keep the latest message in view
+    composer.addEventListener('focusin', function(){ setTimeout(toBottom, 300); });
     if (minBtn) minBtn.addEventListener('click', function(){ var a = composer.querySelector('input, textarea'); if (a) a.blur(); exitFocus(); });
     document.addEventListener('click', function(e){
       if (!chat.classList.contains('is-focus')) return;
