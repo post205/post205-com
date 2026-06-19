@@ -605,6 +605,7 @@
       input.value = '';
       autosize();
       showTyping();
+      var answerText = '';
       try {
         var res = await fetch('/api/faq-answer', {
           method: 'POST',
@@ -627,18 +628,30 @@
             log.scrollTop = log.scrollHeight;
           }
           if (!acc) bubble.textContent = "I'm not sure on that one. Tap Let's talk and a human will reply within a day.";
+          answerText = bubble.textContent;
         } else {
           // JSON path (inert / guard rejections / errors)
           var data = await res.json().catch(function(){ return {}; });
           hideTyping();
-          addMsg('bot', (data && data.answer) ? data.answer : "I'm not sure on that one. Tap Let's talk and a human will reply within a day.");
+          answerText = (data && data.answer) ? data.answer : "I'm not sure on that one. Tap Let's talk and a human will reply within a day.";
+          addMsg('bot', answerText);
         }
       } catch (e) {
         hideTyping();
-        addMsg('bot', "Something went wrong on my end. Browse the FAQs below, or tap Let's talk and a human will reply within a day.");
+        answerText = "Something went wrong on my end. Browse the FAQs below, or tap Let's talk and a human will reply within a day.";
+        addMsg('bot', answerText);
       } finally {
         busy = false;
         send.disabled = false;
+        maybeOffer(answerText);
+      }
+    }
+
+    // Only offer to connect when the answer itself points to a human (pricing,
+    // timelines, uncovered questions, errors) — intentional, not after every Q.
+    function maybeOffer(text){
+      if (!text) return;
+      if (/let.?s talk|reach a human|talk to (the )?(team|a human|someone)|reach (the|our) team|get a quote|scope it/i.test(text)) {
         offerConnect();
       }
     }
