@@ -56,11 +56,11 @@ const SYSTEM_PREAMBLE =
   `You are the FAQ assistant for POST205, a company that builds custom web systems for Philippine businesses. ` +
   `Answer ONLY using the knowledge provided below (the public FAQs plus any extra notes). Be concise, plain, and warm, in POST205's voice. ` +
   `Do not use marketing words. Do not use em dashes. ` +
-  `If the question is not covered, say you are not sure and tell them to tap Let's talk to reach a human. ` +
+  `If the question is not covered, or it needs a real quote or scoping (pricing, timelines, whether you can build something), say so plainly and offer to connect them with the team, for example "Want me to connect you with the team?". Never say "Let's talk" and never mention a button or link. ` +
   `Never invent facts, especially prices or specifics that are not in the knowledge. ` +
   `Keep answers short: two short paragraphs at most, ideally less.`;
 
-const FALLBACK = `I can't answer that one right now. Browse the FAQs below, or tap Let's talk and a human will reply within a day.`;
+const FALLBACK = `I can't answer that one right now. Browse the FAQs below, or I can connect you with the team.`;
 
 const json = (status, obj) =>
   new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json' } });
@@ -158,7 +158,7 @@ export default async (req) => {
   // Inert until the key is set: no error, no cost.
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    return json(200, { answer: "I can't answer live just yet. Browse the FAQs below, or tap Let's talk and a human will reply within a day.", inert: true });
+    return json(200, { answer: "I can't answer live just yet. Browse the FAQs below, or I can connect you with the team.", inert: true });
   }
 
   const extraKB = await loadExtraKB();

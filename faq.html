@@ -504,7 +504,7 @@
   <div class="faq-cta-inner">
     <h2>Still have a question?</h2>
     <p>Ask us anything about how it would work for your business. We answer in plain language.</p>
-    <a href="/#contact" class="btn-primary">Let's talk</a>
+    <a href="/#contact" class="btn-primary">Get in touch</a>
   </div>
 </section>
 
@@ -637,20 +637,20 @@
             bubble.textContent = acc;
             log.scrollTop = log.scrollHeight;
           }
-          if (!acc) bubble.textContent = "I'm not sure on that one. Tap Let's talk and a human will reply within a day.";
+          if (!acc) bubble.textContent = "I'm not sure on that one. I can connect you with the team.";
           answerText = bubble.textContent;
         } else {
           // JSON path (inert / guard rejections / errors)
           var data = await res.json().catch(function(){ return {}; });
           await settleThink(thinkStart);
           hideTyping();
-          answerText = (data && data.answer) ? data.answer : "I'm not sure on that one. Tap Let's talk and a human will reply within a day.";
+          answerText = (data && data.answer) ? data.answer : "I'm not sure on that one. I can connect you with the team.";
           addMsg('bot', answerText);
         }
       } catch (e) {
         await settleThink(thinkStart);
         hideTyping();
-        answerText = "Something went wrong on my end. Browse the FAQs below, or tap Let's talk and a human will reply within a day.";
+        answerText = "Something went wrong on my end. Browse the FAQs below, or I can connect you with the team.";
         addMsg('bot', answerText);
       } finally {
         busy = false;
@@ -663,7 +663,7 @@
     // timelines, uncovered questions, errors) — intentional, not after every Q.
     function maybeOffer(text){
       if (!text) return;
-      if (/let.?s talk|reach a human|talk to (the )?(team|a human|someone)|reach (the|our) team|get a quote|scope it/i.test(text)) {
+      if (/connect you|connect (you )?with the team|have (the|our) team|the team can (take a look|help|scope|sort)|reach out to you/i.test(text)) {
         offerConnect();
       }
     }
@@ -688,7 +688,7 @@
       wrap.className = 'chat-offer'; wrap.id = 'faqOffer';
       var btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'chat-offer-btn';
-      btn.textContent = 'Want us to look at how this fits your business? →';
+      btn.textContent = 'Connect me with the team →';
       btn.addEventListener('click', startIntake);
       wrap.appendChild(btn);
       log.appendChild(wrap); log.scrollTop = log.scrollHeight;
