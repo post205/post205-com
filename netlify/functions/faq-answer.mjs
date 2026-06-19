@@ -132,6 +132,19 @@ async function turnstilePassed(token, ip) {
   } catch (e) { console.error('Turnstile verify failed:', e); return false; }
 }
 
+// --- Question log (fire-and-forget insert into private public.faq_questions) --
+// Records what people actually ask, to inform what to add to the KB. Anonymous
+// (question text only). No-op until the table exists / keys are set.
+function logQuestion(question, inert) {
+  const url = process.env.SUPABASE_URL, key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return Promise.resolve();
+  return fetch(`${url}/rest/v1/faq_questions`, {
+    method: 'POST',
+    headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+    body: JSON.stringify({ question: String(question).slice(0, 600), inert: !!inert }),
+  }).catch((e) => console.error('faq_questions log failed:', e));
+}
+
 export default async (req) => {
   if (req.method !== 'POST') return new Response('Method not allowed', { status: 405 });
 
@@ -158,9 +171,11 @@ export default async (req) => {
   // Inert until the key is set: no error, no cost.
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
+    await logQuestion(question, true);
     return json(200, { answer: "I can't answer live just yet. Browse the FAQs below, or I can connect you with the team.", inert: true });
   }
 
+  logQuestion(question, false); // fire-and-forget; runs while the model responds
   const extraKB = await loadExtraKB();
   const kbText = `Public FAQs:\n${FAQ_KB}` +
     (extraKB ? `\n\nExtra knowledge (not published on the page, use it to answer):\n${extraKB}` : '');
