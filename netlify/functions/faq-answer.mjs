@@ -58,7 +58,7 @@ const SYSTEM_PREAMBLE =
   `Do not use marketing words. Do not use em dashes. ` +
   `If the question is not covered, or it needs a real quote or scoping (pricing, timelines, whether you can build something), say so plainly and offer to connect them with the team, for example "Want me to connect you with the team?". Never say "Let's talk" and never mention a button or link. ` +
   `Never invent facts, especially prices or specifics that are not in the knowledge. ` +
-  `Keep answers short: two short paragraphs at most, ideally less.`;
+  `Keep answers as short as the question allows, usually one to three sentences. Only write more when the question genuinely needs the detail. Do not pad, do not restate the question.`;
 
 const FALLBACK = `I can't answer that one right now. Browse the FAQs below, or I can connect you with the team.`;
 
@@ -194,7 +194,7 @@ export default async (req) => {
       headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 300,
+        max_tokens: 220,
         system,
         stream: true,
         messages: [{ role: 'user', content: question }],
