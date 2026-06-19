@@ -391,7 +391,6 @@
     <p class="faq-intro">These are the things people ask us before they decide to work with us. If you're wondering about cost, security, who owns the code, or how long it takes, the answers are here. If your question isn't, just ask.</p>
 
     <div class="faq-chat">
-      <div class="faq-chat-label">Ask anything</div>
       <div class="chat-widget">
         <div class="chat-log" id="faqChatLog" aria-live="polite" aria-atomic="false"></div>
         <div class="chat-input-area">
@@ -555,7 +554,7 @@
       return wrap;
     }
 
-    var THINK_WORDS = ['Thinking','Tinkering','Pondering','Spelunking','Digging','Cooking','Noodling','Untangling','Connecting','Accomplishing'];
+    var THINK_WORDS = ['Thinking','Iniisip','Tinkering','Nagdidiskarte','Spelunking','Hinuhukay','Cooking','Pinagiisipan','Noodling','Tinitimbang','Untangling','Kinakalkula','Accomplishing'];
     var thinkTimer = null;
     function showTyping(){
       var w = document.createElement('div');
@@ -588,7 +587,15 @@
     input.addEventListener('input', autosize);
 
     // greeting
-    addMsg('bot', 'Ask me anything about how we work. I answer from the FAQs below.');
+    addMsg('bot', "Ask me anything about how we work, what we build, or what it costs. I'll answer straight.");
+
+    function addBotBubble(){
+      var wrap = document.createElement('div');
+      wrap.className = 'chat-msg bot';
+      wrap.innerHTML = '<span class="chat-sender">205</span><span class="chat-bubble"></span>';
+      log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+      return wrap.querySelector('.chat-bubble');
+    }
 
     async function ask(question){
       if (busy) return;
@@ -604,12 +611,27 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question: question }),
         });
-        var data = await res.json().catch(function(){ return {}; });
-        hideTyping();
-        if (data && data.answer) {
-          addMsg('bot', data.answer);
+        var ct = res.headers.get('content-type') || '';
+        if (res.body && res.body.getReader && ct.indexOf('text/plain') !== -1) {
+          // streamed answer — render tokens as they arrive (the snappy path)
+          hideTyping();
+          var bubble = addBotBubble();
+          var reader = res.body.getReader();
+          var decoder = new TextDecoder();
+          var acc = '';
+          for (;;) {
+            var chunk = await reader.read();
+            if (chunk.done) break;
+            acc += decoder.decode(chunk.value, { stream: true });
+            bubble.textContent = acc;
+            log.scrollTop = log.scrollHeight;
+          }
+          if (!acc) bubble.textContent = "I'm not sure on that one. Tap Let's talk and a human will reply within a day.";
         } else {
-          addMsg('bot', "I'm not sure on that one. Tap Let's talk and a human will reply within a day.");
+          // JSON path (inert / guard rejections / errors)
+          var data = await res.json().catch(function(){ return {}; });
+          hideTyping();
+          addMsg('bot', (data && data.answer) ? data.answer : "I'm not sure on that one. Tap Let's talk and a human will reply within a day.");
         }
       } catch (e) {
         hideTyping();
