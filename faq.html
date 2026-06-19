@@ -554,7 +554,7 @@
       return wrap;
     }
 
-    var THINK_WORDS = ['Thinking','Iniisip','Tinkering','Nagdidiskarte','Spelunking','Hinuhukay','Cooking','Pinagiisipan','Noodling','Tinitimbang','Untangling','Kinakalkula','Accomplishing'];
+    var THINK_WORDS = ['Thinking','Tinkering','Nagdidiskarte','Spelunking','Hinuhukay','Cooking','Pinagiisipan','Noodling','Tinitimbang','Untangling','Kinakalkula','Accomplishing'];
     var thinkTimer = null;
     function showTyping(){
       var w = document.createElement('div');
@@ -597,6 +597,15 @@
       return wrap.querySelector('.chat-bubble');
     }
 
+    function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+    // keep a touch of "thinking" visible even when the answer is fast, so it
+    // feels considered (randomised 0.5-1.2s minimum), not robotic.
+    async function settleThink(startTs){
+      var min = 500 + Math.random() * 700;
+      var elapsed = Date.now() - startTs;
+      if (elapsed < min) await sleep(min - elapsed);
+    }
+
     async function ask(question){
       if (busy) return;
       busy = true;
@@ -605,7 +614,7 @@
       input.value = '';
       autosize();
       showTyping();
-      var answerText = '';
+      var answerText = '', thinkStart = Date.now();
       try {
         var res = await fetch('/api/faq-answer', {
           method: 'POST',
@@ -615,6 +624,7 @@
         var ct = res.headers.get('content-type') || '';
         if (res.body && res.body.getReader && ct.indexOf('text/plain') !== -1) {
           // streamed answer — render tokens as they arrive (the snappy path)
+          await settleThink(thinkStart);
           hideTyping();
           var bubble = addBotBubble();
           var reader = res.body.getReader();
@@ -632,11 +642,13 @@
         } else {
           // JSON path (inert / guard rejections / errors)
           var data = await res.json().catch(function(){ return {}; });
+          await settleThink(thinkStart);
           hideTyping();
           answerText = (data && data.answer) ? data.answer : "I'm not sure on that one. Tap Let's talk and a human will reply within a day.";
           addMsg('bot', answerText);
         }
       } catch (e) {
+        await settleThink(thinkStart);
         hideTyping();
         answerText = "Something went wrong on my end. Browse the FAQs below, or tap Let's talk and a human will reply within a day.";
         addMsg('bot', answerText);
