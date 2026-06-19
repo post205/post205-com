@@ -133,16 +133,20 @@ async function turnstilePassed(token, ip) {
   } catch (e) { console.error('Turnstile verify failed:', e); return false; }
 }
 
+// Questions that lean toward prospecting (a real business pain or "where do I
+// start") — these are openings. Mirrors the chat's client-side detection.
+const PROSPECT_RX = /figure out where|where (your|the) business|where you('?re| are)? stuck|a few (plain|quick) questions|fully booked|charging too little|busy but (broke|tight)|from scratch|runs through (you|me)|stalls? when (you|i)|step away|where (do|to) (i|you) start|not sure (what|where)|more (customers|clients)|customers come from|help me figure/i;
+
 // --- Question log (fire-and-forget insert into private public.faq_questions) --
-// Records what people actually ask, to inform what to add to the KB. Anonymous
-// (question text only). No-op until the table exists / keys are set.
-function logQuestion(question, inert) {
+// Records what people actually ask, to inform what to add to the KB and to flag
+// prospecting openings. Anonymous (question text only). No-op without keys.
+function logQuestion(question, inert, prospect) {
   const url = process.env.SUPABASE_URL, key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return Promise.resolve();
   return fetch(`${url}/rest/v1/faq_questions`, {
     method: 'POST',
     headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-    body: JSON.stringify({ question: String(question).slice(0, 600), inert: !!inert }),
+    body: JSON.stringify({ question: String(question).slice(0, 600), inert: !!inert, prospect: !!prospect }),
   }).catch((e) => console.error('faq_questions log failed:', e));
 }
 
@@ -163,6 +167,7 @@ export default async (req) => {
   try { body = await req.json(); } catch { return json(400, { error: 'bad request' }); }
   const question = String((body && body.question) ?? '').trim();
   if (!question || question.length > 600) return json(400, { error: 'invalid question' });
+  const prospect = PROSPECT_RX.test(question);
 
   // Guard 3 (optional): Turnstile.
   if (!(await turnstilePassed(body.turnstileToken, ip))) {
@@ -172,11 +177,11 @@ export default async (req) => {
   // Inert until the key is set: no error, no cost.
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    await logQuestion(question, true);
+    await logQuestion(question, true, prospect);
     return json(200, { answer: "I can't answer live just yet. Browse the FAQs below, or I can connect you with the team.", inert: true });
   }
 
-  logQuestion(question, false); // fire-and-forget; runs while the model responds
+  logQuestion(question, false, prospect); // fire-and-forget; runs while the model responds
   const extraKB = await loadExtraKB();
   const kbText = `Public FAQs:\n${FAQ_KB}` +
     (extraKB ? `\n\nExtra knowledge (not published on the page, use it to answer):\n${extraKB}` : '');
