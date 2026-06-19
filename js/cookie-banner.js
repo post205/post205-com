@@ -12,12 +12,12 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      background: var(--surface-2);
-      border: 1px solid var(--border-2);
+      background: #11181a;
+      border: 1px solid rgba(255,255,255,0.12);
       border-radius: 40px;
       padding: 12px 16px 12px 20px;
       font-size: 13px;
-      color: var(--text-2);
+      color: #b9d2d2;
       white-space: nowrap;
       box-shadow: 0 8px 32px rgba(0,0,0,0.3);
       backdrop-filter: blur(12px);
@@ -34,12 +34,12 @@
     }
     .cookie-icon { font-size: 18px; flex-shrink: 0; }
     .cookie-text { white-space: normal; line-height: 1.4; }
-    .cookie-text a { color: var(--accent); text-decoration: none; }
+    .cookie-text a { color: #6fc9ca; text-decoration: none; }
     .cookie-text a:hover { text-decoration: underline; }
     .cookie-btn {
       flex-shrink: 0;
-      background: var(--accent);
-      color: var(--on-accent, #021616);
+      background: #3BD1D3;
+      color: #021616;
       border: none;
       border-radius: 20px;
       padding: 6px 16px;
@@ -72,7 +72,7 @@
   banner.id = 'cookie-banner';
   banner.innerHTML = `
     <span class="cookie-icon" aria-hidden="true">🍪</span>
-    <span class="cookie-text">This site saves your theme preference. That's the only thing stored in your browser. <a href="/privacy.html">Privacy policy</a></span>
+    <span class="cookie-text">No trackers, no ads. We store only what keeps the site working. <a href="/privacy.html">Privacy policy</a></span>
     <button class="cookie-btn" id="cookie-ok-btn">Got it</button>
   `;
   document.body.appendChild(banner);
