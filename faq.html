@@ -235,7 +235,7 @@
     /* "thinking" indicator: pulsing 205 mark + rotating playful words */
     .chat-thinking { display: inline-flex; align-items: center; gap: 9px; }
     .think-mark { width: 11px; height: 11px; border-radius: 2px; background: var(--nav-accent); flex-shrink: 0; animation: thinkPulse 1s ease-in-out infinite; }
-    .think-word { color: #9fc3c3; font-size: 14px; }
+    .think-word { color: #9fc3c3; font-size: 14px; min-width: 8.5em; }
     .think-dots { display: inline-flex; gap: 3px; }
     .think-dots i { width: 3px; height: 3px; border-radius: 50%; background: #6c8483; animation: thinkDot 1.2s infinite; }
     .think-dots i:nth-child(2){ animation-delay: .15s; }
@@ -554,7 +554,7 @@
       return wrap;
     }
 
-    var THINK_WORDS = ['Thinking','Tinkering','Nagdidiskarte','Spelunking','Hinuhukay','Cooking','Pinagiisipan','Noodling','Tinitimbang','Untangling','Kinakalkula','Accomplishing'];
+    var THINK_WORDS = ['Thinking','Overthinking','Nagdidiskarte','Scheming','Computing','Tinitimbang','Mulling','Hinuhukay','Plotting','Sinusuri','Cooking','Kinakalkula','Deliberating'];
     var thinkTimer = null;
     function showTyping(){
       var w = document.createElement('div');
