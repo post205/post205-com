@@ -72,7 +72,7 @@
   banner.id = 'cookie-banner';
   banner.innerHTML = `
     <span class="cookie-icon" aria-hidden="true">🍪</span>
-    <span class="cookie-text">No trackers, no ads. We store only what keeps the site working. <a href="/privacy.html">Privacy policy</a></span>
+    <span class="cookie-text">We keep one thing in your browser: that you've seen this note. <a href="/privacy.html">Privacy policy</a></span>
     <button class="cookie-btn" id="cookie-ok-btn">Got it</button>
   `;
   document.body.appendChild(banner);
