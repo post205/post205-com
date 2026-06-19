@@ -36,6 +36,8 @@
     /* NAV — transparent over the dark hero, solid on scroll */
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 16px 48px; background: transparent; border-bottom: none; box-shadow: none; transition: background .3s ease, box-shadow .3s ease; }
     nav.nav-solid { background: rgba(15,20,22,0.97); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
+    .nav-faq { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #3BD1D3; text-decoration: none; padding: 7px 13px; border: 1px solid rgba(59,209,211,.4); border-radius: 6px; transition: background .15s; }
+    .nav-faq:hover { background: rgba(59,209,211,.12); }
     .nav-logo { display: flex; align-items: center; text-decoration: none; }
     .nav-logo img { height: 26px; width: auto; mix-blend-mode: var(--logo-blend); filter: var(--logo-filter); opacity: 0.9; }
     .nav-right { display: flex; align-items: center; gap: 24px; }
@@ -120,6 +122,7 @@
   </a>
   <div class="nav-right">
   </div>
+  <a href="/faq" class="nav-faq">FAQ</a>
 </nav>
 
 <header class="page-header">
