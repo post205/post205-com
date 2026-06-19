@@ -264,6 +264,61 @@
     .chat-send:hover { opacity: 0.88; }
     .chat-send:disabled { opacity: 0.5; cursor: default; }
 
+    /* ===== persistent chat: desktop dock (>=769) ===== */
+    @media (min-width:769px){
+      .chat-widget.is-docked {
+        position:fixed; right:24px; bottom:24px; top:auto; left:auto;
+        width:380px; max-width:calc(100vw - 48px); max-height:min(560px, calc(100vh - 110px));
+        z-index:200; margin:0; box-shadow:0 24px 64px rgba(0,0,0,.5), 0 4px 16px rgba(0,0,0,.35);
+        animation:p205dockin .26s ease;
+      }
+      .chat-widget.is-docked .chat-log { flex:1; min-height:0; overflow-y:auto; max-height:none; }
+    }
+    @keyframes p205dockin { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+    @media(prefers-reduced-motion:reduce){ .chat-widget.is-docked { animation:none; } }
+
+    /* ===== persistent chat: mobile focus sheet (<=768) ===== */
+    .chat-min { display:none; }
+    @media (max-width:768px){
+      .chat-widget.is-focus { position:fixed; left:0; right:0; bottom:0; top:76px; z-index:300; width:100%; max-width:none; height:auto; margin:0; border:none; border-radius:18px 18px 0 0; box-shadow:0 -14px 44px rgba(0,0,0,.4); display:flex; flex-direction:column; }
+      .chat-widget.is-focus::after { content:""; position:absolute; top:8px; left:50%; transform:translateX(-50%); width:40px; height:4px; border-radius:2px; background:var(--border-2); pointer-events:none; }
+      html.chat-locked::before { content:""; position:fixed; inset:0; background:rgba(8,16,16,.5); z-index:299; }
+      .chat-widget.is-focus .chat-log { flex:1; min-height:0; max-height:none; }
+      .chat-widget.is-focus .chat-input-area { flex-shrink:0; }
+      .chat-widget.is-focus .chat-min { display:flex; align-items:center; justify-content:center; position:absolute; top:10px; right:12px; width:34px; height:34px; border-radius:50%; border:1px solid var(--border-2); background:var(--surface); color:var(--text-2); cursor:pointer; z-index:1; }
+    }
+    html.chat-locked { overflow:hidden; }
+
+    /* ===== persistent chat: mobile sticky bar (<=768) ===== */
+    .talk-bar {
+      position:fixed; left:0; right:0; bottom:0; width:100%; box-sizing:border-box; z-index:150;
+      display:none; align-items:center; gap:12px; text-align:left; cursor:pointer; border:0;
+      border-top:2px solid var(--nav-accent); background:#141416; color:#fff;
+      padding:13px 18px calc(13px + env(safe-area-inset-bottom,0px));
+      box-shadow:0 -8px 28px rgba(0,0,0,.28);
+      transform:translateY(115%); transition:transform .32s cubic-bezier(.22,1,.36,1);
+      font-family:inherit; -webkit-tap-highlight-color:transparent;
+    }
+    @media (max-width:768px){ .talk-bar { display:flex; } footer { padding-bottom: calc(84px + env(safe-area-inset-bottom,0px)); } }
+    .talk-bar.show { transform:translateY(0); }
+    .talk-bar-tx { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+    .talk-bar-t { font-size:15px; font-weight:700; letter-spacing:-.01em; line-height:1.15; }
+    .talk-bar-s { font-size:12px; color:#cfe3e3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .talk-bar-ic { flex:none; width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.16); display:grid; place-items:center; }
+    .talk-bar-ic svg { width:20px; height:20px; }
+    @media(prefers-reduced-motion:reduce){ .talk-bar { transition:none; } }
+
+    /* dock collapse -> launcher bubble (desktop) */
+    .chat-dock-close { display:none; }
+    @media (min-width:769px){
+      .chat-widget.is-docked .chat-dock-close { display:flex; align-items:center; justify-content:center; position:absolute; top:8px; right:10px; width:30px; height:30px; border-radius:50%; border:1px solid var(--border-2); background:var(--surface); color:var(--text-2); cursor:pointer; z-index:2; }
+    }
+    .chat-widget.is-collapsed { display:none !important; }
+    .chat-fab { display:none; position:fixed; right:24px; bottom:24px; z-index:200; width:60px; height:60px; border-radius:50%; border:2px solid var(--nav-accent); cursor:pointer; background:#141416; color:#fff; align-items:center; justify-content:center; box-shadow:0 16px 40px rgba(8,20,20,.4); animation:p205dockin .26s ease; }
+    .chat-fab.show { display:flex; }
+    .chat-fab svg { width:26px; height:26px; }
+    @media (max-width:768px){ .chat-fab { display:none !important; } }
+
     /* Content — light teal field */
     .faq-wrap {
       max-width: 720px;
@@ -396,6 +451,8 @@
 
     <div class="faq-chat">
       <div class="chat-widget">
+        <button class="chat-min" id="faqChatMin" type="button" aria-label="Minimize chat"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+        <button class="chat-dock-close" id="faqChatDockClose" type="button" aria-label="Collapse chat"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h12"/></svg></button>
         <div class="chat-log" id="faqChatLog" aria-live="polite" aria-atomic="false"></div>
         <div class="chat-input-area">
           <form class="chat-text-wrap" id="faqChatForm">
@@ -504,6 +561,20 @@
 
 </div>
 
+<!-- mobile sticky: brings the FAQ chat back once the hero scrolls off -->
+<button type="button" class="talk-bar" id="talkBar" aria-label="Ask a question">
+  <span class="talk-bar-tx">
+    <span class="talk-bar-t">Got a question?</span>
+    <span class="talk-bar-s">Ask away, I'll answer straight.</span>
+  </span>
+  <span class="talk-bar-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+</button>
+
+<!-- desktop: launcher bubble when the docked chat is collapsed -->
+<button type="button" class="chat-fab" id="faqChatFab" aria-label="Open the chat">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+</button>
+
 <footer>
   <div class="cc-card">
     <div class="cc-grid">
@@ -521,6 +592,98 @@
   (function(){ var n = document.querySelector('nav'); if(!n) return;
     var f = function(){ n.classList.toggle('nav-solid', window.scrollY > 10); };
     f(); window.addEventListener('scroll', f, { passive: true });
+  })();
+</script>
+<script>
+  /* Persistent FAQ chat on mobile (form-chat pattern, ported from the homepage):
+     focus-mode sheet when you tap the field, a sticky bar that brings it back
+     once the hero scrolls off, and a desktop dock. The widget is moved to <body>
+     before going fixed so a transformed ancestor can't trap it. */
+
+  // ── focus sheet + window hook ──
+  (function(){
+    var chat = document.querySelector('.chat-widget');
+    var composer = chat && chat.querySelector('.chat-input-area');
+    if (!chat || !composer) return;
+    var home = chat.parentNode, homeNext = chat.nextSibling;
+    var minBtn = document.getElementById('faqChatMin');
+    var FOCUS_MQ = window.matchMedia('(max-width:768px)');
+    function enterFocus(){
+      if (!FOCUS_MQ.matches) return;
+      if (chat.parentNode !== document.body) document.body.appendChild(chat);
+      chat.classList.add('is-focus');
+      document.documentElement.classList.add('chat-locked');
+    }
+    function exitFocus(){
+      chat.classList.remove('is-focus');
+      document.documentElement.classList.remove('chat-locked');
+      if (home && chat.parentNode === document.body && !chat.classList.contains('is-docked')) home.insertBefore(chat, homeNext);
+    }
+    // tap the field -> raise the sheet (real tap, not programmatic focus)
+    composer.addEventListener('click', function(e){
+      var f = e.target && e.target.closest && e.target.closest('input, textarea');
+      if (!f || chat.classList.contains('is-focus')) return;
+      enterFocus(); try { f.focus(); } catch(_){}
+    });
+    if (minBtn) minBtn.addEventListener('click', function(){ var a = composer.querySelector('input, textarea'); if (a) a.blur(); exitFocus(); });
+    document.addEventListener('click', function(e){
+      if (!chat.classList.contains('is-focus')) return;
+      if (e.target && e.target.isConnected === false) return;   // in-chat control removed itself
+      if (chat.contains(e.target)) return;
+      var a = composer.querySelector('input, textarea'); if (a) a.blur();
+      exitFocus();
+    });
+    if (FOCUS_MQ.addEventListener) FOCUS_MQ.addEventListener('change', function(e){ if (!e.matches) exitFocus(); });
+    window.P205Chat = { open:function(){ enterFocus(); var a = composer.querySelector('input, textarea'); if (a){ try{ a.focus(); }catch(_){} } }, close:exitFocus, isOpen:function(){ return chat.classList.contains('is-focus'); } };
+  })();
+
+  // ── desktop dock (>=769), once the hero scrolls off; collapsible to a bubble ──
+  (function(){
+    var DOCK_MQ = window.matchMedia('(min-width:769px)');
+    var chat = document.querySelector('.chat-widget');
+    var trigger = document.querySelector('.page-hero');
+    var fab = document.getElementById('faqChatFab');
+    var closeBtn = document.getElementById('faqChatDockClose');
+    if (!chat || !trigger || !('IntersectionObserver' in window)) return;
+    var home = chat.parentNode, homeNext = chat.nextSibling, docked = false, collapsed = false, io = null;
+    function showFab(){ if (fab) fab.classList.add('show'); }
+    function hideFab(){ if (fab) fab.classList.remove('show'); }
+    function dock(){
+      if (docked || !DOCK_MQ.matches || chat.classList.contains('is-focus')) return;
+      docked = true;
+      if (chat.parentNode !== document.body) document.body.appendChild(chat);
+      chat.classList.add('is-docked');
+      if (collapsed) { chat.classList.add('is-collapsed'); showFab(); }
+    }
+    function undock(){
+      if (!docked) return;
+      docked = false; collapsed = false;
+      chat.classList.remove('is-docked', 'is-collapsed'); hideFab();
+      if (home && chat.parentNode === document.body) home.insertBefore(chat, homeNext);
+    }
+    if (closeBtn) closeBtn.addEventListener('click', function(){ collapsed = true; chat.classList.add('is-collapsed'); showFab(); });
+    if (fab) fab.addEventListener('click', function(){ collapsed = false; chat.classList.remove('is-collapsed'); hideFab(); });
+    function start(){ if (io) return; io = new IntersectionObserver(function(es){ if (!DOCK_MQ.matches) return; var e = es[0]; if (!e.isIntersecting && e.boundingClientRect.top < 0) dock(); else undock(); }, { threshold: 0 }); io.observe(trigger); }
+    function stop(){ if (io){ io.disconnect(); io = null; } }
+    function apply(){ if (DOCK_MQ.matches) start(); else { stop(); undock(); } }
+    if (DOCK_MQ.addEventListener) DOCK_MQ.addEventListener('change', apply);
+    apply();
+  })();
+
+  // ── mobile sticky bar (<=768), appears once the hero scrolls off ──
+  (function(){
+    var BAR_MQ = window.matchMedia('(max-width:768px)');
+    var bar = document.getElementById('talkBar');
+    var trigger = document.querySelector('.page-hero');
+    var chat = document.querySelector('.chat-widget');
+    if (!bar || !trigger || !chat || !('IntersectionObserver' in window)) return;
+    var pastHero = false;
+    function focusOpen(){ return chat.classList.contains('is-focus'); }
+    function refresh(){ bar.classList.toggle('show', BAR_MQ.matches && pastHero && !focusOpen()); }
+    new IntersectionObserver(function(es){ var e = es[0]; pastHero = (!e.isIntersecting && e.boundingClientRect.top < 0); refresh(); }, { threshold: 0 }).observe(trigger);
+    new MutationObserver(refresh).observe(chat, { attributes:true, attributeFilter:['class'] });
+    bar.addEventListener('click', function(e){ e.stopPropagation(); if (window.P205Chat) window.P205Chat.open(); });
+    if (BAR_MQ.addEventListener) BAR_MQ.addEventListener('change', refresh);
   })();
 </script>
 <script>
