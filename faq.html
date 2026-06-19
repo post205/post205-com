@@ -223,6 +223,15 @@
     }
     .chat-text-wrap textarea::placeholder { color: #6c8483; }
     .chat-text-wrap textarea:focus { border-color: var(--nav-accent); }
+    .chat-offer { margin: 6px 0 2px; }
+    .chat-offer-btn {
+      font-family: ui-monospace, monospace; font-size: 12px; letter-spacing: 0.01em;
+      color: var(--nav-accent); background: rgba(59,209,211,0.08);
+      border: 1px solid rgba(59,209,211,0.35); border-radius: 8px;
+      padding: 9px 13px; cursor: pointer; text-align: left; line-height: 1.4;
+      transition: background 0.15s;
+    }
+    .chat-offer-btn:hover { background: rgba(59,209,211,0.16); }
     .chat-send {
       background: var(--accent);
       color: var(--on-accent);
@@ -584,13 +593,84 @@
       } finally {
         busy = false;
         send.disabled = false;
+        offerConnect();
       }
+    }
+
+    // ── Lead capture: after answers, gently offer to connect; then run the
+    //    homepage-style intake and post to the existing /api/submit-lead ──
+    var mode = 'qa', lead = {}, step = null;
+    var ORDER = ['business', 'pain', 'timeline', 'name', 'email'];
+    var PROMPTS = {
+      business: "Happy to take a look. What kind of business do you run?",
+      pain:     "Got it. What are you trying to sort out or build?",
+      timeline: "When are you hoping to get this going?",
+      name:     "Sige. What's your name?",
+      email:    "And the best email to reach you?"
+    };
+    function leadSent(){ try { return sessionStorage.getItem('p205_faq_lead_sent') === '1'; } catch(e){ return false; } }
+
+    function offerConnect(){
+      if (mode === 'intake' || leadSent()) return;
+      var ex = document.getElementById('faqOffer'); if (ex) ex.remove();
+      var wrap = document.createElement('div');
+      wrap.className = 'chat-offer'; wrap.id = 'faqOffer';
+      var btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'chat-offer-btn';
+      btn.textContent = 'Want us to look at how this fits your business? →';
+      btn.addEventListener('click', startIntake);
+      wrap.appendChild(btn);
+      log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+    }
+
+    function startIntake(){
+      var o = document.getElementById('faqOffer'); if (o) o.remove();
+      mode = 'intake'; lead = {}; step = 'business';
+      input.placeholder = 'Type your answer…';
+      addMsg('bot', PROMPTS.business);
+      input.focus();
+    }
+
+    function intakeStep(val){
+      if (step === 'email'){
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val)){
+          addMsg('bot', "Hmm, that email doesn't look right. Mind trying again?");
+          return;
+        }
+        lead.email = val;
+        submitLead();
+        return;
+      }
+      lead[step] = val;
+      step = ORDER[ORDER.indexOf(step) + 1];
+      addMsg('bot', PROMPTS[step]);
+    }
+
+    function submitLead(){
+      mode = 'qa'; step = null;
+      try { sessionStorage.setItem('p205_faq_lead_sent', '1'); } catch(e){}
+      input.placeholder = 'Ask a question about how we work…';
+      addMsg('bot', "Salamat! I'll be in touch within a day.");
+      fetch('/api/submit-lead', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source: 'post205.com/faq',
+          business: lead.business || '', pain: lead.pain || '',
+          timeline: lead.timeline || '', name: lead.name || '', email: lead.email || ''
+        })
+      }).catch(function(){});
     }
 
     form.addEventListener('submit', function(e){
       e.preventDefault();
-      var q = input.value.trim();
-      if (q) ask(q);
+      var v = input.value.trim();
+      if (!v) return;
+      if (mode === 'intake') {
+        addMsg('user', v); input.value = ''; autosize();
+        intakeStep(v);
+      } else {
+        ask(v); // ask() handles the user bubble + clearing
+      }
     });
 
     // Enter to send, Shift+Enter for a newline
