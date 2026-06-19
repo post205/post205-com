@@ -81,6 +81,7 @@
       letter-spacing: -0.01em; line-height: 1.1; color: #f4f7f7; margin-bottom: 16px;
     }
     .page-hero p { font-size: 16px; color: #b9d2d2; line-height: 1.6; margin-bottom: 40px; }
+    .cd { color: var(--nav-accent); font-variant-numeric: tabular-nums; font-weight: 800; }
     .btn-primary {
       display: inline-block; background: var(--accent); color: var(--on-accent);
       font-size: 15px; font-weight: 700; padding: 14px 28px; border-radius: 6px;
@@ -130,10 +131,10 @@
 
 <section class="page-hero">
   <div class="not-found-inner">
-    <div class="not-found-code">404</div>
-    <h1>This page isn't here anymore.</h1>
-    <p>Like a good idea that didn't scale.</p>
-    <a href="/" class="btn-primary">Back to home</a>
+    <div class="not-found-code">Error 404</div>
+    <h1>This one's gone.</h1>
+    <p>Dead link, old bookmark, or a typo. No use staring at it. Walking you home in <b class="cd" id="cd">10</b>.</p>
+    <a href="/" class="btn-primary">Take me now &rarr;</a>
   </div>
 </section>
 
@@ -156,6 +157,17 @@
   (function(){ var n = document.querySelector('nav'); if(!n) return;
     var f = function(){ n.classList.toggle('nav-solid', window.scrollY > 10); };
     f(); window.addEventListener('scroll', f, { passive: true });
+  })();
+</script>
+<script>
+  // auto-walk home with a visible countdown; the button lets them skip it
+  (function(){
+    var el = document.getElementById('cd'); if (!el) return;
+    var n = 10;
+    var t = setInterval(function(){
+      n--; el.textContent = n;
+      if (n <= 0){ clearInterval(t); window.location.replace('/'); }
+    }, 1000);
   })();
 </script>
 
