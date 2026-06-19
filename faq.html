@@ -224,8 +224,22 @@
       line-height: 1.5;
       transition: border-color 0.15s;
     }
-    .chat-text-wrap textarea::placeholder { color: var(--text-3); }
-    .chat-text-wrap textarea:focus { border-color: var(--accent); }
+    .chat-text-wrap textarea::placeholder { color: var(--text-3); animation: faqAskText 2.4s ease-in-out infinite; }
+    .chat-text-wrap textarea:focus { border-color: var(--accent); animation: none; }
+    .chat-text-wrap textarea:focus::placeholder { animation: none; }
+    /* gently pulse the empty field + placeholder so people notice they can type;
+       stops the moment they focus it or send their first question */
+    .chat-text-wrap textarea { animation: faqAskRing 2.4s ease-in-out infinite; }
+    .chat-widget.chat-engaged .chat-text-wrap textarea,
+    .chat-widget.chat-engaged .chat-text-wrap textarea::placeholder { animation: none; }
+    @keyframes faqAskRing {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(14,154,157,0); }
+      50%      { box-shadow: 0 0 0 4px rgba(14,154,157,0.16); }
+    }
+    @keyframes faqAskText { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce){
+      .chat-text-wrap textarea, .chat-text-wrap textarea::placeholder { animation: none; }
+    }
     .chat-offer { margin: 6px 0 2px; }
     .chat-offer-btn {
       font-family: ui-monospace, monospace; font-size: 12px; letter-spacing: 0.01em;
@@ -768,6 +782,7 @@
     async function ask(question){
       if (busy) return;
       busy = true;
+      var cw = document.querySelector('.chat-widget'); if (cw) cw.classList.add('chat-engaged');
       send.disabled = true;
       addMsg('user', question);
       input.value = '';
