@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="page-title">Loading... — POST 205</title>
+  <title id="page-title">Frameworks · POST205</title>
   <meta id="page-desc" name="description" content="">
   <meta id="og-title" property="og:title" content="">
   <meta id="og-desc" property="og:description" content="">
@@ -35,21 +35,8 @@
     @media (prefers-reduced-motion: reduce){ .nav-faq-q, .nav-faq-label { transition: none; } }
     .nav-logo { display: flex; align-items: center; text-decoration: none; }
     .nav-logo img { height: 26px; width: auto; mix-blend-mode: var(--logo-blend); filter: var(--logo-filter); opacity: 0.9; }
-    .nav-right { display: flex; align-items: center; gap: 24px; }
     .nav-cta { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--on-accent); background: var(--accent); text-decoration: none; padding: 8px 14px; border-radius: 4px; font-weight: 500; transition: opacity 0.15s; }
     .nav-cta:hover { opacity: 0.85; }
-    .theme-toggle { background: none; border: 1px solid var(--border-2); color: var(--text-3); cursor: pointer; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s, color 0.15s; flex-shrink: 0; }
-    .theme-toggle:hover { border-color: var(--text-3); color: var(--text-2); }
-    .theme-toggle svg { width: 14px; height: 14px; }
-    .theme-toggle .icon-dark { display: none; }
-    .theme-toggle .icon-light { display: none; }
-    .theme-toggle .icon-system { display: block; }
-    [data-theme="dark"]  .theme-toggle .icon-dark   { display: block; }
-    [data-theme="dark"]  .theme-toggle .icon-light  { display: none;  }
-    [data-theme="dark"]  .theme-toggle .icon-system { display: none;  }
-    [data-theme="light"] .theme-toggle .icon-dark   { display: none;  }
-    [data-theme="light"] .theme-toggle .icon-light  { display: block; }
-    [data-theme="light"] .theme-toggle .icon-system { display: none;  }
     /* Article layout — header is the dark hero band */
     .article-header { background: var(--hero-bg); padding: 104px 48px 52px; }
     .ah-inner { max-width: 820px; margin: 0 auto; }
@@ -154,10 +141,8 @@
 
 <nav>
   <a href="/" class="nav-logo">
-    <img src="/images/logo.png" alt="POST 205">
+    <img src="/images/logo.png" alt="POST205">
   </a>
-  <div class="nav-right">
-  </div>
   <a href="/faq" class="nav-faq" aria-label="Questions"><span class="nav-faq-q" aria-hidden="true">?</span><span class="nav-faq-label">Questions?</span></a>
 </nav>
 
@@ -236,7 +221,7 @@ async function load() {
 
   if (error || !data) { show('state-error'); return; }
 
-  document.title = (data.seo_title || data.title) + ' — POST 205';
+  document.title = (data.seo_title || data.title) + ' · POST205';
   document.getElementById('page-desc').setAttribute('content', data.seo_description || data.subtitle || '');
   document.getElementById('og-title').setAttribute('content', data.title);
   document.getElementById('og-desc').setAttribute('content', data.seo_description || data.subtitle || '');

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AIOS Crash Course — POST 205</title>
+  <title>AIOS Crash Course · POST205</title>
   <meta name="description" content="The links from the AIOS crash course, in one place.">
   <meta name="robots" content="noindex, nofollow">
 
@@ -73,6 +73,7 @@
     .page-hero .eyebrow { color: var(--nav-accent); }
     .page-hero h1 { color: #f4f7f7; }
     .page-hero .lede { color: #b9d2d2; background: none; border-left: none; padding: 0; margin-top: 18px; }
+    .page-hero .lede strong { color: #f4f7f7; }
 
     /* Nav — transparent over the dark hero, solid on scroll */
     nav {
@@ -111,37 +112,6 @@
       transition: opacity 0.15s;
     }
     .nav-cta:hover { opacity: 0.85; }
-
-    /* Theme toggle (standard — see DESIGN.md) */
-    .nav-right { display: flex; align-items: center; gap: 12px; }
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--border-2);
-      color: var(--text-3);
-      cursor: pointer;
-      width: 40px;
-      height: 40px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: border-color 0.15s, color 0.15s;
-      flex-shrink: 0;
-    }
-    .theme-toggle:hover { border-color: var(--text-3); color: var(--text-2); }
-    .theme-toggle svg { width: 14px; height: 14px; }
-    .theme-toggle .icon-dark   { display: none; }
-    .theme-toggle .icon-light  { display: none; }
-    .theme-toggle .icon-system { display: block; }
-    [data-theme="dark"]   .theme-toggle .icon-dark   { display: block; }
-    [data-theme="dark"]   .theme-toggle .icon-light  { display: none; }
-    [data-theme="dark"]   .theme-toggle .icon-system { display: none; }
-    [data-theme="light"]  .theme-toggle .icon-dark   { display: none; }
-    [data-theme="light"]  .theme-toggle .icon-light  { display: block; }
-    [data-theme="light"]  .theme-toggle .icon-system { display: none; }
-    [data-theme="system"] .theme-toggle .icon-dark   { display: none; }
-    [data-theme="system"] .theme-toggle .icon-light  { display: none; }
-    [data-theme="system"] .theme-toggle .icon-system { display: block; }
 
     /* Content */
     .wrap {
@@ -294,10 +264,8 @@
 
 <nav>
   <a href="/" class="nav-logo">
-    <img src="/images/logo.png" alt="POST 205">
+    <img src="/images/logo.png" alt="POST205">
   </a>
-  <div class="nav-right">
-  </div>
   <a href="/faq" class="nav-faq" aria-label="Questions"><span class="nav-faq-q" aria-hidden="true">?</span><span class="nav-faq-label">Questions?</span></a>
 </nav>
 
@@ -306,7 +274,7 @@
     <div class="eyebrow">AIOS Crash Course</div>
     <h1>Build your own AI Operating System</h1>
     <div class="lede">
-      <strong>For Father Ody and Drea</strong> — from our June 3 session. Everything we covered, in one place: the starter repo, the skills, the connection. Clone it, make it yours, and let it learn how you work.
+      <strong>For Father Ody and Drea.</strong> From our June 3 session. Everything we covered, in one place: the starter repo, the skills, the connection. Clone it, make it yours, and let it learn how you work.
     </div>
   </div>
 </section>
