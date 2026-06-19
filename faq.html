@@ -232,6 +232,17 @@
       transition: background 0.15s;
     }
     .chat-offer-btn:hover { background: rgba(59,209,211,0.16); }
+    /* "thinking" indicator: pulsing 205 mark + rotating playful words */
+    .chat-thinking { display: inline-flex; align-items: center; gap: 9px; }
+    .think-mark { width: 11px; height: 11px; border-radius: 2px; background: var(--nav-accent); flex-shrink: 0; animation: thinkPulse 1s ease-in-out infinite; }
+    .think-word { color: #9fc3c3; font-size: 14px; }
+    .think-dots { display: inline-flex; gap: 3px; }
+    .think-dots i { width: 3px; height: 3px; border-radius: 50%; background: #6c8483; animation: thinkDot 1.2s infinite; }
+    .think-dots i:nth-child(2){ animation-delay: .15s; }
+    .think-dots i:nth-child(3){ animation-delay: .30s; }
+    @keyframes thinkPulse { 0%,100% { transform: scale(.65); opacity: .45; } 50% { transform: scale(1); opacity: 1; } }
+    @keyframes thinkDot { 0%,60%,100% { opacity: .25; } 30% { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce){ .think-mark, .think-dots i { animation: none; } .think-mark { opacity: 1; } }
     .chat-send {
       background: var(--accent);
       color: var(--on-accent);
@@ -544,15 +555,28 @@
       return wrap;
     }
 
+    var THINK_WORDS = ['Thinking','Tinkering','Pondering','Spelunking','Digging','Cooking','Noodling','Untangling','Connecting','Accomplishing'];
+    var thinkTimer = null;
     function showTyping(){
       var w = document.createElement('div');
       w.className = 'chat-msg bot chat-typing';
       w.id = 'faqTyping';
-      w.innerHTML = '<span class="chat-sender">205</span><span class="chat-bubble"><span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span></span>';
+      w.innerHTML = '<span class="chat-sender">205</span>' +
+        '<span class="chat-bubble chat-thinking">' +
+          '<span class="think-mark" aria-hidden="true"></span>' +
+          '<span class="think-word">Thinking</span>' +
+          '<span class="think-dots" aria-hidden="true"><i></i><i></i><i></i></span>' +
+        '</span>';
       log.appendChild(w);
       log.scrollTop = log.scrollHeight;
+      var i = 0, wordEl = w.querySelector('.think-word');
+      thinkTimer = setInterval(function(){
+        i = (i + 1) % THINK_WORDS.length;
+        if (wordEl) wordEl.textContent = THINK_WORDS[i];
+      }, 1500);
     }
     function hideTyping(){
+      if (thinkTimer) { clearInterval(thinkTimer); thinkTimer = null; }
       var t = document.getElementById('faqTyping');
       if (t) t.remove();
     }

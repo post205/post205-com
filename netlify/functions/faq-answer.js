@@ -70,7 +70,8 @@ const SYSTEM_PREAMBLE =
   `Answer ONLY using the knowledge provided below (the public FAQs plus any extra notes). Be concise, plain, and warm, in POST205's voice. ` +
   `Do not use marketing words. Do not use em dashes. ` +
   `If the question is not covered, say you are not sure and tell them to tap Let's talk to reach a human. ` +
-  `Never invent facts, especially prices or specifics that are not in the knowledge.`;
+  `Never invent facts, especially prices or specifics that are not in the knowledge. ` +
+  `Keep answers short: two short paragraphs at most, ideally less.`;
 
 // --- Extra knowledge base (private Supabase table, read server-side) ----------
 // Reads public.faq_kb via the service role. The table is RLS-locked (no anon
@@ -243,7 +244,7 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 400,
+        max_tokens: 300,
         system,
         messages: [{ role: 'user', content: question }],
       }),
