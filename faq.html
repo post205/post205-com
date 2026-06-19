@@ -249,6 +249,9 @@
       transition: background 0.15s;
     }
     .chat-offer-btn:hover { background: rgba(14,154,157,0.14); }
+    .dx-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 2px; }
+    .dx-chip { font-family: ui-monospace, monospace; font-size: 13px; color: var(--accent-text); background: rgba(14,154,157,0.08); border: 1px solid rgba(14,154,157,0.28); border-radius: 18px; padding: 9px 16px; cursor: pointer; transition: background 0.15s; }
+    .dx-chip:hover { background: rgba(14,154,157,0.16); }
     /* "thinking" indicator: pulsing 205 mark + rotating playful words */
     .chat-thinking { display: inline-flex; align-items: center; gap: 9px; }
     .think-mark { width: 11px; height: 11px; border-radius: 2px; background: var(--accent); flex-shrink: 0; animation: thinkPulse 1s ease-in-out infinite; }
@@ -848,7 +851,7 @@
       } finally {
         busy = false;
         send.disabled = false;
-        maybeOffer(answerText);
+        afterAnswer(question, answerText);
       }
     }
 
@@ -887,11 +890,18 @@
       log.appendChild(wrap); log.scrollTop = log.scrollHeight;
     }
 
-    function startIntake(){
+    var activeOrder = ORDER;
+    function startIntake(opts){
+      opts = opts || {};
       var o = document.getElementById('faqOffer'); if (o) o.remove();
-      mode = 'intake'; lead = {}; step = 'business';
+      removeDx();
+      mode = 'intake';
+      lead = opts.preset ? Object.assign({}, opts.preset) : {};
+      lead.source = opts.source || 'post205.com/faq';
+      activeOrder = opts.order || ORDER;
+      step = activeOrder[0];
       input.placeholder = 'Type your answer…';
-      addMsg('bot', PROMPTS.business);
+      addMsg('bot', PROMPTS[step]);
       input.focus();
     }
 
@@ -906,23 +916,109 @@
         return;
       }
       lead[step] = val;
-      step = ORDER[ORDER.indexOf(step) + 1];
+      step = activeOrder[activeOrder.indexOf(step) + 1];
       addMsg('bot', PROMPTS[step]);
     }
 
     function submitLead(){
       mode = 'qa'; step = null;
       try { sessionStorage.setItem('p205_faq_lead_sent', '1'); } catch(e){}
-      input.placeholder = 'Ask a question about how we work…';
+      input.placeholder = 'Type your question…';
       addMsg('bot', "Salamat! I'll be in touch within a day.");
       fetch('/api/submit-lead', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          source: 'post205.com/faq',
+          source: lead.source || 'post205.com/faq',
           business: lead.business || '', pain: lead.pain || '',
           timeline: lead.timeline || '', name: lead.name || '', email: lead.email || ''
         })
       }).catch(function(){});
+    }
+
+    // ── Phase 2: the guided "read" — a short, prospect-facing version of the
+    //    /gate diagnostic. Places them in the first stage they're stuck on,
+    //    gives a qualitative read (no peso figure), then offers to connect.
+    //    Team-size only; never asks what they pay. Lands as a faq-prospect lead.
+    var DQ = [
+      { stage:'demand',     t:"Do you have a steady, reliable flow of customers?",   problemIf:'no'  },
+      { stage:'pricing',    t:"Are you often fully booked but the money's still tight?", problemIf:'yes' },
+      { stage:'delivery',   t:"Does it feel like every job starts from scratch?",     problemIf:'yes' },
+      { stage:'bottleneck', t:"Does the business stall when you step away?",          problemIf:'yes' },
+    ];
+    var READ = {
+      demand:     "Sounds like the first thing to get steady is customers. I'll be honest: a system isn't the right first spend yet, that's more of a marketing problem. Get demand steady first and a system pays off later. I'd rather tell you that than sell you something that won't move the needle.",
+      pricing:    "The money's likely leaking through pricing, not lack of work. A back office that puts your numbers in one place and makes the premium option the easy one would fix the margin. The pricing insight is free, the system is the build, and you stay in control of what you charge.",
+      delivery:   "The pattern is every job starting from scratch, so growth feels heavier instead of easier. That's our core build: a system around the work that repeats, so each job runs the same way and nothing gets rebuilt each time.",
+      bottleneck: "The business runs, but it runs through you, so it stalls when you step away. The fix is a system that runs without you: access by role, a dashboard, and automations, so the team knows what to do and you can step back. You'd own the system that does it.",
+      scaling:    "Honestly, you sound past the usual fixes, the basics are working. From here it's about leverage, not patching. That's worth a proper conversation about what's next.",
+    };
+    var PROSPECT_RX = /figure out where|where (your|the) business|where you('?re| are)? stuck|a few (plain|quick) questions|fully booked|charging too little|busy but (broke|tight)|from scratch|runs through (you|me)|stalls? when (you|i)|step away|where (do|to) (i|you) start|not sure (what|where)|more (customers|clients)|customers come from|help me figure/i;
+    var dstep = 0, danswers = {}, dteam = '';
+
+    function removeDx(){ var d = document.getElementById('dxChips'); if (d) d.remove(); }
+    function dxChips(opts, cb){
+      removeDx();
+      var wrap = document.createElement('div'); wrap.className = 'dx-chips'; wrap.id = 'dxChips';
+      opts.forEach(function(o){
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'dx-chip'; b.textContent = o[0];
+        b.addEventListener('click', function(){ wrap.remove(); addMsg('user', o[0]); cb(o[1]); });
+        wrap.appendChild(b);
+      });
+      log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+    }
+    function showDxOffer(){
+      var ex = document.getElementById('faqOffer'); if (ex) ex.remove();
+      var wrap = document.createElement('div'); wrap.className = 'chat-offer'; wrap.id = 'faqOffer';
+      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'chat-offer-btn';
+      btn.textContent = "Help me figure out where I'm stuck →";
+      btn.addEventListener('click', startDiagnose);
+      wrap.appendChild(btn); log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+    }
+    function startDiagnose(){
+      var o = document.getElementById('faqOffer'); if (o) o.remove();
+      mode = 'diagnose'; dstep = 0; danswers = {}; dteam = '';
+      addMsg('bot', "Let's figure it out. A few quick ones, no wrong answers.");
+      renderDQ();
+    }
+    function renderDQ(){
+      if (dstep < DQ.length){
+        addMsg('bot', DQ[dstep].t);
+        dxChips([['Yes','yes'],['No','no']], function(v){ danswers[DQ[dstep].stage] = v; dstep++; renderDQ(); });
+      } else {
+        addMsg('bot', "Last one. Roughly how big is the team?");
+        dxChips([['Just me','solo'],['2 to 5','2-5'],['6 to 20','6-20'],['20+','20+']], function(v){ dteam = v; computeRead(); });
+      }
+    }
+    function computeRead(){
+      var stage = 'scaling';
+      for (var i = 0; i < DQ.length; i++){ if (danswers[DQ[i].stage] === DQ[i].problemIf){ stage = DQ[i].stage; break; } }
+      addMsg('bot', READ[stage]);
+      var painStr = "Guided read: stuck on " + stage + ". " +
+        DQ.map(function(d){ return d.stage + '=' + (danswers[d.stage] || '-'); }).join(', ') +
+        ". Team: " + dteam + ".";
+      mode = 'qa';
+      if (stage === 'demand'){
+        dxConnect(painStr, "If you'd still like to talk it through, I can connect you with the team, no pressure.", "Connect me anyway →");
+      } else {
+        dxConnect(painStr, "Want me to connect you with the team to look at your setup?", "Connect me with the team →");
+      }
+    }
+    function dxConnect(painStr, preface, label){
+      if (preface) addMsg('bot', preface);
+      var ex = document.getElementById('faqOffer'); if (ex) ex.remove();
+      var wrap = document.createElement('div'); wrap.className = 'chat-offer'; wrap.id = 'faqOffer';
+      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'chat-offer-btn';
+      btn.textContent = label;
+      btn.addEventListener('click', function(){ startIntake({ order:['name','email'], preset:{ pain: painStr, business:'' }, source:'faq-prospect' }); });
+      wrap.appendChild(btn); log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+    }
+
+    // After an answer: prefer the guided read on a prospecting opening,
+    // otherwise the plain connect offer.
+    function afterAnswer(q, a){
+      if (mode !== 'qa' || leadSent()) return;
+      if (PROSPECT_RX.test((q + ' ' + (a || '')).toLowerCase())) { showDxOffer(); return; }
+      maybeOffer(a);
     }
 
     form.addEventListener('submit', function(e){
@@ -933,6 +1029,7 @@
         addMsg('user', v); input.value = ''; autosize();
         intakeStep(v);
       } else {
+        if (mode === 'diagnose') { removeDx(); mode = 'qa'; }
         ask(v); // ask() handles the user bubble + clearing
       }
     });
