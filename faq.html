@@ -482,10 +482,11 @@
         '</span>';
       log.appendChild(w);
       log.scrollTop = log.scrollHeight;
-      var i = 0, wordEl = w.querySelector('.think-word');
+      var wordEl = w.querySelector('.think-word'), last = 0;
       thinkTimer = setInterval(function(){
-        i = (i + 1) % THINK_WORDS.length;
-        if (wordEl) wordEl.textContent = THINK_WORDS[i];
+        var n; do { n = Math.floor(Math.random() * THINK_WORDS.length); } while (n === last && THINK_WORDS.length > 1);
+        last = n;
+        if (wordEl) wordEl.textContent = THINK_WORDS[n];
       }, 900);
     }
     function hideTyping(){
