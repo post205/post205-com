@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>FAQ · POST205</title>
   <meta name="description" content="Common questions about how POST205 builds custom web systems for Philippine businesses.">
   <link rel="canonical" href="https://post205.com/faq">
   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="stylesheet" href="/css/chat.css?v=7">
 
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -70,7 +71,7 @@
     nav.nav-solid { background: rgba(15,20,22,0.97); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
     .nav-faq { display: inline-flex; align-items: center; height: 32px; padding: 0 10px; box-sizing: border-box; color: #3BD1D3; text-decoration: none; font-family: ui-monospace, monospace; font-weight: 600; border: 1px solid rgba(59,209,211,.4); border-radius: 999px; overflow: hidden; white-space: nowrap; transition: background .15s; }
     .nav-faq:hover { background: rgba(59,209,211,.12); }
-    .nav-faq-q { font-size: 16px; line-height: 1; max-width: 1.4em; opacity: 1; overflow: hidden; transition: max-width .28s ease, opacity .2s ease; }
+    .nav-faq-q { font-size: 16px; line-height: 1; transform: translateY(1px); max-width: 1.4em; opacity: 1; overflow: hidden; transition: max-width .28s ease, opacity .2s ease; }
     .nav-faq-label { font-size: 13px; letter-spacing: .04em; max-width: 0; opacity: 0; overflow: hidden; transition: max-width .3s cubic-bezier(.22,1,.36,1), opacity .25s ease; }
     .nav-faq:hover .nav-faq-q { max-width: 0; opacity: 0; }
     .nav-faq:hover .nav-faq-label { max-width: 120px; opacity: 1; }
@@ -124,140 +125,15 @@
       max-width: 60ch;
     }
 
-    /* Ask-anything chat — lives in the dark hero, mirrors the homepage chat
-       (mono "205" sender, rounded bubbles, teal accent, typing dots) but on
-       dark surfaces to sit on the hero band. */
+    /* Ask-anything chat — lives in the dark hero, styled by /css/chat.css
+       (shared with the homepage). Only FAQ-specific bits live here. */
     .faq-chat {
       max-width: 720px;
       margin: 28px auto 0;
     }
-    .faq-chat-label {
-      font-family: ui-monospace, monospace;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--nav-accent);
-      margin-bottom: 10px;
-    }
-    .chat-widget {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      background: var(--surface);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
-    }
-    .chat-log {
-      overflow-y: auto;
-      max-height: 360px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      scroll-behavior: smooth;
-    }
-    .chat-log::-webkit-scrollbar { width: 3px; }
-    .chat-log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-    .chat-msg { display: flex; flex-direction: column; gap: 3px; }
-    .chat-msg.bot { align-items: flex-start; }
-    .chat-msg.user { align-items: flex-end; }
-    .chat-sender {
-      font-family: ui-monospace, monospace;
-      font-size: 8px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      padding: 0 4px;
-    }
-    .chat-bubble {
-      max-width: 82%;
-      padding: 10px 14px;
-      font-size: 14px;
-      line-height: 1.55;
-      border-radius: 4px 12px 12px 12px;
-      white-space: pre-wrap;
-    }
-    .chat-msg.bot .chat-bubble {
-      background: var(--black);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .chat-msg.user .chat-bubble {
-      background: var(--accent);
-      color: var(--on-accent);
-      border-radius: 12px 4px 12px 12px;
-      font-weight: 500;
-    }
-    .chat-bubble a { color: var(--accent-text); }
-    .chat-typing .chat-bubble {
-      display: flex;
-      gap: 5px;
-      align-items: center;
-      padding: 12px 16px;
-    }
-    .chat-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--text-3);
-      animation: chatDot 1.2s infinite;
-    }
-    .chat-dot:nth-child(2) { animation-delay: 0.2s; }
-    .chat-dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes chatDot {
-      0%,60%,100% { opacity: 0.25; transform: scale(0.8); }
-      30% { opacity: 1; transform: scale(1); }
-    }
-    .chat-input-area {
-      border-top: 1px solid var(--border);
-      padding: 14px 20px;
-      background: var(--black);
-    }
-    .chat-text-wrap { display: flex; gap: 8px; align-items: flex-end; }
-    .chat-text-wrap textarea {
-      flex: 1;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 16px;
-      color: var(--text);
-      resize: none;
-      outline: none;
-      overflow-y: hidden;
-      font-family: system-ui, -apple-system, sans-serif;
-      line-height: 1.5;
-      transition: border-color 0.15s;
-    }
-    .chat-text-wrap textarea::placeholder { color: var(--text-3); animation: faqAskText 2.4s ease-in-out infinite; }
-    .chat-text-wrap textarea:focus { border-color: var(--accent); animation: none; }
-    .chat-text-wrap textarea:focus::placeholder { animation: none; }
-    /* gently pulse the empty field + placeholder so people notice they can type;
-       stops the moment they focus it or send their first question */
-    .chat-text-wrap textarea { animation: faqAskRing 2.4s ease-in-out infinite; }
-    .chat-widget.chat-engaged .chat-text-wrap textarea,
-    .chat-widget.chat-engaged .chat-text-wrap textarea::placeholder { animation: none; }
-    @keyframes faqAskRing {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(14,154,157,0); }
-      50%      { box-shadow: 0 0 0 4px rgba(14,154,157,0.16); }
-    }
-    @keyframes faqAskText { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
-    @media (prefers-reduced-motion: reduce){
-      .chat-text-wrap textarea, .chat-text-wrap textarea::placeholder { animation: none; }
-    }
-    .chat-offer { margin: 6px 0 2px; }
-    .chat-offer-btn {
-      font-family: ui-monospace, monospace; font-size: 12px; letter-spacing: 0.01em;
-      color: var(--accent-text); background: rgba(14,154,157,0.08);
-      border: 1px solid rgba(14,154,157,0.28); border-radius: 8px;
-      padding: 9px 13px; cursor: pointer; text-align: left; line-height: 1.4;
-      transition: background 0.15s;
-    }
-    .chat-offer-btn:hover { background: rgba(14,154,157,0.14); }
-    .dx-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 2px; }
-    .dx-chip { font-family: ui-monospace, monospace; font-size: 13px; color: var(--accent-text); background: rgba(14,154,157,0.08); border: 1px solid rgba(14,154,157,0.28); border-radius: 18px; padding: 9px 16px; cursor: pointer; transition: background 0.15s; }
-    .dx-chip:hover { background: rgba(14,154,157,0.16); }
-    /* "thinking" indicator: pulsing 205 mark + rotating playful words */
+
+    /* FAQ-specific "thinking" indicator: pulsing 205 mark + rotating playful
+       words. Rendered inside a shared .chat-bubble (chat.css owns the bubble). */
     .chat-thinking { display: inline-flex; align-items: center; gap: 9px; }
     .think-mark { width: 11px; height: 11px; border-radius: 2px; background: var(--accent); flex-shrink: 0; animation: thinkPulse 1s ease-in-out infinite; }
     .think-word { color: var(--text-2); font-size: 14px; min-width: 8.5em; }
@@ -268,79 +144,26 @@
     @keyframes thinkPulse { 0%,100% { transform: scale(.65); opacity: .45; } 50% { transform: scale(1); opacity: 1; } }
     @keyframes thinkDot { 0%,60%,100% { opacity: .25; } 30% { opacity: 1; } }
     @media (prefers-reduced-motion: reduce){ .think-mark, .think-dots i { animation: none; } .think-mark { opacity: 1; } }
-    .chat-send {
-      background: var(--accent);
-      color: var(--on-accent);
-      border: none;
-      border-radius: 8px;
-      width: 38px;
-      height: 38px;
-      font-size: 18px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: opacity 0.15s;
-    }
-    .chat-send:hover { opacity: 0.88; }
-    .chat-send:disabled { opacity: 0.5; cursor: default; }
 
-    /* ===== persistent chat: desktop dock (>=769) ===== */
-    @media (min-width:769px){
-      .chat-widget.is-docked {
-        position:fixed; right:24px; bottom:24px; top:auto; left:auto;
-        width:380px; max-width:calc(100vw - 48px); max-height:min(560px, calc(100vh - 110px));
-        z-index:200; margin:0; box-shadow:0 24px 64px rgba(0,0,0,.5), 0 4px 16px rgba(0,0,0,.35);
-        animation:p205dockin .26s ease;
-      }
-      .chat-widget.is-docked .chat-log { flex:1; min-height:0; overflow-y:auto; max-height:none; }
+    /* FAQ idle input pulse — gently invite a tap on the empty field; stops the
+       moment they engage (.chat-engaged) or focus it. Retargeted to chat.css's
+       .chat-input. */
+    .chat-input::placeholder { animation: faqAskText 2.4s ease-in-out infinite; }
+    .chat-input:focus::placeholder { animation: none; }
+    .chat-widget:not(.chat-engaged) .chat-input:not(:focus) { animation: faqAskRing 2.4s ease-in-out infinite; }
+    .chat-widget.chat-engaged .chat-input,
+    .chat-widget.chat-engaged .chat-input::placeholder,
+    .chat-input:focus { animation: none; }
+    @keyframes faqAskRing {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(14,154,157,0); }
+      50%      { box-shadow: 0 0 0 4px rgba(14,154,157,0.16); }
     }
-    @keyframes p205dockin { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
-    @media(prefers-reduced-motion:reduce){ .chat-widget.is-docked { animation:none; } }
+    @keyframes faqAskText { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce){
+      .chat-input, .chat-input::placeholder { animation: none; }
+    }
 
-    /* ===== persistent chat: mobile focus sheet (<=768) ===== */
-    .chat-min { display:none; }
-    @media (max-width:768px){
-      /* full-screen sheet; JS sizes height/top to the visual viewport so the
-         keyboard never pushes the conversation off-screen (Claude-app feel) */
-      .chat-widget.is-focus { position:fixed; left:0; right:0; top:0; bottom:auto; z-index:300; width:100%; max-width:none; height:100dvh; margin:0; border:none; border-radius:0; box-shadow:none; display:flex; flex-direction:column; }
-      html.chat-locked::before { content:""; position:fixed; inset:0; background:rgba(8,16,16,.5); z-index:299; }
-      .chat-widget.is-focus .chat-log { flex:1; min-height:0; max-height:none; }
-      .chat-widget.is-focus .chat-input-area { flex-shrink:0; }
-      .chat-widget.is-focus .chat-min { display:flex; align-items:center; justify-content:center; position:absolute; top:10px; right:12px; width:34px; height:34px; border-radius:50%; border:1px solid var(--border-2); background:var(--surface); color:var(--text-2); cursor:pointer; z-index:1; }
-    }
-    html.chat-locked { overflow:hidden; }
-
-    /* ===== persistent chat: mobile sticky bar (<=768) ===== */
-    .talk-bar {
-      position:fixed; left:0; right:0; bottom:0; width:100%; box-sizing:border-box; z-index:150;
-      display:none; align-items:center; gap:12px; text-align:left; cursor:pointer; border:0;
-      border-top:2px solid var(--nav-accent); background:#141416; color:#fff;
-      padding:13px 18px calc(13px + env(safe-area-inset-bottom,0px));
-      box-shadow:0 -8px 28px rgba(0,0,0,.28);
-      transform:translateY(115%); transition:transform .32s cubic-bezier(.22,1,.36,1);
-      font-family:inherit; -webkit-tap-highlight-color:transparent;
-    }
-    @media (max-width:768px){ .talk-bar { display:flex; } footer { padding-bottom: calc(84px + env(safe-area-inset-bottom,0px)); } }
-    .talk-bar.show { transform:translateY(0); }
-    .talk-bar-tx { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
-    .talk-bar-t { font-size:15px; font-weight:700; letter-spacing:-.01em; line-height:1.15; }
-    .talk-bar-s { font-size:12px; color:#cfe3e3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .talk-bar-ic { flex:none; width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.16); display:grid; place-items:center; }
-    .talk-bar-ic svg { width:20px; height:20px; }
-    @media(prefers-reduced-motion:reduce){ .talk-bar { transition:none; } }
-
-    /* dock collapse -> launcher bubble (desktop) */
-    .chat-dock-close { display:none; }
-    @media (min-width:769px){
-      .chat-widget.is-docked .chat-dock-close { display:flex; align-items:center; justify-content:center; position:absolute; top:8px; right:10px; width:30px; height:30px; border-radius:50%; border:1px solid var(--border-2); background:var(--surface); color:var(--text-2); cursor:pointer; z-index:2; }
-    }
-    .chat-widget.is-collapsed { display:none !important; }
-    .chat-fab { display:none; position:fixed; right:24px; bottom:24px; z-index:200; width:60px; height:60px; border-radius:50%; border:2px solid var(--nav-accent); cursor:pointer; background:#141416; color:#fff; align-items:center; justify-content:center; box-shadow:0 16px 40px rgba(8,20,20,.4); animation:p205dockin .26s ease; }
-    .chat-fab.show { display:flex; }
-    .chat-fab svg { width:26px; height:26px; }
-    @media (max-width:768px){ .chat-fab { display:none !important; } }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
     /* Content — light teal field */
     .faq-wrap {
@@ -465,22 +288,22 @@
   </a>
 </nav>
 
-<section class="page-hero">
+<section class="page-hero" id="hero">
   <div class="page-hero-inner">
     <div class="faq-label">Honest answers</div>
     <h1>Questions we get a lot</h1>
     <p class="faq-intro">Ask away, or scroll the ones we always get.</p>
 
     <div class="faq-chat">
-      <div class="chat-widget">
-        <button class="chat-min" id="faqChatMin" type="button" aria-label="Minimize chat"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-        <button class="chat-dock-close" id="faqChatDockClose" type="button" aria-label="Collapse chat"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h12"/></svg></button>
-        <div class="chat-log" id="faqChatLog" aria-live="polite" aria-atomic="false"></div>
-        <div class="chat-input-area">
-          <form class="chat-text-wrap" id="faqChatForm">
-            <label class="visually-hidden" for="faqChatInput">Ask a question about how we work</label>
-            <textarea id="faqChatInput" rows="1" placeholder="Type your question…" maxlength="600"></textarea>
-            <button type="submit" class="chat-send" id="faqChatSend" aria-label="Send question">↑</button>
+      <div class="chat-widget" id="chat-widget">
+        <div class="chat-log" id="chat-log" role="log" aria-label="Conversation" aria-live="polite" aria-atomic="false"></div>
+        <div class="chat-composer" id="chat-composer">
+          <form class="chat-input-wrap" id="faqChatForm">
+            <label class="sr-only" for="faqChatInput">Ask a question about how we work</label>
+            <textarea class="chat-input" id="faqChatInput" rows="1" placeholder="Type your question…" maxlength="600"></textarea>
+            <div class="chat-input-actions">
+              <button type="submit" class="chat-input-send chat-send" id="faqChatSend" aria-label="Send question">↑</button>
+            </div>
           </form>
         </div>
       </div>
@@ -583,19 +406,19 @@
 
 </div>
 
-<!-- mobile sticky: brings the FAQ chat back once the hero scrolls off -->
-<button type="button" class="talk-bar" id="talkBar" aria-label="Ask a question">
-  <span class="talk-bar-tx">
-    <span class="talk-bar-t">Got a question?</span>
-    <span class="talk-bar-s">Ask away, I'll answer straight.</span>
+<!-- mobile sticky: brings the FAQ chat back once the hero scrolls off (chat-cta.js) -->
+<button type="button" class="p205-reserve" id="p205-reserve">
+  <span class="p205-reserve-tx">
+    <span class="p205-reserve-t">Got a question?</span>
+    <span class="p205-reserve-s">Ask away, I'll answer straight.</span>
   </span>
-  <span class="talk-bar-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+  <span class="p205-reserve-ic" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  </span>
 </button>
 
-<!-- desktop: launcher bubble when the docked chat is collapsed -->
-<button type="button" class="chat-fab" id="faqChatFab" aria-label="Open the chat">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-</button>
+<!-- aria-live announcer for the chat -->
+<div id="chat-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
 <footer>
   <div class="cc-card">
@@ -616,122 +439,14 @@
     f(); window.addEventListener('scroll', f, { passive: true });
   })();
 </script>
-<script>
-  /* Persistent FAQ chat on mobile (form-chat pattern, ported from the homepage):
-     focus-mode sheet when you tap the field, a sticky bar that brings it back
-     once the hero scrolls off, and a desktop dock. The widget is moved to <body>
-     before going fixed so a transformed ancestor can't trap it. */
-
-  // ── focus sheet + window hook ──
-  (function(){
-    var chat = document.querySelector('.chat-widget');
-    var composer = chat && chat.querySelector('.chat-input-area');
-    if (!chat || !composer) return;
-    var home = chat.parentNode, homeNext = chat.nextSibling;
-    var minBtn = document.getElementById('faqChatMin');
-    var logEl = document.getElementById('faqChatLog');
-    var FOCUS_MQ = window.matchMedia('(max-width:768px)');
-    var vv = window.visualViewport;
-    function toBottom(){ if (logEl) logEl.scrollTop = logEl.scrollHeight; }
-    // Size the sheet to the area above the keyboard and keep the latest message
-    // pinned just above the input, so opening the keyboard never scrolls the
-    // conversation away (the iOS position:fixed + soft-keyboard problem).
-    function fitVV(){
-      if (!chat.classList.contains('is-focus') || !vv) return;
-      chat.style.height = vv.height + 'px';
-      chat.style.top = vv.offsetTop + 'px';
-      toBottom();
-    }
-    function enterFocus(){
-      if (!FOCUS_MQ.matches) return;
-      if (chat.parentNode !== document.body) document.body.appendChild(chat);
-      chat.classList.add('is-focus');
-      document.documentElement.classList.add('chat-locked');
-      if (vv){ vv.addEventListener('resize', fitVV); vv.addEventListener('scroll', fitVV); }
-      fitVV(); setTimeout(fitVV, 250); setTimeout(toBottom, 350);
-    }
-    function exitFocus(){
-      chat.classList.remove('is-focus');
-      document.documentElement.classList.remove('chat-locked');
-      if (vv){ vv.removeEventListener('resize', fitVV); vv.removeEventListener('scroll', fitVV); }
-      chat.style.height = ''; chat.style.top = '';
-      if (home && chat.parentNode === document.body && !chat.classList.contains('is-docked')) home.insertBefore(chat, homeNext);
-    }
-    // tap the field -> raise the sheet (real tap, not programmatic focus)
-    composer.addEventListener('click', function(e){
-      var f = e.target && e.target.closest && e.target.closest('input, textarea');
-      if (!f || chat.classList.contains('is-focus')) return;
-      enterFocus(); try { f.focus(); } catch(_){}
-    });
-    // when the field gains focus (keyboard opening), keep the latest message in view
-    composer.addEventListener('focusin', function(){ setTimeout(toBottom, 300); });
-    if (minBtn) minBtn.addEventListener('click', function(){ var a = composer.querySelector('input, textarea'); if (a) a.blur(); exitFocus(); });
-    document.addEventListener('click', function(e){
-      if (!chat.classList.contains('is-focus')) return;
-      if (e.target && e.target.isConnected === false) return;   // in-chat control removed itself
-      if (chat.contains(e.target)) return;
-      var a = composer.querySelector('input, textarea'); if (a) a.blur();
-      exitFocus();
-    });
-    if (FOCUS_MQ.addEventListener) FOCUS_MQ.addEventListener('change', function(e){ if (!e.matches) exitFocus(); });
-    window.P205Chat = { open:function(){ enterFocus(); var a = composer.querySelector('input, textarea'); if (a){ try{ a.focus(); }catch(_){} } }, close:exitFocus, isOpen:function(){ return chat.classList.contains('is-focus'); } };
-  })();
-
-  // ── desktop dock (>=769), once the hero scrolls off; collapsible to a bubble ──
-  (function(){
-    var DOCK_MQ = window.matchMedia('(min-width:769px)');
-    var chat = document.querySelector('.chat-widget');
-    var trigger = document.querySelector('.page-hero');
-    var fab = document.getElementById('faqChatFab');
-    var closeBtn = document.getElementById('faqChatDockClose');
-    if (!chat || !trigger || !('IntersectionObserver' in window)) return;
-    var home = chat.parentNode, homeNext = chat.nextSibling, docked = false, collapsed = false, io = null;
-    function showFab(){ if (fab) fab.classList.add('show'); }
-    function hideFab(){ if (fab) fab.classList.remove('show'); }
-    function dock(){
-      if (docked || !DOCK_MQ.matches || chat.classList.contains('is-focus')) return;
-      docked = true;
-      if (chat.parentNode !== document.body) document.body.appendChild(chat);
-      chat.classList.add('is-docked');
-      if (collapsed) { chat.classList.add('is-collapsed'); showFab(); }
-    }
-    function undock(){
-      if (!docked) return;
-      docked = false; collapsed = false;
-      chat.classList.remove('is-docked', 'is-collapsed'); hideFab();
-      if (home && chat.parentNode === document.body) home.insertBefore(chat, homeNext);
-    }
-    if (closeBtn) closeBtn.addEventListener('click', function(){ collapsed = true; chat.classList.add('is-collapsed'); showFab(); });
-    if (fab) fab.addEventListener('click', function(){ collapsed = false; chat.classList.remove('is-collapsed'); hideFab(); });
-    function start(){ if (io) return; io = new IntersectionObserver(function(es){ if (!DOCK_MQ.matches) return; var e = es[0]; if (!e.isIntersecting && e.boundingClientRect.top < 0) dock(); else undock(); }, { threshold: 0 }); io.observe(trigger); }
-    function stop(){ if (io){ io.disconnect(); io = null; } }
-    function apply(){ if (DOCK_MQ.matches) start(); else { stop(); undock(); } }
-    if (DOCK_MQ.addEventListener) DOCK_MQ.addEventListener('change', apply);
-    apply();
-  })();
-
-  // ── mobile sticky bar (<=768), appears once the hero scrolls off ──
-  (function(){
-    var BAR_MQ = window.matchMedia('(max-width:768px)');
-    var bar = document.getElementById('talkBar');
-    var trigger = document.querySelector('.page-hero');
-    var chat = document.querySelector('.chat-widget');
-    if (!bar || !trigger || !chat || !('IntersectionObserver' in window)) return;
-    var pastHero = false;
-    function focusOpen(){ return chat.classList.contains('is-focus'); }
-    function refresh(){ bar.classList.toggle('show', BAR_MQ.matches && pastHero && !focusOpen()); }
-    new IntersectionObserver(function(es){ var e = es[0]; pastHero = (!e.isIntersecting && e.boundingClientRect.top < 0); refresh(); }, { threshold: 0 }).observe(trigger);
-    new MutationObserver(refresh).observe(chat, { attributes:true, attributeFilter:['class'] });
-    bar.addEventListener('click', function(e){ e.stopPropagation(); if (window.P205Chat) window.P205Chat.open(); });
-    if (BAR_MQ.addEventListener) BAR_MQ.addEventListener('change', refresh);
-  })();
-</script>
+<!-- shared persistent CTA layer (inline → desktop dock → mobile focus-sheet + sticky bar) -->
+<script src="/js/chat-cta.js?v=2"></script>
 <script>
   (function(){
     var form  = document.getElementById('faqChatForm');
     var input = document.getElementById('faqChatInput');
     var send  = document.getElementById('faqChatSend');
-    var log   = document.getElementById('faqChatLog');
+    var log   = document.getElementById('chat-log');
     if (!form || !input || !log) return;
 
     var busy = false;
@@ -744,7 +459,7 @@
       var wrap = document.createElement('div');
       wrap.className = 'chat-msg ' + side;
       if (side === 'bot') {
-        wrap.innerHTML = '<span class="chat-sender">205</span><span class="chat-bubble">' + esc(text) + '</span>';
+        wrap.innerHTML = '<span class="chat-avatar-mini" aria-hidden="true">205</span><span class="chat-bubble">' + esc(text) + '</span>';
       } else {
         wrap.innerHTML = '<span class="chat-bubble">' + esc(text) + '</span>';
       }
@@ -753,13 +468,13 @@
       return wrap;
     }
 
-    var THINK_WORDS = ['Thinking','Overthinking','Nagdidiskarte','Scheming','Computing','Tinitimbang','Mulling','Hinuhukay','Plotting','Sinusuri','Cooking','Kinakalkula','Deliberating'];
+    var THINK_WORDS = ['Thinking','Kinikilig','Nagdadasal','Smooshing','Incubating','Nagmumuni-muni','Tinitimbang','Honking','Puzzling','Hinihimay'];
     var thinkTimer = null;
     function showTyping(){
       var w = document.createElement('div');
       w.className = 'chat-msg bot chat-typing';
       w.id = 'faqTyping';
-      w.innerHTML = '<span class="chat-sender">205</span>' +
+      w.innerHTML = '<span class="chat-avatar-mini" aria-hidden="true">205</span>' +
         '<span class="chat-bubble chat-thinking">' +
           '<span class="think-mark" aria-hidden="true"></span>' +
           '<span class="think-word">Thinking</span>' +
@@ -771,7 +486,7 @@
       thinkTimer = setInterval(function(){
         i = (i + 1) % THINK_WORDS.length;
         if (wordEl) wordEl.textContent = THINK_WORDS[i];
-      }, 1500);
+      }, 900);
     }
     function hideTyping(){
       if (thinkTimer) { clearInterval(thinkTimer); thinkTimer = null; }
@@ -785,13 +500,26 @@
     }
     input.addEventListener('input', autosize);
 
-    // greeting
-    addMsg('bot', "Ask me anything about how we work, what we build, or what it costs.");
+    // greeting — think first (a loading beat, like the homepage bot), then type it in
+    var GREETING = "Ask me anything about how we work, what we build, or what it costs.";
+    var REDUCE_FAQ = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    (async function greet(){
+      if (REDUCE_FAQ) { addMsg('bot', GREETING); return; }
+      showTyping();                 // 205 avatar + pulsing mark + rotating words
+      await sleep(1500);            // let a couple of the words cycle
+      hideTyping();
+      var bubble = addBotBubble();
+      for (var i = 0; i < GREETING.length; i++) {
+        bubble.textContent += GREETING.charAt(i);
+        log.scrollTop = log.scrollHeight;
+        await sleep(12);            // type it in
+      }
+    })();
 
     function addBotBubble(){
       var wrap = document.createElement('div');
       wrap.className = 'chat-msg bot';
-      wrap.innerHTML = '<span class="chat-sender">205</span><span class="chat-bubble"></span>';
+      wrap.innerHTML = '<span class="chat-avatar-mini" aria-hidden="true">205</span><span class="chat-bubble"></span>';
       log.appendChild(wrap); log.scrollTop = log.scrollHeight;
       return wrap.querySelector('.chat-bubble');
     }
@@ -883,15 +611,7 @@
 
     function offerConnect(){
       if (mode === 'intake' || leadSent()) return;
-      var ex = document.getElementById('faqOffer'); if (ex) ex.remove();
-      var wrap = document.createElement('div');
-      wrap.className = 'chat-offer'; wrap.id = 'faqOffer';
-      var btn = document.createElement('button');
-      btn.type = 'button'; btn.className = 'chat-offer-btn';
-      btn.textContent = 'Connect me with the team →';
-      btn.addEventListener('click', startIntake);
-      wrap.appendChild(btn);
-      log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+      offerChip('Connect me with the team →', startIntake);
     }
 
     var activeOrder = ORDER;
@@ -959,24 +679,48 @@
     var PROSPECT_RX = /figure out where|where (your|the) business|where you('?re| are)? stuck|a few (plain|quick) questions|fully booked|charging too little|busy but (broke|tight)|from scratch|runs through (you|me)|stalls? when (you|i)|step away|where (do|to) (i|you) start|not sure (what|where)|more (customers|clients)|customers come from|help me figure/i;
     var dstep = 0, danswers = {}, dteam = '';
 
+    // Idle "ping": bloom an accent ring out of a random chip until one is tapped
+    // (mirrors the homepage's chip nudge). Cleared on the first tap in the group.
+    function pingChips(wrap){
+      var chips = Array.prototype.slice.call(wrap.querySelectorAll('.chat-chip'));
+      if (!chips.length) return null;
+      var t = setInterval(function(){
+        if (!wrap.isConnected) { clearInterval(t); return; }
+        chips.forEach(function(c){ c.classList.remove('ping'); });
+        chips[Math.floor(Math.random() * chips.length)].classList.add('ping');
+      }, 1100);
+      return t;
+    }
     function removeDx(){ var d = document.getElementById('dxChips'); if (d) d.remove(); }
     function dxChips(opts, cb){
       removeDx();
-      var wrap = document.createElement('div'); wrap.className = 'dx-chips'; wrap.id = 'dxChips';
-      opts.forEach(function(o){
-        var b = document.createElement('button'); b.type = 'button'; b.className = 'dx-chip'; b.textContent = o[0];
-        b.addEventListener('click', function(){ wrap.remove(); addMsg('user', o[0]); cb(o[1]); });
+      var wrap = document.createElement('div'); wrap.className = 'chat-chips'; wrap.id = 'dxChips';
+      var hint = document.createElement('div'); hint.className = 'chat-hint';
+      var pip = document.createElement('span'); pip.className = 'pip'; pip.setAttribute('aria-hidden', 'true');
+      hint.appendChild(pip); hint.appendChild(document.createTextNode('tap one'));
+      wrap.appendChild(hint);
+      var ping = null;
+      opts.forEach(function(o, i){
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'chat-chip'; b.style.setProperty('--chip-i', i); b.textContent = o[0];
+        b.addEventListener('click', function(){ if (ping) clearInterval(ping); wrap.remove(); addMsg('user', o[0]); cb(o[1]); });
         wrap.appendChild(b);
       });
       log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+      ping = pingChips(wrap);
+    }
+    // A single-chip "offer" rendered with the shared chip style so it picks up the
+    // ping + the mobile tap-to-focus snap.
+    function offerChip(label, onClick){
+      var ex = document.getElementById('faqOffer'); if (ex) ex.remove();
+      var wrap = document.createElement('div'); wrap.className = 'chat-chips'; wrap.id = 'faqOffer';
+      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'chat-chip'; btn.style.setProperty('--chip-i', 0); btn.textContent = label;
+      var ping = null;
+      btn.addEventListener('click', function(){ if (ping) clearInterval(ping); onClick(); });
+      wrap.appendChild(btn); log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+      ping = pingChips(wrap);
     }
     function showDxOffer(){
-      var ex = document.getElementById('faqOffer'); if (ex) ex.remove();
-      var wrap = document.createElement('div'); wrap.className = 'chat-offer'; wrap.id = 'faqOffer';
-      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'chat-offer-btn';
-      btn.textContent = "Help me figure out where I'm stuck →";
-      btn.addEventListener('click', startDiagnose);
-      wrap.appendChild(btn); log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+      offerChip("Help me figure out where I'm stuck →", startDiagnose);
     }
     function startDiagnose(){
       var o = document.getElementById('faqOffer'); if (o) o.remove();
@@ -1009,12 +753,7 @@
     }
     function dxConnect(painStr, preface, label){
       if (preface) addMsg('bot', preface);
-      var ex = document.getElementById('faqOffer'); if (ex) ex.remove();
-      var wrap = document.createElement('div'); wrap.className = 'chat-offer'; wrap.id = 'faqOffer';
-      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'chat-offer-btn';
-      btn.textContent = label;
-      btn.addEventListener('click', function(){ startIntake({ order:['name','email'], preset:{ pain: painStr, business:'' }, source:'faq-prospect' }); });
-      wrap.appendChild(btn); log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+      offerChip(label, function(){ startIntake({ order:['name','email'], preset:{ pain: painStr, business:'' }, source:'faq-prospect' }); });
     }
 
     // After an answer: prefer the guided read on a prospecting opening,

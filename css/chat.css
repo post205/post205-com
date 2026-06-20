@@ -1,0 +1,354 @@
+/* ─────────────────────────────────────────────────────────────
+   POST205 · conversational intake — chat widget
+   Ported from piandre-www/css/chat.css, themed onto the single
+   committed light-teal "Shop Floor" tokens (accent #0e9a9d).
+   Vanilla, no external fonts/@import. Single-accent economy:
+   accent stays on the CTAs (chips-active, Send, sticky bar, launcher).
+   ───────────────────────────────────────────────────────────── */
+
+/* Tokens at :root so EVERY chat element inherits them — including the sticky bar
+   and launcher, which are direct <body> children (not inside .chat-widget). */
+:root {
+  --p205-accent:      #0e9a9d;   /* accent on light */
+  --p205-accent-dark: #3BD1D3;   /* accent on dark */
+  --p205-on-accent:   #ffffff;
+  --p205-ink:         #0b1b1b;   /* primary text */
+  --p205-ink-soft:    #41585a;   /* secondary text */
+  --p205-muted:       #5a7473;   /* tertiary / hints */
+  --p205-card:        #f7fcfc;   /* card surface */
+  --p205-page:        #e7efee;   /* page surface */
+  --p205-deep:        #0f1416;   /* deep surface */
+  --p205-deep-2:      #141416;
+  --p205-line:        #c7d9d7;   /* borders */
+  --p205-line-2:      #b1c8c5;
+  --p205-font:        system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --p205-mono:        ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --p205-ease:        cubic-bezier(.22, 1, .36, 1);
+  --p205-radius:      7px;
+}
+
+.chat-widget {
+  position: relative;
+  display: flex; flex-direction: column;
+  /* content-driven: compact when the chat is short, grows to a cap then scrolls */
+  height: auto; max-height: clamp(340px, 60dvh, 540px);
+  background: var(--p205-card);
+  border: 1px solid var(--p205-line);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(8, 16, 16, .35);
+  overflow: hidden;
+  font-family: var(--p205-font);
+}
+
+/* Jump-to-latest pill — floats above the composer when scrolled up. */
+.chat-jump {
+  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%) translateY(6px);
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--p205-deep); color: var(--p205-on-accent); border: 0; border-radius: 999px;
+  font-family: var(--p205-font); font-size: 12px; font-weight: 600; letter-spacing: .02em;
+  padding: 7px 14px; cursor: pointer; z-index: 6;
+  box-shadow: 0 8px 20px -8px rgba(11, 27, 27, .45);
+  opacity: 0; pointer-events: none; transition: opacity .18s var(--p205-ease), transform .18s var(--p205-ease);
+}
+.chat-jump.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+.chat-jump svg { display: block; }
+
+/* ── Log ── */
+.chat-log {
+  --fade: 12px;
+  position: relative;
+  flex: 1; overflow-y: auto; scroll-behavior: smooth;
+  display: flex; flex-direction: column; gap: 14px;
+  padding: var(--fade) clamp(16px, 2vw, 22px) 22px;
+  scrollbar-width: thin; scrollbar-color: var(--p205-line-2) transparent;
+  /* Fade top AND bottom — bottom fade reads as a "more below" cue over content. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--fade), #000 calc(100% - 20px), transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 0, #000 var(--fade), #000 calc(100% - 20px), transparent 100%);
+}
+.chat-log::-webkit-scrollbar { width: 6px; }
+.chat-log::-webkit-scrollbar-thumb { background: var(--p205-line-2); border-radius: 3px; }
+
+/* ── Messages ── */
+.chat-msg { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; animation: chat-in .42s cubic-bezier(.34,1.56,.64,1); transform-origin: bottom left; }
+.chat-msg.user { flex-direction: row-reverse; transform-origin: bottom right; }
+@keyframes chat-in { 0% { opacity: 0; transform: translateY(8px) scale(.94); } 60% { opacity: 1; transform: translateY(-2px) scale(1.01); } 100% { opacity: 1; transform: none; } }
+
+/* Bot avatar — a flat monospace "P" token, no image dependency. */
+.chat-avatar-mini {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  display: inline-grid; place-items: center;
+  background: var(--p205-deep); color: var(--p205-accent-dark);
+  font-family: var(--p205-mono); font-size: 9px; font-weight: 700; letter-spacing: .02em;
+  border: 0;
+}
+.chat-msg.user .chat-avatar-mini { display: none; }
+
+.chat-bubble {
+  background: var(--p205-card); color: var(--p205-ink);
+  border: 1px solid var(--p205-line);
+  border-radius: 8px; border-bottom-left-radius: 4px;
+  padding: 11px 15px; font-size: 16px; line-height: 1.5; max-width: 32ch;
+  word-wrap: break-word; display: inline-block;
+}
+.chat-msg.user .chat-bubble {
+  background: var(--p205-accent); color: var(--p205-on-accent);
+  border-color: var(--p205-accent);
+  border-bottom-left-radius: 8px; border-bottom-right-radius: 4px;
+}
+
+/* ── Typing indicator ── */
+.chat-typing { display: flex; gap: 8px; align-items: flex-end; animation: chat-in .3s ease; }
+.chat-typing-bubble { background: var(--p205-card); border: 1px solid var(--p205-line); border-radius: 8px; border-bottom-left-radius: 4px; padding: 9px 13px; display: inline-flex; align-items: center; gap: 4px; }
+.chat-typing-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--p205-muted); animation: chat-bounce 1.3s ease-in-out infinite; }
+.chat-typing-dot:nth-child(2) { animation-delay: .18s; }
+.chat-typing-dot:nth-child(3) { animation-delay: .36s; }
+@keyframes chat-bounce { 0%,60%,100% { opacity: .4; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-4px); } }
+
+/* ── Streaming cursor ── */
+.chat-cursor { display: inline-block; width: 2px; height: 1em; background: var(--p205-accent); margin-left: 1px; vertical-align: text-bottom; animation: chat-blink 1s steps(2,start) infinite; }
+@keyframes chat-blink { to { visibility: hidden; } }
+
+/* ── Chips ── */
+.chat-chips { display: flex; flex-wrap: wrap; gap: 7px; padding-left: 34px; }
+.chat-chip {
+  font-family: var(--p205-font); font-size: 14px; font-weight: 400;
+  background: var(--p205-card); border: 1px solid var(--p205-line-2); border-radius: 18px;
+  color: var(--p205-ink); padding: 10px 16px; cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px; position: relative;
+  transition: background .15s, color .15s, border-color .15s, transform .12s var(--p205-ease);
+  opacity: 0; transform: translateY(6px);
+  animation: chip-in .36s cubic-bezier(.34,1.56,.64,1) forwards;
+  animation-delay: calc(var(--chip-i, 0) * 34ms + 40ms);
+}
+@keyframes chip-in { to { opacity: 1; transform: none; } }
+.chat-chip:hover { border-color: var(--p205-accent); color: var(--p205-accent); background: #fff; transform: translateY(-1px); }
+.chat-chip:active { transform: scale(.95); }
+.chat-chip.sel { background: var(--p205-accent); border-color: var(--p205-accent); color: var(--p205-on-accent); }
+
+/* Idle "ping": an accent ring blooms out of a random chip until one is tapped. */
+.chat-chip::after {
+  content: ""; position: absolute; inset: -1px; border-radius: 18px; pointer-events: none;
+  border: 1.5px solid var(--p205-accent); opacity: 0;
+}
+.chat-chip.ping { border-color: var(--p205-accent); color: var(--p205-accent); }
+.chat-chip.ping::after { animation: chip-ping 1s var(--p205-ease); }
+@keyframes chip-ping {
+  0%   { opacity: .7; transform: scale(1); }
+  100% { opacity: 0;  transform: scale(1.16); }
+}
+
+/* "Tap to choose" cue — monospace label, single-accent pip. */
+.chat-hint {
+  flex-basis: 100%; display: flex; align-items: center; gap: 7px; margin: 0 0 2px 2px;
+  font-family: var(--p205-mono);
+  font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--p205-muted);
+}
+.chat-hint .pip { width: 6px; height: 6px; border-radius: 50%; background: var(--p205-accent); animation: chat-pip 1.5s var(--p205-ease) infinite; }
+@keyframes chat-pip { 0%, 100% { opacity: .3; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.15); } }
+.chat-chip-done {
+  font-family: var(--p205-mono); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  background: var(--p205-accent); border: 1px solid var(--p205-accent); border-radius: 18px; color: var(--p205-on-accent); padding: 11px 20px; cursor: pointer;
+}
+.chat-chip-done:disabled { opacity: .4; cursor: not-allowed; }
+
+/* "Undo" — a quiet circle on the visitor's most recent message that reverts
+   that answer. Sits to the left of the right-aligned user bubble. */
+.chat-undo {
+  flex-shrink: 0; align-self: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: none; border: 0; color: var(--p205-muted); cursor: pointer;
+  opacity: .5; transition: opacity .15s var(--p205-ease), color .15s var(--p205-ease), background .15s var(--p205-ease);
+}
+.chat-undo:hover { opacity: 1; color: var(--p205-accent); background: var(--p205-page); }
+.chat-undo:disabled { opacity: .3; cursor: default; }
+
+/* ── Input / composer ── */
+.chat-input-wrap { display: flex; gap: 7px; padding-left: 34px; align-items: stretch; }
+.chat-input {
+  flex: 1; min-width: 0; background: #fff; border: 1px solid var(--p205-line-2); border-radius: var(--p205-radius);
+  color: var(--p205-ink); font-family: var(--p205-font); font-size: 16px; padding: 11px 13px; outline: none;
+  transition: border-color .15s;
+}
+.chat-input::placeholder { color: var(--p205-muted); }
+.chat-input:focus { border-color: var(--p205-accent); }
+textarea.chat-input { min-height: 46px; max-height: 140px; resize: none; overflow-y: hidden; line-height: 1.45; }
+.chat-input-actions { display: flex; flex-direction: column; gap: 5px; }
+.chat-input-send {
+  font-family: var(--p205-mono); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  padding: 0 20px; background: var(--p205-accent); color: var(--p205-on-accent); border: 0; border-radius: var(--p205-radius); cursor: pointer; min-height: 46px;
+  transition: background .15s, filter .15s;
+}
+.chat-input-send:hover { filter: brightness(.93); }
+.chat-input-skip {
+  font-family: var(--p205-font); font-size: 12.5px; font-weight: 600; color: var(--p205-ink-soft);
+  background: none; border: 0; cursor: pointer; text-decoration: underline; text-decoration-color: transparent;
+}
+.chat-input-skip:hover { text-decoration-color: var(--p205-line-2); color: var(--p205-ink-soft); }
+
+/* ── Restart link in success state ── */
+.chat-restart-link { padding-left: 34px; }
+.chat-restart-link a { font-family: var(--p205-mono); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--p205-accent); }
+
+/* Mobile: 16px+ inputs, bigger tap targets. */
+@media (max-width: 600px) {
+  /* Content-driven height: start compact, grow with the conversation, then cap + scroll. */
+  #hero .chat-widget { height: auto; max-height: clamp(360px, 62dvh, 540px); }
+  #hero .chat-log { flex: 0 1 auto; }
+  .chat-log { padding-left: 16px; padding-right: 16px; }
+  .chat-bubble { font-size: 16.5px; }
+  .chat-chip { font-size: 15px; padding: 11px 15px; }
+  .chat-chip-done { padding: 12px 20px; }
+  .chat-input { font-size: 16px; padding: 13px 14px; }   /* 16px at ALL widths (gotcha 3) */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-msg, .chat-typing, .chat-chip { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .chat-cursor, .chat-hint .pip, .chat-chip.ping::after { animation: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Persistent CTA layer (form-chat pattern).
+   The INLINE hero presentation stays frameless. The floating
+   presentations (dock / sheet) get a minimal lifted surface so the
+   conversation stays legible over page content. Single accent on CTAs.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Minimize chevron — created by chat-cta.js; shown in the sheet AND the dock. */
+.chat-sheet-min { display: none; }
+.chat-widget.is-docked .chat-sheet-min {
+  display: grid; place-items: center;
+  position: absolute; top: 9px; right: 11px; z-index: 6;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--p205-page); border: 1px solid var(--p205-line); color: var(--p205-ink-soft);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.chat-widget.is-docked .chat-sheet-min:hover { color: var(--p205-accent); border-color: var(--p205-accent); }
+
+/* Collapsed launcher bubble (≥769) — reopens a tucked-away dock. */
+.p205-launch {
+  position: fixed; right: 24px; bottom: 24px; z-index: 200;
+  width: 60px; height: 60px; border-radius: 50%;
+  display: none; align-items: center; justify-content: center;
+  background: var(--p205-accent); color: var(--p205-on-accent); border: 0; cursor: pointer;
+  box-shadow: 0 14px 32px rgba(14, 154, 157, .30), 0 2px 8px rgba(11, 27, 27, .12);
+  transform: scale(.4); opacity: 0;
+  transition: transform .24s var(--p205-ease), opacity .24s var(--p205-ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.p205-launch svg { width: 26px; height: 26px; }
+.p205-launch:hover { filter: brightness(.93); }
+@media (min-width: 769px) { .p205-launch.show { display: flex; } }
+.p205-launch.show { transform: scale(1); opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .p205-launch { transition: none; } }
+
+/* ── Desktop dock (≥769) — fixed bottom-right, follows the reader ── */
+@media (min-width: 769px) {
+  .chat-widget.is-docked {
+    position: fixed; right: 24px; bottom: 24px; top: auto; left: auto;
+    width: 420px; max-width: calc(100vw - 48px);
+    height: auto; max-height: min(560px, calc(100vh - 100px));
+    z-index: 200; margin: 0;
+    background: var(--p205-card);
+    border: 1px solid var(--p205-line);
+    border-radius: 8px;
+    box-shadow: 0 24px 64px rgba(11, 27, 27, .18), 0 4px 16px rgba(11, 27, 27, .10);
+    animation: p205-dock-in .26s var(--p205-ease);   /* opacity/transform only — never animate layout */
+  }
+  .chat-widget.is-docked .chat-log { flex: 1; min-height: 0; overflow-y: auto; padding-top: 20px; }
+}
+@keyframes p205-dock-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+/* ── Mobile focus sheet (≤768) — dvh bottom-sheet over the keyboard ── */
+@media (max-width: 768px) {
+  .chat-widget.is-focus {
+    position: fixed; left: 0; right: 0; top: auto;
+    /* --kb is the soft-keyboard height (set by chat-cta.js via VisualViewport). */
+    bottom: var(--kb, 0px);
+    height: 86dvh; max-height: calc(100dvh - var(--kb, 0px));
+    width: 100%; max-width: none;
+    margin: 0; border: 0; border-radius: 16px 16px 0 0;
+    z-index: 300;
+    background: var(--p205-card);
+    box-shadow: 0 -18px 44px rgba(11, 27, 27, .22);
+    display: flex; flex-direction: column;
+    transition: bottom .2s ease, max-height .2s ease;
+  }
+  .chat-widget.is-focus .chat-log {
+    flex: 1; min-height: 0; overflow-y: auto;
+    padding: 48px clamp(16px, 4vw, 20px) 22px;   /* top room for the chevron */
+  }
+  .chat-widget.is-focus .chat-sheet-min {
+    display: grid; place-items: center;
+    position: absolute; top: 10px; right: 12px; z-index: 6;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--p205-page); border: 1px solid var(--p205-line); color: var(--p205-ink-soft);
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .chat-widget.is-focus .chat-sheet-min:active { background: var(--p205-line); }
+  html.chat-locked, html.chat-locked body { overflow: hidden; }
+  html.chat-locked::before { content: ""; position: fixed; inset: 0; background: rgba(11, 27, 27, .45); z-index: 299; }  /* dim the peeking page */
+}
+
+/* ── Mobile sticky bar — "Talk about your project" (direct <body> child) ── */
+.p205-reserve {
+  position: fixed; left: 0; right: 0; bottom: 0; width: 100%; box-sizing: border-box;
+  z-index: 150; display: none; align-items: center; gap: 12px;
+  padding: 13px 18px calc(13px + env(safe-area-inset-bottom, 0px));
+  border: 0; background: var(--p205-accent); color: var(--p205-on-accent); text-align: left; cursor: pointer;
+  box-shadow: 0 -8px 28px rgba(11, 27, 27, .22);
+  transform: translateY(110%);
+  transition: transform .32s cubic-bezier(.22,1,.36,1);
+  font-family: var(--p205-font); -webkit-tap-highlight-color: transparent;
+}
+@media (max-width: 768px) { .p205-reserve { display: flex; } }   /* present (off-screen) only on phones */
+.p205-reserve.show { transform: translateY(0); }
+.p205-reserve-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.p205-reserve-t { font-size: 16px; font-weight: 800; letter-spacing: -.01em; line-height: 1.1; }
+.p205-reserve-s { font-size: 12px; font-weight: 500; color: rgba(255,255,255,.85); line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.p205-reserve-ic { flex: none; width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,.16); display: grid; place-items: center; }
+.p205-reserve-ic svg { width: 20px; height: 20px; }
+/* Reserve space so the fixed sticky bar never covers the footer. Pad the footer
+   itself (dark) rather than the body, so no light page-bg strip shows below it. */
+@media (max-width: 768px) { footer { padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px)); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-widget.is-docked { animation: none; }
+  .p205-reserve { transition: none; }
+}
+
+/* ── Pinned composer — typed answers anchor to the bottom of the frame ── */
+.chat-composer { flex-shrink: 0; }
+.chat-composer:empty { display: none; }
+/* Anchor the conversation to the bottom while the text composer is showing, so the
+   latest message hugs the input. Gated on a NON-EMPTY composer so chip steps keep
+   normal top-aligned flow. */
+.chat-widget:has(#chat-composer:not(:empty)) .chat-log > :first-child { margin-top: auto; }
+.chat-composer .chat-input-wrap {
+  padding: 10px clamp(16px, 2vw, 22px);   /* full-width bar — drop the avatar indent */
+  align-items: flex-end;
+}
+@media (max-width: 600px) {
+  .chat-composer .chat-input-wrap { padding-left: 0; padding-right: 0; }
+}
+/* In a surfaced frame (sheet / dock) the bar reads as part of the frame. */
+.chat-widget.is-focus .chat-composer,
+.chat-widget.is-docked .chat-composer {
+  border-top: 1px solid var(--p205-line);
+  background: var(--p205-page);
+}
+.chat-widget.is-focus .chat-composer .chat-input-wrap {
+  padding: 12px clamp(16px, 4vw, 20px) calc(12px + env(safe-area-inset-bottom, 0px));
+}
+.chat-widget.is-docked .chat-composer .chat-input-wrap {
+  padding: 12px clamp(16px, 2vw, 22px);
+}
+/* The resting input gently invites a tap until it's focused. */
+.chat-composer .chat-input:not(:focus):placeholder-shown { animation: chat-cpulse 1.9s var(--p205-ease) infinite; }
+@keyframes chat-cpulse {
+  0%, 100% { border-color: var(--p205-line-2); box-shadow: 0 0 0 0 rgba(14, 154, 157, 0); }
+  50%      { border-color: var(--p205-accent); box-shadow: 0 0 0 3px rgba(14, 154, 157, .08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chat-composer .chat-input:not(:focus):placeholder-shown { animation: none; }
+}
