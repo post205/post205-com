@@ -292,7 +292,7 @@
   <div class="page-hero-inner">
     <div class="faq-label">Honest answers</div>
     <h1>Questions we get a lot</h1>
-    <p class="faq-intro">Ask away, or scroll the ones we always get.</p>
+    <p class="faq-intro">Ask away, or scroll the common ones.</p>
 
     <div class="faq-chat">
       <div class="chat-widget" id="chat-widget">
@@ -502,7 +502,7 @@
     input.addEventListener('input', autosize);
 
     // greeting — think first (a loading beat, like the homepage bot), then type it in
-    var GREETING = "Ask me anything about how we work, what we build, or what it costs.";
+    var GREETING = "Ask me anything about how we work or what we build.";
     var REDUCE_FAQ = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     (async function greet(){
       if (REDUCE_FAQ) { addMsg('bot', GREETING); return; }
