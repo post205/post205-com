@@ -87,7 +87,7 @@
   background: var(--p205-card); color: var(--p205-ink);
   border: 1px solid var(--p205-line);
   border-radius: 8px; border-bottom-left-radius: 4px;
-  padding: 11px 15px; font-size: 16px; line-height: 1.5; max-width: 32ch;
+  padding: 11px 15px; font-size: 16px; line-height: 1.5; max-width: min(82%, 58ch);
   word-wrap: break-word; display: inline-block;
 }
 .chat-msg.user .chat-bubble {
