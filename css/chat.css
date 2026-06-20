@@ -329,7 +329,7 @@ textarea.chat-input { min-height: 46px; max-height: 140px; resize: none; overflo
   align-items: flex-end;
 }
 @media (max-width: 600px) {
-  .chat-composer .chat-input-wrap { padding-left: 0; padding-right: 0; }
+  .chat-composer .chat-input-wrap { padding-left: 16px; padding-right: 16px; }
 }
 /* In a surfaced frame (sheet / dock) the bar reads as part of the frame. */
 .chat-widget.is-focus .chat-composer,
