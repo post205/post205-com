@@ -31,6 +31,17 @@ exports.handler = async (event) => {
     return { statusCode: 422, body: JSON.stringify({ ok: false, error: 'invalid lead' }) };
   }
 
+  // Readable label for where the lead came from (so referrals, FAQ prospects, and
+  // homepage leads are distinguishable in ops — not all "homepage chat").
+  const SRC_LABELS = {
+    'referral':         'FAQ referral (connect to network)',
+    'faq-prospect':     'FAQ guided read',
+    'post205.com/faq':  'FAQ chat',
+    'post205.com':      'homepage chat',
+  };
+  const srcLabel = SRC_LABELS[lead.source] || lead.source;
+  const isReferral = lead.source === 'referral';
+
   const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const sends = [];
 
@@ -41,7 +52,7 @@ exports.handler = async (event) => {
     const notes = [
       lead.pain ? `Pain: ${lead.pain}` : '',
       lead.timeline ? `Timeline: ${lead.timeline}` : '',
-      'Source: post205.com homepage chat',
+      `Source: ${srcLabel}`,
     ].filter(Boolean).join('\n');
     sends.push(fetch(opsUrl, {
       method: 'POST',
@@ -53,7 +64,7 @@ exports.handler = async (event) => {
         name:    lead.name,
         company: lead.business || lead.name,
         email:   lead.email,
-        source:  'post205.com',
+        source:  lead.source,
         status:  'new',
         notes,
       }),
@@ -66,7 +77,8 @@ exports.handler = async (event) => {
   const tgToken = process.env.TELEGRAM_BOT_TOKEN, tgChat = process.env.TELEGRAM_OPS_CHAT_ID;
   if (tgToken && tgChat) {
     const text =
-      `🟢 *New lead — post205.com*\n\n` +
+      (isReferral ? `🔗 *Referral request · post205.com*\n` : `🟢 *New lead · post205.com*\n`) +
+      `_${srcLabel}_\n\n` +
       `*${lead.name}*  ·  ${lead.email}\n` +
       (lead.business ? `Business: ${lead.business}\n` : '') +
       (lead.timeline ? `Timeline: ${lead.timeline}\n` : '') +
