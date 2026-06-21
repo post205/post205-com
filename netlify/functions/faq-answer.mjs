@@ -167,29 +167,17 @@ export default async (req) => {
 
   let body;
   try { body = await req.json(); } catch { return json(400, { error: 'bad request' }); }
-  const question = String((body && body.question) ?? '').trim();
-  if (!question || question.length > 600) return json(400, { error: 'invalid question' });
-  const prospect = PROSPECT_RX.test(question);
-  // Homepage AI asides pass log:false — answer the curveball but don't record it
-  // as an FAQ question (keeps faq_questions clean of homepage chatter/bots).
-  const noLog = !!(body && body.log === false);
 
-  // Guard 3 (optional): Turnstile.
-  if (!(await turnstilePassed(body.turnstileToken, ip))) {
-    return json(403, { answer: "I couldn't verify that request. Refresh the page and try again." });
-  }
-
-  // Inert until the key is set: no error, no cost.
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-
-  // --- JUDGE mode -----------------------------------------------------------
-  // The homepage chat asks the AI to screen ambiguous free-text at its two
-  // "Something else" steps: is this reply a genuine attempt to answer, or
-  // off-topic nonsense? Non-streaming, never logged. Inert (no key) accepts
-  // the answer so the intake is never blocked.
+  // --- JUDGE mode (homepage intake screening) -------------------------------
+  // Runs BEFORE the question-required check: judge requests carry {answer}, not
+  // {question}. Screens ambiguous free-text at the homepage "Something else"
+  // steps: genuine answer vs off-topic nonsense. Non-streaming, never logged.
+  // Inert (no key) accepts the answer so the intake is never blocked.
+  // (Origin allowlist + per-IP rate limit already applied above.)
   if (body && body.mode === 'judge') {
     const field = String(body.field || 'their answer').slice(0, 80);
     const answer = String(body.answer || '').slice(0, 600);
+    const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) return json(200, { aside: false, reply: '' });
 
     const judgeSystem =
@@ -224,6 +212,21 @@ export default async (req) => {
     }
     return json(200, { aside, reply });
   }
+
+  const question = String((body && body.question) ?? '').trim();
+  if (!question || question.length > 600) return json(400, { error: 'invalid question' });
+  const prospect = PROSPECT_RX.test(question);
+  // Homepage AI asides pass log:false — answer the curveball but don't record it
+  // as an FAQ question (keeps faq_questions clean of homepage chatter/bots).
+  const noLog = !!(body && body.log === false);
+
+  // Guard 3 (optional): Turnstile.
+  if (!(await turnstilePassed(body.turnstileToken, ip))) {
+    return json(403, { answer: "I couldn't verify that request. Refresh the page and try again." });
+  }
+
+  // Inert until the key is set: no error, no cost.
+  const apiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!apiKey) {
     if (!noLog) await logQuestion(question, true, prospect);
