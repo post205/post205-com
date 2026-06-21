@@ -237,7 +237,7 @@ export default async (req) => {
           messages: [{ role: 'user', content: `Asked for: ${field}\nReply: ${answer}` }],
         }),
       });
-      noteAiCall(); // count this model call (cost monitor)
+      await noteAiCall(); // count this model call (cost monitor)
       const data = await jr.json().catch(() => ({}));
       const text = (data && Array.isArray(data.content) ? data.content : [])
         .map((b) => (b && typeof b.text === 'string' ? b.text : '')).join('');
@@ -295,7 +295,7 @@ export default async (req) => {
           messages: [{ role: 'user', content: userMsg }],
         }),
       });
-      noteAiCall(); // count this model call (cost monitor)
+      await noteAiCall(); // count this model call (cost monitor)
       const data = await fr.json().catch(() => ({}));
       const text = (data && Array.isArray(data.content) ? data.content : [])
         .map((b) => (b && typeof b.text === 'string' ? b.text : '')).join('');
@@ -420,7 +420,7 @@ export default async (req) => {
     return json(200, { answer: FALLBACK });
   }
 
-  noteAiCall(); // count this model call (cost monitor)
+  await noteAiCall(); // count this model call (cost monitor)
 
   // Transform Anthropic's SSE into a plain-text token stream for the client.
   const enc = new TextEncoder();
