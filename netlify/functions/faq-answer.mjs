@@ -170,6 +170,9 @@ export default async (req) => {
   const question = String((body && body.question) ?? '').trim();
   if (!question || question.length > 600) return json(400, { error: 'invalid question' });
   const prospect = PROSPECT_RX.test(question);
+  // Homepage AI asides pass log:false — answer the curveball but don't record it
+  // as an FAQ question (keeps faq_questions clean of homepage chatter/bots).
+  const noLog = !!(body && body.log === false);
 
   // Guard 3 (optional): Turnstile.
   if (!(await turnstilePassed(body.turnstileToken, ip))) {
@@ -179,11 +182,11 @@ export default async (req) => {
   // Inert until the key is set: no error, no cost.
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    await logQuestion(question, true, prospect);
+    if (!noLog) await logQuestion(question, true, prospect);
     return json(200, { answer: "I can't answer live just yet. Browse the FAQs below, or I can connect you with the team.", inert: true });
   }
 
-  logQuestion(question, false, prospect); // fire-and-forget; runs while the model responds
+  if (!noLog) logQuestion(question, false, prospect); // fire-and-forget; skip for homepage asides
   const extraKB = await loadExtraKB();
   const kbText = `Public FAQs:\n${FAQ_KB}` +
     (extraKB ? `\n\nExtra knowledge (not published on the page, use it to answer):\n${extraKB}` : '');

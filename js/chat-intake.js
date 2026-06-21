@@ -190,11 +190,21 @@
     // preventScroll: the composer is already pinned in view — never jump the page to it.
     setTimeout(() => { try { input.focus({ preventScroll: true }); } catch (_) { input.focus(); } }, 80);
 
-    const fire = () => {
+    // Shared across this step's re-renders so the cap counts CONSECUTIVE asides.
+    const aside = opts.asideState || (opts.asideState = { n: 0 });
+    const fire = async () => {
       const val = (input.value || '').trim();
       if (!val) return;
       userMsg(opts.echo ? opts.echo(val) : val);
       wrap.remove();
+      // AI detour: if the visitor typed a question/aside (and this step opted
+      // in via opts.reAsk), answer it and re-ask instead of storing it.
+      if (opts.reAsk && looksLikeAside(val)) {
+        if (aside.n < 3) { aside.n++; await aiAside(val); }
+        await opts.reAsk();
+        return;
+      }
+      aside.n = 0;            // a real answer clears the consecutive-aside count
       onSubmit(val);
     };
     send.addEventListener('click', fire);
@@ -204,6 +214,86 @@
   }
 
   const isEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(s || '').trim());
+
+  /* ── AI detour for off-script free-text (curveballs / questions) ──
+     The hero chat is a guided intake, not a Q&A. When a visitor TYPES a
+     question or a clear aside ("do you do Shopify?", "are you AI?") at a
+     free-text step, route it to the same KB-grounded brain the FAQ uses,
+     answer it, then gently re-ask the current step. Normal answers (names,
+     a kind of business, a pain in their own words) pass straight through. */
+
+  // CONSERVATIVE: true only when the text clearly reads as a question/aside.
+  const ASIDE_LEAD = /^(do|does|did|can|could|what|how|why|where|when|who|whom|which|should|would|will|is|are|am|was|were|may|might|pwede ba|pwede|ano|anong|paano|saan|magkano|bakit|kaya|meron|may)\b/i;
+  function looksLikeAside(text) {
+    const t = String(text || '').trim();
+    if (!t) return false;
+    if (t.endsWith('?')) return true;
+    if (t.indexOf('?') !== -1) return true;
+    if (ASIDE_LEAD.test(t)) return true;
+    return false;
+  }
+
+  // Hit the FAQ brain. Streams plain text, or shows .answer when inert (JSON).
+  async function aiAside(question) {
+    // Reuse the engine's typing indicator while we wait for the first byte.
+    const typing = el('div', { className: 'chat-typing' });
+    typing.appendChild(el('span', { className: 'chat-avatar-mini', 'aria-hidden': 'true' }, '205'));
+    const tb = el('span', { className: 'chat-typing-bubble' });
+    tb.appendChild(el('span', { className: 'chat-typing-dot' }));
+    tb.appendChild(el('span', { className: 'chat-typing-dot' }));
+    tb.appendChild(el('span', { className: 'chat-typing-dot' }));
+    typing.appendChild(tb);
+    log.appendChild(typing); scroll();
+
+    let typingGone = false;
+    const dropTyping = () => { if (!typingGone) { typing.remove(); typingGone = true; } };
+
+    try {
+      // DIRECT path: the /api/* rewrite breaks streaming (documented gotcha).
+      // log:false keeps homepage asides out of the faq_questions log.
+      const res = await fetch('/.netlify/functions/faq-answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question, log: false }),
+      });
+      if (!res.ok) throw new Error('faq-answer ' + res.status);
+
+      const ctype = res.headers.get('content-type') || '';
+      if (ctype.indexOf('application/json') !== -1) {
+        // Inert fallback: function returns { answer }.
+        const data = await res.json();
+        dropTyping();
+        const bubble = botShell();
+        await streamText(bubble, (data && data.answer) ? data.answer : "Good question. Let me get back to you on that.");
+        announce(bubble.textContent);
+        return;
+      }
+
+      // Streaming plain text: append chunks to a live bot bubble.
+      dropTyping();
+      const bubble = botShell();
+      if (!res.body || !res.body.getReader) {
+        const txt = await res.text();
+        await streamText(bubble, txt);
+        announce(bubble.textContent);
+        return;
+      }
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        const chunk = dec.decode(value, { stream: true });
+        if (chunk) { bubble.appendChild(document.createTextNode(chunk)); scroll(); }
+      }
+      announce(bubble.textContent);
+    } catch (_) {
+      dropTyping();
+      const bubble = botShell();
+      await streamText(bubble, "Sorry, my brain hiccuped. Anyway,");
+      announce(bubble.textContent);
+    }
+  }
 
   /* ── The conversation — an explicit step machine (handoff §3) ── */
   let flowActive = false;
@@ -277,7 +367,10 @@
     ], (v) => {
       if (v === '__other') {
         botSay("Tell me more about it.", 360).then(() => {
-          askInput('text', 'In your own words', (t) => { state.pain_point = t; next(); });
+          const as = { n: 0 };
+          const reAsk = () => botSay("Anyway, tell me more about that headache.", 360)
+            .then(() => askInput('text', 'In your own words', (t) => { state.pain_point = t; next(); }, { reAsk, asideState: as }));
+          askInput('text', 'In your own words', (t) => { state.pain_point = t; next(); }, { reAsk, asideState: as });
         });
         return;
       }
@@ -295,7 +388,10 @@
     ], (v) => {
       if (v === '__other') {
         botSay("What kind? Type it in.", 360).then(() => {
-          askInput('text', 'Your kind of business', (t) => { state.business = t; next(); });
+          const as = { n: 0 };
+          const reAsk = () => botSay("Anyway, what kind of business is it?", 360)
+            .then(() => askInput('text', 'Your kind of business', (t) => { state.business = t; next(); }, { reAsk, asideState: as }));
+          askInput('text', 'Your kind of business', (t) => { state.business = t; next(); }, { reAsk, asideState: as });
         });
         return;
       }
@@ -312,18 +408,28 @@
   }
   async function askName() {
     await botSay("Sige. What's your name?", 440);
-    askInput('text', 'Your name', (v) => { state.name = v; next(); }, { autocomplete: 'name' });
+    const as = { n: 0 };
+    const reAsk = () => botSay("Anyway, what's your name?", 360)
+      .then(() => askInput('text', 'Your name', (v) => { state.name = v; next(); }, { autocomplete: 'name', reAsk, asideState: as }));
+    askInput('text', 'Your name', (v) => { state.name = v; next(); }, { autocomplete: 'name', reAsk, asideState: as });
   }
   async function askEmail() {
     const first = (state.name || '').split(' ')[0];
     await botSay(`And your email, ${first}? I'll show you how we'd fix it.`, 480);
+    // Email handles its own ordering: valid email wins; otherwise an aside gets
+    // the AI detour, and a plain non-email gets the existing nudge. (We do NOT
+    // pass opts.reAsk here, so the generic aside-intercept stays out of it.)
+    let asideCount = 0;
     askInput('email', 'you@email.com', async function handle(email) {
-      if (!isEmail(email)) {
-        await botSay("Hmm, that doesn't look like an email. Mind checking it?", 440);
+      if (isEmail(email)) { state.email = email; next(); return; }   // next() past the end → submit()
+      if (looksLikeAside(email)) {
+        if (asideCount < 3) { asideCount++; await aiAside(email); }
+        await botSay("Anyway, what's the best email for you?", 360);
         askInput('email', 'you@email.com', handle, { autocomplete: 'email' });
         return;
       }
-      state.email = email; next();   // next() past the end → submit()
+      await botSay("Hmm, that doesn't look like an email. Mind checking it?", 440);
+      askInput('email', 'you@email.com', handle, { autocomplete: 'email' });
     }, { autocomplete: 'email' });
   }
 
