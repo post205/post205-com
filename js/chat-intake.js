@@ -23,6 +23,10 @@
   /* Collected answers → map 1:1 to the contact form fields. */
   const state = { business: '', pain_point: '', timeline: '', name: '', email: '' };
 
+  /* Visitor's TYPED free-text (not pill clicks), kept for tone-mirroring in the
+     post-capture follow-up. Pills are canned, so we skip them. */
+  const visitorText = [];
+
   /* ── DOM helpers ─────────────────────────────────────────── */
   function el(tag, attrs, ...kids) {
     const n = document.createElement(tag);
@@ -414,8 +418,8 @@
         botSay("Tell me more about it.", 360).then(() => {
           const as = { n: 0 };
           const reAsk = () => botSay("Anyway, tell me more about that headache.", 360)
-            .then(() => askInput('text', 'In your own words', (t) => { state.pain_point = t; next(); }, { reAsk, asideState: as, judgeField: 'their biggest business headache' }));
-          askInput('text', 'In your own words', (t) => { state.pain_point = t; next(); }, { reAsk, asideState: as, judgeField: 'their biggest business headache' });
+            .then(() => askInput('text', 'In your own words', (t) => { state.pain_point = t; visitorText.push(t); next(); }, { reAsk, asideState: as, judgeField: 'their biggest business headache' }));
+          askInput('text', 'In your own words', (t) => { state.pain_point = t; visitorText.push(t); next(); }, { reAsk, asideState: as, judgeField: 'their biggest business headache' });
         });
         return;
       }
@@ -435,8 +439,8 @@
         botSay("What kind? Type it in.", 360).then(() => {
           const as = { n: 0 };
           const reAsk = () => botSay("Anyway, what kind of business is it?", 360)
-            .then(() => askInput('text', 'Your kind of business', (t) => { state.business = t; next(); }, { reAsk, asideState: as, judgeField: 'what kind of business they run' }));
-          askInput('text', 'Your kind of business', (t) => { state.business = t; next(); }, { reAsk, asideState: as, judgeField: 'what kind of business they run' });
+            .then(() => askInput('text', 'Your kind of business', (t) => { state.business = t; visitorText.push(t); next(); }, { reAsk, asideState: as, judgeField: 'what kind of business they run' }));
+          askInput('text', 'Your kind of business', (t) => { state.business = t; visitorText.push(t); next(); }, { reAsk, asideState: as, judgeField: 'what kind of business they run' });
         });
         return;
       }
@@ -519,15 +523,23 @@
       fetch('/api/submit-lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: leadBody }).catch(() => {});
       const res = await netlify;
       if (!res.ok) throw new Error('netlify ' + res.status);
-      await finishOk();
+      await startFollowup();
     } catch (_) {
       await botSay("Something went wrong on our end. You can email us directly at hello@post205.com.", 480);
     }
   }
 
+  // Guard-trip path (nothing was written): just confirm and offer a restart.
   async function finishOk() {
     const first = (state.name || '').split(' ')[0];
     await botSay(`Salamat, ${first}! I'll be in touch within a day.`, 600);
+    showRestart();
+    // Retire the persistent CTA (chat-cta.js).
+    try { window.P205Chat && window.P205Chat.complete && window.P205Chat.complete(); } catch (_) {}
+  }
+
+  // The "Start over" affordance — shared by the guard-trip end and follow-up end.
+  function showRestart() {
     const restart = el('div', { className: 'chat-restart-link' });
     restart.appendChild(el('a', { href: '#', id: 'chat-restart-link' }, 'Start over'));
     log.appendChild(restart); scroll();
@@ -536,8 +548,92 @@
       try { sessionStorage.removeItem('p205_done'); sessionStorage.removeItem('p205_last'); } catch (_) {}
       location.reload();
     });
-    // Retire the persistent CTA (chat-cta.js).
-    try { window.P205Chat && window.P205Chat.complete && window.P205Chat.complete(); } catch (_) {}
+  }
+
+  /* ── Post-capture follow-up loop ──────────────────────────────
+     The lead is already saved. Confirm it, then let the AI optionally ask up to
+     3 short, useful follow-ups (mirroring the visitor's tone). Extra answers
+     enrich the saved lead via the enrich mode. */
+  let followAsked = 0;
+  let followTranscript = [];
+
+  async function startFollowup() {
+    const first = (state.name || '').split(' ')[0];
+    await botSay("Salamat, " + first + "! Locked in, I'll be in touch within a day.", 600);
+    followAsked = 0;
+    followTranscript = [];
+    await runFollowup();
+  }
+
+  async function runFollowup() {
+    const first = (state.name || '').split(' ')[0];
+
+    // Typing indicator while we wait (same pattern as aiAside).
+    const typing = el('div', { className: 'chat-typing' });
+    typing.appendChild(el('span', { className: 'chat-avatar-mini', 'aria-hidden': 'true' }, '205'));
+    const tb = el('span', { className: 'chat-typing-bubble' });
+    tb.appendChild(el('span', { className: 'chat-typing-dot' }));
+    tb.appendChild(el('span', { className: 'chat-typing-dot' }));
+    tb.appendChild(el('span', { className: 'chat-typing-dot' }));
+    typing.appendChild(tb);
+    log.appendChild(typing); scroll();
+    let typingGone = false;
+    const dropTyping = () => { if (!typingGone) { typing.remove(); typingGone = true; } };
+
+    let ask = '', done = false, closing = '';
+    try {
+      const res = await fetch('/.netlify/functions/faq-answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mode: 'followup',
+          lead: { pain: state.pain_point, business: state.business, timeline: state.timeline, name: state.name },
+          voice: visitorText,
+          transcript: followTranscript,
+          asked: followAsked,
+          log: false,
+        }),
+      });
+      const data = await res.json();
+      ask = String((data && data.ask) || '');
+      done = !!(data && data.done);
+      closing = String((data && data.closing) || '');
+    } catch (_) {
+      done = true; ask = ''; closing = '';
+    }
+    dropTyping();
+
+    if (done || followAsked >= 3 || !ask) {
+      await botSay(closing || ("Salamat ulit, " + first + "! Talk soon."), 480);
+      if (followTranscript.some((t) => t && t.role === 'visitor')) enrichLead();
+      showRestart();
+      try { window.P205Chat && window.P205Chat.complete && window.P205Chat.complete(); } catch (_) {}
+      return;
+    }
+
+    await botSay(ask, 480);
+    followTranscript.push({ role: 'assistant', text: ask });
+    askInput('text', 'Type your answer', function (answer) {
+      followTranscript.push({ role: 'visitor', text: answer });
+      visitorText.push(answer);
+      followAsked++;
+      runFollowup();
+    }, {});
+  }
+
+  // Append the follow-up Q&A to the saved lead (fire-and-forget).
+  function enrichLead() {
+    const note = followTranscript.reduce((acc, t) => {
+      if (!t) return acc;
+      if (t.role === 'assistant') acc.push('Q: ' + String(t.text || ''));
+      else acc.push('A: ' + String(t.text || ''));
+      return acc;
+    }, []).join('\n');
+    fetch('/.netlify/functions/faq-answer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode: 'enrich', email: state.email, name: state.name, note: note, log: false }),
+    }).catch(function () {});
   }
 
   /* ── Boot ── */

@@ -183,10 +183,13 @@ export default async (req) => {
     const judgeSystem =
       `You screen replies in a short chat intake for POST205, which builds custom web systems for Filipino businesses. ` +
       `The visitor was asked for: ${field}. ` +
-      `Decide if their reply is a GENUINE attempt to answer (even if short, informal, Taglish, vague, or a real business problem in their own words) OR clearly off-topic, nonsense, a joke, or spam. ` +
-      `Be lenient. Respond with ONLY compact JSON, no markdown, no extra text: {"aside":true|false,"reply":"..."}. ` +
-      `If genuine: aside=false and reply="". ` +
-      `If off-topic/nonsense: aside=true and reply= a short, funny, good-natured one-liner in POST205's voice (dry, a little Taglish) that acknowledges what they said and nudges back to the question.`;
+      `Classify their reply into one of three: GENUINE (a real attempt to answer, even if short, informal, Taglish, vague, or a real problem in their own words); STUCK (they signal they are lost, unsure, or overwhelmed, e.g. "I don't know where to start", "not sure", "everything is a mess", "ang dami, di ko alam"); or OFF-TOPIC (nonsense, a joke, or spam). ` +
+      `Lean GENUINE whenever it could plausibly be a real answer. ` +
+      `Respond with ONLY compact JSON, no markdown, no extra text: {"aside":true|false,"reply":"..."}. ` +
+      `GENUINE: aside=false, reply="". ` +
+      `STUCK: aside=true, reply= a warm, reassuring line in POST205's voice that gives two or three concrete examples relevant to "${field}" and invites them to pick the closest or say it in their own words. ` +
+      `OFF-TOPIC: aside=true, reply= a short, funny, good-natured one-liner in POST205's voice (dry, a little Taglish) that acknowledges it and nudges back to the question. ` +
+      `Mirror the visitor's language and energy (Taglish if they used it). No marketing words. No em dashes.`;
 
     let aside = false, reply = '';
     try {
@@ -211,6 +214,118 @@ export default async (req) => {
       aside = false; reply = '';
     }
     return json(200, { aside, reply });
+  }
+
+  // --- FOLLOWUP mode (homepage post-capture conversation) -------------------
+  // Runs BEFORE the question-required check: followup requests carry no
+  // {question}. The lead is already saved; this OPTIONALLY gathers a little
+  // more useful context, mirroring the visitor's tone. Non-streaming, never
+  // logged. Inert (no key) returns done=true so the client wraps gracefully.
+  if (body && body.mode === 'followup') {
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) return json(200, { ask: '', done: true, closing: '' });
+
+    const lead = (body && body.lead) || {};
+    const voice = Array.isArray(body.voice) ? body.voice : [];
+    const transcript = Array.isArray(body.transcript) ? body.transcript : [];
+    const asked = Number(body.asked) || 0;
+
+    const followSystem = SYSTEM_PREAMBLE + ' ' +
+      'You are wrapping up a short lead-intake conversation on POST205\'s homepage. The visitor already gave their pain, business, timeline, name, and email, and the lead is already saved. Your job now is to OPTIONALLY gather a little more useful context, conversationally. ' +
+      'Your real goal is to gather what POST205 needs to size a realistic budget for them, but you must NEVER ask their budget or what they can spend directly. Asking about money up front makes people defensive or makes them lowball. Instead, ask about the PAIN they already named and what it costs them, so a tangible number can be worked out later. Good angles: how often it happens, the volume (bookings, orders, clients, transactions, or invoices per week or month), how many hours or people it eats, what goes wrong or what it costs them when it does, and what they pay now for tools, workarounds, or extra staff time to cope. Always tie the question to the pain they gave. ' +
+      'Mirror the visitor\'s tone and language from their messages (formal, casual, Taglish, playful) but always stay respectful and never crude or sycophantic. Ask AT MOST 3 short follow-up questions total, one at a time, and ONLY when the answer would help size the work. If there is nothing useful left to ask, or they signal they are done, or enough has been asked, STOP. If the visitor asks YOU something, answer it briefly and honestly first, then either ask one more useful thing or wrap. Keep every message short. No marketing words. No em dashes. Respond with ONLY compact JSON, no markdown: {"ask": string, "done": boolean, "closing": string}. To ask next: done=false, ask=the question, closing="". To wrap up: done=true, ask="", closing=a short warm sign-off in their tone that reassures them POST205 will be in touch within a day.';
+
+    const userMsg =
+      `Lead so far:\n` +
+      `Pain: ${String(lead.pain || '')}\n` +
+      `Business: ${String(lead.business || '')}\n` +
+      `Timeline: ${String(lead.timeline || '')}\n` +
+      `Name: ${String(lead.name || '')}\n` +
+      `Visitor's own words (for tone): ${voice.map((v) => String(v)).join(' | ') || '(none)'}\n` +
+      `Follow-ups asked so far: ${asked}\n\n` +
+      `Follow-up conversation so far:\n` +
+      (transcript.length
+        ? transcript.map((t) => `${t && t.role === 'visitor' ? 'Visitor' : 'You'}: ${String((t && t.text) || '')}`).join('\n')
+        : '(none yet)');
+
+    let ask = '', done = true, closing = '';
+    try {
+      const fr = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 220,
+          system: followSystem,
+          messages: [{ role: 'user', content: userMsg }],
+        }),
+      });
+      const data = await fr.json().catch(() => ({}));
+      const text = (data && Array.isArray(data.content) ? data.content : [])
+        .map((b) => (b && typeof b.text === 'string' ? b.text : '')).join('');
+      const m = text.match(/\{[\s\S]*\}/);
+      const parsed = m ? JSON.parse(m[0]) : {};
+      ask = String(parsed.ask || '');
+      done = !!parsed.done;
+      closing = String(parsed.closing || '');
+    } catch (_) {
+      ask = ''; done = true; closing = '';
+    }
+    return json(200, { ask, done, closing });
+  }
+
+  // --- ENRICH mode (append follow-up context to the saved lead) --------------
+  // Runs BEFORE the question-required check: enrich requests carry no
+  // {question}. Appends the follow-up Q&A to the most recent leads row for this
+  // email and pings ops on Telegram. Never logged; never breaks the client.
+  if (body && body.mode === 'enrich') {
+    try {
+      const email = String((body && body.email) || '').trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json(200, { ok: false });
+      const name = String((body && body.name) || '').trim();
+      const note = String((body && body.note) || '').slice(0, 2000);
+
+      const url = process.env.SUPABASE_URL, key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      if (url && key) {
+        const sinceISO = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();
+        const enc = encodeURIComponent(email);
+        const getUrl = `${url}/rest/v1/leads?select=id,notes&email=eq.${enc}&created_at=gte.${encodeURIComponent(sinceISO)}&order=created_at.desc&limit=1`;
+        const gr = await fetch(getUrl, {
+          headers: { apikey: key, Authorization: `Bearer ${key}` },
+        });
+        if (gr.ok) {
+          const rows = await gr.json().catch(() => []);
+          const row = Array.isArray(rows) && rows[0];
+          if (row && row.id) {
+            const existing = row.notes ? String(row.notes) : '';
+            const merged = (existing ? existing + '\n\n' : '') + '--- Follow-up ---\n' + note;
+            await fetch(`${url}/rest/v1/leads?id=eq.${encodeURIComponent(row.id)}`, {
+              method: 'PATCH',
+              headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+              body: JSON.stringify({ notes: merged }),
+            }).catch((e) => console.error('lead enrich patch failed:', e));
+          }
+        } else {
+          console.error('lead enrich fetch status', gr.status);
+        }
+      }
+
+      const tgToken = process.env.TELEGRAM_BOT_TOKEN, tgChat = process.env.TELEGRAM_OPS_CHAT_ID;
+      if (tgToken && tgChat) {
+        await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: tgChat,
+            parse_mode: 'Markdown',
+            text: `📝 *Follow-up — ${name || email}*\n\n${note}`,
+          }),
+        }).catch((e) => console.error('telegram follow-up ping failed:', e));
+      }
+    } catch (e) {
+      console.error('enrich mode failed:', e);
+    }
+    return json(200, { ok: true });
   }
 
   const question = String((body && body.question) ?? '').trim();
