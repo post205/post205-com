@@ -204,6 +204,11 @@
         await opts.reAsk();
         return;
       }
+      // Ambiguous free-text at a content step: let the AI judge nonsense vs a real answer.
+      if (opts.judgeField && aside.n < 3) {
+        const wasAside = await aiJudge(opts.judgeField, val);
+        if (wasAside) { aside.n++; await opts.reAsk(); return; }
+      }
       aside.n = 0;            // a real answer clears the consecutive-aside count
       onSubmit(val);
     };
@@ -295,6 +300,46 @@
     }
   }
 
+  // Ask the AI to JUDGE ambiguous free-text at a content step: nonsense vs a
+  // real answer. Returns true if it was an off-topic aside (and the funny reply
+  // has already been shown → caller should re-ask). Returns false on a genuine
+  // answer OR on any error (never block the intake).
+  async function aiJudge(field, answer) {
+    // Reuse the engine's typing indicator while we wait.
+    const typing = el('div', { className: 'chat-typing' });
+    typing.appendChild(el('span', { className: 'chat-avatar-mini', 'aria-hidden': 'true' }, '205'));
+    const tb = el('span', { className: 'chat-typing-bubble' });
+    tb.appendChild(el('span', { className: 'chat-typing-dot' }));
+    tb.appendChild(el('span', { className: 'chat-typing-dot' }));
+    tb.appendChild(el('span', { className: 'chat-typing-dot' }));
+    typing.appendChild(tb);
+    log.appendChild(typing); scroll();
+
+    let typingGone = false;
+    const dropTyping = () => { if (!typingGone) { typing.remove(); typingGone = true; } };
+
+    try {
+      const res = await fetch('/.netlify/functions/faq-answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'judge', field, answer, log: false }),
+      });
+      if (!res.ok) { dropTyping(); return false; }
+      const data = await res.json();
+      dropTyping();
+      if (data && data.aside) {
+        const bubble = botShell();
+        await streamText(bubble, (data.reply) || "Haha. Anyway,");
+        announce(bubble.textContent);
+        return true;
+      }
+      return false;
+    } catch (_) {
+      dropTyping();
+      return false;
+    }
+  }
+
   /* ── The conversation — an explicit step machine (handoff §3) ── */
   let flowActive = false;
   let stepI = 0;
@@ -369,8 +414,8 @@
         botSay("Tell me more about it.", 360).then(() => {
           const as = { n: 0 };
           const reAsk = () => botSay("Anyway, tell me more about that headache.", 360)
-            .then(() => askInput('text', 'In your own words', (t) => { state.pain_point = t; next(); }, { reAsk, asideState: as }));
-          askInput('text', 'In your own words', (t) => { state.pain_point = t; next(); }, { reAsk, asideState: as });
+            .then(() => askInput('text', 'In your own words', (t) => { state.pain_point = t; next(); }, { reAsk, asideState: as, judgeField: 'their biggest business headache' }));
+          askInput('text', 'In your own words', (t) => { state.pain_point = t; next(); }, { reAsk, asideState: as, judgeField: 'their biggest business headache' });
         });
         return;
       }
@@ -390,8 +435,8 @@
         botSay("What kind? Type it in.", 360).then(() => {
           const as = { n: 0 };
           const reAsk = () => botSay("Anyway, what kind of business is it?", 360)
-            .then(() => askInput('text', 'Your kind of business', (t) => { state.business = t; next(); }, { reAsk, asideState: as }));
-          askInput('text', 'Your kind of business', (t) => { state.business = t; next(); }, { reAsk, asideState: as });
+            .then(() => askInput('text', 'Your kind of business', (t) => { state.business = t; next(); }, { reAsk, asideState: as, judgeField: 'what kind of business they run' }));
+          askInput('text', 'Your kind of business', (t) => { state.business = t; next(); }, { reAsk, asideState: as, judgeField: 'what kind of business they run' });
         });
         return;
       }

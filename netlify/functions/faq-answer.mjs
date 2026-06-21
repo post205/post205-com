@@ -181,6 +181,50 @@ export default async (req) => {
 
   // Inert until the key is set: no error, no cost.
   const apiKey = process.env.ANTHROPIC_API_KEY;
+
+  // --- JUDGE mode -----------------------------------------------------------
+  // The homepage chat asks the AI to screen ambiguous free-text at its two
+  // "Something else" steps: is this reply a genuine attempt to answer, or
+  // off-topic nonsense? Non-streaming, never logged. Inert (no key) accepts
+  // the answer so the intake is never blocked.
+  if (body && body.mode === 'judge') {
+    const field = String(body.field || 'their answer').slice(0, 80);
+    const answer = String(body.answer || '').slice(0, 600);
+    if (!apiKey) return json(200, { aside: false, reply: '' });
+
+    const judgeSystem =
+      `You screen replies in a short chat intake for POST205, which builds custom web systems for Filipino businesses. ` +
+      `The visitor was asked for: ${field}. ` +
+      `Decide if their reply is a GENUINE attempt to answer (even if short, informal, Taglish, vague, or a real business problem in their own words) OR clearly off-topic, nonsense, a joke, or spam. ` +
+      `Be lenient. Respond with ONLY compact JSON, no markdown, no extra text: {"aside":true|false,"reply":"..."}. ` +
+      `If genuine: aside=false and reply="". ` +
+      `If off-topic/nonsense: aside=true and reply= a short, funny, good-natured one-liner in POST205's voice (dry, a little Taglish) that acknowledges what they said and nudges back to the question.`;
+
+    let aside = false, reply = '';
+    try {
+      const jr = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 150,
+          system: judgeSystem,
+          messages: [{ role: 'user', content: `Asked for: ${field}\nReply: ${answer}` }],
+        }),
+      });
+      const data = await jr.json().catch(() => ({}));
+      const text = (data && Array.isArray(data.content) ? data.content : [])
+        .map((b) => (b && typeof b.text === 'string' ? b.text : '')).join('');
+      const m = text.match(/\{[\s\S]*\}/);
+      const parsed = m ? JSON.parse(m[0]) : {};
+      aside = !!parsed.aside;
+      reply = String(parsed.reply || '');
+    } catch (_) {
+      aside = false; reply = '';
+    }
+    return json(200, { aside, reply });
+  }
+
   if (!apiKey) {
     if (!noLog) await logQuestion(question, true, prospect);
     return json(200, { answer: "I can't answer live just yet. Browse the FAQs below, or I can connect you with the team.", inert: true });
