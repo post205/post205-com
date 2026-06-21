@@ -68,6 +68,40 @@ const FALLBACK = `I can't answer that one right now. Browse the FAQs below, or I
 const json = (status, obj) =>
   new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json' } });
 
+// --- Telegram + daily AI-usage milestone alert -------------------------------
+async function tgSend(text) {
+  const token = process.env.TELEGRAM_BOT_TOKEN, chat = process.env.TELEGRAM_OPS_CHAT_ID;
+  if (!token || !chat) return;
+  try {
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chat, parse_mode: 'Markdown', text, disable_web_page_preview: true }),
+    });
+  } catch (e) { console.error('telegram send failed:', e); }
+}
+// Milestones: first at 25, then every 50 (50, 100, 150, ...). Each fires once
+// because bump_ai_usage() returns an exact, atomically-incremented daily count.
+function isUsageMilestone(n) { return n === 25 || (n >= 50 && n % 50 === 0); }
+// Count one model call for today; ping ops on Telegram when we cross a milestone.
+// Call fire-and-forget (no await) from each model-call site: never blocks or
+// breaks the answer. No-ops without Supabase creds.
+async function noteAiCall() {
+  const url = process.env.SUPABASE_URL, key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return;
+  try {
+    const r = await fetch(`${url}/rest/v1/rpc/bump_ai_usage`, {
+      method: 'POST',
+      headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: '{}',
+    });
+    if (!r.ok) { console.error('bump_ai_usage status', r.status); return; }
+    const n = Number(await r.text());
+    if (n && isUsageMilestone(n)) {
+      await tgSend(`📈 *post205.com AI usage* — ${n} model calls today (chat answers, judges, follow-ups). Cost watch.`);
+    }
+  } catch (e) { console.error('noteAiCall failed:', e); }
+}
+
 // --- Extra knowledge base (private Supabase table, read server-side) ----------
 let KB_CACHE = { at: 0, text: '' };
 async function loadExtraKB() {
@@ -203,6 +237,7 @@ export default async (req) => {
           messages: [{ role: 'user', content: `Asked for: ${field}\nReply: ${answer}` }],
         }),
       });
+      noteAiCall(); // count this model call (cost monitor)
       const data = await jr.json().catch(() => ({}));
       const text = (data && Array.isArray(data.content) ? data.content : [])
         .map((b) => (b && typeof b.text === 'string' ? b.text : '')).join('');
@@ -260,6 +295,7 @@ export default async (req) => {
           messages: [{ role: 'user', content: userMsg }],
         }),
       });
+      noteAiCall(); // count this model call (cost monitor)
       const data = await fr.json().catch(() => ({}));
       const text = (data && Array.isArray(data.content) ? data.content : [])
         .map((b) => (b && typeof b.text === 'string' ? b.text : '')).join('');
@@ -383,6 +419,8 @@ export default async (req) => {
     console.error('Anthropic API error:', upstream.status, detail);
     return json(200, { answer: FALLBACK });
   }
+
+  noteAiCall(); // count this model call (cost monitor)
 
   // Transform Anthropic's SSE into a plain-text token stream for the client.
   const enc = new TextEncoder();
