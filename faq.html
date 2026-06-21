@@ -542,6 +542,16 @@
       addMsg('user', question);
       input.value = '';
       autosize();
+      // Referral requests skip the AI answer: the matchmaking offer IS the reply.
+      // (Otherwise the AI answers AND afterAnswer appends the offer = two replies.)
+      if (mode === 'qa' && !leadSent() && REFERRAL_RX.test(question || '')) {
+        showTyping();
+        await settleThink(Date.now());
+        hideTyping();
+        showReferralOffer();
+        busy = false; send.disabled = false;
+        return;
+      }
       showTyping();
       var answerText = '', thinkStart = Date.now();
       try {
@@ -791,7 +801,8 @@
     // otherwise the plain connect offer.
     function afterAnswer(q, a){
       if (mode !== 'qa' || leadSent()) return;
-      if (REFERRAL_RX.test(q || '')) { showReferralOffer(); return; }
+      // (Referral requests are handled before the AI call in ask(), so they never
+      //  reach here — no double reply.)
       if (PROSPECT_RX.test((q + ' ' + (a || '')).toLowerCase())) { showDxOffer(); return; }
       maybeOffer(a);
     }
