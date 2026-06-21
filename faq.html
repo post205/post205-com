@@ -545,7 +545,10 @@
       showTyping();
       var answerText = '', thinkStart = Date.now();
       try {
-        var res = await fetch('/api/faq-answer', {
+        // Call the function directly: the /api/* rewrite (status 200 proxy) does
+        // not support this STREAMING function and returns an empty 429. The direct
+        // /.netlify/functions path streams correctly. (submit-lead stays on /api.)
+        var res = await fetch('/.netlify/functions/faq-answer', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question: question }),
