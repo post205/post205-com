@@ -609,7 +609,8 @@
       pain:     "Got it. What are you trying to sort out or build?",
       timeline: "When are you hoping to get this going?",
       name:     "Sige. What's your name?",
-      email:    "And the best email to reach you?"
+      email:    "And the best email to reach you?",
+      need:     "Sure. What are you looking for?"
     };
     function leadSent(){ try { return sessionStorage.getItem('p205_faq_lead_sent') === '1'; } catch(e){ return false; } }
 
@@ -622,6 +623,7 @@
     function startIntake(opts){
       opts = opts || {};
       var o = document.getElementById('faqOffer'); if (o) o.remove();
+      var ro = document.getElementById('faqReferOffer'); if (ro) ro.remove();
       removeDx();
       mode = 'intake';
       lead = opts.preset ? Object.assign({}, opts.preset) : {};
@@ -652,13 +654,21 @@
       mode = 'qa'; step = null;
       try { sessionStorage.setItem('p205_faq_lead_sent', '1'); } catch(e){}
       input.placeholder = 'Type your question…';
-      addMsg('bot', "Salamat! I'll be in touch within a day.");
+      var isReferral = (lead.source === 'referral');
+      if (isReferral) {
+        addMsg('bot', "Salamat! If I know someone who fits, I'll make the intro. Either way, I'll get back to you.");
+      } else {
+        addMsg('bot', "Salamat! I'll be in touch within a day.");
+      }
+      var pain = isReferral ? ('Referral request: ' + (lead.need || '')) : (lead.pain || '');
+      var business = isReferral ? '' : (lead.business || '');
+      var timeline = isReferral ? '' : (lead.timeline || '');
       fetch('/api/submit-lead', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           source: lead.source || 'post205.com/faq',
-          business: lead.business || '', pain: lead.pain || '',
-          timeline: lead.timeline || '', name: lead.name || '', email: lead.email || ''
+          business: business, pain: pain,
+          timeline: timeline, name: lead.name || '', email: lead.email || ''
         })
       }).catch(function(){});
     }
@@ -681,6 +691,9 @@
       scaling:    "Honestly, you sound past the usual fixes, the basics are working. From here it's about leverage, not patching. That's worth a proper conversation about what's next.",
     };
     var PROSPECT_RX = /figure out where|where (your|the) business|where you('?re| are)? stuck|a few (plain|quick) questions|fully booked|charging too little|busy but (broke|tight)|from scratch|runs through (you|me)|stalls? when (you|i)|step away|where (do|to) (i|you) start|not sure (what|where)|more (customers|clients)|customers come from|help me figure/i;
+    // Referrals-only: a visitor asking us to recommend / point them to a NON-software
+    // provider. Kept narrow so it doesn't fire on software needs.
+    var REFERRAL_RX = /do you know (a |an |any |someone)|can you (recommend|refer)|looking for (a |an |someone)|who (does|can do|to call for)|recommend (a |an |someone)|kakilala|\breferral\b|a good (supplier|printer|accountant|lawyer|designer|marketer|photographer|contractor|bookkeeper|va|virtual assistant)/i;
     var dstep = 0, danswers = {}, dteam = '';
 
     // Idle "ping": bloom an accent ring out of a random chip until one is tapped
@@ -714,9 +727,10 @@
     }
     // A single-chip "offer" rendered with the shared chip style so it picks up the
     // ping + the mobile tap-to-focus snap.
-    function offerChip(label, onClick){
-      var ex = document.getElementById('faqOffer'); if (ex) ex.remove();
-      var wrap = document.createElement('div'); wrap.className = 'chat-chips'; wrap.id = 'faqOffer';
+    function offerChip(label, onClick, id){
+      id = id || 'faqOffer';
+      var ex = document.getElementById(id); if (ex) ex.remove();
+      var wrap = document.createElement('div'); wrap.className = 'chat-chips'; wrap.id = id;
       var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'chat-chip'; btn.style.setProperty('--chip-i', 0); btn.textContent = label;
       var ping = null;
       btn.addEventListener('click', function(){ if (ping) clearInterval(ping); onClick(); });
@@ -750,6 +764,8 @@
         ". Team: " + dteam + ".";
       mode = 'qa';
       if (stage === 'demand'){
+        // Demand/marketing is exactly what the owner network can help with.
+        showReferralOffer();
         dxConnect(painStr, "If you'd still like to talk it through, I can connect you with the team, no pressure.", "Connect me anyway →");
       } else {
         dxConnect(painStr, "Want me to connect you with the team to look at your setup?", "Connect me with the team →");
@@ -760,10 +776,22 @@
       offerChip(label, function(){ startIntake({ order:['name','email'], preset:{ pain: painStr, business:'' }, source:'faq-prospect' }); });
     }
 
+    // ── Referrals-only matchmaking: for things POST205 does NOT build. Soft offer
+    //    to point them at a real person in the Taguig/Makati network. ──
+    function showReferralOffer(){
+      if (mode === 'intake' || leadSent()) return;
+      addMsg('bot', "That's not something we build, but I might still be able to help. I'm connected with good business owners around Taguig and Makati, so I may know someone who fits. Want me to try to connect you?");
+      offerChip("Yes, please →", startReferral, 'faqReferOffer');
+    }
+    function startReferral(){
+      startIntake({ order:['need','name','email'], preset:{ source:'referral' }, source:'referral' });
+    }
+
     // After an answer: prefer the guided read on a prospecting opening,
     // otherwise the plain connect offer.
     function afterAnswer(q, a){
       if (mode !== 'qa' || leadSent()) return;
+      if (REFERRAL_RX.test(q || '')) { showReferralOffer(); return; }
       if (PROSPECT_RX.test((q + ' ' + (a || '')).toLowerCase())) { showDxOffer(); return; }
       maybeOffer(a);
     }
