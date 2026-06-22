@@ -132,18 +132,8 @@
       margin: 28px auto 0;
     }
 
-    /* FAQ-specific "thinking" indicator: pulsing 205 mark + rotating playful
-       words. Rendered inside a shared .chat-bubble (chat.css owns the bubble). */
-    .chat-thinking { display: inline-flex; align-items: center; gap: 9px; }
-    .think-mark { width: 11px; height: 11px; border-radius: 2px; background: var(--accent); flex-shrink: 0; animation: thinkPulse 1s ease-in-out infinite; }
-    .think-word { color: var(--text-2); font-size: 14px; min-width: 8.5em; }
-    .think-dots { display: inline-flex; gap: 3px; }
-    .think-dots i { width: 3px; height: 3px; border-radius: 50%; background: var(--text-3); animation: thinkDot 1.2s infinite; }
-    .think-dots i:nth-child(2){ animation-delay: .15s; }
-    .think-dots i:nth-child(3){ animation-delay: .30s; }
-    @keyframes thinkPulse { 0%,100% { transform: scale(.65); opacity: .45; } 50% { transform: scale(1); opacity: 1; } }
-    @keyframes thinkDot { 0%,60%,100% { opacity: .25; } 30% { opacity: 1; } }
-    @media (prefers-reduced-motion: reduce){ .think-mark, .think-dots i { animation: none; } .think-mark { opacity: 1; } }
+    /* FAQ typing indicator now reuses the homepage's bouncing dots
+       (.chat-typing-bubble / .chat-typing-dot in chat.css). */
 
     /* FAQ idle input pulse — gently invite a tap on the empty field; stops the
        moment they engage (.chat-engaged) or focus it. Retargeted to chat.css's
@@ -468,29 +458,20 @@
       return wrap;
     }
 
-    var THINK_WORDS = ['Thinking','Kinikilig','Nagdadasal','Smooshing','Incubating','Nagmumuni-muni','Tinitimbang','Honking','Puzzling','Hinihimay'];
-    var thinkTimer = null;
+    // Typing indicator: simple bouncing dots, same as the homepage (styles live in
+    // chat.css). No rotating "thinking" words on the FAQ.
     function showTyping(){
       var w = document.createElement('div');
       w.className = 'chat-msg bot chat-typing';
       w.id = 'faqTyping';
       w.innerHTML = '<span class="chat-avatar-mini" aria-hidden="true">205</span>' +
-        '<span class="chat-bubble chat-thinking">' +
-          '<span class="think-mark" aria-hidden="true"></span>' +
-          '<span class="think-word">Thinking</span>' +
-          '<span class="think-dots" aria-hidden="true"><i></i><i></i><i></i></span>' +
+        '<span class="chat-typing-bubble">' +
+          '<span class="chat-typing-dot"></span><span class="chat-typing-dot"></span><span class="chat-typing-dot"></span>' +
         '</span>';
       log.appendChild(w);
       log.scrollTop = log.scrollHeight;
-      var wordEl = w.querySelector('.think-word'), last = 0;
-      thinkTimer = setInterval(function(){
-        var n; do { n = Math.floor(Math.random() * THINK_WORDS.length); } while (n === last && THINK_WORDS.length > 1);
-        last = n;
-        if (wordEl) wordEl.textContent = THINK_WORDS[n];
-      }, 900);
     }
     function hideTyping(){
-      if (thinkTimer) { clearInterval(thinkTimer); thinkTimer = null; }
       var t = document.getElementById('faqTyping');
       if (t) t.remove();
     }
@@ -501,13 +482,13 @@
     }
     input.addEventListener('input', autosize);
 
-    // greeting — think first (a loading beat, like the homepage bot), then type it in
+    // greeting — a brief typing beat (dots, like the homepage), then type it in
     var GREETING = "Ask me anything about how we work or what we build.";
     var REDUCE_FAQ = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     (async function greet(){
       if (REDUCE_FAQ) { addMsg('bot', GREETING); return; }
-      showTyping();                 // 205 avatar + pulsing mark + rotating words
-      await sleep(1500);            // let a couple of the words cycle
+      showTyping();                 // 205 avatar + bouncing dots
+      await sleep(700);             // a short loading beat
       hideTyping();
       var bubble = addBotBubble();
       for (var i = 0; i < GREETING.length; i++) {
