@@ -201,19 +201,21 @@
       if (!val) return;
       userMsg(opts.echo ? opts.echo(val) : val);
       wrap.remove();
-      // AI detour: if the visitor typed a question/aside (and this step opted
-      // in via opts.reAsk), answer it and re-ask instead of storing it.
-      if (opts.reAsk && looksLikeAside(val)) {
-        if (aside.n < 3) { aside.n++; await aiAside(val); }
-        await opts.reAsk();
-        return;
+      // AI detour for off-script input — but ONLY up to a cap. The cap gates the
+      // re-ask too, so a visitor whose answer keeps tripping the detector doesn't
+      // get stuck on "Anyway, tell me more..." forever. After the cap, accept it.
+      if (aside.n < 2) {
+        // Obvious question → answer it via the FAQ brain, then re-ask.
+        if (opts.reAsk && looksLikeAside(val)) {
+          aside.n++; await aiAside(val); await opts.reAsk(); return;
+        }
+        // Ambiguous free-text at a content step → let the AI judge it.
+        if (opts.judgeField) {
+          const wasAside = await aiJudge(opts.judgeField, val);
+          if (wasAside) { aside.n++; await opts.reAsk(); return; }
+        }
       }
-      // Ambiguous free-text at a content step: let the AI judge nonsense vs a real answer.
-      if (opts.judgeField && aside.n < 3) {
-        const wasAside = await aiJudge(opts.judgeField, val);
-        if (wasAside) { aside.n++; await opts.reAsk(); return; }
-      }
-      aside.n = 0;            // a real answer clears the consecutive-aside count
+      aside.n = 0;            // a real answer (or hitting the cap) advances the flow
       onSubmit(val);
     };
     send.addEventListener('click', fire);
@@ -232,7 +234,10 @@
      a kind of business, a pain in their own words) pass straight through. */
 
   // CONSERVATIVE: true only when the text clearly reads as a question/aside.
-  const ASIDE_LEAD = /^(do|does|did|can|could|what|how|why|where|when|who|whom|which|should|would|will|is|are|am|was|were|may|might|pwede ba|pwede|ano|anong|paano|saan|magkano|bakit|kaya|meron|may)\b/i;
+  // Statement-starters like "may/meron/kaya/ano" were dropped: they begin genuine
+  // Taglish pain descriptions ("may problema kami...") far more often than questions.
+  // Real Taglish questions almost always end with "?", which is caught above.
+  const ASIDE_LEAD = /^(do|does|did|can|could|what|how|why|where|when|who|whom|which|should|would|will|is|are|am|was|were|might|pwede ba|pwede|paano|saan|magkano|bakit)\b/i;
   function looksLikeAside(text) {
     const t = String(text || '').trim();
     if (!t) return false;
