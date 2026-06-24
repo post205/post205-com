@@ -87,3 +87,17 @@
   from = "/frameworks/:slug"
   to = "/frameworks/article.html"
   status = 200
+
+# StagePro demo — proxy /stagepro to its Netlify site. status=200 is a rewrite,
+# so the URL stays post205.com/stagepro and Netlify is never exposed. The 301
+# handles the no-trailing-slash case so the demo's relative assets resolve.
+# Temporary until stagepro.ph is connected.
+[[redirects]]
+  from = "/stagepro"
+  to = "/stagepro/"
+  status = 301
+
+[[redirects]]
+  from = "/stagepro/*"
+  to = "https://stagepro-ph.netlify.app/:splat"
+  status = 200
