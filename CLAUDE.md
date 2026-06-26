@@ -1,5 +1,15 @@
 # POST205 — post205.com
 
+## Working context (read before writing copy or making calls)
+- **Before writing or editing ANY user-facing copy** (site, demos, emails, chat, SA
+  pages, labels), read [docs/writing-style.md](docs/writing-style.md) and skim
+  [context/anti-slop-log.md](context/anti-slop-log.md). When you hand copy to a
+  subagent, paste the writing-style "Hard Bans" + the anti-slop log into its brief —
+  most slop we've shipped came from subagents that never saw the style guide.
+- **Before a product/design/stack/naming decision**, check [context/decisions.md](context/decisions.md)
+  (settled calls + recurring mistakes) and [DESIGN.md](DESIGN.md) / [docs/build-rules.md](docs/build-rules.md).
+- New slop flagged or new decision made → log it in `context/` in the same change.
+
 ## Public form security (go-live blocker)
 Public form/chat submissions here must adopt the secure-submission pattern before
 this site's production domain goes live: cheap guards (honeypot + min-fill-time +
