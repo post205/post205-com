@@ -268,6 +268,42 @@
       .faq-cta { padding: 56px 24px; }
       footer { padding: 48px 20px calc(110px + env(safe-area-inset-bottom, 0px)); }
     }
+
+    /* ===== the machine under the field (same system as the homepage) ===== */
+
+    /* living fields: canvas behind content per section */
+    .sec-field, .foot-field { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .page-hero { position: relative; overflow: hidden; }
+    .page-hero-inner { position: relative; z-index: 1; }
+    .faq-wrap { position: relative; overflow: hidden; }
+    .faq-wrap > *:not(.sec-field) { position: relative; z-index: 1; }
+    footer { position: relative; overflow: hidden; }
+    footer > *:not(.foot-field) { position: relative; z-index: 1; }
+
+    /* nav HUD: MNL time, scroll %, and the 15-cell pixel strip */
+    .nav-hud { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+    .nav-hud canvas { display: block; }
+    .hud-txt {
+      font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .12em;
+      color: #7aacac; text-transform: uppercase; user-select: none;
+    }
+    @media (max-width: 640px) { .hud-txt { display: none; } }
+
+    /* decode-in for the hero label */
+    .decode-wait { visibility: hidden; }
+
+    /* You're-here live pip */
+    .cc-lbl-web::before {
+      content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%;
+      background: #3BD1D3; margin-right: 7px; vertical-align: 1px;
+      animation: hudPip 2.4s ease-in-out infinite;
+    }
+    @keyframes hudPip { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .decode-wait { visibility: visible; }
+      .cc-lbl-web::before { animation: none; opacity: .8; }
+    }
   </style>
 </head>
 <body>
@@ -276,6 +312,11 @@
   <a href="/" class="nav-logo">
     <img src="/images/logo.png" alt="POST205">
   </a>
+  <div class="nav-hud" aria-hidden="true">
+    <span class="hud-txt" id="hudTime">MNL --:--</span>
+    <span class="hud-txt" id="hudScrl">SCRL 000</span>
+    <canvas id="hudPx" width="66" height="22"></canvas>
+  </div>
 </nav>
 
 <section class="page-hero" id="hero">
@@ -811,6 +852,186 @@
   })();
 </script>
 <script src="/js/cookie-banner.js"></script>
+
+<script>
+/* ===== the machine under the field — FAQ edition ===========================
+   Same system as the homepage, minus the boot (people come here for answers).
+   Living fields per section, nav HUD, hero-label decode. Vanilla, no deps. */
+(function () {
+  'use strict';
+
+  var MC = 15;
+  var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var DPR = Math.min(window.devicePixelRatio || 1, 1.75);
+  var randGlyph = function () {
+    var x = Math.random();
+    if (x > 0.985) return '₱';
+    if (x > 0.96) return Math.random() > 0.5 ? '2' : '5';
+    return Math.random() > 0.5 ? '1' : '0';
+  };
+
+  /* ── living fields ─────────────────────────────────────────────────────── */
+  function makeField(host, o) {
+    if (!host || REDUCE) return;
+    var cv = document.createElement('canvas');
+    cv.className = o.cls || 'sec-field';
+    host.insertBefore(cv, host.firstChild);
+    var ctx = cv.getContext('2d');
+    var W, H, cell, cols, rows, glyphs, alphas, heat;
+    var px = -1e4, py = -1e4;
+
+    function build() {
+      var b = host.getBoundingClientRect();
+      W = Math.max(1, b.width); H = Math.max(1, b.height);
+      cv.width = W * DPR; cv.height = H * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      cell = o.cell || 30;
+      cols = Math.ceil(W / cell); rows = Math.ceil(H / cell);
+      ctx.font = Math.round(cell * 0.42) + 'px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      var n = cols * rows;
+      glyphs = new Array(n); alphas = new Float32Array(n); heat = new Float32Array(n);
+      for (var i = 0; i < n; i++) {
+        var r_ = (i / cols) | 0, c_ = i % cols;
+        var k = 1;
+        if (o.centerThin) {
+          var dx_ = (c_ * cell + cell / 2 - W / 2) / (W * 0.5);
+          var dy_ = (r_ * cell + cell / 2 - H / 2) / (H * 0.62);
+          var edge = Math.min(1, Math.sqrt(dx_ * dx_ + dy_ * dy_));
+          k = 0.15 + 0.85 * edge * edge;
+        }
+        glyphs[i] = randGlyph();
+        alphas[i] = (o.idle + Math.random() * o.idleVar) * k;
+      }
+    }
+    build();
+
+    host.addEventListener('pointermove', function (e) {
+      var b = cv.getBoundingClientRect();
+      px = e.clientX - b.left; py = e.clientY - b.top;
+    }, { passive: true });
+    host.addEventListener('pointerleave', function () { px = py = -1e4; });
+
+    var visible = false, raf = 0, last = 0, t0 = performance.now();
+    new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        visible = en.isIntersecting;
+        if (visible) { cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop); }
+      });
+    }, { threshold: 0 }).observe(host);
+    var rT; window.addEventListener('resize', function () { clearTimeout(rT); rT = setTimeout(build, 200); });
+
+    var R = o.radius || 140, R2 = R * R;
+    function loop(now) {
+      if (!visible || document.hidden) return;
+      raf = requestAnimationFrame(loop);
+      if (now - last < 50) return;
+      var dt = last ? (now - last) / 1000 : 0.05;
+      last = now;
+      var t = (now - t0) / 1000;
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = o.ink;
+      var decay = Math.exp(-dt * 2.4);
+      for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+        var i = r * cols + c;
+        var h = heat[i];
+        if (h > 0.004) heat[i] = h * decay;
+        if (px > -1e3) {
+          var dx = c * cell + cell / 2 - px, dy = r * cell + cell / 2 - py;
+          var d2 = dx * dx + dy * dy;
+          if (d2 < R2) { var v = o.wake * (1 - Math.sqrt(d2) / R); if (v > heat[i]) heat[i] = v; }
+        }
+        var a = alphas[i] * (0.7 + 0.3 * Math.sin(t * 0.35 + c * 0.3 + r * 0.5)) + h;
+        if (a < 0.012) continue;
+        ctx.globalAlpha = Math.min(o.cap, a);
+        ctx.fillText(glyphs[i], c * cell + cell / 2, r * cell + cell / 2);
+      }
+      ctx.globalAlpha = 1;
+      glyphs[(Math.random() * glyphs.length) | 0] = randGlyph();
+    }
+  }
+
+  /* dark hero band: lively, wakes under the pointer around the chat */
+  makeField(document.querySelector('.page-hero'), {
+    ink: '#3BD1D3', idle: 0.03, idleVar: 0.05, wake: 0.35, cap: 0.42, cell: 24
+  });
+  /* the FAQ list: faint print that darkens under your hand */
+  makeField(document.querySelector('.faq-wrap'), {
+    ink: '#0e9a9d', idle: 0.026, idleVar: 0.036, wake: 0.22, cap: 0.24, cell: 32
+  });
+  /* footer: the hum, thinned so the calling card owns the center */
+  makeField(document.querySelector('footer'), {
+    cls: 'foot-field', ink: '#3BD1D3', idle: 0.015, idleVar: 0.035,
+    wake: 0.3, cap: 0.32, centerThin: true
+  });
+
+  /* ── nav HUD: pixel strip + MNL time + scroll% ─────────────────────────── */
+  (function hud() {
+    var cv = document.getElementById('hudPx');
+    var timeEl = document.getElementById('hudTime');
+    var scrlEl = document.getElementById('hudScrl');
+    if (!cv) return;
+    var ctx = cv.getContext('2d');
+    var d = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = 66 * d; cv.height = 22 * d;
+    cv.style.width = '66px'; cv.style.height = '22px';
+    ctx.scale(d, d);
+
+    function draw(p) {
+      ctx.clearRect(0, 0, 66, 22);
+      var lit = Math.round(p * MC);
+      for (var i = 0; i < MC; i++) {
+        ctx.globalAlpha = i < lit ? 1 : 0.16;
+        ctx.fillStyle = '#3BD1D3';
+        ctx.fillRect(3 + i * 4, 9, 3, 3);
+      }
+      ctx.globalAlpha = 1;
+    }
+    function mnl() {
+      try {
+        timeEl.textContent = 'MNL ' + new Intl.DateTimeFormat('en-PH', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Manila' }).format(new Date());
+      } catch (e) { timeEl.textContent = ''; }
+    }
+    mnl(); setInterval(mnl, 30000);
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        var max = document.documentElement.scrollHeight - innerHeight;
+        var p = max > 0 ? Math.min(1, scrollY / max) : 0;
+        draw(p);
+        scrlEl.textContent = 'SCRL ' + String(Math.round(p * 100)).padStart(3, '0');
+      });
+    }
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  /* ── the hero label decodes in ─────────────────────────────────────────── */
+  (function decode() {
+    if (REDUCE) return;
+    var el = document.querySelector('.faq-label');
+    if (!el || el.childElementCount) return;
+    var SCRAM = '010101201510';
+    var final_ = el.textContent;
+    var t0 = performance.now(), DUR = 520;
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / DUR);
+      var solid = Math.floor(k * final_.length), out = final_.slice(0, solid);
+      for (var i = solid; i < final_.length; i++) {
+        out += final_[i] === ' ' ? ' ' : SCRAM[(Math.random() * SCRAM.length) | 0];
+      }
+      el.textContent = out;
+      if (k < 1) requestAnimationFrame(step);
+      else el.textContent = final_;
+    })(t0);
+  })();
+
+})();
+</script>
 
 </body>
 </html>
