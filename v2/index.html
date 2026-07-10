@@ -1,0 +1,2594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <title>POST205: Custom software for Filipino business owners</title>
+  <meta name="description" content="Custom software for Filipino business owners, built around how you actually work. Websites, inventory, and back-office systems, built from scratch since 2015. Your data and code stay yours.">
+  <meta property="og:title" content="POST205: Your business software.">
+  <meta property="og:description" content="Custom software for Filipino business owners, built around how you actually work. Built from scratch since 2015, and the data and code stay yours.">
+  <meta property="og:image" content="https://post205.com/images/og-image.png?v=2">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://post205.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="POST205: Your business software.">
+  <meta name="twitter:description" content="Custom software for Filipino business owners, built around how you actually work. Built from scratch since 2015, and the data and code stay yours.">
+  <meta name="twitter:image" content="https://post205.com/images/og-image.png?v=2">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="canonical" href="https://post205.com/">
+  <meta name="robots" content="noindex,nofollow"><!-- v2 preview, not for crawlers -->
+  <script>
+    /* boot plays once per session; repeat visits and reduced motion go straight in */
+    try {
+      if (sessionStorage.getItem('p205boot') === '1' ||
+          matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('no-boot');
+      }
+    } catch (e) { document.documentElement.classList.add('no-boot'); }
+  </script>
+  <link rel="stylesheet" href="/css/chat.css?v=9">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "POST205, Inc.",
+    "url": "https://post205.com",
+    "logo": "https://post205.com/images/logo.png",
+    "description": "Custom software for Filipino business owners, built around how you actually work. Websites, inventory, and back-office systems, built from scratch since 2015. Your data and code stay yours.",
+
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "3/F LZF Building, 25A Timog Avenue",
+      "addressLocality": "Quezon City",
+      "addressRegion": "Metro Manila",
+      "postalCode": "1103",
+      "addressCountry": "PH"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "Philippines"
+    }
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* single theme — dark masthead over a light teal field (the "little-way" SA look) */
+      --black:        #e7efee;
+      --surface:      #f7fcfc;
+      --surface-2:    #dce8e7;
+      --surface-deep: #0D2828;   /* stays dark: mockup chrome + high-contrast blocks */
+      --border:       #c7d9d7;
+      --border-2:     #b1c8c5;
+      --text:         #0b1b1b;
+      --text-2:       #41585a;
+      --text-3:       #5a7473;
+      --accent:       #0e9a9d;
+      --accent-text:  #0f7476;
+      --accent-dim:   rgba(14, 154, 157, 0.10);
+      --accent-border: rgba(14, 154, 157, 0.28);
+      --on-accent:    #ffffff;
+      --green:        #198a4c;
+      --red:          #c0392b;
+      --nav-bg:       rgba(20, 20, 22, 0.96);  /* dark masthead, always */
+      --logo-filter:  none;
+      --logo-blend:   screen;                  /* logo sits on the dark masthead */
+      --promise-bg:   #f7fcfc;
+      --nav-ink:      #7aacac;   /* nav link on the dark masthead */
+      --nav-ink-hi:   #f0f0f2;   /* nav link hover on the dark masthead */
+      --nav-accent:   #3BD1D3;   /* bright teal reads better on dark than the body accent */
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 48px;
+      background: var(--nav-bg);
+      border-bottom: 2px solid var(--nav-accent);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .nav-logo img {
+      height: 26px;
+      width: auto;
+      mix-blend-mode: var(--logo-blend);
+      filter: var(--logo-filter);
+      opacity: 0.9;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-link {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--nav-ink);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-link:hover { color: var(--nav-ink-hi); }
+
+    .nav-cta {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #021616;
+      background: var(--nav-accent);
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: opacity 0.15s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+    }
+
+    .hero-binary {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bin-col {
+      position: absolute;
+      font-family: ui-monospace, monospace;
+      line-height: 1.8;
+      color: var(--accent);
+      white-space: pre;
+      user-select: none;
+      animation: binfall linear infinite;
+      opacity: var(--op-l, 0.22);
+    }
+    @keyframes binfall {
+      from { transform: translateY(-100%); }
+      to   { transform: translateY(100vh); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bin-col { animation-play-state: paused; }
+    }
+
+    .hero-fade {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.88;
+      background:
+        linear-gradient(to right, transparent 25%, var(--black) 72%),
+        radial-gradient(
+          ellipse 70% 80% at 38% 50%,
+          transparent 0%,
+          transparent 40%,
+          var(--black) 92%
+        );
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      padding: 152px 48px 88px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: clamp(34px, 5.6vw, 64px);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 36px;
+    }
+
+    .hero-descriptor {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: clamp(16px, 2.2vw, 22px);
+      font-weight: 500;
+      color: var(--text-2);
+      letter-spacing: -0.01em;
+      margin-bottom: 32px;
+    }
+
+    .hero-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 36px;
+    }
+    .hero-bullet {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: clamp(16px, 2.2vw, 22px);
+      font-weight: 500;
+      color: var(--text-2);
+      letter-spacing: -0.01em;
+    }
+    .hero-bullet .plus { color: var(--accent-text); margin-right: 6px; }
+
+    /* ── CASE STUDIES ── */
+    .case-studies {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+    .case-studies-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .cs-tabs {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 2px;
+    }
+
+    .cs-tab {
+      padding: 13px 24px;
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: color 0.15s, background 0.15s, border-color 0.15s;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+    }
+    .cs-industry {
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+    .cs-tab:first-child { border-radius: 6px 0 0 0; }
+    .cs-tab:last-child  { border-radius: 0 6px 0 0; }
+    .cs-tab:hover:not(.active) { color: var(--text-2); border-color: var(--border-2); }
+    .cs-tab.active {
+      color: var(--on-accent);
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .cs-panel {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0 6px 6px 6px;
+      overflow: hidden;
+    }
+    .cs-panel.active { display: grid; grid-template-columns: 1fr 1fr; }
+
+    .cs-content {
+      padding: 48px;
+      border-right: 1px solid var(--border);
+    }
+
+    .cs-content h2 {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .cs-content p {
+      font-size: 15px;
+      color: var(--text-2);
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    .cs-content p:last-of-type { margin-bottom: 24px; }
+
+    .cs-ai {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .cs-ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--accent);
+      border-radius: 4px;
+      padding: 3px 7px 3px 5px;
+      flex-shrink: 0;
+      color: var(--on-accent);
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 1px;
+    }
+    .cs-ai-text {
+      font-size: 13px;
+      color: var(--text-3);
+      line-height: 1.65;
+    }
+
+    .cs-link {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .cs-link:hover { color: var(--text); }
+
+    .cs-mockup {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: var(--black);
+    }
+
+    /* browser chrome */
+    .mock-win {
+      width: 100%;
+      border: 1px solid var(--border-2);
+      border-radius: 7px;
+      overflow: hidden;
+      font-size: 11px;
+    }
+    .mock-bar {
+      background: var(--surface-deep);
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border-bottom: 1px solid var(--border);
+    }
+    .m-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .m-r { background: #ff5f57; }
+    .m-y { background: #ffbd2e; }
+    .m-g { background: #28c840; }
+    .mock-url {
+      flex: 1;
+      background: #0d0d0d;
+      border-radius: 3px;
+      padding: 2px 8px;
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      color: var(--text-3);
+      margin: 0 6px;
+    }
+
+    /* booking / right information mockup */
+    .book-search {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      color: var(--text-2);
+    }
+    .book-search-icon { color: var(--text-2); font-size: 16px; }
+    .book-client-card { padding: 12px 14px; }
+    .book-client-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .book-client-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .book-tag {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: var(--accent-dim);
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+    .book-detail {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .book-detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 10px;
+    }
+    .book-detail-row:last-child { border-bottom: none; }
+    .book-key {
+      color: var(--text-3);
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.04em;
+    }
+    .book-val { color: var(--text); font-size: 10px; }
+    .book-slot {
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* access / right person mockup */
+    .acc-head {
+      background: var(--surface);
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .acc-head-title { font-size: 11px; font-weight: 700; color: var(--text); }
+    .acc-role-badge {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: rgba(46,204,113,0.12);
+      color: var(--green);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .acc-table { padding: 0 14px; }
+    .acc-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.2fr;
+      gap: 6px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      font-size: 10px;
+    }
+    .acc-row:last-child { border-bottom: none; }
+    .acc-row-hd {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+    .acc-entity { font-weight: 500; color: var(--text); }
+    .acc-amount { color: var(--text-2); font-family: ui-monospace, monospace; font-size: 10px; }
+    .acc-vis {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      color: var(--text-3);
+      background: var(--surface);
+      padding: 2px 5px;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    .acc-admin-only { opacity: 0.5; }
+    .acc-footer {
+      padding: 8px 14px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .acc-note {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    /* ticketing / right time mockup */
+    .tkt-valid {
+      padding: 10px 14px;
+      background: rgba(46,204,113,0.07);
+      border-bottom: 1px solid rgba(46,204,113,0.15);
+    }
+    .tkt-valid-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+    .tkt-valid-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      flex-shrink: 0;
+    }
+    .tkt-valid-text { font-size: 11px; font-weight: 600; color: var(--text); }
+    .tkt-type {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+      padding-left: 12px;
+    }
+    .tkt-flag {
+      padding: 10px 14px;
+      background: rgba(255,77,77,0.07);
+      border-bottom: 1px solid rgba(255,77,77,0.15);
+    }
+    .tkt-flag-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--red);
+      margin-bottom: 3px;
+    }
+    .tkt-flag-sub {
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+    }
+    .tkt-actions {
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .tkt-btn {
+      padding: 7px 12px;
+      border-radius: 3px;
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      background: var(--surface);
+    }
+    .tkt-primary {
+      background: var(--accent-dim);
+      color: var(--accent);
+      border-color: var(--accent-border);
+    }
+
+    /* AI output card inside mockup */
+    .mock-ai {
+      margin: 0 14px 12px;
+      padding: 9px 11px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: 4px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .mock-ai-icon {
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .mock-ai-text {
+      font-size: 10px;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    .section-label {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 24px;
+    }
+
+    /* ── PROMISES ── */
+    .promises {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+    .promises-inner { max-width: 1200px; margin: 0 auto; }
+
+    .promises h2 {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 48px;
+    }
+
+    .promises-trust {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .promises-trust-sep {
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      color: var(--border-2);
+    }
+
+    .promises-intro {
+      font-size: 15px;
+      color: var(--text-2);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 40px;
+    }
+
+    .promises-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .promise-card {
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+    }
+    /* Round corner cards manually since overflow:hidden is removed (it clips tooltips) */
+    .promise-card:first-child { border-radius: 7px 0 0 7px; }
+    .promise-card:last-child  { border-radius: 0 7px 7px 0; }
+
+    .promise-img-wrap { display: none; }
+    .promise-card-body { padding: 32px; }
+    .promise-card-icon {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      color: var(--accent);
+    }
+    .promise-card-icon svg { flex-shrink: 0; }
+
+    .promise-key {
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-text);
+    }
+
+    .promise-card h4 {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .promise-card p {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .promise-card p:last-of-type { margin-bottom: 0; }
+
+    .promise-badge {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 16px;
+      margin-right: 4px;
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-text);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: 4px;
+      padding: 3px 7px;
+      cursor: default;
+      transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+    }
+    .promise-badge[data-tip] { cursor: help; }
+    .promise-badge[data-tip]:hover { color: var(--accent); border-color: var(--accent); background: var(--surface); }
+    @media (max-width: 960px) {
+      .promise-badge { padding: 8px 12px; }
+    }
+
+    /* JS-powered tooltip — positioned via getBoundingClientRect, viewport-clamped */
+    .badge-tooltip {
+      display: none;
+      position: fixed;
+      background: var(--surface-2);
+      border: 1px solid var(--border-2);
+      border-radius: 4px;
+      padding: 7px 10px;
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      line-height: 1.6;
+      color: var(--text-2);
+      letter-spacing: 0.02em;
+      font-weight: 400;
+      width: 210px;
+      white-space: normal;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    /* Icon breathe animation */
+    @keyframes iconBreath { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+    .promise-card-icon svg { animation: iconBreath 2.6s ease-in-out infinite; }
+    .promise-card:nth-child(2) .promise-card-icon svg { animation-delay: -0.87s; }
+    .promise-card:nth-child(3) .promise-card-icon svg { animation-delay: -1.73s; }
+
+    /* ── ABOUT ── */
+    .about {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .about-star-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      color: var(--accent);
+      pointer-events: none;
+    }
+    .about-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      position: relative;
+      z-index: 1;
+    }
+    .about-mission { flex: 1; }
+    .about-graphic {
+      flex: 0 0 380px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+    .sys-hub {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: sysHub 4s ease-in-out infinite;
+    }
+    .sys-glow-a { animation: sysGlow 5s ease-in-out infinite 0s; }
+    .sys-glow-b { animation: sysGlow 5s ease-in-out infinite 1.6s; }
+    .sys-glow-c { animation: sysGlow 6s ease-in-out infinite 3.2s; }
+    @keyframes sysHub {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.25); opacity: 1; }
+    }
+    @keyframes sysGlow {
+      0%, 100% { opacity: 0.25; }
+      50% { opacity: 0.9; }
+    }
+    .about-mission-hl {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+    .about-mission-body {
+      font-size: 17px;
+      color: var(--text-2);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-top: 16px;
+    }
+    .about-mission-close {
+      font-size: 17px;
+      color: var(--text);
+      line-height: 1.7;
+      margin-top: 32px;
+      font-weight: 500;
+    }
+    .about-graphic svg {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      color: var(--accent);
+    }
+    .about-sun-g {
+      animation: aboutSpin 22s linear infinite;
+      transform-origin: 0px 0px;
+    }
+    .about-star-a { animation: aboutStarGlow 3.5s ease-in-out infinite 0s; }
+    .about-star-b { animation: aboutStarGlow 3.5s ease-in-out infinite 1.2s; }
+    .about-star-c { animation: aboutStarGlow 3.5s ease-in-out infinite 2.4s; }
+    @keyframes aboutSpin { to { transform: rotate(360deg); } }
+    @keyframes aboutStarGlow {
+      0%, 100% { opacity: 0.25; }
+      50% { opacity: 1; }
+    }
+    @keyframes starBlink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: var(--so, 0.35); }
+    }
+
+    /* ── CTA ── */
+    .cta {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+    .cta-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 48px;
+    }
+
+    .cta h2 {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1.05;
+      color: var(--text);
+    }
+
+    /* chat styling now lives in /css/chat.css */
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--on-accent);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 32px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo img {
+      height: 20px;
+      width: auto;
+      mix-blend-mode: var(--logo-blend);
+      filter: var(--logo-filter);
+      opacity: 0.5;
+    }
+
+    .footer-right {
+      font-family: ui-monospace, monospace;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      color: var(--text-3);
+      text-align: right;
+      line-height: 1.8;
+    }
+    .footer-right a { color: var(--text-3); text-decoration: none; }
+    .footer-right a:hover { color: var(--text-2); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      nav { padding: 16px 20px; }
+      .nav-link { display: none; }
+      .hero-inner { padding: 110px 20px 56px; }
+      .case-studies { padding: 32px 0 56px; }
+      .cs-tabs { margin-bottom: 0; }
+      .cs-panel.active { grid-template-columns: 1fr; }
+      .cs-panel { border-radius: 0 0 6px 6px; }
+      .cs-content { padding: 24px 20px; border-right: none; border-bottom: 1px solid var(--border); }
+      .cs-mockup { padding: 20px; }
+      .promises { padding: 56px 0; }
+      .promises-cards { grid-template-columns: 1fr; }
+      .promise-card:first-child { border-radius: 7px 7px 0 0; }
+      .promise-card:last-child  { border-radius: 0 0 7px 7px; }
+      .promise-card-body { padding: 24px 20px; }
+      .about { padding: 56px 0; }
+      .about-inner { flex-direction: column; }
+      .about-graphic { display: none; }
+
+      .cta { padding: 56px 20px; }
+      .cta-inner { flex-direction: column; align-items: flex-start; gap: 32px; }
+      footer { padding: 28px 20px; flex-direction: column; gap: 12px; align-items: flex-start; }
+      .footer-right { text-align: left; }
+    }
+
+    @media (max-width: 600px) {
+      .promise { grid-template-columns: 1fr; gap: 8px; }
+    }
+
+    @media (min-width: 421px) and (max-width: 960px) {
+      .hero h1 { font-size: clamp(44px, 8vw, 88px); }
+    }
+
+    /* ===== v2: dark hero band (matches the masthead) ===== */
+    .hero { background: #0f1416; border-bottom: 2px solid var(--nav-accent); }
+    .hero-fade {
+      background:
+        linear-gradient(to right, transparent 25%, #0f1416 72%),
+        radial-gradient(ellipse 70% 80% at 38% 50%, transparent 0%, transparent 40%, #0f1416 92%);
+    }
+    .hero .bin-col { color: #3BD1D3; opacity: var(--op-d, 0.13); }
+    .hero-eyebrow { color: #6fc9ca; }
+    .hero h1 { color: #f4f7f7; }
+    .hero-descriptor { color: #a7c4c4; margin-bottom: 0; }
+    .hero-tagline { margin-top: 16px; font-family: ui-monospace, monospace; font-size: 12px; letter-spacing: .16em; color: #6fc9ca; }
+    /* hero headline with side-bracket decode (Filipino / easy to use) */
+    .hero-annotated { display:flex; flex-direction:column; gap:14px; }
+    .hl-line { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+    /* both lines: a long-dash side annotation (drawn line, controllable length) */
+    .hl-dash { display:inline-flex; align-items:center; gap:12px; font-family: ui-monospace,monospace; font-size:11px; font-weight:400; letter-spacing:.12em; text-transform:uppercase; color:#6fc9ca; white-space:nowrap; }
+    .hl-dash::before { content:""; width:38px; height:1.5px; background:rgba(255,255,255,.5); flex-shrink:0; }
+    /* mobile: compress the dash/gaps so the label stays on the same line as the word */
+    @media (max-width:640px){
+      .hl-line { gap:8px; }
+      .hl-dash { gap:6px; font-size:10px; letter-spacing:.08em; }
+      .hl-dash::before { width:12px; }
+    }
+    /* transparent header that blends into the dark hero (rain shows through);
+       gains a solid dark backdrop only after the hero scrolls away */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: none; box-shadow: none; transition: background .3s ease, box-shadow .3s ease; }
+    nav.nav-solid { background: rgba(15,20,22,0.97); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
+    .nav-faq { display: inline-flex; align-items: center; height: 32px; padding: 0 10px; box-sizing: border-box; color: #3BD1D3; text-decoration: none; font-family: ui-monospace, monospace; font-weight: 600; border: 1px solid rgba(59,209,211,.4); border-radius: 999px; overflow: hidden; white-space: nowrap; transition: background .15s; }
+    .nav-faq:hover { background: rgba(59,209,211,.12); }
+    .nav-faq-q { font-size: 16px; line-height: 1; transform: translateY(1px); max-width: 1.4em; opacity: 1; overflow: hidden; transition: max-width .28s ease, opacity .2s ease; }
+    .nav-faq-label { font-size: 13px; letter-spacing: .04em; max-width: 0; opacity: 0; overflow: hidden; transition: max-width .3s cubic-bezier(.22,1,.36,1), opacity .25s ease; }
+    .nav-faq:hover .nav-faq-q { max-width: 0; opacity: 0; }
+    .nav-faq:hover .nav-faq-label { max-width: 120px; opacity: 1; }
+    @media (prefers-reduced-motion: reduce){ .nav-faq-q, .nav-faq-label { transition: none; } }
+
+    .hero-actions { display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:4px; }
+    .hero-cta {
+      font-family: ui-monospace, monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:700;
+      background:#3BD1D3; color:#021616; padding:13px 22px; border-radius:6px; text-decoration:none;
+      transition: transform .15s, box-shadow .15s; cursor:pointer; border:none;
+    }
+    .hero-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59,209,211,.25); }
+    .hero-ghost {
+      font-family: ui-monospace, monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+      color:#a7c4c4; text-decoration:none; border-bottom:1px solid rgba(255,255,255,.18); padding-bottom:2px;
+    }
+    .hero-ghost:hover { color:#f4f7f7; }
+
+    /* hero with the live chat beside it */
+    .hero-text { min-width: 0; }
+    .hero-ghost { display:inline-block; margin-top:20px; }
+    .hero-chat { width:100%; margin-top:28px; }
+    @media (min-width: 900px){
+      .hero-inner { display:grid; grid-template-columns: 1.05fr 0.95fr; gap:52px; align-items:start; }
+      .hero-chat { margin-top:0; }
+    }
+
+    /* ===== v2: live-preview switcher ===== */
+    .lp-head { max-width:760px; margin:0 auto 26px; text-align:center; }
+    .lp-eyebrow { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-text); margin-bottom:12px; }
+    .lp-head h2 { font-size: clamp(26px,4vw,42px); font-weight:800; letter-spacing:-0.01em; line-height:1.08; color:var(--text); }
+    .lp-lede { color:var(--text-2); font-size:15px; line-height:1.6; margin:14px auto 0; max-width:60ch; }
+    .lp-tabs { display:flex; gap:4px; justify-content:center; margin-bottom:32px; border-bottom:1px solid var(--border); }
+    .lp-tab { font-family: ui-monospace,monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; padding:11px 18px; border:none; border-bottom:2px solid transparent; background:transparent; color:var(--text-2); cursor:pointer; margin-bottom:-1px; transition: color .15s, border-color .15s; }
+    .lp-tab:hover { color:var(--accent-text); }
+    .lp-tab.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
+    @media (max-width:768px){ .lp-tabs { gap:0; } .lp-tab { flex:1 1 0; padding:12px 4px; font-size:10px; letter-spacing:.02em; text-align:center; } }
+    .lp-stage { display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:center; max-width:1000px; margin:0 auto; }
+    .lp-copy h3 { font-size: clamp(20px,2.6vw,28px); font-weight:800; letter-spacing:-0.01em; line-height:1.14; color:var(--text); margin-bottom:14px; }
+    .lp-copy > p { color:var(--text-2); font-size:15px; line-height:1.65; margin-bottom:16px; }
+    .lp-built { color:var(--text); font-size:14.5px; line-height:1.6; font-weight:600; background:var(--accent-dim); border-radius:8px; padding:13px 15px; margin-bottom:18px; }
+    .lp-copy .cs-industry { margin-top:4px; }
+    .lp-flip { animation: lpFlip .5s cubic-bezier(.22,1,.36,1); }
+    @keyframes lpFlip { from { opacity:0; transform: translateY(10px) scale(.985); } to { opacity:1; transform:none; } }
+    .lp-fade { animation: lpFade .45s ease-out; }
+    @keyframes lpFade { from { opacity:.25; } to { opacity:1; } }
+    @media (prefers-reduced-motion: reduce){ .lp-flip,.lp-fade{ animation:none; } }
+    @media (max-width:768px){ .lp-stage { grid-template-columns:1fr; gap:24px; } }
+
+    /* persistent-chat CSS (dock / focus sheet / sticky bar / fab) now lives in /css/chat.css */
+
+    /* ===== v2 ribbon ===== */
+    /* ===== v2: live demos ===== */
+    .demo-panel { display:none; grid-template-columns:1fr 1fr; gap:44px; align-items:start; }
+    .demo-panel.active { display:grid; }
+    @media (min-width:769px){ .demo-copy { position:sticky; top:96px; } }
+    .demo-copy h3 { font-size: clamp(20px,2.6vw,28px); font-weight:800; letter-spacing:-0.01em; line-height:1.14; color:var(--text); margin-bottom:14px; }
+    .demo-copy > p { color:var(--text-2); font-size:15px; line-height:1.65; margin-bottom:16px; }
+    @media (max-width:768px){ .demo-panel { grid-template-columns:1fr; gap:24px; } }
+
+    .dep { padding:16px; }
+    .dep-title { font-family: ui-monospace,monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:14px; }
+    .dep-field { display:block; margin-bottom:12px; }
+    .dep-field span { display:block; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); margin-bottom:5px; }
+    .dep-field input, .dep-field select { width:100%; padding:10px 12px; border:1px solid var(--border-2); border-radius:7px; background:var(--surface); color:var(--text); font-size:16px; font-family:inherit; }
+    .dep-field select { -webkit-appearance:none; appearance:none; padding-right:40px; cursor:pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235a7473' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position: right 14px center; background-size:15px; }
+    .dep-field select:focus { border-color:var(--accent); }
+    .dep-field input:focus, .dep-field select:focus { outline:none; border-color:var(--accent); }
+    .dep-upload { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; padding:11px; border:1px dashed var(--border-2); border-radius:7px; background:transparent; color:var(--text-2); font-size:13px; cursor:pointer; margin-bottom:14px; transition: border-color .15s, color .15s; }
+    .dep-upload:hover { border-color:var(--accent); color:var(--accent-text); }
+    .dep-upload.has { border-style:solid; border-color:var(--accent); color:var(--accent-text); }
+    .dep-submit { width:100%; padding:13px; border:none; border-radius:7px; background:var(--accent); color:var(--on-accent); font-family: ui-monospace,monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:700; cursor:pointer; transition: opacity .15s; }
+    .dep-submit:hover { opacity:.9; } .dep-submit:disabled { opacity:.6; cursor:default; }
+    .dep-done { padding:20px 16px; text-align:center; }
+    .dep-check { width:46px; height:46px; border-radius:50%; background:var(--accent); color:var(--on-accent); display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto 12px; }
+    .dep-done-h { font-size:18px; font-weight:800; color:var(--text); }
+    .dep-done-sub { font-size:13px; color:var(--text-3); margin-top:4px; }
+    .dep-done-sub b { color:var(--accent-text); }
+    .dep-email { text-align:left; margin-top:18px; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--surface); animation: depSlide .5s cubic-bezier(.22,1,.36,1); }
+    @keyframes depSlide { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform:none; } }
+    @media (prefers-reduced-motion: reduce){ .dep-email { animation:none; } }
+    .dep-email-bar { background:var(--surface-2); padding:8px 12px; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); display:flex; align-items:center; gap:7px; }
+    .dep-email-ic { display:inline-flex; color:var(--accent-text); }
+    .dep-email-ic svg { width:15px; height:15px; }
+    .dep-email-body { padding:16px; }
+    .dep-email-logo { font-weight:800; letter-spacing:-.02em; color:var(--text); margin-bottom:10px; }
+    .dep-email-h { font-size:15px; font-weight:700; color:var(--text); margin-bottom:8px; }
+    .dep-email-row { font-size:13px; color:var(--text-2); line-height:1.6; }
+    .dep-email-row b { color:var(--text); }
+    .dep-email-meta { font-family: ui-monospace,monospace; font-size:11px; color:var(--text-3); margin-top:10px; }
+    .dep-reset { margin-top:16px; background:none; border:none; color:var(--accent-text); font-size:13px; cursor:pointer; display:inline-flex; align-items:center; gap:7px; }
+    .dep-reset svg { width:15px; height:15px; }
+    .dep-up-ic { display:inline-flex; align-items:center; }
+    .dep-up-ic svg { width:16px; height:16px; }
+    .dep-soon { padding:48px 16px; text-align:center; color:var(--text-3); font-family: ui-monospace,monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; }
+
+    /* Telegram + email mini-alerts (shared by deposit + cpd) */
+    .dep-tg { display:flex; gap:10px; align-items:flex-start; margin-top:12px; padding:11px 13px; border:1px solid var(--border); border-radius:8px; background:var(--surface); animation: depSlide .5s cubic-bezier(.22,1,.36,1) .16s both; }
+    .dep-tg-ic { width:38px; height:38px; flex-shrink:0; border-radius:50%; background:#229ED9; color:#fff; display:flex; align-items:center; justify-content:center; }
+    .dep-tg-ic svg { width:21px; height:21px; }
+    .dep-tg-mail { background:var(--accent); color:var(--on-accent); }
+    .dep-tg-mail svg { width:18px; height:18px; }
+    .dep-tg-body { text-align:left; }
+    .cpd-ledger { text-align:left; }
+    .dep-tg-h { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); margin-bottom:3px; }
+    .dep-tg-msg { font-size:13px; color:var(--text-2); line-height:1.5; }
+    .dep-tg-msg b { color:var(--text); }
+    @media (prefers-reduced-motion: reduce){ .dep-tg { animation:none; } }
+
+    /* CPD quiz + certificate */
+    .cpd { padding:16px; }
+    .cpd-q { margin-bottom:16px; }
+    .cpd-q-t { font-size:14px; font-weight:600; color:var(--text); margin-bottom:8px; }
+    .cpd-opt { display:flex; align-items:center; gap:9px; padding:8px 11px; border:1px solid var(--border-2); border-radius:7px; margin-bottom:6px; font-size:13.5px; color:var(--text-2); cursor:pointer; transition: border-color .15s; }
+    .cpd-opt:hover { border-color:var(--accent); }
+    .cpd-opt input { accent-color: var(--accent); }
+    /* certificate — meant to look like a real, downloadable document */
+    .cert { background:var(--surface); border-radius:10px; padding:7px; box-shadow:0 6px 22px rgba(8,20,20,.10); animation: depSlide .5s cubic-bezier(.22,1,.36,1); }
+    .cert-frame { position:relative; border:1px solid var(--accent-border); border-radius:7px; padding:24px 18px 18px; text-align:center; box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--border); background-image: repeating-linear-gradient(0deg, rgba(11,27,27,.02) 0 1px, transparent 1px 4px); }
+    .cert-seal { display:flex; justify-content:center; margin:0 auto 10px; }
+    .cert-seal-img { width:60px; height:auto; display:block; }
+    .cert-sig-img { width:112px; height:auto; display:block; margin:-6px 0 0; mix-blend-mode:multiply; }
+    .cert-band { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--text-3); margin-bottom:14px; }
+    .cert-name { font-size:22px; font-weight:800; letter-spacing:-.01em; color:var(--text); }
+    .cert-line { font-size:12px; color:var(--text-3); margin:7px 0; }
+    .cert-activity { font-size:15px; font-weight:600; color:var(--text); }
+    .cert-units { display:inline-block; margin-top:12px; background:var(--accent-dim); color:var(--accent-text); font-family: ui-monospace,monospace; font-size:12px; font-weight:700; letter-spacing:.04em; padding:5px 12px; border-radius:999px; }
+    .cert-foot { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; margin-top:20px; padding-top:14px; border-top:1px solid var(--border); text-align:left; }
+    .cert-sig-name { display:block; font-family:'Snell Roundhand','Segoe Script',cursive; font-size:19px; color:var(--text); line-height:1; }
+    .cert-sig-cap { font-family: ui-monospace,monospace; font-size:8.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); }
+    .cert-ref { font-family: ui-monospace,monospace; font-size:9px; color:var(--text-3); text-align:right; line-height:1.6; }
+    .cert-ref b { color:var(--text-2); }
+    .cert-accred { margin-top:12px; font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); }
+    .cpd-dl { margin-top:12px; width:100%; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px; border:1px solid var(--border-2); border-radius:7px; background:transparent; color:var(--text); font-size:13px; font-weight:600; cursor:pointer; transition:border-color .15s,color .15s; }
+    .cpd-dl:hover { border-color:var(--accent); color:var(--accent-text); }
+    /* back office: auto-logged, PRC-ready export */
+    .cpd-ledger { margin-top:14px; border:1px solid var(--border); border-radius:8px; background:var(--surface-2); padding:13px 14px; }
+    .cpd-ledger-h { font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:9px; }
+    .cpd-ledger-row { display:flex; justify-content:space-between; gap:10px; font-size:13px; color:var(--text-2); padding-bottom:11px; margin-bottom:11px; border-bottom:1px solid var(--border); }
+    .cpd-ledger-row b { color:var(--text); }
+    .cpd-csv { width:100%; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px; border:none; border-radius:7px; background:var(--accent); color:var(--on-accent); font-family: ui-monospace,monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; font-weight:700; cursor:pointer; transition:opacity .15s; }
+    .cpd-csv:hover { opacity:.9; }
+    .cpd-prc { display:flex; align-items:flex-start; gap:8px; margin-top:14px; font-size:12.5px; line-height:1.55; color:var(--text-2); text-align:left; }
+    .cpd-prc-tick { width:20px; height:20px; flex-shrink:0; border-radius:50%; background:var(--accent); color:var(--on-accent); display:flex; align-items:center; justify-content:center; font-size:12px; }
+    @media (prefers-reduced-motion: reduce){ .cert { animation:none; } }
+
+    /* CPD scoring + editable fields */
+    .cpd-row { display:flex; gap:12px; }
+    .cpd-row .dep-field { flex:1; margin-bottom:12px; }
+    .cpd-units-f { flex:0 0 92px !important; }
+    .cpd-opt.correct { border-color:var(--green); background:rgba(25,138,76,.10); color:var(--text); }
+    .cpd-opt.wrong { border-color:var(--red); background:rgba(192,57,43,.08); color:var(--text); }
+    .cpd-score { font-size:13px; line-height:1.5; padding:9px 12px; border-radius:7px; margin-bottom:12px; }
+    .cpd-score.fail { background:rgba(192,57,43,.08); color:#a8392f; }
+    .cpd-score.pass { background:rgba(25,138,76,.10); color:#157a43; }
+
+    /* Proposal: tiers + signature */
+    .sa { padding:16px; }
+    .sa-tiers { display:flex; flex-direction:column; gap:8px; }
+    .sa-tier { position:relative; text-align:left; width:100%; border:1px solid var(--border-2); border-radius:9px; background:var(--surface); padding:13px 15px; cursor:pointer; transition: border-color .15s, box-shadow .15s; }
+    .sa-tier:hover { border-color:var(--accent); }
+    .sa-tier.sel { border-color:var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+    .sa-tier-n { font-size:15px; font-weight:700; color:var(--text); }
+    .sa-tier-p { font-family: ui-monospace,monospace; font-size:14px; color:var(--accent-text); margin:2px 0; }
+    .sa-tier-d { font-size:12.5px; color:var(--text-3); }
+    .sa-tier-tag { position:absolute; top:-9px; right:12px; background:var(--accent); color:var(--on-accent); font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:999px; }
+    .sa-sign { margin-top:14px; border-top:1px solid var(--border); padding-top:14px; animation: depSlide .4s ease-out; }
+    .sa-signline { border-bottom:1px solid var(--border-2); padding:8px 2px; margin:6px 0 14px; font-family: ui-monospace, monospace; font-size:15px; letter-spacing:.02em; color:var(--text); word-break:break-all; }
+    .sa-done { text-align:center; }
+    .sa-signed-name { font-family: ui-monospace, monospace; font-size:15px; color:var(--text); margin:2px 0 10px; word-break:break-all; }
+    .sa-sig-mark { width:110px; height:auto; color:var(--text); display:block; margin:6px auto 2px; }
+    /* proposal document header — reads like a real proposal */
+    .sa-doc { border-bottom:1px solid var(--border); padding-bottom:15px; margin-bottom:16px; }
+    .sa-doc-top { display:flex; justify-content:space-between; align-items:center; font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--text-3); margin-bottom:10px; }
+    .sa-doc-kind { color:var(--accent-text); }
+    .sa-doc-title { font-size:18px; font-weight:800; letter-spacing:-.01em; line-height:1.2; color:var(--text); }
+    .sa-doc-party { display:flex; flex-wrap:wrap; gap:8px 28px; margin-top:13px; font-size:12.5px; color:var(--text-2); }
+    .sa-doc-lbl { display:block; font-family: ui-monospace,monospace; font-size:8.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:2px; }
+    .sa-doc-intro { font-size:13px; color:var(--text-2); line-height:1.55; margin-top:13px; }
+    .sa-pick-lbl { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:10px; }
+    .sa-intro { display:flex; gap:11px; align-items:flex-start; padding:12px 13px; margin-bottom:14px; border:1px solid var(--border); border-radius:9px; background:var(--surface-2); }
+    .sa-intro-ava { flex:none; width:32px; height:32px; border-radius:50%; background:var(--accent); color:var(--on-accent); display:flex; align-items:center; justify-content:center; font-family: ui-monospace,monospace; font-size:11px; font-weight:700; }
+    .sa-intro-from { font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:3px; }
+    .sa-intro-msg { font-size:13px; color:var(--text-2); line-height:1.5; }
+    .sa-legal { font-size:11px; line-height:1.5; color:var(--text-3); margin-top:10px; }
+    .sa-legal-done { margin:0 auto 14px; max-width:34ch; }
+    @media (prefers-reduced-motion: reduce){ .sa-sign { animation:none; } }
+
+    /* Payroll: employee rows + payslip */
+    .pay { padding:16px; }
+    .pay-emp { display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:11px 13px; border:1px solid var(--border-2); border-radius:8px; margin-bottom:7px; }
+    .pay-emp-n { font-size:14px; font-weight:600; color:var(--text); }
+    .pay-emp-d { font-family: ui-monospace,monospace; font-size:10.5px; letter-spacing:.02em; color:var(--text-3); margin-top:2px; }
+    .pay-emp-net { font-family: ui-monospace,monospace; font-size:14px; font-weight:700; color:var(--accent-text); white-space:nowrap; }
+    .pay-emp-net[hidden] { display:none; }
+    .pay-slip { margin-top:14px; border:1px solid var(--border); border-radius:9px; background:var(--surface); overflow:hidden; animation: depSlide .5s cubic-bezier(.22,1,.36,1); }
+    .pay-slip-bar { background:var(--surface-2); padding:9px 14px; font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); }
+    .pay-slip-body { padding:14px; }
+    .pay-line { display:flex; justify-content:space-between; gap:14px; font-size:13px; color:var(--text-2); padding:6px 0; }
+    .pay-line span:last-child { font-family: ui-monospace,monospace; white-space:nowrap; text-align:right; }
+    .pay-line b { color:var(--text); }
+    .pay-line.pay-sub { color:var(--text-3); }
+    .pay-line.pay-net { margin-top:8px; padding-top:11px; border-top:1px solid var(--border); font-size:15px; }
+    .pay-line.pay-net span { color:var(--text); font-weight:700; }
+    .pay-line.pay-net span:last-child { color:var(--accent); font-weight:800; }
+    @media (prefers-reduced-motion: reduce){ .pay-slip { animation:none; } }
+
+
+    /* pulse — invites the click */
+    @keyframes p205pulse { 0%,100%{ box-shadow:0 0 0 0 rgba(14,154,157,0); } 50%{ box-shadow:0 0 0 6px rgba(14,154,157,.14); } }
+    .pulse { animation: p205pulse 1.8s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce){ .pulse { animation:none; } }
+
+    /* calling-card bracket motif: decode the headline parts (label = the techy meaning) */
+    .annotated { padding: 44px 0; line-height: 1.5; }
+    .ann { position: relative; white-space: nowrap; }
+    .ann::before { content:""; position:absolute; left:0; right:0; height:7px; border:1px solid var(--accent-text); opacity:.5; }
+    .ann::after { content: attr(data-label); position:absolute; left:50%; transform:translateX(-50%); white-space:nowrap; font-family: ui-monospace,monospace; font-size:10px; font-weight:400; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-text); }
+    .ann-top::before { bottom:100%; margin-bottom:5px; border-bottom:none; }
+    .ann-top::after  { bottom:100%; margin-bottom:17px; }
+    .ann-bot::before { top:100%; margin-top:5px; border-top:none; }
+    .ann-bot::after  { top:100%; margin-top:17px; }
+    @media (max-width:768px){ .annotated { padding:38px 0; } }
+
+    /* demo "reality" note — the honest, no-gimmick context */
+    .demo-real { margin-top:20px; font-size:12.5px; line-height:1.65; color:var(--text-3); max-width:42ch; }
+    .demo-real::before { content:"[ REALITY ]"; display:block; font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.14em; color:var(--accent-text); margin-bottom:7px; }
+
+    /* about section — dark band (matches the hero + footer) */
+    .about { background:#0f1416; border-top:none; }
+    .about-mission-hl { color:#f4f7f7; }
+    /* bracket-decode: a left bracket groups the two "We"s, labelled FILIPINOS */
+    .about-decode { display:flex; align-items:center; gap:14px; }
+    .ad-tag { font-family: ui-monospace,monospace; font-size:12px; font-weight:400; letter-spacing:.14em; text-transform:uppercase; color:#6fc9ca; white-space:nowrap; }
+    .ad-bracket { align-self:stretch; width:9px; flex-shrink:0; border:1.5px solid rgba(255,255,255,.38); border-right:none; border-radius:3px 0 0 3px; }
+    .ad-lines { display:flex; flex-direction:column; gap:2px; }
+    .ad-we { color:#6fc9ca; }
+    /* mobile: stack the FILIPINOS label above so the headline gets full width */
+    @media (max-width:600px){ .about-decode { flex-wrap:wrap; row-gap:4px; } .ad-tag { flex-basis:100%; order:-1; } }
+    .about-mission-body { color:#a7c4c4; }
+    .about-mission-body strong { color:#f4f7f7; }
+    .about-mission-close { color:#e7efee; }
+    .about-star-bg, .about-graphic svg { color:#3BD1D3; }
+
+    /* calling-card footer: the bracket-decode device (privacy-safe) */
+    footer { background:#0f1416; border-top:none; flex-direction:column; gap:26px; padding:60px 20px 44px; }
+    .cc-card { display:inline-block; }
+    /* one string, @post205.com, decoded by two overlapping brackets:
+       @post205 = the handle (Instagram), post205.com = the website (you're here) */
+    .cc-grid { display:inline-grid; grid-template-columns:auto auto auto; align-items:center; justify-items:center; row-gap:5px; }
+    .cc-lbl { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.18em; color:#6fc9ca; text-transform:uppercase; text-decoration:none; white-space:nowrap; }
+    a.cc-lbl:hover { color:#a7c4c4; }
+    .cc-lbl-ig  { grid-row:1; grid-column:1 / 3; }
+    .cc-br-top  { grid-row:2; grid-column:1 / 3; }
+    .cc-at   { grid-row:3; grid-column:1; }
+    .cc-core { grid-row:3; grid-column:2; }
+    .cc-tld  { grid-row:3; grid-column:3; }
+    .cc-br-bot  { grid-row:4; grid-column:2 / 4; }
+    .cc-lbl-web { grid-row:5; grid-column:2 / 4; }
+    .cc-bracket { width:100%; height:7px; border:1px solid rgba(255,255,255,.32); justify-self:stretch; }
+    .cc-br-top { border-bottom:none; }
+    .cc-br-bot { border-top:none; }
+    .cc-ch { font-size: clamp(17px,2.6vw,24px); font-weight:600; letter-spacing:.01em; color:#f4f7f7; }
+    .cc-meta { font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; color:#5a7473; }
+    .cc-meta a { color:#5a7473; text-decoration:none; }
+    .cc-meta a:hover { color:#a7c4c4; }
+    /* mobile: clear the fixed chat sticky bar so the footer + privacy links stay visible */
+    @media (max-width:768px){ footer { padding-bottom: calc(124px + env(safe-area-inset-bottom,0px)); } }
+    /* consistent section margins — hero is the reference (48px inner padding) */
+    .case-studies-inner, .promises-inner, .about-inner { padding-left:48px; padding-right:48px; }
+    @media (max-width:768px){ .case-studies-inner, .promises-inner, .about-inner { padding-left:20px; padding-right:20px; } }
+    /* hero: keep the headline pinned while the chat scrolls (same idea as the demo copy) */
+    @media (min-width:900px){ .hero-text { position:sticky; top:120px; } .hero-chat { position:sticky; top:96px; } }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+    /* ===== v3: the machine under the field ================================
+       One motif carried through: the 15x5 pixel grid of the logo.
+       Boot overlay -> living binary hero -> nav pixel strip -> decode-ins. */
+
+    /* boot overlay: covers instantly, lifts like a shutter when ready */
+    #p205-boot {
+      position: fixed; inset: 0; z-index: 100000;
+      background: #0f1416;
+      transform: translateY(0);
+      will-change: transform;
+    }
+    #p205-boot.lift { transition: transform .55s cubic-bezier(0.16, 1, 0.3, 1); transform: translateY(-100%); }
+    #p205-boot canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .boot-read {
+      position: absolute; left: 22px; bottom: 20px;
+      font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .1em;
+      color: #6fc9ca; text-transform: uppercase; line-height: 1.9;
+      user-select: none;
+    }
+    .boot-read b { color: #3BD1D3; font-weight: 400; }
+    .boot-pct {
+      position: absolute; right: 22px; bottom: 16px;
+      font-family: ui-monospace, monospace; font-size: 26px; letter-spacing: .06em;
+      color: #3BD1D3; user-select: none; font-weight: 400;
+    }
+    .no-boot #p205-boot { display: none; }
+
+    /* living binary hero: canvas replaces the DOM rain */
+    .hero-binary canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    /* nav HUD: pixel progress strip + readouts (rationed to three) */
+    .nav-hud { display: flex; align-items: center; gap: 14px; margin-left: auto; margin-right: 16px; }
+    .nav-hud canvas { display: block; }
+    .hud-txt {
+      font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .12em;
+      color: #7aacac; text-transform: uppercase; user-select: none;
+    }
+    @media (max-width: 640px) { .hud-txt { display: none; } .nav-hud { margin-right: 10px; } }
+
+    /* decode-in: elements hold layout, characters resolve in JS */
+    .decode-wait { visibility: hidden; }
+
+    /* headline annotations + descriptor arrive after the decode */
+    .v3-late { opacity: 0; transition: opacity .5s cubic-bezier(0.25, 1, 0.5, 1); }
+    .v3-late.in { opacity: 1; }
+
+    /* demo mockups boot with a two-beat scanline flicker when they enter */
+    .mock-win { position: relative; }
+    .mw-boot::after {
+      content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none;
+      background: repeating-linear-gradient(to bottom, rgba(59,209,211,.14) 0 2px, transparent 2px 5px);
+      animation: mwBoot .32s steps(3, end) forwards;
+    }
+    @keyframes mwBoot { 0% { opacity: 1; } 60% { opacity: .35; } 100% { opacity: 0; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      #p205-boot { display: none; }
+      .decode-wait { visibility: visible; }
+      .v3-late { opacity: 1; transition: none; }
+      .mw-boot::after { animation: none; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── BOOT (v3): binary assembles the logo, then the shutter lifts.
+     Plays once per session; skipped entirely on repeat visits + reduced motion. -->
+<div id="p205-boot" aria-hidden="true">
+  <canvas id="bootCv"></canvas>
+  <div class="boot-read" id="bootRead"></div>
+  <div class="boot-pct" id="bootPct">0%</div>
+</div>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png" alt="POST205">
+  </a>
+  <div class="nav-hud" aria-hidden="true">
+    <span class="hud-txt" id="hudTime">MNL --:--</span>
+    <span class="hud-txt" id="hudScrl">SCRL 000</span>
+    <canvas id="hudPx" width="66" height="22"></canvas>
+  </div>
+  <a href="/faq" class="nav-faq" aria-label="Questions"><span class="nav-faq-q" aria-hidden="true">?</span><span class="nav-faq-label">Questions?</span></a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+  <div class="hero-binary" aria-hidden="true"></div>
+  <div class="hero-fade"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1 class="hero-annotated">
+        <span class="hl-line"><span class="hl-word">Your business</span><span class="hl-dash">Filipino</span></span>
+        <span class="hl-line"><span class="hl-word">software</span><span class="hl-dash">easy to use</span></span>
+      </h1>
+      <div class="hero-descriptor">Websites, inventory, and back-office systems.</div>
+    </div>
+    <div class="hero-chat">
+      <div class="chat-widget" id="chat-widget"><div class="chat-log" id="chat-log" role="log" aria-label="Conversation"></div><div class="chat-composer" id="chat-composer"></div></div>
+      <form id="nlForm" name="contact" netlify data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+        <input type="hidden" name="form-name" value="contact">
+        <p style="display:none"><label>Don't fill this out: <input name="bot-field" id="hp-chat"></label></p>
+        <input type="hidden" name="business" id="nl_business">
+        <input type="hidden" name="pain_point" id="nl_pain">
+        <input type="hidden" name="timeline" id="nl_timeline">
+        <input type="text"  name="name"  id="nl_name">
+        <input type="email" name="email" id="nl_email">
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ── LIVE DEMOS ── -->
+<section class="case-studies" id="work">
+  <div class="case-studies-inner">
+    <div class="lp-head">
+      <h2 class="annotated"><span class="ann ann-top" data-label="BESPOKE">Built to fit</span> <span class="ann ann-bot" data-label="YOUR SYSTEM">how you work</span>.</h2>
+      <p class="lp-lede">Each one below is a working demo. Click any of them to try it.</p>
+    </div>
+
+    <div class="lp-tabs" role="tablist" aria-label="Choose a demo">
+      <button class="lp-tab active" data-demo="deposit" role="tab" aria-selected="true">Bank deposit</button>
+      <button class="lp-tab" data-demo="cpd" role="tab" aria-selected="false">CPD</button>
+      <button class="lp-tab" data-demo="proposal" role="tab" aria-selected="false">Proposal</button>
+      <button class="lp-tab" data-demo="payroll" role="tab" aria-selected="false">Payroll</button>
+    </div>
+
+    <!-- DEMO: bank deposit + email confirmation -->
+    <div class="demo-panel active" id="demo-deposit" role="tabpanel">
+      <div class="demo-copy">
+        <h3>They pay, then send you a screenshot.</h3>
+        <div class="lp-built">Give them one place to log it, so you verify every payment from a single screen, not from your Messenger.</div>
+        <div class="cs-industry">Bank transfer or GCash</div>
+        <p class="demo-real">Card gateways are overkill for a lot of businesses, and most people here still pay by GCash or bank transfer. We make that path easy. Want online cards too? We plug in PayMongo or Xendit. Tech that fits how you already get paid, not the other way around.</p>
+      </div>
+      <div class="demo-stage-r">
+        <div class="mock-win">
+          <div class="mock-bar">
+            <div class="m-dot m-r"></div>
+            <div class="m-dot m-y"></div>
+            <div class="m-dot m-g"></div>
+            <div class="mock-url">report a payment</div>
+          </div>
+          <div class="dep">
+            <div class="dep-step" id="depForm">
+              <div class="dep-title">Report your payment</div>
+              <label class="dep-field"><span>Amount</span><input id="depAmt" type="text" inputmode="numeric" value="₱3,500"></label>
+              <label class="dep-field"><span>Paid via</span>
+                <select id="depBank"><option>BPI</option><option>BDO</option><option>GCash</option><option>Maya</option><option>UnionBank</option></select>
+              </label>
+              <label class="dep-field"><span>Reference no.</span><input id="depRef" type="text" value="0093 4471 22"></label>
+              <button class="dep-upload" id="depUpload" type="button"><span class="dep-up-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0L8 8m4-4 4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span> <span id="depUpTxt">Attach deposit slip</span></button>
+              <button class="dep-submit pulse" id="depSubmit" type="button">Submit payment</button>
+            </div>
+            <div class="dep-step dep-done" id="depDone" hidden>
+              <div class="dep-check" aria-hidden="true">✓</div>
+              <div class="dep-done-h">Payment recorded</div>
+              <div class="dep-done-sub">Ref <b id="depRefOut">OR-4471</b> · <span id="depWhen">just now</span></div>
+              <div class="dep-email" id="depEmail">
+                <div class="dep-email-bar"><span class="dep-email-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span> Confirmation sent to you</div>
+                <div class="dep-email-body">
+                  <div class="dep-email-logo">Your Business</div>
+                  <div class="dep-email-h">Payment received</div>
+                  <div class="dep-email-row">We've recorded your payment of <b id="depEmAmt">₱3,500</b> via <span id="depEmBank">BPI</span>. Nothing else for you to do.</div>
+                  <div class="dep-email-meta">Ref <span id="depEmRef">0093 4471 22</span> · <span id="depEmDate"></span></div>
+                </div>
+              </div>
+              <div class="dep-tg" id="depTg">
+                <span class="dep-tg-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg></span>
+                <div class="dep-tg-body">
+                  <div class="dep-tg-h">Telegram · your team</div>
+                  <div class="dep-tg-msg">New payment in, <b id="depTgAmt">₱3,500</b> via <span id="depTgBank">BPI</span> · Ref <span id="depTgRef">0093 4471 22</span></div>
+                </div>
+              </div>
+              <button class="dep-reset" id="depReset" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Run it again</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO: CPD module → certificate → email → PRC-ready -->
+    <div class="demo-panel" id="demo-cpd" role="tabpanel" hidden>
+      <div class="demo-copy">
+        <h3>Quiz in. Certificate out.</h3>
+        <div class="lp-built">They pass the quiz, get a real certificate by email, and the units are logged, PRC-ready.</div>
+        <div class="cs-industry">PRC-accredited CPD providers</div>
+        <p class="demo-real">PRC needs the units logged with proof on file. We're not PRC. We keep your records PRC-ready: every certificate is saved as you earn it. At renewal you export the list and submit, a few clicks instead of an afternoon of data entry.</p>
+      </div>
+      <div class="demo-stage-r">
+        <div class="mock-win">
+          <div class="mock-bar">
+            <div class="m-dot m-r"></div>
+            <div class="m-dot m-y"></div>
+            <div class="m-dot m-g"></div>
+            <div class="mock-url">cpd module</div>
+          </div>
+          <div class="cpd">
+            <div class="cpd-step" id="cpdQuiz">
+              <div class="dep-title">CPD module</div>
+              <label class="dep-field"><span>Activity</span><input id="cpdActivity" type="text" value="Infection Control Updates 2026"></label>
+              <div class="cpd-row">
+                <label class="dep-field"><span>Your name</span><input id="cpdName" type="text" value="Maria Santos, RN"></label>
+                <label class="dep-field cpd-units-f"><span>Units</span><input id="cpdUnits" type="number" min="1" max="40" value="3"></label>
+              </div>
+              <div class="cpd-q">
+                <div class="cpd-q-t">1. When should hand hygiene be performed?</div>
+                <label class="cpd-opt"><input type="radio" name="cq1"> Once at the start of the shift</label>
+                <label class="cpd-opt"><input type="radio" name="cq1" data-ok> Before and after every patient contact</label>
+                <label class="cpd-opt"><input type="radio" name="cq1"> Only when hands look dirty</label>
+              </div>
+              <div class="cpd-q">
+                <div class="cpd-q-t">2. What does PPE stand for?</div>
+                <label class="cpd-opt"><input type="radio" name="cq2" data-ok> Personal Protective Equipment</label>
+                <label class="cpd-opt"><input type="radio" name="cq2"> Patient Privacy Enclosure</label>
+                <label class="cpd-opt"><input type="radio" name="cq2"> Public Practice Exam</label>
+              </div>
+              <div class="cpd-score" id="cpdScore" hidden></div>
+              <button class="dep-submit pulse" id="cpdSubmit" type="button">Submit answers</button>
+            </div>
+            <div class="cpd-step" id="cpdDone" hidden>
+              <div class="cert">
+                <div class="cert-frame">
+                  <div class="cert-seal" aria-hidden="true"><img class="cert-seal-img" src="/images/cert-seal.svg" alt="" loading="lazy" decoding="async"></div>
+                  <div class="cert-band">Certificate of Completion</div>
+                  <div class="cert-name" id="cpdCertName">Maria Santos, RN</div>
+                  <div class="cert-line">has completed</div>
+                  <div class="cert-activity" id="cpdCertActivity">Infection Control Updates 2026</div>
+                  <div class="cert-units" id="cpdCertUnits">3 CPD units</div>
+                  <div class="cert-foot">
+                    <div class="cert-sig">
+                      <img class="cert-sig-img" src="/images/cert-signature.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                      <span class="cert-sig-cap">Program Director</span>
+                    </div>
+                    <div class="cert-ref">No. <b id="cpdCertNo">CPD-2026-0418</b><br><span id="cpdCertDate"></span></div>
+                  </div>
+                  <div class="cert-accred">PRC-Accredited CPD Provider No. 2024-0731</div>
+                </div>
+              </div>
+              <button class="cpd-dl" id="cpdDl" type="button"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg> Download certificate</button>
+              <div class="dep-tg" id="cpdEmail">
+                <span class="dep-tg-ic dep-tg-mail" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+                <div class="dep-tg-body">
+                  <div class="dep-tg-h">Emailed to the member</div>
+                  <div class="dep-tg-msg">Sent to <span id="cpdEmailTo">maria.santos</span>@email.com</div>
+                </div>
+              </div>
+              <div class="cpd-ledger">
+                <div class="cpd-ledger-h">Your CPD log · 1 new entry</div>
+                <div class="cpd-ledger-row"><span id="cpdLedgerName">Maria Santos, RN</span><span><b id="cpdLedgerUnits">3</b> units · today</span></div>
+                <button class="cpd-csv" id="cpdCsv" type="button"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg> Export PRC list (CSV)</button>
+              </div>
+              <div class="cpd-prc"><span class="cpd-prc-tick" aria-hidden="true">✓</span> PRC-ready. Logged to your records and formatted for submission, you stay in control.</div>
+              <button class="dep-reset" id="cpdReset" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Try again</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO: proposal & e-sign (interactive) -->
+    <div class="demo-panel" id="demo-proposal" role="tabpanel" hidden>
+      <div class="demo-copy">
+        <h3>Read it. Sign it. Same page.</h3>
+        <div class="lp-built">Your email address counts as a signature under Philippine law (RA 8792).</div>
+        <div class="cs-industry">sign.post205.com</div>
+        <p class="demo-real">The proposal and the signing live on one page. Your client reads it, signs it there, and it's binding under RA 8792.</p>
+      </div>
+      <div class="demo-stage-r">
+        <div class="mock-win">
+          <div class="mock-bar">
+            <div class="m-dot m-r"></div>
+            <div class="m-dot m-y"></div>
+            <div class="m-dot m-g"></div>
+            <div class="mock-url">workshop proposal</div>
+          </div>
+          <div class="sa">
+            <div class="sa-step" id="saPick">
+              <div class="sa-doc">
+                <div class="sa-doc-top"><span class="sa-doc-kind">Service Proposal</span><span class="sa-doc-ref">No. SA-2026-0142</span></div>
+                <div class="sa-doc-title">Leadership Workshop for your team</div>
+                <div class="sa-doc-party">
+                  <div><span class="sa-doc-lbl">From</span> Your Business</div>
+                  <div><span class="sa-doc-lbl">Prepared for</span> Your Client · Jun 18, 2026</div>
+                </div>
+                <p class="sa-doc-intro">Here's what we discussed. Pick a package, then sign to accept.</p>
+              </div>
+              <div class="sa-pick-lbl">Choose a package</div>
+              <div class="sa-tiers">
+                <button class="sa-tier" data-tier="Half-day" data-price="₱40,000" type="button">
+                  <div class="sa-tier-n">Half-day</div>
+                  <div class="sa-tier-p">₱40,000</div>
+                  <div class="sa-tier-d">One 4-hour session, up to 20 pax</div>
+                </button>
+                <button class="sa-tier pulse" data-tier="Full-day" data-price="₱75,000" type="button">
+                  <div class="sa-tier-tag">Most pick this</div>
+                  <div class="sa-tier-n">Full-day</div>
+                  <div class="sa-tier-p">₱75,000</div>
+                  <div class="sa-tier-d">Two sessions + workbook + certificates</div>
+                </button>
+                <button class="sa-tier" data-tier="Series" data-price="₱150,000" type="button">
+                  <div class="sa-tier-n">Workshop series</div>
+                  <div class="sa-tier-p">₱150,000</div>
+                  <div class="sa-tier-d">Four sessions + coaching + CPD units</div>
+                </button>
+              </div>
+              <div class="sa-sign" id="saSign" hidden>
+                <label class="dep-field"><span>Your name</span><input id="saName" type="text" value="Juan dela Cruz"></label>
+                <label class="dep-field"><span>Your email — this is your signature</span><input id="saEmail" type="email" value="juan.delacruz@gmail.com"></label>
+                <div class="sa-signline" id="saSigShow">juan.delacruz@gmail.com</div>
+                <button class="dep-submit" id="saSubmit" type="button">Sign &amp; accept</button>
+                <div class="sa-legal">Your email address is the signature, binding under RA 8792 (E-Commerce Act).</div>
+              </div>
+            </div>
+            <div class="sa-step sa-done" id="saDone" hidden>
+              <div class="dep-check" aria-hidden="true">✓</div>
+              <div class="dep-done-h">Agreement signed</div>
+              <div class="dep-done-sub"><b id="saDoneTier">Standard</b> · <span id="saDoneDate"></span></div>
+              <div class="sa-signed-name" id="saDoneName">juan.delacruz@gmail.com</div>
+              <div class="sa-legal sa-legal-done">Signed electronically, binding under RA 8792 (E-Commerce Act of 2000). Timestamp recorded.</div>
+              <div class="dep-tg">
+                <span class="dep-tg-ic dep-tg-mail" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+                <div class="dep-tg-body"><div class="dep-tg-h">Emailed</div><div class="dep-tg-msg">Signed copy sent to both sides</div></div>
+              </div>
+              <div class="dep-tg">
+                <span class="dep-tg-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg></span>
+                <div class="dep-tg-body"><div class="dep-tg-h">Telegram · your team</div><div class="dep-tg-msg" id="saTgMsg">Signed: Standard</div></div>
+              </div>
+              <div class="cpd-ledger">
+                <div class="cpd-ledger-h">Your dashboard · agreement recorded</div>
+                <div class="cpd-ledger-row"><span id="saDashTier">Full-day · ₱75,000</span><span>Signed · today</span></div>
+                <button class="cpd-csv" id="saBill" type="button">Next step: send the bill →</button>
+              </div>
+              <button class="dep-reset" id="saReset" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Try again</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO: payroll run → payslips → remittance -->
+    <div class="demo-panel" id="demo-payroll" role="tabpanel" hidden>
+      <div class="demo-copy">
+        <h3>Payroll that already knows the schedule.</h3>
+        <div class="lp-built">Nothing to re-enter. The hours and leave are already counted, the SSS, PhilHealth, and Pag-IBIG come out, and each payslip is ready to send.</div>
+        <div class="cs-industry">Any team on a payroll</div>
+        <p class="demo-real">Deduct SSS, PhilHealth, or Pag-IBIG from someone's pay and fail to remit it, and that is a crime under RA 11199, not a late fee. Even an honest delay adds a penalty that climbs the longer it sits. We keep the rates and the deadlines current so the run is right, and you still see every payslip before anyone gets paid.</p>
+      </div>
+      <div class="demo-stage-r">
+        <div class="mock-win">
+          <div class="mock-bar">
+            <div class="m-dot m-r"></div>
+            <div class="m-dot m-y"></div>
+            <div class="m-dot m-g"></div>
+            <div class="mock-url">payroll · Apr 1-15</div>
+          </div>
+          <div class="pay">
+            <div class="pay-step" id="payForm">
+              <div class="dep-title">Pay run · Apr 1-15</div>
+              <div class="pay-emp">
+                <div><div class="pay-emp-n">Ana Cruz</div><div class="pay-emp-d">11 days</div></div>
+                <div class="pay-emp-net" id="payNet1" hidden>₱12,632</div>
+              </div>
+              <div class="pay-emp">
+                <div><div class="pay-emp-n">Boy Santos</div><div class="pay-emp-d">10 days, 1 day leave</div></div>
+                <div class="pay-emp-net" id="payNet2" hidden>₱11,470</div>
+              </div>
+              <div class="pay-emp">
+                <div><div class="pay-emp-n">Carla Lim</div><div class="pay-emp-d">11 days</div></div>
+                <div class="pay-emp-net" id="payNet3" hidden>₱12,632</div>
+              </div>
+              <div class="pay-slip" id="paySlip" hidden>
+                <div class="pay-slip-bar">Payslip · Ana Cruz</div>
+                <div class="pay-slip-body">
+                  <div class="pay-line"><span>Gross</span><span><b>₱13,750</b></span></div>
+                  <div class="pay-line pay-sub"><span>11 days × ₱1,250</span><span></span></div>
+                  <div class="pay-line"><span>SSS</span><span>−₱675</span></div>
+                  <div class="pay-line"><span>PhilHealth</span><span>−₱343</span></div>
+                  <div class="pay-line"><span>Pag-IBIG</span><span>−₱100</span></div>
+                  <div class="pay-line"><span>Withholding tax</span><span>−₱0</span></div>
+                  <div class="pay-line"><span>Leave</span><span>1 paid, 4 days left</span></div>
+                  <div class="pay-line pay-net"><span>Net pay</span><span>₱12,632</span></div>
+                </div>
+              </div>
+              <div class="dep-tg" id="payTg" hidden>
+                <span class="dep-tg-ic dep-tg-mail" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+                <div class="dep-tg-body">
+                  <div class="dep-tg-h">Payslips emailed to the team</div>
+                  <div class="dep-tg-msg">Each person gets their own. Contributions summary ready, <b>SSS remittance due Apr 30</b>.</div>
+                </div>
+              </div>
+              <button class="dep-submit pulse" id="payRun" type="button" style="margin-top:14px;">Run payroll</button>
+              <button class="dep-reset" id="payReset" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Run it again</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── PROMISES ── -->
+<section class="promises">
+  <div class="promises-inner">
+    <h2>What makes it yours.</h2>
+    <div class="promises-cards">
+
+      <div class="promise-card">
+        <div class="promise-img-wrap">
+          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="45" y1="18" x2="45" y2="74" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="28" y1="74" x2="62" y2="74" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="14" y1="28" x2="76" y2="28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="45" cy="28" r="3" fill="currentColor"/>
+            <line x1="18" y1="28" x2="14" y2="46" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="28" y1="28" x2="32" y2="46" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M10 46 Q23 54 36 46" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <line x1="62" y1="28" x2="58" y2="46" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="72" y1="28" x2="76" y2="46" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M54 46 Q67 54 80 46" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="promise-card-body">
+          <div class="promise-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="12" cy="5.5" rx="7" ry="3"/>
+              <path d="M5 5.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" stroke-linecap="round"/>
+              <path d="M5 11.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" stroke-linecap="round"/>
+            </svg>
+            <div class="promise-key">Ownership</div>
+          </div>
+          <h4>Your data and code are yours.</h4>
+          <p>It runs on your own database, and the software we build belongs to you. Export it, move it, keep it.</p>
+          <div class="promise-badge" data-tip="Your records sit in your own Postgres database, the same kind banks and big software run on. Not trapped inside our app.">Your own Postgres</div>
+          <div class="promise-badge" data-tip="The system we build is yours: the code, the logic, all of it. You're never renting it back from us.">The code is yours</div>
+          <div class="promise-badge" data-tip="Leave whenever you want and take everything, data and code, with you.">No lock-in</div>
+        </div>
+      </div>
+
+      <div class="promise-card">
+        <div class="promise-img-wrap">
+          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="27" r="11" stroke="currentColor" stroke-width="2"/>
+            <path d="M8 68 Q8 46 32 46 Q56 46 56 68" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="60" cy="30" r="9" stroke="currentColor" stroke-width="2"/>
+            <path d="M42 68 Q42 52 60 52 Q82 52 82 68" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="promise-card-body">
+          <div class="promise-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 8l-4 4 4 4"/>
+              <path d="M15 8l4 4-4 4"/>
+            </svg>
+            <div class="promise-key">The system</div>
+          </div>
+          <h4>Do the work only you can do.</h4>
+          <p>It's built around how your business works and takes the mechanical, repetitive jobs off your team, so their time goes to what makes the business special.</p>
+          <div class="promise-badge" data-tip="Built from scratch for your business, not an off-the-shelf app with your name on it.">Built from scratch</div>
+          <div class="promise-badge" data-tip="The repetitive jobs, encoding, computing, reminders, chasing, run on their own so your people don't have to.">Automates the busywork</div>
+          <div class="promise-badge" data-tip="Your eligibility rules, your pricing, your loan and accounting math, all written into the system itself. Auditable, every action logged.">Your rules, in code</div>
+        </div>
+      </div>
+
+      <div class="promise-card">
+        <div class="promise-img-wrap">
+          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M67 45 A22 22 0 1 0 56 26" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M56 26 L46 22 L52 34" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="promise-card-body">
+          <div class="promise-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2.3l1.9 5.6 5.8 2-5.8 2-1.9 5.6-1.9-5.6-5.8-2 5.8-2z"/>
+            </svg>
+            <div class="promise-key">Experience</div>
+          </div>
+          <h4>It explains itself.</h4>
+          <p>Nobody needs a manual or a training day, and using it never feels like a chore. The experience is intentional: the habits you want are the easy ones, the ones you don't are hard.</p>
+          <div class="promise-badge" data-tip="Built for how Filipino teams work: mixed skill levels, shared phones, spotty signal. None of it gets in the way.">Filipino-first</div>
+          <div class="promise-badge" data-tip="Works on the phone your staff already uses, on mobile data.">Any device</div>
+          <div class="promise-badge" data-tip="Built on purpose. What you want your team to do is the easy path; what you don't is the hard one.">Nudges the right habits</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ── ABOUT ── -->
+<section class="about" id="about">
+  <!-- full-section starfield — 761 stars generated by JS -->
+  <svg id="about-star-bg" class="about-star-bg" viewBox="0 0 120 50" preserveAspectRatio="none" aria-hidden="true"></svg>
+  <div class="about-inner">
+    <div class="about-mission">
+      <h2 class="about-mission-hl about-decode">
+        <span class="ad-tag">Filipinos</span>
+        <span class="ad-bracket" aria-hidden="true"></span>
+        <span class="ad-lines">
+          <span><span class="ad-we">We</span> don't march.</span>
+          <span><span class="ad-we">We</span> sway.</span>
+        </span>
+      </h2>
+      <p class="about-mission-body">Swaying means the system moves with you. Built around how Filipinos actually work.</p>
+
+      <p class="about-mission-body"><em><strong>Hiya.</strong></em> Your staff will smile through a broken process before they tell you about it. We design around that.</p>
+
+      <p class="about-mission-body"><em><strong>Kusa.</strong></em> The best people on your team don't wait to be told. They act. We build systems that get out of their way.</p>
+
+      <p class="about-mission-body"><em><strong>Kapwa.</strong></em> Your accountant has a PhD. Your receptionist finished high school. The accountant needs reports, permissions, an audit trail. The receptionist needs to do one thing and get back to work. We build for both.</p>
+
+      <p class="about-mission-close">Building for Filipino businesses since 2015.</p>
+    </div>
+    <div class="about-graphic">
+      <svg viewBox="-60 -65 120 108" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+        <!-- ── Sun ── -->
+        <g class="about-sun-g">
+          <!-- outer circle + inner ring -->
+          <circle r="9" stroke="currentColor" stroke-width="0.22"/>
+          <circle r="5" stroke="currentColor" stroke-width="0.08"/>
+          <!-- 4 cardinal rays: long, thin -->
+          <line x1="0" y1="-10" x2="0" y2="-27" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="10" y1="0" x2="27" y2="0" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="0" y1="10" x2="0" y2="27" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="-10" y1="0" x2="-27" y2="0" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <!-- 4 diagonal rays: medium -->
+          <line x1="7.07" y1="-7.07" x2="15.56" y2="-15.56" stroke="currentColor" stroke-width="0.14" stroke-linecap="round"/>
+          <line x1="7.07" y1="7.07" x2="15.56" y2="15.56" stroke="currentColor" stroke-width="0.14" stroke-linecap="round"/>
+          <line x1="-7.07" y1="7.07" x2="-15.56" y2="15.56" stroke="currentColor" stroke-width="0.14" stroke-linecap="round"/>
+          <line x1="-7.07" y1="-7.07" x2="-15.56" y2="-15.56" stroke="currentColor" stroke-width="0.14" stroke-linecap="round"/>
+          <!-- 8 micro rays at 22.5° between main rays -->
+          <line x1="3.83" y1="-9.24" x2="5.36" y2="-12.93" stroke="currentColor" stroke-width="0.07" stroke-linecap="round"/>
+          <line x1="9.24" y1="-3.83" x2="12.93" y2="-5.36" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="9.24" y1="3.83" x2="12.93" y2="5.36" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="3.83" y1="9.24" x2="5.36" y2="12.93" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="-3.83" y1="9.24" x2="-5.36" y2="12.93" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="-9.24" y1="3.83" x2="-12.93" y2="5.36" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="-9.24" y1="-3.83" x2="-12.93" y2="-5.36" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+          <line x1="-3.83" y1="-9.24" x2="-5.36" y2="-12.93" stroke="currentColor" stroke-width="0.22" stroke-linecap="round"/>
+        </g>
+
+        <!-- ── Star A — HIYA (top) ── -->
+        <path class="about-star-a" transform="translate(0,-42)" fill="currentColor" d="M0,-2.5 L0.32,-0.32 L2.5,0 L0.32,0.32 L0,2.5 L-0.32,0.32 L-2.5,0 L-0.32,-0.32 Z"/>
+
+        <!-- ── Star B — KUSA (lower left) ── -->
+        <path class="about-star-b" transform="translate(-36,22)" fill="currentColor" d="M0,-2.5 L0.32,-0.32 L2.5,0 L0.32,0.32 L0,2.5 L-0.32,0.32 L-2.5,0 L-0.32,-0.32 Z"/>
+
+        <!-- ── Star C — KAPWA (lower right) ── -->
+        <path class="about-star-c" transform="translate(36,22)" fill="currentColor" d="M0,-2.5 L0.32,-0.32 L2.5,0 L0.32,0.32 L0,2.5 L-0.32,0.32 L-2.5,0 L-0.32,-0.32 Z"/>
+
+      </svg>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  var svg = document.getElementById('about-star-bg');
+  if (!svg) return;
+  var ns = 'http://www.w3.org/2000/svg';
+  var g = document.createElementNS(ns, 'g');
+  // Seeded LCG — consistent pattern every load
+  var s = 20260512;
+  function rng() { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967295; }
+  // 76 sparse blinking stars across the section
+  for (var i = 0; i < 76; i++) {
+    var x = rng() * 120;
+    var y = rng() * 50;
+    var r = (rng() * 0.1 + 0.05).toFixed(2);
+    var o = (rng() * 0.35 + 0.2).toFixed(2);
+    var dur = (2.5 + rng() * 5).toFixed(1);
+    var del = (rng() * 8).toFixed(1);
+    var c = document.createElementNS(ns, 'circle');
+    c.setAttribute('cx', x.toFixed(1));
+    c.setAttribute('cy', y.toFixed(1));
+    c.setAttribute('r', r);
+    c.setAttribute('fill', 'currentColor');
+    c.style.setProperty('--so', o);
+    c.style.animation = 'starBlink ' + dur + 's ease-in-out ' + del + 's infinite backwards';
+    g.appendChild(c);
+  }
+  // Nebula cluster — dense patch of tiny static stars, upper-right of section
+  // Box-Muller Gaussian using seeded rng
+  function gauss() {
+    var u = rng() || 0.0001, v = rng();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+  for (var j = 0; j < 420; j++) {
+    var cx = 90 + gauss() * 9;   // cluster center x=90, spread σ=9
+    var cy = 18 + gauss() * 5;   // cluster center y=18, spread σ=5
+    if (cx < 0 || cx > 120 || cy < 0 || cy > 50) continue;
+    var r2 = (rng() * 0.07 + 0.03).toFixed(2); // very tiny: 0.03–0.10
+    var o2 = (rng() * 0.18 + 0.04).toFixed(2);
+    var c2 = document.createElementNS(ns, 'circle');
+    c2.setAttribute('cx', cx.toFixed(1));
+    c2.setAttribute('cy', cy.toFixed(1));
+    c2.setAttribute('r', r2);
+    c2.setAttribute('fill', 'currentColor');
+    c2.setAttribute('opacity', o2);
+    g.appendChild(c2);
+  }
+  svg.appendChild(g);
+})();
+</script>
+
+<!-- ── CTA ── -->
+<!-- contact chat now lives in the hero -->
+<span id="contact" aria-hidden="true"></span>
+
+<!-- mobile sticky bar (≤768): brings the chat back once the hero scrolls off -->
+<button type="button" class="p205-reserve" id="p205-reserve">
+  <span class="p205-reserve-tx">
+    <span class="p205-reserve-t">Talk about your project</span>
+    <span class="p205-reserve-s">Five quick questions, a reply within a day.</span>
+  </span>
+  <span class="p205-reserve-ic" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  </span>
+</button>
+
+<!-- aria-live announcer for the chat -->
+<div id="chat-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="cc-card">
+    <div class="cc-grid">
+      <a class="cc-lbl cc-lbl-ig" href="https://instagram.com/post205" target="_blank" rel="noopener">Instagram</a>
+      <div class="cc-bracket cc-br-top"></div>
+      <span class="cc-ch cc-at">@</span><span class="cc-ch cc-core">post205</span><span class="cc-ch cc-tld">.com</span>
+      <div class="cc-bracket cc-br-bot"></div>
+      <div class="cc-lbl cc-lbl-web">You're here</div>
+    </div>
+  </div>
+  <div class="cc-meta">© 2026 POST205, Inc. · <a href="/faq">FAQ</a> · <a href="/privacy.html">Privacy</a></div>
+</footer>
+
+<script>
+  // ── LIVE DEMOS: tab switching + the bank-deposit clickable flow ──
+  (function(){
+    var tabs = document.querySelectorAll('.lp-tab[data-demo]');
+    function showDemo(key){
+      document.querySelectorAll('.demo-panel').forEach(function(p){ p.classList.remove('active'); p.hidden = true; });
+      var panel = document.getElementById('demo-' + key);
+      if (panel){ panel.hidden = false; panel.classList.add('active'); }
+    }
+    tabs.forEach(function(t){
+      t.addEventListener('click', function(){
+        tabs.forEach(function(x){ x.classList.remove('active'); x.setAttribute('aria-selected','false'); });
+        t.classList.add('active'); t.setAttribute('aria-selected','true');
+        showDemo(t.dataset.demo);
+      });
+    });
+
+    // bank deposit + email confirmation
+    var slip = false;
+    var up = document.getElementById('depUpload');
+    if (up) up.addEventListener('click', function(){
+      slip = !slip;
+      up.classList.toggle('has', slip);
+      document.getElementById('depUpTxt').textContent = slip ? 'Deposit slip attached ✓' : 'Attach deposit slip';
+    });
+    var submit = document.getElementById('depSubmit');
+    if (submit) submit.addEventListener('click', function(){
+      submit.classList.remove('pulse');
+      submit.disabled = true; submit.textContent = 'Verifying…';
+      setTimeout(function(){
+        var amt  = (document.getElementById('depAmt').value || '₱0').trim();
+        var bank = document.getElementById('depBank').value;
+        var ref  = (document.getElementById('depRef').value || '—').trim();
+        var refDigits = ref.replace(/\D/g,'').slice(-4) || '0001';
+        document.getElementById('depRefOut').textContent = 'OR-' + refDigits;
+        document.getElementById('depEmAmt').textContent  = amt;
+        document.getElementById('depEmBank').textContent = bank;
+        document.getElementById('depEmRef').textContent  = ref;
+        document.getElementById('depEmDate').textContent = new Date().toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+        document.getElementById('depTgAmt').textContent  = amt;
+        document.getElementById('depTgBank').textContent = bank;
+        document.getElementById('depTgRef').textContent  = ref;
+        document.getElementById('depForm').hidden = true;
+        document.getElementById('depDone').hidden = false;
+      }, 900);
+    });
+    var reset = document.getElementById('depReset');
+    if (reset) reset.addEventListener('click', function(){
+      document.getElementById('depDone').hidden = true;
+      document.getElementById('depForm').hidden = false;
+      submit.disabled = false; submit.textContent = 'Submit payment';
+    });
+
+    // CPD module → score → certificate → email → PRC-ready
+    var cpdSubmit = document.getElementById('cpdSubmit');
+    var cpdEntry = null;
+    function gradeCpd(){
+      var qs = document.querySelectorAll('#cpdQuiz .cpd-q');
+      var correct = 0, answered = 0;
+      qs.forEach(function(q){
+        q.querySelectorAll('.cpd-opt').forEach(function(o){ o.classList.remove('correct','wrong'); });
+        var chosen = q.querySelector('input:checked');
+        var okInput = q.querySelector('input[data-ok]');
+        if (chosen) {
+          answered++;
+          if (chosen.hasAttribute('data-ok')) { chosen.parentNode.classList.add('correct'); correct++; }
+          else { chosen.parentNode.classList.add('wrong'); if (okInput) okInput.parentNode.classList.add('correct'); }
+        }
+      });
+      return { correct: correct, total: qs.length, answered: answered };
+    }
+    if (cpdSubmit) cpdSubmit.addEventListener('click', function(){
+      cpdSubmit.classList.remove('pulse');
+      var score = document.getElementById('cpdScore');
+      var r = gradeCpd();
+      if (r.answered < r.total) {
+        score.hidden = false; score.className = 'cpd-score fail';
+        score.textContent = 'Answer both questions to continue.';
+        return;
+      }
+      if (r.correct < r.total) {
+        score.hidden = false; score.className = 'cpd-score fail';
+        score.textContent = 'You scored ' + r.correct + '/' + r.total + '. The correct answers are highlighted — fix and resubmit.';
+        return;
+      }
+      score.hidden = false; score.className = 'cpd-score pass';
+      score.textContent = 'Passed, ' + r.correct + '/' + r.total + '. Issuing your certificate…';
+      cpdSubmit.disabled = true; cpdSubmit.textContent = 'Issuing…';
+      setTimeout(function(){
+        var nm  = (document.getElementById('cpdName').value || 'Member').trim();
+        var act = (document.getElementById('cpdActivity').value || 'CPD activity').trim();
+        var u   = (document.getElementById('cpdUnits').value || '1').trim();
+        var unitsTxt = u + ' CPD unit' + (u === '1' ? '' : 's');
+        var certNo = 'CPD-2026-' + String(new Date().getTime()).slice(-4);
+        var dateStr = new Date().toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+        document.getElementById('cpdCertName').textContent = nm;
+        document.getElementById('cpdCertActivity').textContent = act;
+        document.getElementById('cpdCertUnits').textContent = unitsTxt;
+        document.getElementById('cpdCertNo').textContent = certNo;
+        document.getElementById('cpdCertDate').textContent = dateStr;
+        document.getElementById('cpdLedgerName').textContent = nm;
+        document.getElementById('cpdLedgerUnits').textContent = u;
+        var handle = nm.toLowerCase().replace(/,.*$/, '').replace(/[^a-z]+/g, '.').replace(/^\.|\.$/g, '') || 'member';
+        document.getElementById('cpdEmailTo').textContent = handle;
+        cpdEntry = { name:nm, units:u, activity:act, certNo:certNo, date:dateStr };
+        document.getElementById('cpdQuiz').hidden = true;
+        document.getElementById('cpdDone').hidden = false;
+      }, 850);
+    });
+    // download certificate (demo affordance)
+    var cpdDl = document.getElementById('cpdDl');
+    if (cpdDl) cpdDl.addEventListener('click', function(){
+      var t = cpdDl.innerHTML; cpdDl.disabled = true; cpdDl.textContent = 'Saved to your device ✓';
+      setTimeout(function(){ cpdDl.innerHTML = t; cpdDl.disabled = false; }, 1600);
+    });
+    // export the PRC compliance list as a real CSV (the back-office benefit)
+    var cpdCsv = document.getElementById('cpdCsv');
+    if (cpdCsv) cpdCsv.addEventListener('click', function(){
+      var e = cpdEntry || {};
+      var rows = [
+        ['Name','CPD Units','Activity','Certificate No.','Date Completed','Provider Accreditation'],
+        [e.name||'', e.units||'', e.activity||'', e.certNo||'', e.date||'', 'PRC CPD Provider No. 2024-0731']
+      ];
+      var csv = rows.map(function(r){ return r.map(function(c){ return '"' + String(c).replace(/"/g,'""') + '"'; }).join(','); }).join('\r\n');
+      var blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a'); a.href = url; a.download = 'cpd-prc-list.csv';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    });
+    var cpdReset = document.getElementById('cpdReset');
+    if (cpdReset) cpdReset.addEventListener('click', function(){
+      document.getElementById('cpdDone').hidden = true;
+      document.getElementById('cpdQuiz').hidden = false;
+      var sc = document.getElementById('cpdScore'); sc.hidden = true; sc.textContent = '';
+      document.querySelectorAll('#cpdQuiz .cpd-opt').forEach(function(o){ o.classList.remove('correct','wrong'); });
+      cpdSubmit.disabled = false; cpdSubmit.textContent = 'Submit answers';
+    });
+
+    // Proposal: pick a tier → sign → recorded
+    var saTier = null, saPrice = null;
+    document.querySelectorAll('.sa-tier').forEach(function(t){
+      t.addEventListener('click', function(){
+        document.querySelectorAll('.sa-tier').forEach(function(x){ x.classList.remove('sel','pulse'); });
+        t.classList.add('sel');
+        saTier = t.dataset.tier; saPrice = t.dataset.price;
+        document.getElementById('saSign').hidden = false;
+        document.getElementById('saSubmit').textContent = 'Sign & accept · ' + saTier;
+      });
+    });
+    var saEmailEl = document.getElementById('saEmail');
+    if (saEmailEl) saEmailEl.addEventListener('input', function(){
+      document.getElementById('saSigShow').textContent = saEmailEl.value.trim() || 'your@email.com';
+    });
+    var saSubmit = document.getElementById('saSubmit');
+    if (saSubmit) saSubmit.addEventListener('click', function(){
+      var email = (saEmailEl.value || '').trim();
+      if (!saTier) return;
+      if (!email) { saEmailEl.focus(); return; }
+      saSubmit.disabled = true; saSubmit.textContent = 'Signing…';
+      setTimeout(function(){
+        document.getElementById('saDoneTier').textContent = saTier + ' · ' + saPrice;
+        document.getElementById('saDoneName').textContent = email;
+        document.getElementById('saDoneDate').textContent = new Date().toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+        document.getElementById('saTgMsg').textContent = 'Signed: ' + saTier + ' (' + saPrice + ') by ' + email;
+        document.getElementById('saDashTier').textContent = saTier + ' · ' + saPrice;
+        document.getElementById('saPick').hidden = true;
+        document.getElementById('saDone').hidden = false;
+      }, 850);
+    });
+    var saBill = document.getElementById('saBill');
+    if (saBill) saBill.addEventListener('click', function(){
+      saBill.disabled = true; saBill.textContent = 'Invoice sent ✓';
+    });
+    var saReset = document.getElementById('saReset');
+    if (saReset) saReset.addEventListener('click', function(){
+      var sb = document.getElementById('saBill'); if (sb) { sb.disabled = false; sb.textContent = 'Next step: send the bill →'; }
+      document.getElementById('saDone').hidden = true;
+      document.getElementById('saPick').hidden = false;
+      document.getElementById('saSign').hidden = true;
+      document.querySelectorAll('.sa-tier').forEach(function(x){ x.classList.remove('sel'); });
+      saTier = null; saPrice = null;
+      saSubmit.disabled = false; saSubmit.textContent = 'Sign & accept';
+    });
+
+    // Payroll: run → reveal net pay + payslip + remittance notice
+    var payRun = document.getElementById('payRun');
+    if (payRun) payRun.addEventListener('click', function(){
+      payRun.classList.remove('pulse');
+      payRun.disabled = true; payRun.textContent = 'Running…';
+      setTimeout(function(){
+        document.getElementById('payNet1').hidden = false;
+        document.getElementById('payNet2').hidden = false;
+        document.getElementById('payNet3').hidden = false;
+        document.getElementById('paySlip').hidden = false;
+        document.getElementById('payTg').hidden = false;
+        payRun.hidden = true;
+        document.getElementById('payReset').hidden = false;
+      }, 850);
+    });
+    var payReset = document.getElementById('payReset');
+    if (payReset) payReset.addEventListener('click', function(){
+      ['payNet1','payNet2','payNet3','paySlip','payTg'].forEach(function(id){ document.getElementById(id).hidden = true; });
+      payReset.hidden = true;
+      payRun.hidden = false; payRun.disabled = false; payRun.textContent = 'Run payroll'; payRun.classList.add('pulse');
+    });
+
+  })();
+
+  // ── transparent header → solid dark once the hero scrolls away ──
+  (function(){
+    var nav = document.querySelector('nav');
+    var hero = document.querySelector('.hero');
+    if (!nav || !hero || !('IntersectionObserver' in window)) return;
+    new IntersectionObserver(function(es){
+      es.forEach(function(en){ nav.classList.toggle('nav-solid', !en.isIntersecting); });
+    }, { rootMargin: '-70px 0px 0px 0px', threshold: 0 }).observe(hero);
+  })();
+
+</script>
+
+<script>
+/* ===== v3 engine: boot -> living field -> decode -> HUD ====================
+   One motif: the logo's 15x5 pixel grid. Vanilla, no deps, one rAF per canvas,
+   paused offscreen, DPR-capped, static under prefers-reduced-motion. */
+(function () {
+  'use strict';
+
+  /* the logo bitmap: 15 columns x 5 rows (same matrix the email logo uses) */
+  var M = ['001011101110111', '100000101010100', '010011101010111', '000010001010001', '100011101110111'];
+  var MC = 15, MR = 5;
+  var ON = [];                                     // [row, col] of lit cells, reading order
+  for (var r = 0; r < MR; r++) for (var c = 0; c < MC; c++) if (M[r][c] === '1') ON.push([r, c]);
+
+  var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var DPR = Math.min(window.devicePixelRatio || 1, 1.75);
+  var easeOutExpo = function (t) { return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t); };
+  var GLYPHS = '01';
+  var randGlyph = function () {
+    var x = Math.random();
+    if (x > 0.985) return '₱';                 // a rare peso sign in the stream
+    if (x > 0.96) return Math.random() > 0.5 ? '2' : '5';
+    return Math.random() > 0.5 ? '1' : '0';
+  };
+
+  /* whether the boot plays this load (guard class set pre-paint in <head>) */
+  var wantBoot = /[?&]boot=1/.test(location.search);
+  if (wantBoot) document.documentElement.classList.remove('no-boot');
+  var BOOT = !document.documentElement.classList.contains('no-boot');
+  try { sessionStorage.setItem('p205boot', '1'); } catch (e) {}
+
+  var revealFired = false;
+  function fireReveal() {
+    if (revealFired) return;
+    revealFired = true;
+    window.dispatchEvent(new Event('p205:reveal'));
+  }
+
+  /* ── boot overlay ──────────────────────────────────────────────────────── */
+  (function boot() {
+    var box = document.getElementById('p205-boot');
+    if (!box) return;
+    if (!BOOT) { box.remove(); fireReveal(); return; }
+
+    var cv = document.getElementById('bootCv');
+    var read = document.getElementById('bootRead');
+    var pctEl = document.getElementById('bootPct');
+    var ctx = cv.getContext('2d');
+    var W = innerWidth, H = innerHeight;
+    cv.width = W * DPR; cv.height = H * DPR;
+    ctx.scale(DPR, DPR);
+
+    /* grid sized off the bitmap: logo lands at ~72vw capped 440px */
+    var bmpW = Math.min(W * 0.72, 440);
+    var cell = bmpW / MC;
+    var cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
+    var x0 = (W - bmpW) / 2, y0 = (H - cell * MR) / 2 - H * 0.04;
+
+    var mnl = new Intl.DateTimeFormat('en-PH', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Manila' }).format(new Date());
+    read.innerHTML = 'POST205 · MNL ' + mnl + '<br>LOADING';
+
+    /* cells: ignite time; bitmap 'on' cells also get a reveal time */
+    var cells = [], reveals = [];
+    for (var gr = 0; gr < rows; gr++) for (var gc = 0; gc < cols; gc++) {
+      var cx = gc * cell, cy = gr * cell;
+      var bc = Math.floor((cx + cell / 2 - x0) / cell), br = Math.floor((cy + cell / 2 - y0) / cell);
+      var inBmp = br >= 0 && br < MR && bc >= 0 && bc < MC && M[br][bc] === '1';
+      var cl = { x: cx, y: cy, g: randGlyph(), ig: Math.random() * 420, on: inBmp, rv: -1 };
+      cells.push(cl);
+      if (inBmp) reveals.push(cl);
+    }
+    /* shuffled reveal order across 380-1280ms */
+    reveals.sort(function () { return Math.random() - 0.5; });
+    reveals.forEach(function (cl, i) { cl.rv = 380 + (i / Math.max(1, reveals.length - 1)) * 900; });
+
+    var t0 = performance.now(), LIFT = 1650, dead = false, raf = 0;
+    var fontPx = Math.max(10, cell * 0.5);
+    ctx.font = fontPx + 'px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+    function frame(now) {
+      if (dead) return;
+      var t = now - t0;
+      ctx.clearRect(0, 0, W, H);
+
+      for (var i = 0; i < cells.length; i++) {
+        var cl = cells[i];
+        if (t < cl.ig) continue;
+        if (cl.rv >= 0 && t >= cl.rv) {
+          /* digits become pixels: the glyph resolves into a filled cell */
+          var k = easeOutExpo(Math.min(1, (t - cl.rv) / 160));
+          ctx.globalAlpha = k;
+          ctx.fillStyle = '#3BD1D3';
+          ctx.fillRect(cl.x + 1, cl.y + 1, cell - 2, cell - 2);
+        } else {
+          /* ambient digits settle down as the logo takes over */
+          var settle = t < 420 ? 0.16 : Math.max(0.035, 0.16 - (t - 420) / 900 * 0.125);
+          ctx.globalAlpha = settle;
+          ctx.fillStyle = '#9adedf';
+          if (Math.random() > 0.992) cl.g = randGlyph();
+          ctx.fillText(cl.g, cl.x + cell / 2, cl.y + cell / 2);
+        }
+      }
+      ctx.globalAlpha = 1;
+
+      var pct = Math.min(100, Math.round(t / 1280 * 100));
+      pctEl.textContent = pct + '%';
+      if (pct >= 100 && read.innerHTML.indexOf('HANDA') === -1) {
+        read.innerHTML = 'POST205 · MNL ' + mnl + '<br><b>HANDA NA.</b>';
+      }
+      if (t >= LIFT) { end(); return; }
+      raf = requestAnimationFrame(frame);
+    }
+
+    function end() {
+      if (dead) return;
+      dead = true;
+      cancelAnimationFrame(raf);
+      box.classList.add('lift');
+      fireReveal();
+      setTimeout(function () { box.remove(); }, 650);
+    }
+    /* tap, click, or key skips the whole thing */
+    box.addEventListener('pointerdown', end);
+    window.addEventListener('keydown', end, { once: true });
+    setTimeout(end, 3200);                          // hard safety: never trap anyone
+    raf = requestAnimationFrame(frame);
+  })();
+
+  /* ── living binary hero ────────────────────────────────────────────────── */
+  (function field() {
+    var host = document.querySelector('.hero-binary');
+    var hero = document.querySelector('.hero');
+    if (!host || !hero) return;
+
+    var cv = document.createElement('canvas');
+    host.appendChild(cv);
+    var ctx = cv.getContext('2d');
+
+    var W, H, cell, cols, rows, fontPx;
+    var glyph, base, heat, inBmp;                   // flat arrays, index = r*cols+c
+    var px = -1e4, py = -1e4;                       // pointer, canvas coords
+
+    function build() {
+      var b = host.getBoundingClientRect();
+      W = Math.max(1, b.width); H = Math.max(1, b.height);
+      cv.width = W * DPR; cv.height = H * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      cell = Math.max(15, Math.min(21, W / 64));
+      cols = Math.ceil(W / cell); rows = Math.ceil(H / cell);
+      fontPx = Math.max(9, cell * 0.58);
+      ctx.font = fontPx + 'px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+      /* the hidden giant 205: left-of-center on desktop, upper field on mobile */
+      var mobile = W < 640;
+      var bw = mobile ? W * 0.92 : W * 0.56;
+      var bx = mobile ? W * 0.04 : W * 0.03;
+      var bcell = bw / MC, bh = bcell * MR;
+      var by = mobile ? H * 0.10 : (H - bh) / 2;
+
+      var n = cols * rows;
+      glyph = new Array(n); base = new Float32Array(n); heat = new Float32Array(n); inBmp = new Uint8Array(n);
+      for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+        var i = r * cols + c;
+        glyph[i] = randGlyph();
+        base[i] = 0.055 + Math.random() * 0.085;
+        var cx = c * cell + cell / 2, cy = r * cell + cell / 2;
+        var mc = Math.floor((cx - bx) / bcell), mr = Math.floor((cy - by) / (bh / MR));
+        inBmp[i] = (mr >= 0 && mr < MR && mc >= 0 && mc < MC && M[mr][mc] === '1') ? 1 : 0;
+      }
+    }
+    build();
+
+    if (REDUCE) {                                   /* one calm static paint, no loop */
+      for (var r0 = 0; r0 < rows; r0++) for (var c0 = 0; c0 < cols; c0++) {
+        var i0 = r0 * cols + c0;
+        ctx.globalAlpha = base[i0];
+        ctx.fillStyle = inBmp[i0] ? '#3BD1D3' : '#9adedf';
+        ctx.fillText(glyph[i0], c0 * cell + cell / 2, r0 * cell + cell / 2);
+      }
+      return;
+    }
+
+    hero.addEventListener('pointermove', function (e) {
+      var b = cv.getBoundingClientRect();
+      px = e.clientX - b.left; py = e.clientY - b.top;
+    }, { passive: true });
+    hero.addEventListener('pointerleave', function () { px = py = -1e4; });
+    hero.addEventListener('pointerdown', function (e) {
+      var b = cv.getBoundingClientRect();
+      var dx = e.clientX - b.left, dy = e.clientY - b.top;
+      splash(dx, dy, 220, 1);                       /* a tap drops a bigger pulse */
+    }, { passive: true });
+
+    function splash(sx, sy, rad, amt) {
+      var r1 = Math.max(0, Math.floor((sy - rad) / cell)), r2 = Math.min(rows - 1, Math.ceil((sy + rad) / cell));
+      var c1 = Math.max(0, Math.floor((sx - rad) / cell)), c2 = Math.min(cols - 1, Math.ceil((sx + rad) / cell));
+      for (var r = r1; r <= r2; r++) for (var c = c1; c <= c2; c++) {
+        var dx = c * cell + cell / 2 - sx, dy = r * cell + cell / 2 - sy;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d < rad) {
+          var i = r * cols + c;
+          var v = amt * (1 - d / rad);
+          if (v > heat[i]) heat[i] = Math.min(1, v);
+        }
+      }
+    }
+
+    /* run only while the hero is on screen and the tab is visible */
+    var visible = true, hidden = false, raf = 0, last = 0, tStart = performance.now();
+    var sweepT = -2400;                             /* first hint sweep shortly after reveal */
+    window.addEventListener('p205:reveal', function () { sweepT = performance.now() + 1400; });
+
+    new IntersectionObserver(function (es) {
+      es.forEach(function (en) { visible = en.isIntersecting; if (visible) kick(); });
+    }, { threshold: 0 }).observe(host);
+    document.addEventListener('visibilitychange', function () {
+      hidden = document.hidden; if (!hidden) kick();
+    });
+    var resizeT;
+    window.addEventListener('resize', function () { clearTimeout(resizeT); resizeT = setTimeout(build, 180); });
+
+    function kick() { cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop); }
+
+    function loop(now) {
+      if (!visible || hidden) return;
+      raf = requestAnimationFrame(loop);
+      if (now - last < 33) return;                  /* ~30fps: digital, and cheap */
+      var dt = last ? (now - last) / 1000 : 0.033;
+      last = now;
+      var t = (now - tStart) / 1000;
+
+      /* pointer wake */
+      if (px > -1e3) splash(px, py, 175, 1);
+
+      /* periodic hint sweep: only the bitmap cells catch the light */
+      var sw = (now - sweepT) / 2200;
+      var sweepOn = sw >= 0 && sw <= 1;
+      if (sw > 1) sweepT = now + 6500 + Math.random() * 2500;
+
+      ctx.clearRect(0, 0, W, H);
+      var decay = Math.exp(-dt * 2.2);
+      var flips = 6;
+
+      /* pass 1: plain cells; pass 2: bitmap cells (fewer fillStyle switches) */
+      for (var pass = 0; pass < 2; pass++) {
+        ctx.fillStyle = pass ? '#3BD1D3' : '#9adedf';
+        for (var r = 0; r < rows; r++) {
+          var breathR = Math.sin(t * 0.45 + r * 0.35);
+          for (var c = 0; c < cols; c++) {
+            var i = r * cols + c;
+            if ((inBmp[i] === 1) !== (pass === 1)) continue;
+            var h = heat[i];
+            if (h > 0.003) { heat[i] = h * decay; if (h > 0.45 && Math.random() > 0.6) glyph[i] = randGlyph(); }
+            var a = base[i] * (0.75 + 0.25 * Math.sin(t * 0.4 + c * 0.22 + breathR));
+            if (pass) {
+              a += h * 1.0;
+              if (sweepOn) {
+                var band = Math.abs((r + c) / (rows + cols) - sw);
+                if (band < 0.07) a += (1 - band / 0.07) * 0.17;
+              }
+            } else {
+              a += h * 0.42;
+            }
+            if (a < 0.015) continue;
+            ctx.globalAlpha = Math.min(pass ? 0.95 : 0.5, a);
+            if (pass && h > 0.3) {
+              /* woken bitmap cells resolve from digits into solid pixels,
+                 the same move the boot makes: that's how the 205 appears */
+              ctx.fillRect(c * cell + 1.5, r * cell + 1.5, cell - 3, cell - 3);
+            } else {
+              ctx.fillText(glyph[i], c * cell + cell / 2, r * cell + cell / 2);
+            }
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+      /* ambient life: a few cells flip every frame */
+      while (flips--) glyph[(Math.random() * glyph.length) | 0] = randGlyph();
+    }
+    kick();
+  })();
+
+  /* ── decode-in: headline on reveal, eyebrows on scroll ─────────────────── */
+  (function decode() {
+    var SCRAM = '010101201510';
+    function run(el, dur) {
+      var final_ = el.textContent;
+      var n = final_.length, t0 = performance.now();
+      el.classList.remove('decode-wait');
+      (function step(now) {
+        var k = Math.min(1, (now - t0) / dur);
+        var solid = Math.floor(k * n), out = final_.slice(0, solid);
+        for (var i = solid; i < n; i++) {
+          var ch = final_[i];
+          out += (ch === ' ') ? ' ' : SCRAM[(Math.random() * SCRAM.length) | 0];
+        }
+        el.textContent = out;
+        if (k < 1) requestAnimationFrame(step);
+        else el.textContent = final_;
+      })(t0);
+    }
+
+    /* headline: only theatrical when the boot played; instant on repeat visits */
+    var words = document.querySelectorAll('.hero .hl-word');
+    var late = document.querySelectorAll('.hero .hl-dash, .hero .hero-descriptor');
+    if (BOOT && !REDUCE && words.length) {
+      words.forEach(function (w) { w.classList.add('decode-wait'); });
+      late.forEach(function (el) { el.classList.add('v3-late'); });
+      window.addEventListener('p205:reveal', function () {
+        words.forEach(function (w, i) { setTimeout(function () { run(w, 620); }, i * 150); });
+        setTimeout(function () { late.forEach(function (el) { el.classList.add('in'); }); }, 800);
+      });
+    }
+
+    /* section eyebrows decode as they scroll in (every load, cheap + subtle) */
+    if (REDUCE || !('IntersectionObserver' in window)) return;
+    var eyes = document.querySelectorAll('.lp-eyebrow, .section-label, [class*="-eyebrow"]');
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        run(en.target, 430);
+      });
+    }, { threshold: 0.6 });
+    eyes.forEach(function (el) {
+      if (el.childElementCount || el.closest('.hero')) return;
+      var len = el.textContent.trim().length;
+      if (len > 1 && len < 48) io.observe(el);
+    });
+  })();
+
+  /* ── nav HUD: pixel progress strip + MNL time + scroll% ────────────────── */
+  (function hud() {
+    var cv = document.getElementById('hudPx');
+    var timeEl = document.getElementById('hudTime');
+    var scrlEl = document.getElementById('hudScrl');
+    if (!cv) return;
+    var ctx = cv.getContext('2d');
+    var d = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = 66 * d; cv.height = 22 * d;
+    cv.style.width = '66px'; cv.style.height = '22px';
+    ctx.scale(d, d);
+
+    /* one quiet row of 15 cells filling with scroll (a grid echo, not a second
+       logo: the real mark already owns the left side of the nav) */
+    function draw(p) {
+      ctx.clearRect(0, 0, 66, 22);
+      var lit = Math.round(p * MC);
+      for (var i = 0; i < MC; i++) {
+        ctx.globalAlpha = i < lit ? 1 : 0.16;
+        ctx.fillStyle = '#3BD1D3';
+        ctx.fillRect(3 + i * 4, 9, 3, 3);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function mnl() {
+      try {
+        timeEl.textContent = 'MNL ' + new Intl.DateTimeFormat('en-PH', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Manila' }).format(new Date());
+      } catch (e) { timeEl.textContent = ''; }
+    }
+    mnl(); setInterval(mnl, 30000);
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        var max = document.documentElement.scrollHeight - innerHeight;
+        var p = max > 0 ? Math.min(1, scrollY / max) : 0;
+        draw(p);
+        scrlEl.textContent = 'SCRL ' + String(Math.round(p * 100)).padStart(3, '0');
+      });
+    }
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  /* ── demo mockups boot with a scanline flicker when they enter ─────────── */
+  (function flick() {
+    if (REDUCE || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        en.target.classList.add('mw-boot');
+      });
+    }, { threshold: 0.35 });
+    document.querySelectorAll('.mock-win').forEach(function (el) { io.observe(el); });
+  })();
+
+})();
+</script>
+
+<script src="/js/cookie-banner.js"></script>
+
+<script>
+(function() {
+  var tip = document.createElement('div');
+  tip.className = 'badge-tooltip';
+  document.body.appendChild(tip);
+  var activeBadge = null;
+
+  function show(badge) {
+    tip.textContent = badge.getAttribute('data-tip');
+    tip.style.display = 'block';
+    var r = badge.getBoundingClientRect();
+    var w = tip.offsetWidth;
+    var h = tip.offsetHeight;
+    var left = r.left + r.width / 2 - w / 2;
+    var top = r.top - h - 8;
+    left = Math.max(10, Math.min(left, window.innerWidth - w - 10));
+    if (top < 10) top = r.bottom + 8;
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+    activeBadge = badge;
+  }
+
+  function hide() { tip.style.display = 'none'; activeBadge = null; }
+
+  document.querySelectorAll('.promise-badge[data-tip]').forEach(function(b) {
+    // Hover only for mouse — pointerType check prevents mobile mouseenter from firing
+    b.addEventListener('pointerenter', function(e) { if (e.pointerType === 'mouse') show(b); });
+    b.addEventListener('pointerleave', function(e) { if (e.pointerType === 'mouse') hide(); });
+    // Tap to toggle on touch
+    b.addEventListener('click', function(e) {
+      e.stopPropagation();
+      activeBadge === b ? hide() : show(b);
+    });
+  });
+
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', function() { if (activeBadge) show(activeBadge); }, { passive: true });
+})();
+</script>
+
+<!-- ── hero chat (ported engine + persistent CTA layer) ── -->
+<script src="/js/chat-intake.js?v=9"></script>
+<script src="/js/chat-cta.js?v=2"></script>
+
+</body>
+</html>
