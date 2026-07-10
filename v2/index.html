@@ -1370,10 +1370,7 @@
     .promise-card-icon svg { transition: transform .3s cubic-bezier(0.25,1,0.5,1); }
     .promise-card:hover .promise-card-icon svg { transform: scale(1.15) rotate(-5deg); }
 
-    /* about: the headline actually sways, the sun turns, stars pair with words */
-    .ad-lines > span { animation: adSway 5.8s ease-in-out infinite; transform-origin: 0% 100%; }
-    .ad-lines > span:nth-child(2) { animation-delay: -2.9s; }
-    @keyframes adSway { 0%, 100% { transform: rotate(-0.7deg); } 50% { transform: rotate(0.7deg); } }
+    /* about: the sun turns, stars pair with words */
     .about-sun-g { animation: sunTurn 240s linear infinite; }
     @keyframes sunTurn { to { transform: rotate(360deg); } }
     .about-star-a.star-lit, .about-star-b.star-lit, .about-star-c.star-lit {
@@ -1383,10 +1380,17 @@
     .about-mission-body strong { transition: color .25s; }
     .about-mission-body.hot strong { color: #3BD1D3; }
 
-    /* footer: a faint field hums under the calling card; You're-here pip */
+    /* living fields: the footer hum, spread to every section (canvas behind content) */
     footer { position: relative; overflow: hidden; }
     footer > * { position: relative; z-index: 1; }
-    .foot-field { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .foot-field, .sec-field { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .case-studies, .promises { position: relative; overflow: hidden; }
+    .case-studies-inner, .promises-inner, .about-inner { position: relative; z-index: 1; }
+
+    /* demos: the mock windows are physical objects; they follow the pointer a little */
+    .mock-win { transition: transform .5s cubic-bezier(0.25, 1, 0.5, 1); }
+    .mock-win.tilting { transition: transform .12s cubic-bezier(0.25, 1, 0.5, 1); }
+    @media (prefers-reduced-motion: reduce) { .mock-win, .mock-win.tilting { transform: none !important; transition: none; } }
     .cc-lbl-web::before {
       content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%;
       background: #3BD1D3; margin-right: 7px; vertical-align: 1px;
@@ -2677,23 +2681,22 @@
     });
   })();
 
-  /* ── footer: a faint field hums under the calling card ─────────────────── */
-  (function footField() {
-    var f = document.querySelector('footer');
-    if (!f || REDUCE) return;
+  /* ── living fields: the footer hum, spread to every section ────────────── */
+  function makeField(host, o) {
+    if (!host || REDUCE) return;
     var cv = document.createElement('canvas');
-    cv.className = 'foot-field';
-    f.insertBefore(cv, f.firstChild);
+    cv.className = o.cls || 'sec-field';
+    host.insertBefore(cv, host.firstChild);
     var ctx = cv.getContext('2d');
     var W, H, cell, cols, rows, glyphs, alphas, heat;
     var px = -1e4, py = -1e4;
 
     function build() {
-      var b = f.getBoundingClientRect();
+      var b = host.getBoundingClientRect();
       W = Math.max(1, b.width); H = Math.max(1, b.height);
       cv.width = W * DPR; cv.height = H * DPR;
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      cell = 30;
+      cell = o.cell || 30;
       cols = Math.ceil(W / cell); rows = Math.ceil(H / cell);
       ctx.font = Math.round(cell * 0.42) + 'px ui-monospace, Menlo, monospace';
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -2701,21 +2704,25 @@
       glyphs = new Array(n); alphas = new Float32Array(n); heat = new Float32Array(n);
       for (var i = 0; i < n; i++) {
         var r_ = (i / cols) | 0, c_ = i % cols;
-        /* thin out toward the middle so the calling card owns the center */
-        var dx_ = (c_ * cell + cell / 2 - W / 2) / (W * 0.5);
-        var dy_ = (r_ * cell + cell / 2 - H / 2) / (H * 0.62);
-        var edge = Math.min(1, Math.sqrt(dx_ * dx_ + dy_ * dy_));
+        var k = 1;
+        if (o.centerThin) {
+          /* thin toward the middle so the content owns the center */
+          var dx_ = (c_ * cell + cell / 2 - W / 2) / (W * 0.5);
+          var dy_ = (r_ * cell + cell / 2 - H / 2) / (H * 0.62);
+          var edge = Math.min(1, Math.sqrt(dx_ * dx_ + dy_ * dy_));
+          k = 0.15 + 0.85 * edge * edge;
+        }
         glyphs[i] = randGlyph();
-        alphas[i] = (0.015 + Math.random() * 0.035) * (0.15 + 0.85 * edge * edge);
+        alphas[i] = (o.idle + Math.random() * o.idleVar) * k;
       }
     }
     build();
 
-    f.addEventListener('pointermove', function (e) {
+    host.addEventListener('pointermove', function (e) {
       var b = cv.getBoundingClientRect();
       px = e.clientX - b.left; py = e.clientY - b.top;
     }, { passive: true });
-    f.addEventListener('pointerleave', function () { px = py = -1e4; });
+    host.addEventListener('pointerleave', function () { px = py = -1e4; });
 
     var visible = false, raf = 0, last = 0, t0 = performance.now();
     new IntersectionObserver(function (es) {
@@ -2723,18 +2730,19 @@
         visible = en.isIntersecting;
         if (visible) { cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop); }
       });
-    }, { threshold: 0 }).observe(f);
+    }, { threshold: 0 }).observe(host);
     var rT; window.addEventListener('resize', function () { clearTimeout(rT); rT = setTimeout(build, 200); });
 
+    var R = o.radius || 140, R2 = R * R;
     function loop(now) {
       if (!visible || document.hidden) return;
       raf = requestAnimationFrame(loop);
-      if (now - last < 50) return;                 /* 20fps: it's a hum, not a show */
+      if (now - last < 50) return;                 /* 20fps: a hum, not a show */
       var dt = last ? (now - last) / 1000 : 0.05;
       last = now;
       var t = (now - t0) / 1000;
       ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = '#3BD1D3';
+      ctx.fillStyle = o.ink;
       var decay = Math.exp(-dt * 2.4);
       for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
         var i = r * cols + c;
@@ -2743,16 +2751,92 @@
         if (px > -1e3) {
           var dx = c * cell + cell / 2 - px, dy = r * cell + cell / 2 - py;
           var d2 = dx * dx + dy * dy;
-          if (d2 < 19600) { var v = 0.3 * (1 - Math.sqrt(d2) / 140); if (v > heat[i]) heat[i] = v; }
+          if (d2 < R2) { var v = o.wake * (1 - Math.sqrt(d2) / R); if (v > heat[i]) heat[i] = v; }
         }
-        var a = alphas[i] * (0.7 + 0.3 * Math.sin(t * 0.35 + c * 0.3 + r * 0.5)) + heat[i];
+        var a = alphas[i] * (0.7 + 0.3 * Math.sin(t * 0.35 + c * 0.3 + r * 0.5)) + h;
         if (a < 0.012) continue;
-        ctx.globalAlpha = Math.min(0.32, a);
+        ctx.globalAlpha = Math.min(o.cap, a);
         ctx.fillText(glyphs[i], c * cell + cell / 2, r * cell + cell / 2);
       }
       ctx.globalAlpha = 1;
       glyphs[(Math.random() * glyphs.length) | 0] = randGlyph();
     }
+  }
+
+  /* footer: the original hum */
+  makeField(document.querySelector('footer'), {
+    cls: 'foot-field', ink: '#3BD1D3', idle: 0.015, idleVar: 0.035,
+    wake: 0.3, cap: 0.32, centerThin: true
+  });
+  /* light sections: faint print that darkens under your hand */
+  makeField(document.querySelector('.case-studies'), {
+    ink: '#0e9a9d', idle: 0.026, idleVar: 0.036, wake: 0.22, cap: 0.24, cell: 32
+  });
+  makeField(document.querySelector('.promises'), {
+    ink: '#0e9a9d', idle: 0.026, idleVar: 0.036, wake: 0.22, cap: 0.24, cell: 32
+  });
+  /* about: near-invisible at rest, the pointer reveals the machine under the sky */
+  makeField(document.querySelector('.about'), {
+    ink: '#3BD1D3', idle: 0.004, idleVar: 0.008, wake: 0.26, cap: 0.28, cell: 30, radius: 160
+  });
+
+  /* ── demos alive: mock windows tilt toward the pointer, forms type themselves ── */
+  (function tilt() {
+    if (REDUCE || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    document.querySelectorAll('.mock-win').forEach(function (w) {
+      w.addEventListener('pointermove', function (e) {
+        var b = w.getBoundingClientRect();
+        var nx = (e.clientX - b.left) / b.width - 0.5;
+        var ny = (e.clientY - b.top) / b.height - 0.5;
+        w.classList.add('tilting');
+        w.style.transform = 'perspective(900px) rotateY(' + (nx * 3.2).toFixed(2) + 'deg) rotateX(' + (-ny * 2.6).toFixed(2) + 'deg)';
+      });
+      w.addEventListener('pointerleave', function () {
+        w.classList.remove('tilting');
+        w.style.transform = '';
+      });
+    });
+  })();
+
+  (function selfType() {
+    if (REDUCE) return;
+    /* the demo fills itself in the first time you see it, like someone using it */
+    function typeInputs(panel) {
+      if (!panel || panel.dataset.typed) return;
+      panel.dataset.typed = '1';
+      var inputs = panel.querySelectorAll('input[type="text"]:not([hidden]), input[type="number"]');
+      var delay = 0;
+      inputs.forEach(function (inp) {
+        if (!inp.value || inp.closest('[hidden]')) return;
+        var final_ = inp.value;
+        inp.value = '';
+        setTimeout(function () {
+          if (document.activeElement === inp) { inp.value = final_; return; }
+          var i = 0;
+          (function tick() {
+            if (document.activeElement === inp) { inp.value = final_; return; }
+            inp.value = final_.slice(0, ++i);
+            if (i < final_.length) setTimeout(tick, 26 + Math.random() * 30);
+          })();
+        }, delay);
+        delay += 260;
+      });
+    }
+    if (!('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var active = document.querySelector('.demo-panel.active');
+        if (active) { typeInputs(active); io.disconnect(); }
+      });
+    }, { threshold: 0.45 });
+    var cs = document.querySelector('.case-studies');
+    if (cs) io.observe(cs);
+    document.querySelectorAll('.lp-tab[data-demo]').forEach(function (t) {
+      t.addEventListener('click', function () {
+        typeInputs(document.getElementById('demo-' + t.dataset.demo));
+      });
+    });
   })();
 
 })();
