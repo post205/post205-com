@@ -1346,6 +1346,60 @@
       .v3-late { opacity: 1; transition: none; }
       .mw-boot::after { animation: none; opacity: 0; }
     }
+
+    /* ===== v3.1: every section alive ===================================== */
+
+    /* section entrances: a quiet rise, classes added by JS only (no-JS safe) */
+    .v3-rise { opacity: 0; transform: translateY(14px); }
+    .v3-rise.in { opacity: 1; transform: none; transition: opacity .6s cubic-bezier(0.16,1,0.3,1), transform .6s cubic-bezier(0.16,1,0.3,1); }
+
+    /* demos: a live pip in the mock chrome + the url types in on switch */
+    .mw-live { width: 6px; height: 6px; border-radius: 50%; background: #2ecc71; margin-left: 6px; flex-shrink: 0; animation: mwLive 2.4s ease-in-out infinite; }
+    @keyframes mwLive { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+
+    /* promises: cards rise staggered; on hover the badges catch light in a wave */
+    .promises-cards.v3wait .promise-card { opacity: 0; transform: translateY(16px); }
+    .promises-cards.v3wait.in .promise-card { opacity: 1; transform: none; transition: opacity .55s cubic-bezier(0.16,1,0.3,1), transform .55s cubic-bezier(0.16,1,0.3,1); }
+    .promises-cards.v3wait.in .promise-card:nth-child(2) { transition-delay: .12s; }
+    .promises-cards.v3wait.in .promise-card:nth-child(3) { transition-delay: .24s; }
+    .promise-card:hover .promise-badge { border-color: var(--accent); color: var(--accent-text); background: var(--accent-dim); }
+    .promise-card:hover .promise-badge:nth-of-type(2) { transition-delay: 0s; }
+    .promise-card:hover .promise-badge:nth-of-type(3) { transition-delay: .09s; }
+    .promise-card:hover .promise-badge:nth-of-type(4) { transition-delay: .18s; }
+    .promise-card .promise-badge { transition-delay: 0s; }
+    .promise-card-icon svg { transition: transform .3s cubic-bezier(0.25,1,0.5,1); }
+    .promise-card:hover .promise-card-icon svg { transform: scale(1.15) rotate(-5deg); }
+
+    /* about: the headline actually sways, the sun turns, stars pair with words */
+    .ad-lines > span { animation: adSway 5.8s ease-in-out infinite; transform-origin: 0% 100%; }
+    .ad-lines > span:nth-child(2) { animation-delay: -2.9s; }
+    @keyframes adSway { 0%, 100% { transform: rotate(-0.7deg); } 50% { transform: rotate(0.7deg); } }
+    .about-sun-g { animation: sunTurn 240s linear infinite; }
+    @keyframes sunTurn { to { transform: rotate(360deg); } }
+    .about-star-a.star-lit, .about-star-b.star-lit, .about-star-c.star-lit {
+      animation: starLit 1.1s ease-in-out infinite; fill: #3BD1D3;
+    }
+    @keyframes starLit { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+    .about-mission-body strong { transition: color .25s; }
+    .about-mission-body.hot strong { color: #3BD1D3; }
+
+    /* footer: a faint field hums under the calling card; You're-here pip */
+    footer { position: relative; overflow: hidden; }
+    footer > * { position: relative; z-index: 1; }
+    .foot-field { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .cc-lbl-web::before {
+      content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%;
+      background: #3BD1D3; margin-right: 7px; vertical-align: 1px;
+      animation: mwLive 2.4s ease-in-out infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .v3-rise, .promises-cards.v3wait .promise-card { opacity: 1; transform: none; transition: none; }
+      .mw-live, .cc-lbl-web::before { animation: none; opacity: .8; }
+      .ad-lines > span, .about-sun-g { animation: none; }
+      .star-lit { animation: none; opacity: 1; }
+      .promise-card:hover .promise-card-icon svg { transform: none; }
+    }
   </style>
 </head>
 <body>
@@ -2539,6 +2593,166 @@
       });
     }, { threshold: 0.35 });
     document.querySelectorAll('.mock-win').forEach(function (el) { io.observe(el); });
+  })();
+
+  /* ── demos: live pip in every mock chrome + the url types in on switch ─── */
+  (function demoLife() {
+    document.querySelectorAll('.mock-bar').forEach(function (bar) {
+      var pip = document.createElement('span');
+      pip.className = 'mw-live';
+      bar.appendChild(pip);
+    });
+    if (REDUCE) return;
+    function typeUrl(panel) {
+      var u = panel && panel.querySelector('.mock-url');
+      if (!u) return;
+      var final_ = u.dataset.t || (u.dataset.t = u.textContent);
+      var t0 = performance.now(), DUR = 340;
+      (function step(now) {
+        var k = Math.min(1, (now - t0) / DUR);
+        var n = Math.ceil(k * final_.length);
+        u.textContent = final_.slice(0, n) + (k < 1 ? '▎' : '');
+        if (k < 1) requestAnimationFrame(step);
+      })(t0);
+    }
+    document.querySelectorAll('.lp-tab[data-demo]').forEach(function (t) {
+      t.addEventListener('click', function () {
+        typeUrl(document.getElementById('demo-' + t.dataset.demo));
+      });
+    });
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          io.disconnect();
+          typeUrl(document.querySelector('.demo-panel.active'));
+        });
+      }, { threshold: 0.3 });
+      var cs = document.querySelector('.case-studies');
+      if (cs) io.observe(cs);
+    }
+  })();
+
+  /* ── section entrances: a quiet rise, once ─────────────────────────────── */
+  (function rises() {
+    if (REDUCE || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        en.target.classList.add('in');
+      });
+    }, { threshold: 0.18 });
+    document.querySelectorAll('.lp-head, .about-mission, .cc-card').forEach(function (el) {
+      el.classList.add('v3-rise');
+      io.observe(el);
+    });
+    var pc = document.querySelector('.promises-cards');
+    if (pc) { pc.classList.add('v3wait'); io.observe(pc); }
+    /* never trap content invisible if observation misfires */
+    setTimeout(function () {
+      document.querySelectorAll('.v3-rise, .v3wait').forEach(function (el) { el.classList.add('in'); });
+    }, 2600);
+  })();
+
+  /* ── about: Hiya / Kusa / Kapwa light their own star ───────────────────── */
+  (function aboutPair() {
+    var map = { hiya: '.about-star-a', kusa: '.about-star-b', kapwa: '.about-star-c' };
+    var touch = window.matchMedia('(hover: none)').matches;
+    document.querySelectorAll('.about-mission-body').forEach(function (p) {
+      var s = p.querySelector('strong');
+      if (!s) return;
+      var star = document.querySelector(map[s.textContent.trim().toLowerCase().replace(/\./g, '')] || 'noop');
+      if (!star) return;
+      function on() { star.classList.add('star-lit'); p.classList.add('hot'); }
+      function off() { star.classList.remove('star-lit'); p.classList.remove('hot'); }
+      p.addEventListener('mouseenter', on);
+      p.addEventListener('mouseleave', off);
+      /* no cursor: the paragraph in the middle of the screen owns its star */
+      if (touch && 'IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) {
+          es.forEach(function (en) { en.isIntersecting ? on() : off(); });
+        }, { rootMargin: '-42% 0px -42% 0px' }).observe(p);
+      }
+    });
+  })();
+
+  /* ── footer: a faint field hums under the calling card ─────────────────── */
+  (function footField() {
+    var f = document.querySelector('footer');
+    if (!f || REDUCE) return;
+    var cv = document.createElement('canvas');
+    cv.className = 'foot-field';
+    f.insertBefore(cv, f.firstChild);
+    var ctx = cv.getContext('2d');
+    var W, H, cell, cols, rows, glyphs, alphas, heat;
+    var px = -1e4, py = -1e4;
+
+    function build() {
+      var b = f.getBoundingClientRect();
+      W = Math.max(1, b.width); H = Math.max(1, b.height);
+      cv.width = W * DPR; cv.height = H * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      cell = 30;
+      cols = Math.ceil(W / cell); rows = Math.ceil(H / cell);
+      ctx.font = Math.round(cell * 0.42) + 'px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      var n = cols * rows;
+      glyphs = new Array(n); alphas = new Float32Array(n); heat = new Float32Array(n);
+      for (var i = 0; i < n; i++) {
+        var r_ = (i / cols) | 0, c_ = i % cols;
+        /* thin out toward the middle so the calling card owns the center */
+        var dx_ = (c_ * cell + cell / 2 - W / 2) / (W * 0.5);
+        var dy_ = (r_ * cell + cell / 2 - H / 2) / (H * 0.62);
+        var edge = Math.min(1, Math.sqrt(dx_ * dx_ + dy_ * dy_));
+        glyphs[i] = randGlyph();
+        alphas[i] = (0.015 + Math.random() * 0.035) * (0.15 + 0.85 * edge * edge);
+      }
+    }
+    build();
+
+    f.addEventListener('pointermove', function (e) {
+      var b = cv.getBoundingClientRect();
+      px = e.clientX - b.left; py = e.clientY - b.top;
+    }, { passive: true });
+    f.addEventListener('pointerleave', function () { px = py = -1e4; });
+
+    var visible = false, raf = 0, last = 0, t0 = performance.now();
+    new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        visible = en.isIntersecting;
+        if (visible) { cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop); }
+      });
+    }, { threshold: 0 }).observe(f);
+    var rT; window.addEventListener('resize', function () { clearTimeout(rT); rT = setTimeout(build, 200); });
+
+    function loop(now) {
+      if (!visible || document.hidden) return;
+      raf = requestAnimationFrame(loop);
+      if (now - last < 50) return;                 /* 20fps: it's a hum, not a show */
+      var dt = last ? (now - last) / 1000 : 0.05;
+      last = now;
+      var t = (now - t0) / 1000;
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = '#3BD1D3';
+      var decay = Math.exp(-dt * 2.4);
+      for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+        var i = r * cols + c;
+        var h = heat[i];
+        if (h > 0.004) heat[i] = h * decay;
+        if (px > -1e3) {
+          var dx = c * cell + cell / 2 - px, dy = r * cell + cell / 2 - py;
+          var d2 = dx * dx + dy * dy;
+          if (d2 < 19600) { var v = 0.3 * (1 - Math.sqrt(d2) / 140); if (v > heat[i]) heat[i] = v; }
+        }
+        var a = alphas[i] * (0.7 + 0.3 * Math.sin(t * 0.35 + c * 0.3 + r * 0.5)) + heat[i];
+        if (a < 0.012) continue;
+        ctx.globalAlpha = Math.min(0.32, a);
+        ctx.fillText(glyphs[i], c * cell + cell / 2, r * cell + cell / 2);
+      }
+      ctx.globalAlpha = 1;
+      glyphs[(Math.random() * glyphs.length) | 0] = randGlyph();
+    }
   })();
 
 })();
