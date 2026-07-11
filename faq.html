@@ -869,6 +869,14 @@
     if (x > 0.96) return Math.random() > 0.5 ? '2' : '5';
     return Math.random() > 0.5 ? '1' : '0';
   };
+  /* deterministic per-cell randoms: rebuilds (iOS address-bar resizes) must
+     reproduce the exact same field, or the whole texture pops mid-scroll */
+  var seedRand = function (i) { var x = Math.sin((i + 1) * 127.1) * 43758.5453; return x - Math.floor(x); };
+  var glyphAt = function (x) {
+    if (x > 0.985) return '₱';
+    if (x > 0.96) return x * 1000 % 1 > 0.5 ? '2' : '5';
+    return x * 100 % 1 > 0.5 ? '1' : '0';
+  };
 
   /* ── living fields ─────────────────────────────────────────────────────── */
   function makeField(host, o) {
@@ -879,9 +887,13 @@
     var ctx = cv.getContext('2d');
     var W, H, cell, cols, rows, glyphs, alphas, heat;
     var px = -1e4, py = -1e4;
+    var lastW = 0, lastH = 0;
 
     function build() {
       var b = host.getBoundingClientRect();
+      /* skip no-op rebuilds (iOS address-bar resize fires without real change) */
+      if (glyphs && Math.round(b.width) === lastW && Math.round(b.height) === lastH) return;
+      lastW = Math.round(b.width); lastH = Math.round(b.height);
       W = Math.max(1, b.width); H = Math.max(1, b.height);
       cv.width = W * DPR; cv.height = H * DPR;
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -900,8 +912,9 @@
           var edge = Math.min(1, Math.sqrt(dx_ * dx_ + dy_ * dy_));
           k = 0.15 + 0.85 * edge * edge;
         }
-        glyphs[i] = randGlyph();
-        alphas[i] = (o.idle + Math.random() * o.idleVar) * k;
+        /* deterministic per cell: rebuilds reproduce the same texture */
+        glyphs[i] = glyphAt(seedRand(i));
+        alphas[i] = (o.idle + seedRand(i + 7919) * o.idleVar) * k;
       }
     }
     build();

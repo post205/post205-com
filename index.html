@@ -2228,6 +2228,14 @@
     if (x > 0.96) return Math.random() > 0.5 ? '2' : '5';
     return Math.random() > 0.5 ? '1' : '0';
   };
+  /* deterministic per-cell randoms: rebuilds (iOS address-bar resizes) must
+     reproduce the exact same field, or the whole texture pops mid-scroll */
+  var seedRand = function (i) { var x = Math.sin((i + 1) * 127.1) * 43758.5453; return x - Math.floor(x); };
+  var glyphAt = function (x) {
+    if (x > 0.985) return '₱';
+    if (x > 0.96) return x * 1000 % 1 > 0.5 ? '2' : '5';
+    return x * 100 % 1 > 0.5 ? '1' : '0';
+  };
 
   /* whether the boot plays this load (guard class set pre-paint in <head>) */
   var wantBoot = /[?&]boot=1/.test(location.search);
@@ -2346,9 +2354,14 @@
     var W, H, cell, cols, rows, fontPx;
     var glyph, base, heat, inBmp;                   // flat arrays, index = r*cols+c
     var px = -1e4, py = -1e4;                       // pointer, canvas coords
+    var lastW = 0, lastH = 0;
 
     function build() {
       var b = host.getBoundingClientRect();
+      /* iOS address-bar show/hide fires resize without changing the section:
+         skip the rebuild entirely when nothing actually moved */
+      if (glyph && Math.round(b.width) === lastW && Math.round(b.height) === lastH) return;
+      lastW = Math.round(b.width); lastH = Math.round(b.height);
       W = Math.max(1, b.width); H = Math.max(1, b.height);
       cv.width = W * DPR; cv.height = H * DPR;
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -2369,8 +2382,8 @@
       glyph = new Array(n); base = new Float32Array(n); heat = new Float32Array(n); inBmp = new Uint8Array(n);
       for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
         var i = r * cols + c;
-        glyph[i] = randGlyph();
-        base[i] = 0.055 + Math.random() * 0.085;
+        glyph[i] = glyphAt(seedRand(i));
+        base[i] = 0.055 + seedRand(i + 7919) * 0.085;
         var cx = c * cell + cell / 2, cy = r * cell + cell / 2;
         var mc = Math.floor((cx - bx) / bcell), mr = Math.floor((cy - by) / (bh / MR));
         inBmp[i] = (mr >= 0 && mr < MR && mc >= 0 && mc < MC && M[mr][mc] === '1') ? 1 : 0;
@@ -2689,9 +2702,13 @@
     var ctx = cv.getContext('2d');
     var W, H, cell, cols, rows, glyphs, alphas, heat;
     var px = -1e4, py = -1e4;
+    var lastW = 0, lastH = 0;
 
     function build() {
       var b = host.getBoundingClientRect();
+      /* skip no-op rebuilds (iOS address-bar resize fires without real change) */
+      if (glyphs && Math.round(b.width) === lastW && Math.round(b.height) === lastH) return;
+      lastW = Math.round(b.width); lastH = Math.round(b.height);
       W = Math.max(1, b.width); H = Math.max(1, b.height);
       cv.width = W * DPR; cv.height = H * DPR;
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -2711,8 +2728,9 @@
           var edge = Math.min(1, Math.sqrt(dx_ * dx_ + dy_ * dy_));
           k = 0.15 + 0.85 * edge * edge;
         }
-        glyphs[i] = randGlyph();
-        alphas[i] = (o.idle + Math.random() * o.idleVar) * k;
+        /* deterministic per cell: rebuilds reproduce the same texture */
+        glyphs[i] = glyphAt(seedRand(i));
+        alphas[i] = (o.idle + seedRand(i + 7919) * o.idleVar) * k;
       }
     }
     build();
