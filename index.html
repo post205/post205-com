@@ -2319,8 +2319,8 @@
 
       var pct = Math.min(100, Math.round(t / 1280 * 100));
       pctEl.textContent = pct + '%';
-      if (pct >= 100 && read.innerHTML.indexOf('HANDA') === -1) {
-        read.innerHTML = 'POST205 · MNL ' + mnl + '<br><b>HANDA NA.</b>';
+      if (pct >= 100 && read.innerHTML.indexOf('READY') === -1) {
+        read.innerHTML = 'POST205 · MNL ' + mnl + '<br><b>READY.</b>';
       }
       if (t >= LIFT) { end(); return; }
       raf = requestAnimationFrame(frame);
