@@ -50,6 +50,9 @@ A: Yes. Online payments, email, calendars, and data you already keep can all plu
 
 Q: Do you use AI to build?
 A: Yes, and we're not shy about it. AI is how we ship custom systems in weeks instead of months. A person designs the system, makes the calls, and reviews every line. AI does the heavy typing. It doesn't do the thinking.
+
+Q: Do you offer AI consulting or AI strategy? Can you help me figure out where AI fits my business?
+A: Yes, as a paid System Mapping Session, not a slide deck. We sit with your real process, price each repeated task per year (how often it happens, how long it takes, whose time it eats), and you leave with a plan of what to automate first and what it's worth. It's ₱28,500, deducted from your build price if you build with us after, so the map ends up free if we build together. You can start it at post205.com/mapping
 `.trim();
 
 const SYSTEM_PREAMBLE =

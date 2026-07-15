@@ -418,8 +418,22 @@
       { val: 'Encoding by hand',       label: 'Encoding by hand' },
       { val: 'Bookings and schedules', label: 'Bookings and schedules' },
       { val: 'Reports and compliance', label: 'Reports and compliance' },
+      { val: '__ai',                   label: 'Where AI fits' },
       { val: '__other',                label: 'Something else' },
     ], (v) => {
+      // "Where AI fits" → offer the mapping session instead of the intake flow.
+      if (v === '__ai') {
+        botSay("Best place to start: a quick mapping session. We price one task you keep doing by hand, and you see what it costs you in a year. Want to try it?", 460).then(() => {
+          askChips([
+            { val: '__go_mapping', label: 'Show me →' },
+            { val: '__stay',       label: 'Maybe later' },
+          ], (c) => {
+            if (c === '__go_mapping') { window.location.href = '/mapping'; return; }
+            botSay("Sige. So what's the biggest headache right now?", 360).then(askPain);
+          }, 'tap one', true);
+        });
+        return;
+      }
       if (v === '__other') {
         botSay("Tell me more about it.", 360).then(() => {
           const as = { n: 0 };

@@ -1026,6 +1026,17 @@
       color:#a7c4c4; text-decoration:none; border-bottom:1px solid rgba(255,255,255,.18); padding-bottom:2px;
     }
     .hero-ghost:hover { color:#f4f7f7; }
+    /* subtle entry to the AI mapping session, sits under the hero descriptor */
+    .hero-ai-link {
+      display:inline-flex; align-items:center; gap:8px; margin-top:16px;
+      font-family: ui-monospace, monospace; font-size:12px; letter-spacing:.04em;
+      color:#3BD1D3; text-decoration:none;
+      border:1px solid rgba(59,209,211,.35); border-radius:999px; padding:7px 15px;
+      transition: background .15s, border-color .15s;
+    }
+    .hero-ai-link:hover { background:rgba(59,209,211,.10); border-color:rgba(59,209,211,.6); }
+    .hero-ai-link span { transition: transform .15s; }
+    .hero-ai-link:hover span { transform: translateX(3px); }
 
     /* hero with the live chat beside it */
     .hero-text { min-width: 0; }
@@ -1439,6 +1450,7 @@
         <span class="hl-line"><span class="hl-word">software</span><span class="hl-dash">easy to use</span></span>
       </h1>
       <div class="hero-descriptor">Websites, inventory, and back-office systems.</div>
+      <a href="/mapping" class="hero-ai-link">I need help with AI <span aria-hidden="true">&rarr;</span></a>
     </div>
     <div class="hero-chat">
       <div class="chat-widget" id="chat-widget"><div class="chat-log" id="chat-log" role="log" aria-label="Conversation"></div><div class="chat-composer" id="chat-composer"></div></div>
@@ -2902,7 +2914,7 @@
 </script>
 
 <!-- ── hero chat (ported engine + persistent CTA layer) ── -->
-<script src="/js/chat-intake.js?v=10"></script>
+<script src="/js/chat-intake.js?v=11"></script>
 <script src="/js/chat-cta.js?v=2"></script>
 <script src="/js/chat-log.js?v=2"></script>
 
