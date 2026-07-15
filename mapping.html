@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <title>System Mapping Session · POST205</title>
+  <meta name="description" content="A paid working session that puts a peso figure on every manual task in your business, and gives you the order to fix them in. ₱28,500, credited in full against a build.">
+  <meta property="og:title" content="System Mapping Session · POST205">
+  <meta property="og:description" content="Put a peso figure on every manual task in your business. One session, one map, and the order to fix them in. Credited in full against a build.">
+  <meta property="og:image" content="https://post205.com/images/og-image.png?v=2">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://post205.com/mapping">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="System Mapping Session · POST205">
+  <meta name="twitter:description" content="Put a peso figure on every manual task in your business. One session, one map, and the order to fix them in.">
+  <meta name="twitter:image" content="https://post205.com/images/og-image.png?v=2">
+  <link rel="canonical" href="https://post205.com/mapping">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="stylesheet" href="/css/chat.css?v=9">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "System Mapping Session",
+    "provider": { "@type": "LocalBusiness", "name": "POST205, Inc.", "url": "https://post205.com" },
+    "areaServed": { "@type": "Country", "name": "Philippines" },
+    "description": "A paid working session that maps every manual workflow in a business, prices each one per year, and delivers a one-page plan of what to automate first.",
+    "offers": { "@type": "Offer", "price": "28500", "priceCurrency": "PHP" }
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* single theme — dark masthead/hero over a light teal field (matches the homepage) */
+      --black:        #e7efee;
+      --surface:      #f7fcfc;
+      --surface-2:    #dce8e7;
+      --border:       #c7d9d7;
+      --border-2:     #b1c8c5;
+      --text:         #0b1b1b;
+      --text-2:       #41585a;
+      --text-3:       #5a7473;
+      --accent:       #0e9a9d;
+      --accent-text:  #0f7476;
+      --on-accent:    #ffffff;
+      --hero-bg:      #0f1416;
+      --nav-accent:   #3BD1D3;
+      --logo-blend:   screen;
+      --logo-filter:  none;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* smooth load reveal — sections fade/slide in */
+    @keyframes pageReveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: no-preference) {
+      .page-hero, .map-wrap, footer { opacity: 0; animation: pageReveal .6s cubic-bezier(.22,1,.36,1) forwards; }
+      .map-wrap { animation-delay: .12s; }
+      footer { animation-delay: .28s; }
+    }
+
+    /* Nav — transparent over the dark hero, solid on scroll */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px;
+      background: transparent; border-bottom: none; box-shadow: none;
+      transition: background .3s ease, box-shadow .3s ease;
+    }
+    nav.nav-solid { background: rgba(15,20,22,0.97); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img {
+      height: 26px; width: auto;
+      mix-blend-mode: var(--logo-blend);
+      filter: var(--logo-filter);
+      opacity: 0.9;
+    }
+    .nav-cta {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--on-accent);
+      background: var(--accent);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: opacity 0.15s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+    .nav-right { display: flex; align-items: center; gap: 18px; }
+
+    /* nav HUD: MNL time, scroll %, and the 15-cell pixel strip */
+    .nav-hud { display: flex; align-items: center; gap: 14px; }
+    .nav-hud canvas { display: block; }
+    .hud-txt {
+      font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .12em;
+      color: #7aacac; text-transform: uppercase; user-select: none;
+    }
+    @media (max-width: 640px) { .hud-txt { display: none; } }
+
+    /* Dark hero band */
+    .page-hero { background: var(--hero-bg); padding: 120px 24px 64px; }
+    .page-hero-inner { max-width: 720px; margin: 0 auto; }
+    .map-label {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--nav-accent);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .page-hero h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+      color: #f4f7f7;
+    }
+    .map-intro {
+      font-size: 18px;
+      color: #b9d2d2;
+      line-height: 1.6;
+      margin-top: 18px;
+      max-width: 60ch;
+    }
+    .hero-price {
+      margin-top: 26px;
+      font-family: ui-monospace, monospace;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: #b9d2d2;
+    }
+    .hero-price b { color: #f4f7f7; font-size: 16px; font-weight: 600; }
+
+    /* The cost calculator chat — lives in the dark hero, styled by /css/chat.css
+       (shared with the homepage and FAQ). Only mapping-specific bits live here. */
+    .map-chat { max-width: 720px; margin: 28px auto 0; }
+
+    /* idle input pulse — invite a tap on the empty field; stops on engage/focus */
+    .chat-input::placeholder { animation: mapAskText 2.4s ease-in-out infinite; }
+    .chat-input:focus::placeholder { animation: none; }
+    .chat-widget:not(.chat-engaged) .chat-input:not(:focus) { animation: mapAskRing 2.4s ease-in-out infinite; }
+    .chat-widget.chat-engaged .chat-input,
+    .chat-widget.chat-engaged .chat-input::placeholder,
+    .chat-input:focus { animation: none; }
+    @keyframes mapAskRing {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(14,154,157,0); }
+      50%      { box-shadow: 0 0 0 4px rgba(14,154,157,0.16); }
+    }
+    @keyframes mapAskText { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce){
+      .chat-input, .chat-input::placeholder { animation: none; }
+    }
+
+    /* the cost reveal — a receipt inside the conversation */
+    .chat-cost {
+      margin: 6px 0 4px 40px;
+      border: 1px solid rgba(59,209,211,.35);
+      background: rgba(59,209,211,.06);
+      border-radius: 12px;
+      padding: 16px 18px 14px;
+      max-width: 300px;
+    }
+    .chat-cost .cc-t {
+      font-family: ui-monospace, monospace;
+      font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent-text); margin-bottom: 6px;
+    }
+    .chat-cost .cc-n {
+      font-family: ui-monospace, monospace;
+      font-size: clamp(26px, 5vw, 34px); font-weight: 700; letter-spacing: -0.01em;
+      color: var(--text); line-height: 1.1; font-variant-numeric: tabular-nums;
+    }
+    .chat-cost .cc-n small { font-size: 13px; font-weight: 500; color: var(--text-3); letter-spacing: 0; }
+    .chat-cost .cc-s {
+      font-family: ui-monospace, monospace;
+      font-size: 11px; letter-spacing: .04em; color: var(--text-2); margin-top: 6px;
+    }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+    /* Content — light teal field */
+    .map-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    .map-section { margin-bottom: 64px; }
+    .map-section h2 {
+      font-size: clamp(22px, 3.4vw, 28px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+    .map-section > p { color: var(--text-2); max-width: 60ch; margin-bottom: 14px; }
+    .map-section > p:last-child { margin-bottom: 0; }
+
+    /* numbered steps */
+    .step { display: flex; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--border); }
+    .step:first-of-type { border-top: 1px solid var(--border); }
+    .step-num {
+      font-family: ui-monospace, monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--accent-text);
+      padding-top: 4px;
+      flex-shrink: 0;
+      width: 30px;
+    }
+    .step h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+    .step p { color: var(--text-2); font-size: 15px; max-width: 56ch; }
+
+    /* price block */
+    .price-card {
+      border: 1px solid var(--border-2);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 28px 30px;
+    }
+    .price-card .amount {
+      font-size: clamp(30px, 5vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      line-height: 1;
+    }
+    .price-card .amount span {
+      font-family: ui-monospace, monospace;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-left: 10px;
+    }
+    .price-card p { color: var(--text-2); font-size: 15px; margin-top: 14px; max-width: 56ch; }
+    .price-card p b { color: var(--text); font-weight: 700; }
+
+    /* FAQ reuse */
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:first-of-type { border-top: 1px solid var(--border); }
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: "+";
+      font-family: ui-monospace, monospace;
+      color: var(--accent);
+      font-size: 20px;
+      line-height: 1.2;
+      flex-shrink: 0;
+    }
+    .faq-item[open] summary::after { content: "\2013"; }
+    .faq-item summary:hover { color: var(--accent); }
+    .faq-answer { padding: 0 0 22px; color: var(--text-2); font-size: 15px; line-height: 1.7; max-width: 60ch; }
+    .faq-answer p { margin-bottom: 12px; }
+    .faq-answer p:last-child { margin-bottom: 0; }
+
+    a { color: var(--accent-text); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* booking CTA */
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--on-accent);
+      font: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      margin-top: 24px;
+      transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .book-note { font-size: 13px; color: var(--text-3); margin-top: 12px; }
+
+    /* Footer — calling-card bookend, matches the homepage */
+    footer { background:#0f1416; border-top:none; display:flex; flex-direction:column; align-items:center; gap:26px; padding:60px 20px 44px; }
+    .cc-card { display:inline-block; }
+    .cc-grid { display:inline-grid; grid-template-columns:auto auto auto; align-items:center; justify-items:center; row-gap:5px; }
+    .cc-lbl { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.18em; color:#6fc9ca; text-transform:uppercase; text-decoration:none; white-space:nowrap; }
+    a.cc-lbl:hover { color:#a7c4c4; }
+    .cc-lbl-ig  { grid-row:1; grid-column:1 / 3; }
+    .cc-br-top  { grid-row:2; grid-column:1 / 3; }
+    .cc-at   { grid-row:3; grid-column:1; }
+    .cc-core { grid-row:3; grid-column:2; }
+    .cc-tld  { grid-row:3; grid-column:3; }
+    .cc-br-bot  { grid-row:4; grid-column:2 / 4; }
+    .cc-lbl-web { grid-row:5; grid-column:2 / 4; }
+    .cc-bracket { width:100%; height:7px; border:1px solid rgba(255,255,255,.32); justify-self:stretch; }
+    .cc-br-top { border-bottom:none; }
+    .cc-br-bot { border-top:none; }
+    .cc-ch { font-size: clamp(17px,2.6vw,24px); font-weight:600; letter-spacing:.01em; color:#f4f7f7; }
+    .cc-meta { font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; color:#5a7473; text-align:center; }
+    .cc-meta a { color:#5a7473; text-decoration:none; }
+    .cc-meta a:hover { color:#a7c4c4; }
+    .cc-lbl-web::before {
+      content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%;
+      background: #3BD1D3; margin-right: 7px; vertical-align: 1px;
+      animation: hudPip 2.4s ease-in-out infinite;
+    }
+    @keyframes hudPip { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      .page-hero { padding: 100px 20px 48px; }
+      .map-wrap { padding: 40px 20px 56px; }
+      .map-section { margin-bottom: 52px; }
+      footer { padding: 48px 20px 44px; }
+    }
+
+    /* ===== the machine under the field (same system as the homepage) ===== */
+
+    /* living fields: canvas behind content per section */
+    .sec-field, .foot-field { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .page-hero { position: relative; overflow: hidden; }
+    .page-hero-inner { position: relative; z-index: 1; }
+    .map-wrap { position: relative; overflow: hidden; }
+    .map-wrap > *:not(.sec-field) { position: relative; z-index: 1; }
+    footer { position: relative; overflow: hidden; }
+    footer > *:not(.foot-field) { position: relative; z-index: 1; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png" alt="POST205">
+  </a>
+  <div class="nav-right">
+    <div class="nav-hud" aria-hidden="true">
+      <span class="hud-txt" id="hudTime">MNL --:--</span>
+      <span class="hud-txt" id="hudScrl">SCRL 000</span>
+      <canvas id="hudPx" width="66" height="22"></canvas>
+    </div>
+    <a class="nav-cta" href="#book">Book a session</a>
+  </div>
+</nav>
+
+<section class="page-hero" id="hero">
+  <div class="page-hero-inner">
+    <div class="map-label">System Mapping Session</div>
+    <h1>Put a peso figure on every manual task in your business.</h1>
+    <p class="map-intro">A paid working session. We sit with your process, price every repeated task per year, and you leave with a plan: what to automate first, and what it&rsquo;s worth.</p>
+    <p class="hero-price"><b>&#8369;28,500</b> &middot; fixed &middot; deducted from your build price if you build with us after</p>
+
+    <div class="map-chat">
+      <div class="chat-widget" id="chat-widget">
+        <div class="chat-log" id="chat-log" role="log" aria-label="Conversation" aria-live="polite" aria-atomic="false"></div>
+        <div class="chat-composer" id="chat-composer">
+          <form class="chat-input-wrap" id="mapChatForm">
+            <label class="sr-only" for="mapChatInput">Name a task your team repeats</label>
+            <textarea class="chat-input" id="mapChatInput" rows="1" placeholder="Type the task&hellip;" maxlength="400"></textarea>
+            <div class="chat-input-actions">
+              <button type="submit" class="chat-input-send chat-send" id="mapChatSend" aria-label="Send">&uarr;</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="map-wrap">
+
+  <section class="map-section">
+    <h2>How it works</h2>
+
+    <div class="step">
+      <div class="step-num">01</div>
+      <div>
+        <h3>Walk me through it</h3>
+        <p>We screen-share, or I sit in your office. You show me the work the way it runs on a normal day. The order that comes in by Viber. The invoice that waits for you to be free. The spreadsheet only one person understands.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">02</div>
+      <div>
+        <h3>Every step gets a number</h3>
+        <p>Each task gets three: how often it happens, how long it takes, and who does it. Multiply across a year and the cost shows up in pesos. Most owners have never seen this figure for their own business.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">03</div>
+      <div>
+        <h3>You leave with the map</h3>
+        <p>One page. Every repeated workflow, what it costs annually, and the order to fix them in. Nothing gets automated during the session. That comes after, and only where the numbers earn it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="map-section">
+    <h2>What it costs</h2>
+    <div class="price-card">
+      <div class="amount">&#8369;28,500 <span>fixed</span></div>
+      <p><b>Build with us after, and the &#8369;28,500 is deducted from the build price.</b> Say your build costs &#8369;120,000. You already paid &#8369;28,500 for the map, so you pay &#8369;91,500. The map ends up free.</p>
+      <p>The session runs about two hours. The written map follows within three days. It&rsquo;s yours either way; take it to another developer and it still works.</p>
+    </div>
+  </section>
+
+  <section class="map-section">
+    <h2>Common questions</h2>
+
+    <details class="faq-item">
+      <summary>Why is the session paid?</summary>
+      <div class="faq-answer">
+        <p>The map is the work. You&rsquo;re paying for a document with real numbers in it, not a sales call.</p>
+        <p>Build with us after and the &#8369;28,500 is deducted from the build price, so the map ends up free.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Do I have to build with POST205 after?</summary>
+      <div class="faq-answer">
+        <p>No. The map stands on its own. Any competent developer can build from it.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Will you tell me to buy AI tools?</summary>
+      <div class="faq-answer">
+        <p>Only where one fits. Most of what we find gets fixed with one system built around how you already work.</p>
+        <p>Some things shouldn&rsquo;t be automated at all. The map says so when that&rsquo;s the case.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>My process is a mess. Should I fix it first?</summary>
+      <div class="faq-answer">
+        <p>No. Every business we&rsquo;ve mapped thought theirs was the messy one. The session is built for exactly that.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>We're not in Metro Manila.</summary>
+      <div class="faq-answer">
+        <p>Sessions run over screen-share, so location doesn&rsquo;t matter. Businesses outside the Philippines can ask about USD pricing in the chat above.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Who is this for?</summary>
+      <div class="faq-answer">
+        <p>Philippine businesses with roughly 5 to 50 people, where the owner still catches everything. Salons, clinics, law firms, distributors, schools. If your team runs on Viber threads and one sacred spreadsheet, you&rsquo;re who we built this for.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="map-section" id="book">
+    <h2>Book a session</h2>
+    <p>The chat at the top does the booking. Name a task, see its yearly cost, and leave your details when it offers the session.</p>
+    <button type="button" class="btn-primary" id="bookJump">Start with one task</button>
+    <p class="book-note">We reply within one business day.</p>
+  </section>
+
+</div>
+
+<!-- mobile sticky: brings the calculator back once the hero scrolls off (chat-cta.js) -->
+<button type="button" class="p205-reserve" id="p205-reserve">
+  <span class="p205-reserve-tx">
+    <span class="p205-reserve-t">What does one task cost you?</span>
+    <span class="p205-reserve-s">Name it. I'll do the math.</span>
+  </span>
+  <span class="p205-reserve-ic" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  </span>
+</button>
+
+<!-- aria-live announcer for the chat -->
+<div id="chat-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+<footer>
+  <div class="cc-card">
+    <div class="cc-grid">
+      <a class="cc-lbl cc-lbl-ig" href="https://instagram.com/post205" target="_blank" rel="noopener">Instagram</a>
+      <div class="cc-bracket cc-br-top"></div>
+      <span class="cc-ch cc-at">@</span><span class="cc-ch cc-core">post205</span><span class="cc-ch cc-tld">.com</span>
+      <div class="cc-bracket cc-br-bot"></div>
+      <div class="cc-lbl cc-lbl-web">You're here</div>
+    </div>
+  </div>
+  <div class="cc-meta">© 2026 POST205, Inc. · <a href="/faq">FAQ</a> · <a href="/privacy.html">Privacy</a></div>
+</footer>
+
+<script>
+  (function(){ var n = document.querySelector('nav'); if(!n) return;
+    var f = function(){ n.classList.toggle('nav-solid', window.scrollY > 10); };
+    f(); window.addEventListener('scroll', f, { passive: true });
+  })();
+</script>
+<!-- shared persistent CTA layer (inline → desktop dock → mobile focus-sheet + sticky bar) -->
+<script src="/js/chat-cta.js?v=2"></script>
+<script>
+  /* ── the mapping chat: a one-task cost calculator that books the session ──
+     Scripted spine, no AI call. task → frequency → duration → whose time →
+     the yearly figure counts up in a receipt → offer → name/business/email
+     → POST /api/submit-lead (same pipeline as the homepage and FAQ). */
+  (function(){
+    var form  = document.getElementById('mapChatForm');
+    var input = document.getElementById('mapChatInput');
+    var send  = document.getElementById('mapChatSend');
+    var log   = document.getElementById('chat-log');
+    var widget = document.getElementById('chat-widget');
+    if (!form || !input || !log) return;
+
+    var REDUCE = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    var PESO = '₱';
+
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function fmt(n){ return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+    function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+    function addMsg(side, text){
+      var wrap = document.createElement('div');
+      wrap.className = 'chat-msg ' + side;
+      if (side === 'bot') {
+        wrap.innerHTML = '<span class="chat-avatar-mini" aria-hidden="true">205</span><span class="chat-bubble">' + esc(text) + '</span>';
+      } else {
+        wrap.innerHTML = '<span class="chat-bubble">' + esc(text) + '</span>';
+      }
+      log.appendChild(wrap);
+      log.scrollTop = log.scrollHeight;
+      return wrap;
+    }
+    function addBotBubble(){
+      var wrap = document.createElement('div');
+      wrap.className = 'chat-msg bot';
+      wrap.innerHTML = '<span class="chat-avatar-mini" aria-hidden="true">205</span><span class="chat-bubble"></span>';
+      log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+      return wrap.querySelector('.chat-bubble');
+    }
+    function showTyping(){
+      var w = document.createElement('div');
+      w.className = 'chat-msg bot chat-typing';
+      w.id = 'mapTyping';
+      w.innerHTML = '<span class="chat-avatar-mini" aria-hidden="true">205</span>' +
+        '<span class="chat-typing-bubble">' +
+          '<span class="chat-typing-dot"></span><span class="chat-typing-dot"></span><span class="chat-typing-dot"></span>' +
+        '</span>';
+      log.appendChild(w); log.scrollTop = log.scrollHeight;
+    }
+    function hideTyping(){ var t = document.getElementById('mapTyping'); if (t) t.remove(); }
+
+    async function botSay(text, opts){
+      opts = opts || {};
+      if (REDUCE) { addMsg('bot', text); return; }
+      showTyping();
+      await sleep(opts.think || 650);
+      hideTyping();
+      if (opts.type) {
+        var b = addBotBubble();
+        for (var i = 0; i < text.length; i++) {
+          b.textContent += text.charAt(i);
+          log.scrollTop = log.scrollHeight;
+          await sleep(12);
+        }
+      } else {
+        addMsg('bot', text);
+      }
+    }
+
+    // idle "ping": bloom an accent ring out of a random chip until one is tapped
+    function pingChips(wrap){
+      var chips = Array.prototype.slice.call(wrap.querySelectorAll('.chat-chip'));
+      if (!chips.length) return null;
+      var t = setInterval(function(){
+        if (!wrap.isConnected) { clearInterval(t); return; }
+        chips.forEach(function(c){ c.classList.remove('ping'); });
+        chips[Math.floor(Math.random() * chips.length)].classList.add('ping');
+      }, 1100);
+      return t;
+    }
+    function chips(opts){
+      return new Promise(function(resolve){
+        var wrap = document.createElement('div'); wrap.className = 'chat-chips'; wrap.id = 'mapChips';
+        var hint = document.createElement('div'); hint.className = 'chat-hint';
+        var pip = document.createElement('span'); pip.className = 'pip'; pip.setAttribute('aria-hidden','true');
+        hint.appendChild(pip); hint.appendChild(document.createTextNode('tap one'));
+        wrap.appendChild(hint);
+        var ping = null;
+        opts.forEach(function(o, i){
+          var b = document.createElement('button'); b.type = 'button'; b.className = 'chat-chip';
+          b.style.setProperty('--chip-i', i); b.textContent = o[0];
+          b.addEventListener('click', function(){
+            if (ping) clearInterval(ping);
+            wrap.remove(); addMsg('user', o[0]); resolve(o[1]);
+          });
+          wrap.appendChild(b);
+        });
+        log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+        ping = pingChips(wrap);
+      });
+    }
+    function chipsOpen(){ return !!document.getElementById('mapChips'); }
+
+    // the receipt: the yearly figure counts up inside the conversation
+    async function showCost(cost, hours){
+      var card = document.createElement('div');
+      card.className = 'chat-cost';
+      card.innerHTML =
+        '<div class="cc-t">This one task, one year</div>' +
+        '<div class="cc-n"><span id="ccNum">' + PESO + '0</span> <small>/ year</small></div>' +
+        '<div class="cc-s">' + fmt(hours) + ' hours of somebody’s time</div>';
+      log.appendChild(card); log.scrollTop = log.scrollHeight;
+      var el = card.querySelector('#ccNum');
+      if (REDUCE) { el.textContent = PESO + fmt(cost); return; }
+      var t0 = performance.now(), DUR = 1300;
+      await new Promise(function(done){
+        (function tick(now){
+          var k = Math.min(1, (now - t0) / DUR);
+          var eased = 1 - Math.pow(1 - k, 3);
+          el.textContent = PESO + fmt(cost * eased);
+          log.scrollTop = log.scrollHeight;
+          if (k < 1) requestAnimationFrame(tick); else done();
+        })(t0);
+      });
+    }
+
+    // typed answers resolve through here; chip steps nudge instead
+    var pendingText = null;
+    function waitText(placeholder){
+      input.placeholder = placeholder || 'Type here…';
+      return new Promise(function(resolve){ pendingText = resolve; });
+    }
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var v = input.value.trim();
+      if (!v) return;
+      if (chipsOpen()) { addMsg('user', v); addMsg('bot', 'Tap one of the options above. Close enough is fine.'); input.value=''; autosize(); return; }
+      if (!pendingText) return;
+      widget.classList.add('chat-engaged');
+      addMsg('user', v); input.value = ''; autosize();
+      var r = pendingText; pendingText = null; r(v);
+    });
+    input.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', { cancelable: true }));
+      }
+    });
+    function autosize(){ input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 120) + 'px'; }
+    input.addEventListener('input', autosize);
+
+    var FREQ = [
+      ['Every day', 312],            // six-day weeks
+      ['A few times a week', 156],
+      ['Weekly', 52],
+      ['A few times a month', 24]
+    ];
+    var DUR = [
+      ['15 minutes', 0.25],
+      ['30 minutes', 0.5],
+      ['1 hour', 1],
+      ['Half a day', 4]
+    ];
+    var RATE = [
+      ['Staff, around ' + PESO + '150/hr', 150],
+      ['Manager, around ' + PESO + '400/hr', 400],
+      ['Mine, ' + PESO + '1,000+/hr', 1000]
+    ];
+
+    async function run(){
+      await botSay('Name one task your team repeats every week. I’ll show you what it costs in a year.', { type: true, think: 700 });
+      var task = await waitText('e.g. checking payments one by one');
+
+      await botSay('How often does it happen?');
+      var freq = await chips(FREQ);
+
+      await botSay('How long does each round take?');
+      var dur = await chips(DUR);
+
+      await botSay('Whose time does it eat?');
+      var rate = await chips(RATE);
+
+      var hours = freq * dur;
+      var cost = hours * rate;
+      showTyping(); await sleep(REDUCE ? 0 : 900); hideTyping();
+      await showCost(cost, hours);
+      await sleep(400);
+      await botSay('That’s one task. The session prices every task like this and gives you the order to fix them in.');
+
+      var next = await chips([
+        ['Book my session →', 'book'],
+        ['How much is the session?', 'price']
+      ]);
+      if (next === 'price') {
+        await botSay(PESO + '28,500, fixed. Build with us after and it’s deducted from the build price, so the map ends up free. It’s yours either way.');
+        await chips([['Book my session →', 'book']]);
+      }
+
+      await botSay('Sige. What’s your name?');
+      var name = await waitText('Your name');
+      await botSay('And your business?');
+      var business = await waitText('Business name');
+      var email = '';
+      await botSay('Best email to reach you?');
+      for (;;) {
+        email = await waitText('you@business.com');
+        if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) break;
+        await botSay('Hmm, that email doesn’t look right. Mind trying again?');
+      }
+
+      var pain = 'Mapping page calc: "' + task + '" ≈ ' + PESO + fmt(cost) + '/yr (' +
+        freq + 'x/yr × ' + dur + 'h × ' + PESO + rate + '/hr, ' + fmt(hours) + ' hrs).';
+      fetch('/api/submit-lead', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source: 'post205.com/mapping',
+          business: business, pain: pain, timeline: '',
+          name: name, email: email
+        })
+      }).catch(function(){});
+
+      await botSay('Salamat, ' + name.split(' ')[0] + '! I’ll reply within one business day with slots for your session.');
+      if (window.P205Chat && window.P205Chat.complete) window.P205Chat.complete();
+    }
+    run();
+
+    // the bottom "Book a session" button re-opens the conversation
+    var jump = document.getElementById('bookJump');
+    if (jump) jump.addEventListener('click', function(){
+      if (window.matchMedia('(max-width: 768px)').matches && window.P205Chat) { window.P205Chat.open(); return; }
+      document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+      setTimeout(function(){ try { input.focus({ preventScroll: true }); } catch(e){} }, 600);
+    });
+  })();
+</script>
+<script src="/js/cookie-banner.js"></script>
+
+<script>
+/* ===== the machine under the field — mapping edition ========================
+   Same system as the homepage and FAQ, minus the boot. Living fields per
+   section, nav HUD, hero-label decode. Vanilla, no deps. */
+(function () {
+  'use strict';
+
+  var MC = 15;
+  var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var DPR = Math.min(window.devicePixelRatio || 1, 1.75);
+  var randGlyph = function () {
+    var x = Math.random();
+    if (x > 0.985) return '₱';
+    if (x > 0.96) return Math.random() > 0.5 ? '2' : '5';
+    return Math.random() > 0.5 ? '1' : '0';
+  };
+  /* deterministic per-cell randoms: rebuilds (iOS address-bar resizes) must
+     reproduce the exact same field, or the whole texture pops mid-scroll */
+  var seedRand = function (i) { var x = Math.sin((i + 1) * 127.1) * 43758.5453; return x - Math.floor(x); };
+  var glyphAt = function (x) {
+    if (x > 0.985) return '₱';
+    if (x > 0.96) return x * 1000 % 1 > 0.5 ? '2' : '5';
+    return x * 100 % 1 > 0.5 ? '1' : '0';
+  };
+
+  /* ── living fields ─────────────────────────────────────────────────────── */
+  function makeField(host, o) {
+    if (!host || REDUCE) return;
+    var cv = document.createElement('canvas');
+    cv.className = o.cls || 'sec-field';
+    host.insertBefore(cv, host.firstChild);
+    var ctx = cv.getContext('2d');
+    var W, H, cell, cols, rows, glyphs, alphas, heat;
+    var px = -1e4, py = -1e4;
+    var lastW = 0, lastH = 0;
+
+    function build() {
+      var b = host.getBoundingClientRect();
+      /* skip no-op rebuilds (iOS address-bar resize fires without real change) */
+      if (glyphs && Math.round(b.width) === lastW && Math.round(b.height) === lastH) return;
+      lastW = Math.round(b.width); lastH = Math.round(b.height);
+      W = Math.max(1, b.width); H = Math.max(1, b.height);
+      cv.width = W * DPR; cv.height = H * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      cell = o.cell || 30;
+      cols = Math.ceil(W / cell); rows = Math.ceil(H / cell);
+      ctx.font = Math.round(cell * 0.42) + 'px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      var n = cols * rows;
+      glyphs = new Array(n); alphas = new Float32Array(n); heat = new Float32Array(n);
+      for (var i = 0; i < n; i++) {
+        var r_ = (i / cols) | 0, c_ = i % cols;
+        var k = 1;
+        if (o.centerThin) {
+          var dx_ = (c_ * cell + cell / 2 - W / 2) / (W * 0.5);
+          var dy_ = (r_ * cell + cell / 2 - H / 2) / (H * 0.62);
+          var edge = Math.min(1, Math.sqrt(dx_ * dx_ + dy_ * dy_));
+          k = 0.15 + 0.85 * edge * edge;
+        }
+        /* deterministic per cell: rebuilds reproduce the same texture */
+        glyphs[i] = glyphAt(seedRand(i));
+        alphas[i] = (o.idle + seedRand(i + 7919) * o.idleVar) * k;
+      }
+    }
+    build();
+
+    host.addEventListener('pointermove', function (e) {
+      var b = cv.getBoundingClientRect();
+      px = e.clientX - b.left; py = e.clientY - b.top;
+    }, { passive: true });
+    host.addEventListener('pointerleave', function () { px = py = -1e4; });
+
+    var visible = false, raf = 0, last = 0, t0 = performance.now();
+    new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        visible = en.isIntersecting;
+        if (visible) { cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop); }
+      });
+    }, { threshold: 0 }).observe(host);
+    var rT; window.addEventListener('resize', function () { clearTimeout(rT); rT = setTimeout(build, 200); });
+
+    var R = o.radius || 140, R2 = R * R;
+    function loop(now) {
+      if (!visible || document.hidden) return;
+      raf = requestAnimationFrame(loop);
+      if (now - last < 50) return;
+      var dt = last ? (now - last) / 1000 : 0.05;
+      last = now;
+      var t = (now - t0) / 1000;
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = o.ink;
+      var decay = Math.exp(-dt * 2.4);
+      for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+        var i = r * cols + c;
+        var h = heat[i];
+        if (h > 0.004) heat[i] = h * decay;
+        if (px > -1e3) {
+          var dx = c * cell + cell / 2 - px, dy = r * cell + cell / 2 - py;
+          var d2 = dx * dx + dy * dy;
+          if (d2 < R2) { var v = o.wake * (1 - Math.sqrt(d2) / R); if (v > heat[i]) heat[i] = v; }
+        }
+        var a = alphas[i] * (0.7 + 0.3 * Math.sin(t * 0.35 + c * 0.3 + r * 0.5)) + h;
+        if (a < 0.012) continue;
+        ctx.globalAlpha = Math.min(o.cap, a);
+        ctx.fillText(glyphs[i], c * cell + cell / 2, r * cell + cell / 2);
+      }
+      ctx.globalAlpha = 1;
+      glyphs[(Math.random() * glyphs.length) | 0] = randGlyph();
+    }
+  }
+
+  /* dark hero band: lively, wakes under the pointer */
+  makeField(document.querySelector('.page-hero'), {
+    ink: '#3BD1D3', idle: 0.03, idleVar: 0.05, wake: 0.35, cap: 0.42, cell: 24
+  });
+  /* the content field: faint print that darkens under your hand */
+  makeField(document.querySelector('.map-wrap'), {
+    ink: '#0e9a9d', idle: 0.026, idleVar: 0.036, wake: 0.22, cap: 0.24, cell: 32
+  });
+  /* footer: the hum, thinned so the calling card owns the center */
+  makeField(document.querySelector('footer'), {
+    cls: 'foot-field', ink: '#3BD1D3', idle: 0.015, idleVar: 0.035,
+    wake: 0.3, cap: 0.32, centerThin: true
+  });
+
+  /* ── nav HUD: pixel strip + MNL time + scroll% ─────────────────────────── */
+  (function hud() {
+    var cv = document.getElementById('hudPx');
+    var timeEl = document.getElementById('hudTime');
+    var scrlEl = document.getElementById('hudScrl');
+    if (!cv) return;
+    var ctx = cv.getContext('2d');
+    var d = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = 66 * d; cv.height = 22 * d;
+    cv.style.width = '66px'; cv.style.height = '22px';
+    ctx.scale(d, d);
+
+    function draw(p) {
+      ctx.clearRect(0, 0, 66, 22);
+      var lit = Math.round(p * MC);
+      for (var i = 0; i < MC; i++) {
+        ctx.globalAlpha = i < lit ? 1 : 0.16;
+        ctx.fillStyle = '#3BD1D3';
+        ctx.fillRect(3 + i * 4, 9, 3, 3);
+      }
+      ctx.globalAlpha = 1;
+    }
+    function mnl() {
+      try {
+        timeEl.textContent = 'MNL ' + new Intl.DateTimeFormat('en-PH', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Manila' }).format(new Date());
+      } catch (e) { timeEl.textContent = ''; }
+    }
+    mnl(); setInterval(mnl, 30000);
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        var max = document.documentElement.scrollHeight - innerHeight;
+        var p = max > 0 ? Math.min(1, scrollY / max) : 0;
+        draw(p);
+        scrlEl.textContent = 'SCRL ' + String(Math.round(p * 100)).padStart(3, '0');
+      });
+    }
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  /* ── the hero label decodes in ─────────────────────────────────────────── */
+  (function decode() {
+    if (REDUCE) return;
+    var el = document.querySelector('.map-label');
+    if (!el || el.childElementCount) return;
+    var SCRAM = '010101201510';
+    var final_ = el.textContent;
+    var t0 = performance.now(), DUR = 520;
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / DUR);
+      var solid = Math.floor(k * final_.length), out = final_.slice(0, solid);
+      for (var i = solid; i < final_.length; i++) {
+        out += final_[i] === ' ' ? ' ' : SCRAM[(Math.random() * SCRAM.length) | 0];
+      }
+      el.textContent = out;
+      if (k < 1) requestAnimationFrame(step);
+      else el.textContent = final_;
+    })(t0);
+  })();
+
+})();
+</script>
+
+</body>
+</html>
