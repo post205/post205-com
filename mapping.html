@@ -234,6 +234,20 @@
     .step h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
     .step p { color: var(--text-2); font-size: 15px; max-width: 56ch; }
 
+    /* objections reframed as features — a clean two-column list */
+    .feat-grid { display: grid; grid-template-columns: 1fr; gap: 0; }
+    @media (min-width: 720px) { .feat-grid { grid-template-columns: 1fr 1fr; column-gap: 40px; } }
+    .feat { padding: 20px 0; border-top: 1px solid var(--border); }
+    .feat h3 {
+      font-size: 15.5px; font-weight: 700; color: var(--text); line-height: 1.35; margin-bottom: 6px;
+      display: flex; gap: 9px; align-items: baseline;
+    }
+    .feat h3::before {
+      content: ""; flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); transform: translateY(-2px);
+    }
+    .feat p { color: var(--text-2); font-size: 14px; line-height: 1.6; max-width: 46ch; padding-left: 15px; }
+
     /* price block */
     .price-card {
       border: 1px solid var(--border-2);
@@ -401,6 +415,37 @@
 </section>
 
 <div class="map-wrap">
+
+  <section class="map-section">
+    <h2>Made for owners, not tech teams</h2>
+    <p>You don’t need to know anything about AI to do this. That’s the point of the session.</p>
+    <div class="feat-grid">
+      <div class="feat">
+        <h3>You don’t code, and you don’t have to</h3>
+        <p>You talk about your business the way you already do. The Viber orders, the spreadsheet, the invoice that waits for you. I handle the tech side.</p>
+      </div>
+      <div class="feat">
+        <h3>You pay for a document, not a meeting</h3>
+        <p>You leave with a written map: every repeated task, its cost per year, and the order to fix them in. Build with us after and the fee comes off your build price.</p>
+      </div>
+      <div class="feat">
+        <h3>Messy is the whole point</h3>
+        <p>Every business I’ve mapped thought theirs was the worst one. The session is built for the tangle you already have, not a tidy version of it.</p>
+      </div>
+      <div class="feat">
+        <h3>The map says when not to automate</h3>
+        <p>Some tasks are cheaper left alone. You find out which ones, so your money goes where it earns and nowhere it doesn’t.</p>
+      </div>
+      <div class="feat">
+        <h3>One sitting, then it’s done</h3>
+        <p>One session, about two hours, over screen-share. The written map reaches you within three days, and that’s the whole commitment.</p>
+      </div>
+      <div class="feat">
+        <h3>The map is yours to keep</h3>
+        <p>Take it to any developer and it still works. You own the plan whether or not you build it with us.</p>
+      </div>
+    </div>
+  </section>
 
   <section class="map-section">
     <h2>How it works</h2>
