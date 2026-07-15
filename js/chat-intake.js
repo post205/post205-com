@@ -21,7 +21,7 @@
   const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* Collected answers → map 1:1 to the contact form fields. */
-  const state = { business: '', pain_point: '', timeline: '', name: '', email: '' };
+  const state = { business: '', pain_point: '', timeline: '', name: '', referrer: '', email: '' };
 
   /* Visitor's TYPED free-text (not pill clicks), kept for tone-mirroring in the
      post-capture follow-up. Pills are canned, so we skip them. */
@@ -360,6 +360,7 @@
     { key: 'business', ask: askBusiness },
     { key: 'timeline', ask: askTimeline },
     { key: 'name',     ask: askName },
+    { key: 'referrer', ask: askReferrer },
     { key: 'email',    ask: askEmail },
   ];
 
@@ -467,6 +468,22 @@
       .then(() => askInput('text', 'Your name', (v) => { state.name = v; next(); }, { autocomplete: 'name', reAsk, asideState: as }));
     askInput('text', 'Your name', (v) => { state.name = v; next(); }, { autocomplete: 'name', reAsk, asideState: as });
   }
+  // A gracious aside, not a form field — captures who sent them (a name, BNI, an
+  // ad). Any text is valid; skip-like answers pass through empty. Stored on the
+  // chat session (via P205ChatMeta) for referrer reconciliation in ops.
+  async function askReferrer() {
+    const first = (state.name || '').split(' ')[0];
+    await botSay(`Salamat, ${first}! One more, who should I thank for sending you my way?`, 460);
+    askInput('text', 'a name, BNI, Instagram… or skip', (v) => {
+      const r = (v || '').trim();
+      if (r && !/^(skip|none|n\/?a|-)$/i.test(r)) {
+        state.referrer = r;
+        window.P205ChatMeta = window.P205ChatMeta || {};
+        window.P205ChatMeta.referrer = r;
+      }
+      next();
+    }, { autocomplete: 'off' });
+  }
   async function askEmail() {
     const first = (state.name || '').split(' ')[0];
     await botSay(`And your email, ${first}? I'll show you how we'd fix it.`, 480);
@@ -520,6 +537,7 @@
       timeline: state.timeline,
       name: state.name,
       email: state.email,
+      referrer: state.referrer || '',
     });
 
     try {

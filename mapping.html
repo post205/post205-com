@@ -531,7 +531,7 @@
 </script>
 <!-- shared persistent CTA layer (inline → desktop dock → mobile focus-sheet + sticky bar) -->
 <script src="/js/chat-cta.js?v=2"></script>
-<script src="/js/chat-log.js?v=1"></script>
+<script src="/js/chat-log.js?v=2"></script>
 <script>
   /* ── the mapping chat: a one-task cost calculator that books the session ──
      Scripted spine, no AI call. task → frequency → duration → whose time →
@@ -732,6 +732,16 @@
 
       await botSay('Sige. What’s your name?');
       var name = await waitText('Your name');
+
+      // A gracious aside, not a form field — captures who sent them (a name, BNI,
+      // an ad). Skippable; stored on the chat session for reconciliation in ops.
+      await botSay('Salamat, ' + name.split(' ')[0] + '! One more thing — who should I thank for sending you my way?');
+      var ref = await waitText('a name, BNI, Instagram… or just “found you”');
+      if (ref && !/^(skip|none|n\/?a|\-)$/i.test(ref.trim())) {
+        window.P205ChatMeta = window.P205ChatMeta || {};
+        window.P205ChatMeta.referrer = ref.trim();
+      }
+
       await botSay('And your business?');
       var business = await waitText('Business name');
       var email = '';
@@ -749,7 +759,8 @@
         body: JSON.stringify({
           source: 'post205.com/mapping',
           business: business, pain: pain, timeline: '',
-          name: name, email: email
+          name: name, email: email,
+          referrer: (window.P205ChatMeta && window.P205ChatMeta.referrer) || ''
         })
       }).catch(function(){});
 

@@ -9,6 +9,9 @@
   var log = document.getElementById('chat-log');
   if (!log || !window.fetch) return;
 
+  // Shared hook the chat engines write to (referrer = who sent this visitor).
+  window.P205ChatMeta = window.P205ChatMeta || { referrer: null };
+
   var SOURCE = 'post205.com' + (location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '');
   var KEY;
   try {
@@ -69,21 +72,24 @@
   }
 
   function payload() {
+    var ref = (window.P205ChatMeta && window.P205ChatMeta.referrer) || null;
     return JSON.stringify({
       session_key: KEY,
       source: SOURCE,
       turns: queue.splice(0, queue.length),
-      converted: converted()
+      converted: converted(),
+      referrer: ref ? String(ref).slice(0, 200) : null
     });
   }
 
-  var lastConverted = false;
+  var lastConverted = false, lastReferrer = null;
   function flush(useBeacon) {
     harvest(useBeacon);
     var conv = converted();
+    var ref = (window.P205ChatMeta && window.P205ChatMeta.referrer) || null;
     if (!engaged) return;                       // nothing shipped until they engage
-    if (!queue.length && conv === lastConverted) return;
-    lastConverted = conv;
+    if (!queue.length && conv === lastConverted && ref === lastReferrer) return;
+    lastConverted = conv; lastReferrer = ref;
     var body = payload();
     try {
       if (useBeacon && navigator.sendBeacon) {

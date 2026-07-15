@@ -472,7 +472,7 @@
 </script>
 <!-- shared persistent CTA layer (inline → desktop dock → mobile focus-sheet + sticky bar) -->
 <script src="/js/chat-cta.js?v=2"></script>
-<script src="/js/chat-log.js?v=1"></script>
+<script src="/js/chat-log.js?v=2"></script>
 <script>
   (function(){
     var form  = document.getElementById('faqChatForm');
@@ -636,12 +636,13 @@
     // ── Lead capture: after answers, gently offer to connect; then run the
     //    homepage-style intake and post to the existing /api/submit-lead ──
     var mode = 'qa', lead = {}, step = null;
-    var ORDER = ['business', 'pain', 'timeline', 'name', 'email'];
+    var ORDER = ['business', 'pain', 'timeline', 'name', 'referrer', 'email'];
     var PROMPTS = {
       business: "Happy to take a look. What kind of business do you run?",
       pain:     "Got it. What are you trying to sort out or build?",
       timeline: "When are you hoping to get this going?",
       name:     "Sige. What's your name?",
+      referrer: "One more — who should I thank for sending you my way?",
       email:    "And the best email to reach you?",
       need:     "Sure. What are you looking for?"
     };
@@ -678,8 +679,26 @@
         submitLead();
         return;
       }
+      if (step === 'referrer'){
+        var r = (val || '').trim();
+        if (r && !/^(skip|none|n\/?a|-)$/i.test(r)) {
+          lead.referrer = r;
+          window.P205ChatMeta = window.P205ChatMeta || {};
+          window.P205ChatMeta.referrer = r;
+        }
+        step = activeOrder[activeOrder.indexOf(step) + 1];
+        addMsg('bot', PROMPTS[step]);
+        return;
+      }
       lead[step] = val;
       step = activeOrder[activeOrder.indexOf(step) + 1];
+      // Warm, name-personalized referral aside (kept out of the static PROMPTS).
+      if (step === 'referrer') {
+        var fn = (lead.name || '').split(' ')[0];
+        addMsg('bot', (fn ? 'Salamat, ' + fn + '! ' : 'Salamat! ') + PROMPTS.referrer);
+        input.placeholder = 'a name, BNI, Instagram… or skip';
+        return;
+      }
       addMsg('bot', PROMPTS[step]);
     }
 
@@ -701,7 +720,8 @@
         body: JSON.stringify({
           source: lead.source || 'post205.com/faq',
           business: business, pain: pain,
-          timeline: timeline, name: lead.name || '', email: lead.email || ''
+          timeline: timeline, name: lead.name || '', email: lead.email || '',
+          referrer: lead.referrer || (window.P205ChatMeta && window.P205ChatMeta.referrer) || ''
         })
       }).catch(function(){});
     }

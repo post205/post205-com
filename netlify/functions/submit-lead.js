@@ -24,6 +24,7 @@ exports.handler = async (event) => {
     timeline: clean(body.timeline, 120),
     name:     clean(body.name, 120),
     email:    clean(body.email, 160),
+    referrer: clean(body.referrer, 200),
   };
 
   // Server-side guard: a real lead has a name and a plausible email.
@@ -52,6 +53,7 @@ exports.handler = async (event) => {
     const notes = [
       lead.pain ? `Pain: ${lead.pain}` : '',
       lead.timeline ? `Timeline: ${lead.timeline}` : '',
+      lead.referrer ? `Referred by: ${lead.referrer}` : '',
       `Source: ${srcLabel}`,
     ].filter(Boolean).join('\n');
     sends.push(fetch(opsUrl, {
@@ -82,6 +84,7 @@ exports.handler = async (event) => {
       `*${lead.name}*  ·  ${lead.email}\n` +
       (lead.business ? `Business: ${lead.business}\n` : '') +
       (lead.timeline ? `Timeline: ${lead.timeline}\n` : '') +
+      (lead.referrer ? `👋 Referred by: *${lead.referrer}*\n` : '') +
       (lead.pain ? `\n${lead.pain}\n` : '');
     sends.push(fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
