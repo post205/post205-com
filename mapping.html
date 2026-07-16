@@ -219,19 +219,22 @@
     .map-section > p { color: var(--text-2); max-width: 60ch; margin-bottom: 14px; }
     .map-section > p:last-child { margin-bottom: 0; }
 
-    /* numbered steps */
-    .step { display: flex; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--border); }
-    .step:first-of-type { border-top: 1px solid var(--border); }
+    /* numbered steps as a connected timeline */
+    .step { display: flex; gap: 22px; padding: 0 0 30px; position: relative; }
+    .step:last-of-type { padding-bottom: 0; }
     .step-num {
-      font-family: ui-monospace, monospace;
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      color: var(--accent-text);
-      padding-top: 4px;
-      flex-shrink: 0;
-      width: 30px;
+      position: relative; flex-shrink: 0;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border-2); background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+      font-family: ui-monospace, monospace; font-size: 12px; font-weight: 600;
+      color: var(--accent-text); z-index: 1;
     }
-    .step h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+    .step:not(:last-of-type) .step-num::after {
+      content: ""; position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+      width: 1px; height: calc(100% - 40px); background: var(--border);
+    }
+    .step h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; color: var(--text); padding-top: 9px; }
     .step p { color: var(--text-2); font-size: 15px; max-width: 56ch; }
 
     /* objections reframed as features — a clean two-column list */
@@ -250,19 +253,35 @@
 
     /* the three-tier ladder */
     .ladder { display: grid; grid-template-columns: 1fr; gap: 16px; }
-    .tier { border: 1px solid var(--border-2); border-radius: 12px; padding: 24px 22px; background: var(--surface); display: flex; flex-direction: column; }
+    .tier { position: relative; overflow: hidden; border: 1px solid var(--border-2); border-radius: 12px; padding: 26px 22px 22px; background: var(--surface); display: flex; flex-direction: column; }
     .tier.flag { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .tier-num { position: absolute; top: 20px; right: 22px; font-family: ui-monospace, monospace; font-size: 34px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; color: var(--border-2); }
+    .tier.flag .tier-num { color: rgba(14,154,157,0.32); }
     .tier-label { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); margin-bottom: 11px; }
     .tier.flag .tier-label { color: var(--accent-text); }
     .tier h3 { font-size: 19px; font-weight: 800; color: var(--text); margin-bottom: 10px; letter-spacing: -0.01em; line-height: 1.2; }
     .tier > p { font-size: 14px; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; flex: 1; }
     .tier-foot { font-family: ui-monospace, monospace; font-size: 12px; color: var(--text); border-top: 1px solid var(--border); padding-top: 14px; }
     .tier-foot b { font-size: 15px; }
+
+    /* blueprint divider band — one dark, engineered beat that breaks the light run */
+    .band { position: relative; overflow: hidden; background: #0f1416; border-radius: 14px; padding: 48px 34px; text-align: center; }
+    .band::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(to right, rgba(59,209,211,0.11) 0 1px, transparent 1px 40px),
+        repeating-linear-gradient(to bottom, rgba(59,209,211,0.11) 0 1px, transparent 1px 40px);
+      -webkit-mask: radial-gradient(ellipse 70% 80% at 50% 50%, #000 35%, transparent 88%);
+              mask: radial-gradient(ellipse 70% 80% at 50% 50%, #000 35%, transparent 88%);
+    }
+    .band > * { position: relative; z-index: 1; }
+    .band-k { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #6fc9ca; margin-bottom: 14px; }
+    .band p { color: #eef6f6; font-size: clamp(19px, 2.6vw, 25px); font-weight: 700; letter-spacing: -0.01em; line-height: 1.3; max-width: 30ch; margin: 0 auto; }
     /* desktop 3-up: reserve two title lines + a fixed foot so bodies and divider rules align across cards */
     @media (min-width: 820px) {
       .ladder { grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
       .tier h3 { min-height: 2.4em; }
-      .tier-foot { min-height: 40px; display: flex; align-items: center; }
+      .tier-foot { min-height: 38px; }
     }
     .tier-tag { display: inline-block; font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-text); background: rgba(14,154,157,0.10); padding: 4px 9px; border-radius: 5px; }
 
@@ -413,7 +432,7 @@
     <div class="map-label">System Mapping Session</div>
     <h1>Put a peso figure on every manual task in your business.</h1>
     <p class="map-intro">A working session. I map every task you still do by hand, price each one per year, and you see where AI earns its place and where it doesn&rsquo;t.</p>
-    <p class="hero-price"><b>&#8369;28,500</b> to start &middot; a deposit, not a fee</p>
+    <p class="hero-price"><b>&#8369;28,500</b> to start &middot; comes off your build</p>
 
     <div class="map-chat">
       <div class="chat-widget" id="chat-widget">
@@ -435,7 +454,7 @@
 <div class="map-wrap">
 
   <section class="map-section">
-    <h2>Made for owners, not tech teams</h2>
+    <h2>Made for owners who run everything</h2>
     <p>You don’t need to know anything about AI to start. That’s the whole idea.</p>
     <div class="feat-grid">
       <div class="feat">
@@ -448,7 +467,7 @@
       </div>
       <div class="feat">
         <h3>Messy is the point</h3>
-        <p>Every owner I’ve sat with thought theirs was the messy one. The session is built for the tangle, not a cleaned-up version of it.</p>
+        <p>Every owner I’ve sat with thought theirs was the messy one. The session is built for the tangle you already have. Come as you are.</p>
       </div>
       <div class="feat">
         <h3>It tells you when to leave things alone</h3>
@@ -498,22 +517,25 @@
     <p>Most people start with the session. Whatever you pay comes off what you build next.</p>
     <div class="ladder">
       <div class="tier">
-        <div class="tier-label">Tier 1 · Remote</div>
+        <div class="tier-num">01</div>
+        <div class="tier-label">Remote</div>
         <h3>The Map</h3>
         <p>We meet over screen-share. I price every task you still do by hand and give you the blueprint: what to automate first, and what each one costs you a year.</p>
         <div class="tier-foot"><b>&#8369;28,500</b> to start</div>
       </div>
       <div class="tier flag">
-        <div class="tier-label">Tier 2 · In person</div>
+        <div class="tier-num">02</div>
+        <div class="tier-label">In person</div>
         <h3>The Founder&rsquo;s Machine</h3>
-        <p>I come to you and make your machine intelligent. Your own AI operating system, wired to how your business runs, set up on your laptop while we sit together. A monthly keeps it sharp.</p>
+        <p>I come to you and make your machine intelligent. Your own AI operating system, wired to how your business runs, set up on your laptop while we sit together. One time, and it&rsquo;s yours.</p>
         <div class="tier-foot"><span class="tier-tag">By application</span></div>
       </div>
       <div class="tier">
-        <div class="tier-label">Tier 3 · Your system</div>
+        <div class="tier-num">03</div>
+        <div class="tier-label">Your system</div>
         <h3>The Build</h3>
         <p>The custom dashboard your team logs into and runs the business from. Booking, billing, inventory, the whole back office, built from scratch and yours to keep.</p>
-        <div class="tier-foot">Priced from your map</div>
+        <div class="tier-foot"><b>From &#8369;80,000</b> &middot; monthly after</div>
       </div>
     </div>
   </section>
@@ -522,8 +544,15 @@
     <h2>The deposit</h2>
     <div class="price-card">
       <div class="amount">&#8369;28,500 <span>to start</span></div>
-      <p><b>It’s a deposit, not a fee.</b> The &#8369;28,500 comes off whatever you build next. If your system runs &#8369;120,000, you’ve already put &#8369;28,500 toward it, so you pay &#8369;91,500. Build with me and the map costs you nothing.</p>
+      <p><b>The &#8369;28,500 comes off whatever you build next.</b> If your system runs &#8369;120,000, you’ve already put &#8369;28,500 toward it, so you pay &#8369;91,500. Build with me and the map costs you nothing.</p>
       <p>The session runs about two hours. The written map reaches you within three days.</p>
+    </div>
+  </section>
+
+  <section class="map-section">
+    <div class="band">
+      <div class="band-k">Since 2015</div>
+      <p>Eleven years building systems for Filipino businesses. Yours can start with one task.</p>
     </div>
   </section>
 
@@ -540,7 +569,7 @@
     <details class="faq-item">
       <summary>What’s the Founder’s Machine?</summary>
       <div class="faq-answer">
-        <p>The in-person tier. I come to you, set up your own AI operating system on your machine, and keep it sharp month to month.</p>
+        <p>The in-person tier. I come to you, set up your own AI operating system on your machine, and it’s yours to keep. One time.</p>
         <p>It’s by application. I take a few at a time, so it stays hands-on.</p>
       </div>
     </details>
