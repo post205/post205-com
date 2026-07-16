@@ -854,8 +854,10 @@
 
     // the bottom "Book a session" button re-opens the conversation
     var jump = document.getElementById('bookJump');
-    if (jump) jump.addEventListener('click', function(){
-      if (window.matchMedia('(max-width: 768px)').matches && window.P205Chat) { window.P205Chat.open(); return; }
+    if (jump) jump.addEventListener('click', function(e){
+      // Stop the tap bubbling to the document backdrop-close handler, or it would
+      // shut the sheet the instant this opens it (form-chat gotcha 5).
+      if (window.matchMedia('(max-width: 768px)').matches && window.P205Chat) { e.stopPropagation(); window.P205Chat.open(); return; }
       document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
       setTimeout(function(){ try { input.focus({ preventScroll: true }); } catch(e){} }, 600);
     });
