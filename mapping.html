@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
   <title>System Mapping Session · POST205</title>
-  <meta name="description" content="A paid working session that puts a peso figure on every manual task in your business, and gives you the order to fix them in. ₱28,500, credited in full against a build.">
+  <meta name="description" content="Map every task you still do by hand and see what each one costs you a year. A ₱28,500 deposit that comes off whatever you build next. Over Zoom, or in person.">
   <meta property="og:title" content="System Mapping Session · POST205">
-  <meta property="og:description" content="Put a peso figure on every manual task in your business. One session, one map, and the order to fix them in. Credited in full against a build.">
+  <meta property="og:description" content="Map every task you still do by hand and see what each one costs you a year. A deposit that comes off whatever you build next.">
   <meta property="og:image" content="https://post205.com/images/og-mapping.png?v=2">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -16,7 +16,7 @@
   <meta property="og:site_name" content="POST205">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="System Mapping Session · POST205">
-  <meta name="twitter:description" content="Put a peso figure on every manual task in your business. One session, one map, and the order to fix them in.">
+  <meta name="twitter:description" content="Map every task you still do by hand and see what each one costs you a year. A deposit that comes off whatever you build next.">
   <meta name="twitter:image" content="https://post205.com/images/og-mapping.png?v=2">
   <meta name="twitter:image:alt" content="A blank receipt on a dark field of digits: this one task, one year, peso sign, six empty digit boxes. Your number, not ours.">
   <link rel="canonical" href="https://post205.com/mapping">
@@ -248,6 +248,19 @@
     }
     .feat p { color: var(--text-2); font-size: 14px; line-height: 1.6; max-width: 46ch; padding-left: 15px; }
 
+    /* the three-tier ladder */
+    .ladder { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 820px) { .ladder { grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; } }
+    .tier { border: 1px solid var(--border-2); border-radius: 12px; padding: 24px 22px; background: var(--surface); display: flex; flex-direction: column; }
+    .tier.flag { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .tier-label { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); margin-bottom: 11px; }
+    .tier.flag .tier-label { color: var(--accent-text); }
+    .tier h3 { font-size: 19px; font-weight: 800; color: var(--text); margin-bottom: 9px; letter-spacing: -0.01em; }
+    .tier > p { font-size: 14px; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; flex: 1; }
+    .tier-foot { font-family: ui-monospace, monospace; font-size: 12px; color: var(--text); border-top: 1px solid var(--border); padding-top: 13px; }
+    .tier-foot b { font-size: 15px; }
+    .tier-tag { display: inline-block; font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-text); background: rgba(14,154,157,0.10); padding: 4px 9px; border-radius: 5px; }
+
     /* price block */
     .price-card {
       border: 1px solid var(--border-2);
@@ -394,8 +407,8 @@
   <div class="page-hero-inner">
     <div class="map-label">System Mapping Session</div>
     <h1>Put a peso figure on every manual task in your business.</h1>
-    <p class="map-intro">A paid working session. We sit with your process, price every repeated task per year, and you leave with a plan: what to automate first, and what it&rsquo;s worth.</p>
-    <p class="hero-price"><b>&#8369;28,500</b> &middot; fixed &middot; deducted from your build price if you build with us after</p>
+    <p class="map-intro">A working session. I map every task you still do by hand, price each one per year, and you see where AI earns its place and where it doesn&rsquo;t.</p>
+    <p class="hero-price"><b>&#8369;28,500</b> to start &middot; a deposit, not a fee</p>
 
     <div class="map-chat">
       <div class="chat-widget" id="chat-widget">
@@ -418,31 +431,31 @@
 
   <section class="map-section">
     <h2>Made for owners, not tech teams</h2>
-    <p>You don’t need to know anything about AI to do this. That’s the point of the session.</p>
+    <p>You don’t need to know anything about AI to start. That’s the whole idea.</p>
     <div class="feat-grid">
       <div class="feat">
-        <h3>You don’t code, and you don’t have to</h3>
-        <p>You talk about your business the way you already do. The Viber orders, the spreadsheet, the invoice that waits for you. I handle the tech side.</p>
+        <h3>You don’t code, and you never will here</h3>
+        <p>You describe your business the way you already talk about it. I handle every technical part.</p>
       </div>
       <div class="feat">
-        <h3>You pay for a document, not a meeting</h3>
-        <p>You leave with a written map: every repeated task, its cost per year, and the order to fix them in. Build with us after and the fee comes off your build price.</p>
+        <h3>The fee is a deposit</h3>
+        <p>The ₱28,500 comes off whatever you build with me. Work together and the map itself costs you nothing.</p>
       </div>
       <div class="feat">
-        <h3>Messy is the whole point</h3>
-        <p>Every business I’ve mapped thought theirs was the worst one. The session is built for the tangle you already have, not a tidy version of it.</p>
+        <h3>Messy is the point</h3>
+        <p>Every owner I’ve sat with thought theirs was the messy one. The session is built for the tangle, not a cleaned-up version of it.</p>
       </div>
       <div class="feat">
-        <h3>The map says when not to automate</h3>
-        <p>Some tasks are cheaper left alone. You find out which ones, so your money goes where it earns and nowhere it doesn’t.</p>
+        <h3>It tells you when to leave things alone</h3>
+        <p>Some tasks cost more to automate than they save. You find out which, so your money goes where it earns.</p>
       </div>
       <div class="feat">
-        <h3>One sitting, then it’s done</h3>
-        <p>One session, about two hours, over screen-share. The written map reaches you within three days, and that’s the whole commitment.</p>
+        <h3>One sitting settles it</h3>
+        <p>One session, about two hours. The written map reaches you within three days. That’s the whole ask.</p>
       </div>
       <div class="feat">
-        <h3>The map is yours to keep</h3>
-        <p>Take it to any developer and it still works. You own the plan whether or not you build it with us.</p>
+        <h3>The map is yours</h3>
+        <p>Take it to any developer and it still works. You own the plan, whether or not you build it with me.</p>
       </div>
     </div>
   </section>
@@ -476,11 +489,36 @@
   </section>
 
   <section class="map-section">
-    <h2>What it costs</h2>
+    <h2>How far you take it</h2>
+    <p>The session is the first rung. What you put down follows you up the ladder.</p>
+    <div class="ladder">
+      <div class="tier">
+        <div class="tier-label">Tier 1 · Remote</div>
+        <h3>The Map</h3>
+        <p>We meet over screen-share. I price every task you still do by hand and give you the blueprint: what to automate first, and what each one costs you a year.</p>
+        <div class="tier-foot"><b>&#8369;28,500</b> to start &middot; your deposit</div>
+      </div>
+      <div class="tier flag">
+        <div class="tier-label">Tier 2 · In person</div>
+        <h3>The Founder&rsquo;s Machine</h3>
+        <p>I come to you and make your machine intelligent. Your own AI operating system, wired to how your business runs, set up on your laptop while we sit together. A monthly keeps it sharp.</p>
+        <div class="tier-foot"><span class="tier-tag">By application</span></div>
+      </div>
+      <div class="tier">
+        <div class="tier-label">Tier 3 · Your system</div>
+        <h3>The Build</h3>
+        <p>The custom dashboard your team logs into and runs the business from. Booking, billing, inventory, the whole back office, built from scratch and yours to keep.</p>
+        <div class="tier-foot">Priced from your map</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="map-section">
+    <h2>The deposit</h2>
     <div class="price-card">
-      <div class="amount">&#8369;28,500 <span>fixed</span></div>
-      <p><b>Build with us after, and the &#8369;28,500 is deducted from the build price.</b> Say your build costs &#8369;120,000. You already paid &#8369;28,500 for the map, so you pay &#8369;91,500. The map ends up free.</p>
-      <p>The session runs about two hours. The written map follows within three days. It&rsquo;s yours either way; take it to another developer and it still works.</p>
+      <div class="amount">&#8369;28,500 <span>to start</span></div>
+      <p><b>It’s a deposit, not a fee.</b> The &#8369;28,500 comes off whatever you build next. If your system runs &#8369;120,000, you’ve already put &#8369;28,500 toward it, so you pay &#8369;91,500. Build with me and the map costs you nothing.</p>
+      <p>The session runs about two hours. The written map reaches you within three days.</p>
     </div>
   </section>
 
@@ -488,55 +526,55 @@
     <h2>Common questions</h2>
 
     <details class="faq-item">
-      <summary>Why is the session paid?</summary>
+      <summary>Do I have to build with POST205 after?</summary>
       <div class="faq-answer">
-        <p>The map is the work. You&rsquo;re paying for a document with real numbers in it, not a sales call.</p>
-        <p>Build with us after and the &#8369;28,500 is deducted from the build price, so the map ends up free.</p>
+        <p>No. The map stands on its own, and your deposit only comes off a build if you choose one.</p>
       </div>
     </details>
 
     <details class="faq-item">
-      <summary>Do I have to build with POST205 after?</summary>
+      <summary>What’s the Founder’s Machine?</summary>
       <div class="faq-answer">
-        <p>No. The map stands on its own. Any competent developer can build from it.</p>
+        <p>The in-person tier. I come to you, set up your own AI operating system on your machine, and keep it sharp month to month.</p>
+        <p>It’s by application. I take a few at a time, so it stays hands-on.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Do you build the whole system too?</summary>
+      <div class="faq-answer">
+        <p>Yes. That’s the build: a custom dashboard your team runs the business from. The map is the spec for it, priced from what we find.</p>
       </div>
     </details>
 
     <details class="faq-item">
       <summary>Will you tell me to buy AI tools?</summary>
       <div class="faq-answer">
-        <p>Only where one fits. Most of what we find gets fixed with one system built around how you already work.</p>
-        <p>Some things shouldn&rsquo;t be automated at all. The map says so when that&rsquo;s the case.</p>
+        <p>Only where one fits. Most of what we find gets handled by a single system built around how you already work.</p>
+        <p>Some tasks shouldn’t be automated at all. The map says so when that’s the case.</p>
       </div>
     </details>
 
     <details class="faq-item">
-      <summary>My process is a mess. Should I fix it first?</summary>
+      <summary>We’re not in Metro Manila.</summary>
       <div class="faq-answer">
-        <p>No. Every business we&rsquo;ve mapped thought theirs was the messy one. The session is built for exactly that.</p>
-      </div>
-    </details>
-
-    <details class="faq-item">
-      <summary>We're not in Metro Manila.</summary>
-      <div class="faq-answer">
-        <p>Sessions run over screen-share, so location doesn&rsquo;t matter. Businesses outside the Philippines can ask about USD pricing in the chat above.</p>
+        <p>The session and the map are remote, so where you are doesn’t matter. The in-person Founder’s Machine covers Metro Manila and nearby for now. Ask in the chat and I’ll tell you.</p>
       </div>
     </details>
 
     <details class="faq-item">
       <summary>Who is this for?</summary>
       <div class="faq-answer">
-        <p>Philippine businesses with roughly 5 to 50 people, where the owner still catches everything. Salons, clinics, law firms, distributors, schools. If your team runs on Viber threads and one sacred spreadsheet, you&rsquo;re who we built this for.</p>
+        <p>Filipino businesses of roughly 5 to 50 people, where the owner still catches everything. Salons, clinics, law firms, distributors, schools. If your team runs on Viber and one spreadsheet nobody else understands, this was built for you.</p>
       </div>
     </details>
   </section>
 
   <section class="map-section" id="book">
     <h2>Book a session</h2>
-    <p>The chat at the top does the booking. Name a task, see its yearly cost, and leave your details when it offers the session.</p>
+    <p>The chat at the top books it. Name one task, watch its yearly cost add up, and leave your details when it offers you a session.</p>
     <button type="button" class="btn-primary" id="bookJump">Start with one task</button>
-    <p class="book-note">We reply within one business day.</p>
+    <p class="book-note">I reply within one business day.</p>
   </section>
 
 </div>
@@ -780,7 +818,7 @@
 
       // A gracious aside, not a form field — captures who sent them (a name, BNI,
       // an ad). Skippable; stored on the chat session for reconciliation in ops.
-      await botSay('Salamat, ' + name.split(' ')[0] + '! One more thing — who should I thank for sending you my way?');
+      await botSay('Salamat, ' + name.split(' ')[0] + '! One more thing. Who should I thank for sending you my way?');
       var ref = await waitText('a name, BNI, Instagram… or just “found you”');
       if (ref && !/^(skip|none|n\/?a|\-)$/i.test(ref.trim())) {
         window.P205ChatMeta = window.P205ChatMeta || {};
