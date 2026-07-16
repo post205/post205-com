@@ -250,15 +250,20 @@
 
     /* the three-tier ladder */
     .ladder { display: grid; grid-template-columns: 1fr; gap: 16px; }
-    @media (min-width: 820px) { .ladder { grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; } }
     .tier { border: 1px solid var(--border-2); border-radius: 12px; padding: 24px 22px; background: var(--surface); display: flex; flex-direction: column; }
     .tier.flag { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
     .tier-label { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); margin-bottom: 11px; }
     .tier.flag .tier-label { color: var(--accent-text); }
-    .tier h3 { font-size: 19px; font-weight: 800; color: var(--text); margin-bottom: 9px; letter-spacing: -0.01em; }
+    .tier h3 { font-size: 19px; font-weight: 800; color: var(--text); margin-bottom: 10px; letter-spacing: -0.01em; line-height: 1.2; }
     .tier > p { font-size: 14px; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; flex: 1; }
-    .tier-foot { font-family: ui-monospace, monospace; font-size: 12px; color: var(--text); border-top: 1px solid var(--border); padding-top: 13px; }
+    .tier-foot { font-family: ui-monospace, monospace; font-size: 12px; color: var(--text); border-top: 1px solid var(--border); padding-top: 14px; }
     .tier-foot b { font-size: 15px; }
+    /* desktop 3-up: reserve two title lines + a fixed foot so bodies and divider rules align across cards */
+    @media (min-width: 820px) {
+      .ladder { grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
+      .tier h3 { min-height: 2.4em; }
+      .tier-foot { min-height: 40px; display: flex; align-items: center; }
+    }
     .tier-tag { display: inline-block; font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-text); background: rgba(14,154,157,0.10); padding: 4px 9px; border-radius: 5px; }
 
     /* price block */
@@ -490,13 +495,13 @@
 
   <section class="map-section">
     <h2>How far you take it</h2>
-    <p>The session is the first rung. What you put down follows you up the ladder.</p>
+    <p>Most people start with the session. Whatever you pay comes off what you build next.</p>
     <div class="ladder">
       <div class="tier">
         <div class="tier-label">Tier 1 · Remote</div>
         <h3>The Map</h3>
         <p>We meet over screen-share. I price every task you still do by hand and give you the blueprint: what to automate first, and what each one costs you a year.</p>
-        <div class="tier-foot"><b>&#8369;28,500</b> to start &middot; your deposit</div>
+        <div class="tier-foot"><b>&#8369;28,500</b> to start</div>
       </div>
       <div class="tier flag">
         <div class="tier-label">Tier 2 · In person</div>
