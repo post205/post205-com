@@ -475,8 +475,8 @@
 <section class="page-hero" id="hero">
   <div class="page-hero-inner">
     <div class="map-label">System Mapping Session</div>
-    <h1>Put a peso figure on the work you still do by hand.</h1>
-    <p class="map-intro">One session. I sit with your process, price every repeated task for a year, and you see kung saan sulit ang AI, at kung saan hindi. Usually it&rsquo;s the small task, the one you stopped noticing, that costs the most.</p>
+    <h1>See where AI fits your business, down to the peso.</h1>
+    <p class="map-intro">One session. I sit with your process, price every task you still do by hand, and you&rsquo;ll know kung saan sulit ang AI, at kung saan hindi. Real numbers first, tools second.</p>
     <p class="hero-price"><b>&#8369;25,000</b> to start &middot; comes off your build</p>
 
     <div class="map-chat">
@@ -817,15 +817,16 @@
     function chipsOpen(){ return !!document.getElementById('mapChips'); }
 
     // the receipt: the yearly figure counts up inside the conversation
-    async function showCost(cost, hours){
+    async function showCost(cost, hours, label){
       var card = document.createElement('div');
       card.className = 'chat-cost';
+      var title = label ? esc(label.slice(0, 42)) : 'This one task, one year';
       card.innerHTML =
-        '<div class="cc-t">This one task, one year</div>' +
-        '<div class="cc-n"><span id="ccNum">' + PESO + '0</span> <small>/ year</small></div>' +
+        '<div class="cc-t">' + title + '</div>' +
+        '<div class="cc-n"><span class="ccNum">' + PESO + '0</span> <small>/ year</small></div>' +
         '<div class="cc-s">' + fmt(hours) + ' hours of somebody’s time</div>';
       log.appendChild(card); log.scrollTop = log.scrollHeight;
-      var el = card.querySelector('#ccNum');
+      var el = card.querySelector('.ccNum');
       if (REDUCE) { el.textContent = PESO + fmt(cost); return; }
       var t0 = performance.now(), DUR = 1300;
       await new Promise(function(done){
@@ -882,33 +883,70 @@
       ['Mine, ' + PESO + '1,000+/hr', 1000]
     ];
 
-    async function run(){
-      await botSay('Name one task your team repeats every week. I’ll show you what it costs in a year.', { type: true, think: 700 });
-      var task = await waitText('e.g. checking payments one by one');
+    // The chat maps several tasks into a running total — it starts the mapping,
+    // not just one calc. Everything they name rides into the lead so ops sees the
+    // whole mini-map. The goal is the name + email at the end (interest).
+    var tasks = [];  // { label, freq, dur, rate, cost, hours }
+    function grandTotal(){ return tasks.reduce(function (s, t) { return s + t.cost; }, 0); }
+
+    async function askTask(first){
+      await botSay(first
+        ? 'Name one task your team repeats every week. I’ll show you what it costs in a year.'
+        : 'Name another one you keep doing by hand.',
+        { type: first, think: first ? 700 : 450 });
+      var task = await waitText(first ? 'e.g. checking payments one by one' : 'another task…');
 
       await botSay('How often does it happen?');
       var freq = await chips(FREQ);
-
       await botSay('How long does each round take?');
       var dur = await chips(DUR);
-
       await botSay('Whose time does it eat?');
       var rate = await chips(RATE);
 
-      var hours = freq * dur;
-      var cost = hours * rate;
+      var hours = freq * dur, cost = hours * rate;
+      tasks.push({ label: task, freq: freq, dur: dur, rate: rate, cost: cost, hours: hours });
       showTyping(); await sleep(REDUCE ? 0 : 900); hideTyping();
-      await showCost(cost, hours);
-      await sleep(400);
-      await botSay('That’s one task. The session prices every task like this and gives you the order to fix them in.');
+      await showCost(cost, hours, task);
+      if (tasks.length > 1) {
+        await sleep(250);
+        await botSay('Running total: ' + PESO + fmt(grandTotal()) + ' a year, ' + tasks.length + ' tasks in.');
+      }
+    }
+
+    async function run(){
+      await askTask(true);
+
+      // keep mapping: stack tasks until they’ve seen enough (soft cap at 5)
+      for (;;) {
+        if (tasks.length >= 5) {
+          await botSay('Five already, and that’s ' + PESO + fmt(grandTotal()) + ' a year. Let’s look at your map.');
+          break;
+        }
+        var choice = await chips([
+          ['Add another task', 'more'],
+          ['I’ve seen enough →', 'done']
+        ]);
+        if (choice === 'done') break;
+        await askTask(false);
+      }
+
+      // the map: the total, then where I’d start
+      var total = grandTotal();
+      if (tasks.length === 1) {
+        await botSay('That’s one task at ' + PESO + fmt(total) + ' a year. The session prices every task like this and gives you the order to fix them in.');
+      } else {
+        await botSay('So that’s ' + PESO + fmt(total) + ' a year across ' + tasks.length + ' tasks, and that’s just what you named.');
+        var biggest = tasks.slice().sort(function (a, b) { return b.cost - a.cost; })[0];
+        await botSay('If I were you, I’d start with the “' + biggest.label + '” one. Biggest number, and the session prices the rest.');
+      }
 
       var next = await chips([
-        ['Book my session →', 'book'],
+        ['Get my map + book →', 'book'],
         ['How much is the session?', 'price']
       ]);
       if (next === 'price') {
-        await botSay(PESO + '25,000, fixed. Build with us after and it’s deducted from the build price, so the map ends up free. It’s yours either way.');
-        await chips([['Book my session →', 'book']]);
+        await botSay(PESO + '25,000 to start, and it comes off whatever you build. So the map ends up free if we build together. Yours either way.');
+        await chips([['Get my map + book →', 'book']]);
       }
 
       await botSay('Sige. What’s your name?');
@@ -926,15 +964,18 @@
       await botSay('And your business?');
       var business = await waitText('Business name');
       var email = '';
-      await botSay('Best email to reach you?');
+      await botSay('Best email for your map?');
       for (;;) {
         email = await waitText('you@business.com');
         if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) break;
         await botSay('Hmm, that email doesn’t look right. Mind trying again?');
       }
 
-      var pain = 'Mapping page calc: "' + task + '" ≈ ' + PESO + fmt(cost) + '/yr (' +
-        freq + 'x/yr × ' + dur + 'h × ' + PESO + rate + '/hr, ' + fmt(hours) + ' hrs).';
+      // the whole mini-map rides into the lead so ops + Telegram see every task
+      var lines = tasks.map(function (t) {
+        return '• ' + t.label + ' — ' + PESO + fmt(t.cost) + '/yr (' + t.freq + 'x × ' + t.dur + 'h × ' + PESO + t.rate + '/hr)';
+      }).join('\n');
+      var pain = 'Mapping page: ' + tasks.length + ' task(s), ' + PESO + fmt(total) + '/yr total.\n' + lines;
       fetch('/api/submit-lead', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -945,7 +986,7 @@
         })
       }).catch(function(){});
 
-      await botSay('Salamat, ' + name.split(' ')[0] + '! I’ll reply within one business day with slots for your session.');
+      await botSay('Salamat, ' + name.split(' ')[0] + '! I’ll send your map and reply within one business day with session slots.');
       if (window.P205Chat && window.P205Chat.complete) window.P205Chat.complete();
     }
     run();
