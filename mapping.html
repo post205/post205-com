@@ -295,6 +295,39 @@
     .band > * { position: relative; z-index: 1; }
     .band-k { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #6fc9ca; margin-bottom: 14px; }
     .band p { color: #eef6f6; font-size: clamp(19px, 2.6vw, 25px); font-weight: 700; letter-spacing: -0.01em; line-height: 1.3; max-width: 30ch; margin: 0 auto; }
+
+    /* pixel seam — a blocky divider where the dark hero meets the light field */
+    .seam { position: relative; height: 14px; background: var(--black); z-index: 2; }
+    .seam::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 14px; background: var(--hero-bg);
+      -webkit-mask: repeating-linear-gradient(90deg, #000 0 9px, transparent 9px 18px);
+              mask: repeating-linear-gradient(90deg, #000 0 9px, transparent 9px 18px);
+    }
+
+    /* the calculation flow — how one task becomes a peso figure */
+    .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 9px; margin-top: 36px; }
+    .flow-node { flex: 1 1 104px; min-width: 96px; border: 1px solid var(--border-2); border-radius: 10px; padding: 13px 13px; background: var(--surface); }
+    .flow-k { display: block; font-family: ui-monospace, monospace; font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 6px; }
+    .flow-v { display: block; font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.25; }
+    .flow-op, .flow-eq { align-self: center; flex: 0 0 auto; font-family: ui-monospace, monospace; font-size: 15px; color: var(--accent-text); }
+    .flow-result { flex: 1 1 132px; border-color: var(--accent); background: rgba(14,154,157,0.06); }
+    .flow-result .flow-v { color: var(--accent-text); font-size: 18px; }
+    .flow-cap { margin-top: 14px; font-size: 13.5px; color: var(--text-3); }
+    @media (max-width: 680px) {
+      .flow { flex-direction: column; gap: 6px; }
+      .flow-node { flex: none; }
+      .flow-op, .flow-eq { transform: rotate(90deg); }
+    }
+
+    /* deposit receipt — the subtraction, with the total counting up */
+    .dep-math { margin: 18px 0 4px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .dep-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 16px; font-size: 14px; color: var(--text-2); }
+    .dep-row + .dep-row { border-top: 1px solid var(--border); }
+    .dep-row b { font-family: ui-monospace, monospace; color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .dep-tot { background: rgba(14,154,157,0.06); }
+    .dep-tot span { color: var(--text); font-weight: 700; }
+    .dep-tot b { color: var(--accent-text); font-size: 16px; }
+    .dep-note { margin-top: 14px; font-size: 14px; color: var(--text-2); }
     /* desktop 3-up: reserve two title lines + a fixed foot so bodies and divider rules align across cards */
     @media (min-width: 820px) {
       .ladder { grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
@@ -469,6 +502,8 @@
   </div>
 </section>
 
+<div class="seam" aria-hidden="true"></div>
+
 <div class="map-wrap">
 
   <section class="map-section">
@@ -528,6 +563,19 @@
         <p>One page. Every repeated workflow, what it costs annually, and the order to fix them in. Nothing gets automated during the session. That comes after, and only where the numbers earn it.</p>
       </div>
     </div>
+
+    <div class="flow reveal">
+      <div class="flow-node"><span class="flow-k">The task</span><span class="flow-v">Checking payments</span></div>
+      <div class="flow-op">&times;</div>
+      <div class="flow-node"><span class="flow-k">How often</span><span class="flow-v">312 a year</span></div>
+      <div class="flow-op">&times;</div>
+      <div class="flow-node"><span class="flow-k">Each time</span><span class="flow-v">30 minutes</span></div>
+      <div class="flow-op">&times;</div>
+      <div class="flow-node"><span class="flow-k">Whose time</span><span class="flow-v">&#8369;400 / hr</span></div>
+      <div class="flow-eq">=</div>
+      <div class="flow-node flow-result"><span class="flow-k">One task, one year</span><span class="flow-v"><span class="count" data-to="62400">&#8369;62,400</span></span></div>
+    </div>
+    <p class="flow-cap">That&rsquo;s one task. The session does this for every task you repeat.</p>
   </section>
 
   <section class="map-section">
@@ -546,14 +594,14 @@
         <div class="tier-label">In person</div>
         <h3>The Founder&rsquo;s Machine</h3>
         <p>I come to you and make your machine intelligent. Your own AI operating system, wired to how your business runs, set up on your laptop while we sit together. One time, and it&rsquo;s yours.</p>
-        <div class="tier-foot"><span class="tier-tag">By application</span></div>
+        <div class="tier-foot"><b>From &#8369;60,000</b></div>
       </div>
       <div class="tier reveal">
         <div class="tier-num">03</div>
         <div class="tier-label">Your system</div>
         <h3>The Build</h3>
         <p>The custom dashboard your team logs into and runs the business from. Booking, billing, inventory, the whole back office, built from scratch and yours to keep.</p>
-        <div class="tier-foot"><b>From &#8369;80,000</b> &middot; monthly after</div>
+        <div class="tier-foot"><b>From &#8369;80,000</b></div>
       </div>
     </div>
   </section>
@@ -562,8 +610,13 @@
     <h2>The deposit</h2>
     <div class="price-card reveal">
       <div class="amount">&#8369;28,500 <span>to start</span></div>
-      <p><b>The &#8369;28,500 comes off whatever you build next.</b> If your system runs &#8369;120,000, you’ve already put &#8369;28,500 toward it, so you pay &#8369;91,500. Build with me and the map costs you nothing.</p>
-      <p>The session runs about two hours. The written map reaches you within three days.</p>
+      <p><b>The &#8369;28,500 comes off whatever you build next.</b> Build with me and the map costs you nothing.</p>
+      <div class="dep-math">
+        <div class="dep-row"><span>Your build</span><b>&#8369;120,000</b></div>
+        <div class="dep-row"><span>Less your deposit</span><b>&minus;&#8369;28,500</b></div>
+        <div class="dep-row dep-tot"><span>You pay</span><b class="count" data-to="91500">&#8369;91,500</b></div>
+      </div>
+      <p class="dep-note">The session runs about two hours. The written map reaches you within three days.</p>
     </div>
   </section>
 
@@ -587,8 +640,8 @@
     <details class="faq-item">
       <summary>What’s the Founder’s Machine?</summary>
       <div class="faq-answer">
-        <p>The in-person tier. I come to you, set up your own AI operating system on your machine, and it’s yours to keep. One time.</p>
-        <p>It’s by application. I take a few at a time, so it stays hands-on.</p>
+        <p>The in-person tier. I come to you, set up your own AI operating system on your machine, and it’s yours to keep. One time, from ₱60,000.</p>
+        <p>I only take a few at a time, so it stays hands-on.</p>
       </div>
     </details>
 
@@ -916,19 +969,34 @@
   })();
 </script>
 <script>
-  /* scroll-reveal: add .in as each .reveal enters view (once). Reduced-motion
-     shows everything immediately. */
+  /* scroll-reveal: add .in as each .reveal enters view (once), and count up any
+     [data-to] numbers inside it. Reduced-motion shows everything immediately. */
   (function () {
     var els = document.querySelectorAll('.reveal');
     if (!els.length) return;
-    if (!('IntersectionObserver' in window) ||
-        (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+    var peso = function (n) { return '₱' + Math.round(n).toLocaleString('en-PH'); };
+    function countUp(el) {
+      var to = parseInt(el.getAttribute('data-to'), 10) || 0;
+      var dur = 1100, t0 = performance.now();
+      (function tick(now) {
+        var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = peso(to * e);
+        if (k < 1) requestAnimationFrame(tick); else el.textContent = peso(to);
+      })(t0);
+    }
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!('IntersectionObserver' in window) || reduce) {
       els.forEach(function (e) { e.classList.add('in'); });
       return;
     }
+    document.querySelectorAll('.count').forEach(function (c) { c.textContent = '₱0'; });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          en.target.querySelectorAll('.count').forEach(countUp);
+          io.unobserve(en.target);
+        }
       });
     }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
     els.forEach(function (e) { io.observe(e); });
