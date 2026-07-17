@@ -18,6 +18,16 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
+# The StagePro demo is embedded as the "live proof" iframe inside the Service
+# Agreement on sign.post205.com. X-Frame-Options can't express an allow-list, so
+# for this path only we hand off to CSP frame-ancestors (the invalid XFO value is
+# ignored by browsers, which then honour the CSP). Everything else stays DENY.
+[[headers]]
+  for = "/stagepro/*"
+  [headers.values]
+    X-Frame-Options = "ALLOWALL"
+    Content-Security-Policy = "frame-ancestors 'self' https://post205.com https://sign.post205.com"
+
 # Keep the shareable AIOS links page out of search engines
 [[headers]]
   for = "/aios"
