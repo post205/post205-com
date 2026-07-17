@@ -1098,28 +1098,28 @@
     // each task: [label, meta, annualCost, verdict, tool]  verdict = auto|sys|human
     var MAPS = {
       realestate: { biz: 'A real estate office', tasks: [
-        ['Chasing new leads by hand', 'daily · 45 min · staff', 35100, 'auto', 'Auto follow-ups from your CRM'],
+        ['Chasing new leads by hand', 'daily · 45 min · staff', 35100, 'auto', 'Auto follow-ups (Follow Up Boss or your Sheet)'],
         ['Scheduling showings around everyone', 'daily · 30 min · agent', 62400, 'auto', 'A self-book Google Calendar'],
-        ['Re-typing listings across sites', 'weekly · 1 hr · staff', 7800, 'auto', 'One entry, synced everywhere'],
-        ['Tracking commissions in a sheet', 'weekly · 45 min · manager', 15600, 'sys', 'A live dashboard off your Sheet']
+        ['Re-typing listings across sites', 'weekly · 1 hr · staff', 7800, 'auto', 'One entry, pushed to Lamudi + Facebook'],
+        ['Tracking commissions in a sheet', 'weekly · 45 min · manager', 15600, 'sys', 'A dashboard off your Google Sheet']
       ]},
       agency: { biz: 'A creative agency', tasks: [
-        ['Chasing the team for status updates', 'daily · 30 min · owner', 156000, 'sys', 'A shared board (ClickUp / Trello)'],
-        ['Rebuilding the monthly client report', 'monthly · 3 hrs · manager', 14400, 'auto', 'Reports built from your own data'],
-        ['Logging hours for billing by hand', 'weekly · 1 hr · staff', 7800, 'auto', 'Time tracking wired to invoices'],
+        ['Chasing the team for status updates', 'daily · 30 min · owner', 156000, 'sys', 'A live board in Notion or ClickUp, pinged to Slack'],
+        ['Rebuilding the monthly client report', 'monthly · 3 hrs · manager', 14400, 'auto', 'Reports auto-built from your analytics'],
+        ['Logging hours for billing by hand', 'weekly · 1 hr · staff', 7800, 'auto', 'Time tracking (Harvest) wired to invoices'],
         ['Pitching and scoping new work', 'weekly · 2 hrs · owner', 104000, 'human', 'Stays with you']
       ]},
       events: { biz: 'An events company', tasks: [
         ['Coordinating vendors and relationships', 'daily · 1 hr · manager', 124800, 'human', 'Stays with you'],
-        ['Chasing RSVPs and headcounts', 'few times a week · 45 min · staff', 17550, 'auto', 'An RSVP form + auto reminders'],
-        ['Tracking deposits and balances', 'weekly · 1 hr · manager', 20800, 'auto', 'Payment tracking (Xendit)'],
-        ['Remaking the event timeline each time', 'few times a month · 2 hrs · owner', 48000, 'sys', 'A reusable timeline template']
+        ['Chasing RSVPs and headcounts', 'few times a week · 45 min · staff', 17550, 'auto', 'A Google Form + auto reminders'],
+        ['Tracking deposits and balances', 'weekly · 1 hr · manager', 20800, 'auto', 'Payment tracking (Xendit) on your Sheet'],
+        ['Remaking the event timeline each time', 'few times a month · 2 hrs · owner', 48000, 'sys', 'A reusable timeline in Airtable']
       ]},
       salon: { biz: 'A salon or clinic', tasks: [
-        ['Booking and rebooking over DMs', 'daily · 1 hr · staff', 46800, 'auto', 'An online booking system'],
+        ['Booking and rebooking over DMs', 'daily · 1 hr · staff', 46800, 'auto', 'An online booking system (Fresha / Booksy)'],
         ['Reminding clients by hand', 'daily · 30 min · staff', 23400, 'auto', 'Auto reminders by SMS or Viber'],
-        ['Tracking who is due for a follow-up', 'weekly · 1 hr · manager', 20800, 'sys', 'Auto rebooking prompts'],
-        ['Tallying daily sales and commissions', 'daily · 30 min · manager', 62400, 'sys', 'A live sales dashboard']
+        ['Tracking who is due for a follow-up', 'weekly · 1 hr · manager', 20800, 'sys', 'Auto rebooking from your booking data'],
+        ['Tallying daily sales and commissions', 'daily · 30 min · manager', 62400, 'sys', 'A sales dashboard off your Sheet']
       ]}
     };
     var VERDICT = { auto: 'Automate', sys: 'Systemize', human: 'Keep human' };
