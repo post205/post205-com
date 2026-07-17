@@ -339,7 +339,12 @@
     .maprow-l { min-width: 0; }
     .maprow-t { font-size: 15px; font-weight: 600; color: var(--text); }
     .maprow-m { font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-3); margin-top: 3px; }
-    .maprow b { font-family: ui-monospace, monospace; font-size: 15px; color: var(--text); flex-shrink: 0; font-variant-numeric: tabular-nums; }
+    .maprow-r { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+    .maprow b { font-family: ui-monospace, monospace; font-size: 15px; color: var(--text); font-variant-numeric: tabular-nums; }
+    .verdict { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+    .v-auto { color: var(--accent-text); background: rgba(14,154,157,0.12); }
+    .v-sys { color: #566d6c; background: rgba(86,109,108,0.14); }
+    .v-human { color: #9a6a2f; background: rgba(176,124,52,0.13); }
     .start-tag { margin-left: 9px; font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-text); background: rgba(14,154,157,0.1); padding: 3px 8px; border-radius: 4px; white-space: nowrap; vertical-align: 2px; }
     .mapshow-note { margin-top: 15px; font-size: 13px; color: var(--text-3); }
     @media (prefers-reduced-motion: reduce) { .maprow { opacity: 1; transform: none; transition: none; } }
@@ -1077,32 +1082,34 @@
     var tabsEl = document.getElementById('mapshowTabs');
     if (!panel || !tabsEl) return;
 
+    // each task: [label, meta, annualCost, verdict]  verdict = auto | sys | human
     var MAPS = {
       realestate: { biz: 'A real estate office', tasks: [
-        ['Chasing new leads by hand', 'daily · 45 min · staff', 35100],
-        ['Scheduling showings around everyone', 'daily · 30 min · agent', 62400],
-        ['Re-typing listings across sites', 'weekly · 1 hr · staff', 7800],
-        ['Tracking commissions in a sheet', 'weekly · 45 min · manager', 15600]
+        ['Chasing new leads by hand', 'daily · 45 min · staff', 35100, 'auto'],
+        ['Scheduling showings around everyone', 'daily · 30 min · agent', 62400, 'auto'],
+        ['Re-typing listings across sites', 'weekly · 1 hr · staff', 7800, 'auto'],
+        ['Tracking commissions in a sheet', 'weekly · 45 min · manager', 15600, 'sys']
       ]},
       agency: { biz: 'A creative agency', tasks: [
-        ['Chasing the team for status updates', 'daily · 30 min · owner', 156000],
-        ['Rebuilding the monthly client report', 'monthly · 3 hrs · manager', 14400],
-        ['Logging hours for billing by hand', 'weekly · 1 hr · staff', 7800],
-        ['Writing invoices one by one', '2x a month · 45 min · manager', 7200]
+        ['Chasing the team for status updates', 'daily · 30 min · owner', 156000, 'sys'],
+        ['Rebuilding the monthly client report', 'monthly · 3 hrs · manager', 14400, 'auto'],
+        ['Logging hours for billing by hand', 'weekly · 1 hr · staff', 7800, 'auto'],
+        ['Pitching and scoping new work', 'weekly · 2 hrs · owner', 104000, 'human']
       ]},
       events: { biz: 'An events company', tasks: [
-        ['Coordinating vendors over Viber', 'daily · 1 hr · manager', 124800],
-        ['Chasing RSVPs and headcounts', 'few times a week · 45 min · staff', 17550],
-        ['Tracking deposits and balances', 'weekly · 1 hr · manager', 20800],
-        ['Remaking the event timeline each time', 'few times a month · 2 hrs · owner', 48000]
+        ['Coordinating vendors and relationships', 'daily · 1 hr · manager', 124800, 'human'],
+        ['Chasing RSVPs and headcounts', 'few times a week · 45 min · staff', 17550, 'auto'],
+        ['Tracking deposits and balances', 'weekly · 1 hr · manager', 20800, 'auto'],
+        ['Remaking the event timeline each time', 'few times a month · 2 hrs · owner', 48000, 'sys']
       ]},
       salon: { biz: 'A salon or clinic', tasks: [
-        ['Booking and rebooking over DMs', 'daily · 1 hr · staff', 46800],
-        ['Reminding clients by hand', 'daily · 30 min · staff', 23400],
-        ['Tracking who is due for a follow-up', 'weekly · 1 hr · manager', 20800],
-        ['Tallying daily sales and commissions', 'daily · 30 min · manager', 62400]
+        ['Booking and rebooking over DMs', 'daily · 1 hr · staff', 46800, 'auto'],
+        ['Reminding clients by hand', 'daily · 30 min · staff', 23400, 'auto'],
+        ['Tracking who is due for a follow-up', 'weekly · 1 hr · manager', 20800, 'sys'],
+        ['Tallying daily sales and commissions', 'daily · 30 min · manager', 62400, 'sys']
       ]}
     };
+    var VERDICT = { auto: 'Automate', sys: 'Systemize', human: 'Keep human' };
 
     var esc = function (s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
     var peso = function (n) { return '₱' + Math.round(n).toLocaleString('en-PH'); };
@@ -1128,13 +1135,15 @@
           '<div class="maprow-l"><div class="maprow-t">' + esc(t[0]) +
           (isMax ? ' <span class="start-tag">Start here</span>' : '') + '</div>' +
           '<div class="maprow-m">' + esc(t[1]) + '</div></div>' +
-          '<b class="count" data-to="' + t[2] + '">' + peso(t[2]) + '</b></div>';
+          '<div class="maprow-r"><span class="verdict v-' + t[3] + '">' + VERDICT[t[3]] + '</span>' +
+          '<b class="count" data-to="' + t[2] + '">' + peso(t[2]) + '</b></div>' +
+        '</div>';
       }).join('');
       panel.innerHTML =
         '<div class="mapshow-head"><span class="mapshow-biz">' + esc(m.biz) + '</span>' +
         '<span class="mapshow-tot"><span class="count" data-to="' + total + '">' + peso(total) + '</span> a year, mapped</span></div>' +
         '<div class="mapshow-rows">' + rows + '</div>' +
-        '<p class="mapshow-note">An example of what a session like this usually finds. Yours will be your own numbers.</p>';
+        '<p class="mapshow-note">An example of what a session finds. Each task gets a verdict: automate it, systemize it, or keep it human. Yours will be your own numbers.</p>';
     }
 
     function animate() {
