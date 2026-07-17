@@ -35,13 +35,15 @@ exports.handler = async (event) => {
   // Readable label for where the lead came from (so referrals, FAQ prospects, and
   // homepage leads are distinguishable in ops — not all "homepage chat").
   const SRC_LABELS = {
-    'referral':         'FAQ referral (connect to network)',
-    'faq-prospect':     'FAQ guided read',
-    'post205.com/faq':  'FAQ chat',
-    'post205.com':      'homepage chat',
+    'referral':            'FAQ referral (connect to network)',
+    'faq-prospect':        'FAQ guided read',
+    'post205.com/faq':     'FAQ chat',
+    'post205.com/mapping': 'Mapping session',
+    'post205.com':         'homepage chat',
   };
   const srcLabel = SRC_LABELS[lead.source] || lead.source;
   const isReferral = lead.source === 'referral';
+  const tasks = Array.isArray(body.tasks) ? body.tasks.slice(0, 12) : [];
 
   const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const sends = [];
@@ -75,6 +77,22 @@ exports.handler = async (event) => {
     console.error('OPS_LEAD_ENDPOINT not set — ops forward skipped');
   }
 
+  // 1b) Mapping leads: compose the branded map-email DRAFT in Toffer's Gmail
+  //     (addressed to the visitor, nothing sent) so he reviews and hits Send.
+  //     Awaited so the Telegram ping can say whether the draft is ready.
+  let mapDraft = false;
+  if (lead.source === 'post205.com/mapping' && tasks.length && opsUrl && opsSecret) {
+    try {
+      const dr = await fetch(opsUrl.replace('register-lead', 'compose-map-draft'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${opsSecret}` },
+        body: JSON.stringify({ name: lead.name, email: lead.email, biz: lead.business, tasks }),
+      });
+      mapDraft = dr.ok;
+      if (!dr.ok) console.error('map draft failed', dr.status, await dr.text().catch(() => ''));
+    } catch (e) { console.error('map draft error', e.message); }
+  }
+
   // 2) Telegram ping
   const tgToken = process.env.TELEGRAM_BOT_TOKEN, tgChat = process.env.TELEGRAM_OPS_CHAT_ID;
   if (tgToken && tgChat) {
@@ -85,6 +103,7 @@ exports.handler = async (event) => {
       (lead.business ? `Business: ${lead.business}\n` : '') +
       (lead.timeline ? `Timeline: ${lead.timeline}\n` : '') +
       (lead.referrer ? `👋 Referred by: *${lead.referrer}*\n` : '') +
+      (mapDraft ? `\n📝 *Map draft ready in your Gmail* — review & send\n` : '') +
       (lead.pain ? `\n${lead.pain}\n` : '');
     sends.push(fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },

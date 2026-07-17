@@ -1009,7 +1009,14 @@
         await botSay('Hmm, that email doesn’t look right. Mind trying again?');
       }
 
-      // the whole mini-map rides into the lead so ops + Telegram see every task
+      // the whole mini-map rides into the lead so ops + Telegram see every task,
+      // and as structured tasks so the server can compose the map-email draft.
+      var FMETA = { 312: 'daily', 156: 'a few times a week', 52: 'weekly', 24: 'a few times a month' };
+      var DMETA = { 0.25: '15 min', 0.5: '30 min', 1: '1 hr', 4: 'half a day' };
+      var RMETA = { 150: 'staff', 400: 'manager', 1000: 'you' };
+      var tasksPayload = tasks.map(function (t) {
+        return { label: t.label, meta: (FMETA[t.freq] || '') + ' · ' + (DMETA[t.dur] || '') + ' · ' + (RMETA[t.rate] || ''), cost: t.cost };
+      });
       var lines = tasks.map(function (t) {
         return '• ' + t.label + ' — ' + PESO + fmt(t.cost) + '/yr (' + t.freq + 'x × ' + t.dur + 'h × ' + PESO + t.rate + '/hr)';
       }).join('\n');
@@ -1020,7 +1027,8 @@
           source: 'post205.com/mapping',
           business: business, pain: pain, timeline: '',
           name: name, email: email,
-          referrer: (window.P205ChatMeta && window.P205ChatMeta.referrer) || ''
+          referrer: (window.P205ChatMeta && window.P205ChatMeta.referrer) || '',
+          tasks: tasksPayload, total: total
         })
       }).catch(function(){});
 
