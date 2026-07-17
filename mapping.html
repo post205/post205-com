@@ -322,6 +322,27 @@
     .dep-tot b { color: var(--accent-text); font-size: 16px; }
     .dep-lead { font-size: 15px; color: var(--text-2); margin-bottom: 2px; }
     .dep-note { margin-top: 14px; font-size: 14px; color: var(--text-2); }
+
+    /* mapping showcase — pick an industry, watch its map build */
+    .mapshow-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin: 26px 0 20px; border-bottom: 1px solid var(--border); }
+    .mapshow-tab { font-family: ui-monospace, monospace; font-size: 12px; letter-spacing: 0.03em; padding: 10px 14px; border: none; border-bottom: 2px solid transparent; background: none; color: var(--text-2); cursor: pointer; margin-bottom: -1px; transition: color .15s, border-color .15s; }
+    .mapshow-tab:hover { color: var(--accent-text); }
+    .mapshow-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+    @media (max-width: 560px) { .mapshow-tab { flex: 1 1 auto; text-align: center; padding: 10px 6px; } }
+    .mapshow-panel { border: 1px solid var(--border-2); border-radius: 12px; background: var(--surface); padding: 22px 24px; }
+    .mapshow-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    .mapshow-biz { font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
+    .mapshow-tot { font-family: ui-monospace, monospace; font-size: 13px; color: var(--text-2); }
+    .mapshow-tot .count { color: var(--accent-text); font-weight: 700; font-size: 16px; }
+    .maprow { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); opacity: 0; transform: translateY(10px); transition: opacity .5s ease, transform .5s cubic-bezier(.16,1,.3,1); }
+    .maprow.in { opacity: 1; transform: none; }
+    .maprow-l { min-width: 0; }
+    .maprow-t { font-size: 15px; font-weight: 600; color: var(--text); }
+    .maprow-m { font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-3); margin-top: 3px; }
+    .maprow b { font-family: ui-monospace, monospace; font-size: 15px; color: var(--text); flex-shrink: 0; font-variant-numeric: tabular-nums; }
+    .start-tag { margin-left: 9px; font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-text); background: rgba(14,154,157,0.1); padding: 3px 8px; border-radius: 4px; white-space: nowrap; vertical-align: 2px; }
+    .mapshow-note { margin-top: 15px; font-size: 13px; color: var(--text-3); }
+    @media (prefers-reduced-motion: reduce) { .maprow { opacity: 1; transform: none; transition: none; } }
     /* desktop 3-up: reserve two title lines + a fixed foot so bodies and divider rules align across cards */
     @media (min-width: 820px) {
       .ladder { grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
@@ -569,6 +590,18 @@
       <div class="flow-node flow-result"><span class="flow-k">One task, one year</span><span class="flow-v"><span class="count" data-to="62400">&#8369;62,400</span></span></div>
     </div>
     <p class="flow-cap">That&rsquo;s one task. The session does this for every task you repeat.</p>
+  </section>
+
+  <section class="map-section" id="mapshow">
+    <h2>What a mapping looks like</h2>
+    <p>Every owner thinks their mess is unique. Then we map it, and pareho lang pala. Tap the one closest to yours.</p>
+    <div class="mapshow-tabs" id="mapshowTabs">
+      <button type="button" class="mapshow-tab active" data-k="realestate">Real estate</button>
+      <button type="button" class="mapshow-tab" data-k="agency">Agency</button>
+      <button type="button" class="mapshow-tab" data-k="events">Events</button>
+      <button type="button" class="mapshow-tab" data-k="salon">Salon &amp; clinic</button>
+    </div>
+    <div class="mapshow-panel" id="mapshowPanel"></div>
   </section>
 
   <section class="map-section">
@@ -1034,6 +1067,109 @@
       });
     }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
     els.forEach(function (e) { io.observe(e); });
+  })();
+</script>
+<script>
+  /* mapping showcase: pick an industry, its map builds (rows stagger in, costs
+     count up). Examples grounded in real industry workflows; honest peso math. */
+  (function () {
+    var panel = document.getElementById('mapshowPanel');
+    var tabsEl = document.getElementById('mapshowTabs');
+    if (!panel || !tabsEl) return;
+
+    var MAPS = {
+      realestate: { biz: 'A real estate office', tasks: [
+        ['Chasing new leads by hand', 'daily · 45 min · staff', 35100],
+        ['Scheduling showings around everyone', 'daily · 30 min · agent', 62400],
+        ['Re-typing listings across sites', 'weekly · 1 hr · staff', 7800],
+        ['Tracking commissions in a sheet', 'weekly · 45 min · manager', 15600]
+      ]},
+      agency: { biz: 'A creative agency', tasks: [
+        ['Chasing the team for status updates', 'daily · 30 min · owner', 156000],
+        ['Rebuilding the monthly client report', 'monthly · 3 hrs · manager', 14400],
+        ['Logging hours for billing by hand', 'weekly · 1 hr · staff', 7800],
+        ['Writing invoices one by one', '2x a month · 45 min · manager', 7200]
+      ]},
+      events: { biz: 'An events company', tasks: [
+        ['Coordinating vendors over Viber', 'daily · 1 hr · manager', 124800],
+        ['Chasing RSVPs and headcounts', 'few times a week · 45 min · staff', 17550],
+        ['Tracking deposits and balances', 'weekly · 1 hr · manager', 20800],
+        ['Remaking the event timeline each time', 'few times a month · 2 hrs · owner', 48000]
+      ]},
+      salon: { biz: 'A salon or clinic', tasks: [
+        ['Booking and rebooking over DMs', 'daily · 1 hr · staff', 46800],
+        ['Reminding clients by hand', 'daily · 30 min · staff', 23400],
+        ['Tracking who is due for a follow-up', 'weekly · 1 hr · manager', 20800],
+        ['Tallying daily sales and commissions', 'daily · 30 min · manager', 62400]
+      ]}
+    };
+
+    var esc = function (s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+    var peso = function (n) { return '₱' + Math.round(n).toLocaleString('en-PH'); };
+    var REDUCE = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function countUp(el) {
+      var to = parseInt(el.getAttribute('data-to'), 10) || 0, dur = 1000, t0 = performance.now();
+      (function tick(now) {
+        var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = peso(to * e);
+        if (k < 1) requestAnimationFrame(tick); else el.textContent = peso(to);
+      })(t0);
+    }
+
+    function render(key) {
+      var m = MAPS[key]; if (!m) return;
+      var maxCost = Math.max.apply(null, m.tasks.map(function (t) { return t[2]; }));
+      var total = m.tasks.reduce(function (s, t) { return s + t[2]; }, 0);
+      var flagged = false;
+      var rows = m.tasks.map(function (t) {
+        var isMax = !flagged && t[2] === maxCost; if (isMax) flagged = true;
+        return '<div class="maprow">' +
+          '<div class="maprow-l"><div class="maprow-t">' + esc(t[0]) +
+          (isMax ? ' <span class="start-tag">Start here</span>' : '') + '</div>' +
+          '<div class="maprow-m">' + esc(t[1]) + '</div></div>' +
+          '<b class="count" data-to="' + t[2] + '">' + peso(t[2]) + '</b></div>';
+      }).join('');
+      panel.innerHTML =
+        '<div class="mapshow-head"><span class="mapshow-biz">' + esc(m.biz) + '</span>' +
+        '<span class="mapshow-tot"><span class="count" data-to="' + total + '">' + peso(total) + '</span> a year, mapped</span></div>' +
+        '<div class="mapshow-rows">' + rows + '</div>' +
+        '<p class="mapshow-note">An example of what a session like this usually finds. Yours will be your own numbers.</p>';
+    }
+
+    function animate() {
+      var rows = panel.querySelectorAll('.maprow');
+      if (REDUCE) { rows.forEach(function (r) { r.classList.add('in'); }); return; }
+      panel.querySelectorAll('.count').forEach(function (c) { c.textContent = '₱0'; });
+      rows.forEach(function (r, i) {
+        r.classList.remove('in');
+        r.style.transitionDelay = (i * 70) + 'ms';
+        requestAnimationFrame(function () { requestAnimationFrame(function () { r.classList.add('in'); }); });
+      });
+      setTimeout(function () { panel.querySelectorAll('.count').forEach(countUp); }, 180);
+    }
+
+    var current = 'realestate';
+    render(current);
+
+    // first animation when the section scrolls into view; every tab switch after
+    if (!('IntersectionObserver' in window) || REDUCE) {
+      panel.querySelectorAll('.maprow').forEach(function (r) { r.classList.add('in'); });
+    } else {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { animate(); io.unobserve(e.target); } });
+      }, { threshold: 0.2 });
+      io.observe(panel);
+    }
+
+    tabsEl.addEventListener('click', function (e) {
+      var b = e.target.closest('.mapshow-tab'); if (!b) return;
+      var k = b.getAttribute('data-k'); if (k === current) return;
+      current = k;
+      tabsEl.querySelectorAll('.mapshow-tab').forEach(function (x) { x.classList.toggle('active', x === b); });
+      render(k);
+      animate();
+    });
   })();
 </script>
 <script src="/js/cookie-banner.js"></script>
