@@ -996,10 +996,10 @@
       await botSay('Sige. What’s your name?');
       var name = await waitText('Your name');
 
-      // A gracious aside, not a form field — captures who sent them (a name, BNI,
+      // A gracious aside, not a form field — captures who sent them (a name, a group,
       // an ad). Skippable; stored on the chat session for reconciliation in ops.
       await botSay('Salamat, ' + name.split(' ')[0] + '! One more thing. Who should I thank for sending you my way?');
-      var ref = await waitText('a name, BNI, Instagram… or just “found you”');
+      var ref = await waitText('a name, a group, Instagram… or just “found you”');
       if (ref && !/^(skip|none|n\/?a|\-)$/i.test(ref.trim())) {
         window.P205ChatMeta = window.P205ChatMeta || {};
         window.P205ChatMeta.referrer = ref.trim();
