@@ -609,6 +609,7 @@
       <button type="button" class="mapshow-tab" data-k="agency">Agency</button>
       <button type="button" class="mapshow-tab" data-k="events">Events</button>
       <button type="button" class="mapshow-tab" data-k="salon">Salon &amp; clinic</button>
+      <button type="button" class="mapshow-tab" data-k="org">Organization</button>
     </div>
     <div class="mapshow-panel" id="mapshowPanel"></div>
     <p class="mapshow-stack"><b>Built on Claude Code, wired into what you already run on.</b> Your Google Workspace, your project tool (ClickUp, Trello), your booking and your payments. The Founder&rsquo;s Machine builds it; the session tells you what, and in what order.</p>
@@ -1120,6 +1121,12 @@
         ['Reminding clients by hand', 'daily · 30 min · staff', 23400, 'auto', 'Auto reminders by SMS or Viber'],
         ['Tracking who is due for a follow-up', 'weekly · 1 hr · manager', 20800, 'sys', 'Auto rebooking from your booking data'],
         ['Tallying daily sales and commissions', 'daily · 30 min · manager', 62400, 'sys', 'A sales dashboard off your Sheet']
+      ]},
+      org: { biz: 'A member organization', tasks: [
+        ['Logging attendance in two places', 'weekly · 45 min · officer', 15600, 'auto', 'One attendance log, mirrored from Notion'],
+        ['Copying referrals and results between tools', 'weekly · 1 hr · officer', 20800, 'auto', 'One entry, synced across Notion + Trello'],
+        ['Keeping the member directory current', 'weekly · 1 hr · staff', 20800, 'sys', 'A live directory off your Notion'],
+        ['Rebuilding the weekly report by hand', 'weekly · 1.5 hrs · officer', 31200, 'auto', 'The report auto-built, without the per-seat AI bill']
       ]}
     };
     var VERDICT = { auto: 'Automate', sys: 'Systemize', human: 'Keep human' };
