@@ -22,9 +22,12 @@
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
   <link rel="canonical" href="https://post205.com/">
   <script>
-    /* boot plays once per session; repeat visits and reduced motion go straight in */
+    /* boot plays once per session; repeat visits, reduced motion, and embedded
+       frames (previews on other pages) go straight in — a throttled iframe can
+       stall the boot's rAF loop and leave the headline stuck mid-decode */
     try {
       if (sessionStorage.getItem('p205boot') === '1' ||
+          window.self !== window.top ||
           matchMedia('(prefers-reduced-motion: reduce)').matches) {
         document.documentElement.classList.add('no-boot');
       }
