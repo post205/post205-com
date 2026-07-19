@@ -272,9 +272,15 @@
   .work-card .asg-link { margin: 0; white-space: nowrap; }
   .work-card.wide { grid-column: 1 / -1; }
   .work-card.wide .work-shot { --frameH: 460px; }
-  .work-card.wip { border-style: dashed; justify-content: center; padding: 34px 26px; background: transparent; }
-  .work-card.wip h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-  .work-card.wip p { font-size: 13.5px; color: var(--text-2); }
+  .current-strip { margin-top: 28px; border-top: 1px solid var(--border); padding-top: 20px; }
+  .current-strip .items { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .current-strip .items span, .current-strip .items a {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.05em; color: var(--text-2);
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 8px 14px;
+    text-decoration: none;
+  }
+  .current-strip .items a { color: var(--accent-text); border-color: var(--accent-border); }
+  .current-strip .items a:hover { background: var(--accent-dim); }
 
 
 
@@ -555,6 +561,16 @@
                 <div><h4>POST205</h4><p>The firm's own site</p></div>
                 <a class="asg-link" href="https://post205.com" target="_blank" rel="noopener">Open ↗</a>
               </div>
+            </div>
+          </div>
+          <div class="current-strip">
+            <div class="label">In build now</div>
+            <div class="items">
+              <span>StagePro — back office</span>
+              <span>Creative Learning School (CLSI)</span>
+              <span>Serenity Shores</span>
+              <span>Little Way Playschool</span>
+              <a href="https://post205.com/mapping" target="_blank" rel="noopener">AI systems consultancy — post205.com/mapping ↗</a>
             </div>
           </div>
         </div>
