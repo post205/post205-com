@@ -113,3 +113,9 @@
   [headers.values]
     X-Frame-Options = "ALLOW-VIA-CSP"
     Content-Security-Policy = "frame-ancestors 'self'"
+
+# ─── CV dossier: keep out of search engines (page + files) ───
+[[headers]]
+  for = "/docs/cv/krcl/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
