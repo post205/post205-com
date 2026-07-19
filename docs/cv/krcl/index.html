@@ -245,7 +245,7 @@
   .work-chrome span {
     font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; color: var(--text-3);
     margin-left: 8px; background: var(--field); border: 1px solid var(--border); border-radius: 3px;
-    padding: 2px 10px;
+    padding: 2px 10px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .work-shot { position: relative; height: 340px; overflow: hidden; background: var(--surface-2); }
   .work-shot img {
@@ -314,6 +314,10 @@
     .doc-card { border-left: none; border-top: 1px solid var(--border); padding: 30px 0; }
     .edu { grid-template-columns: 1fr; }
     .asg-grid { grid-template-columns: 1fr; }
+    .work-grid { grid-template-columns: 1fr; }
+    .work-shot { height: 300px; }
+    @keyframes shotscroll { from { transform: translateY(0); } to { transform: translateY(calc(-100% + 300px)); } }
+    .work-meta { flex-wrap: wrap; }
     .paper-docs { grid-template-columns: 1fr; }
     .kv { grid-template-columns: 1fr; gap: 6px; padding: 16px 0; }
     .stratum { grid-template-columns: 96px 1fr; gap: 16px; }
@@ -411,7 +415,6 @@
       <a href="#s4">04 · Education</a>
       <a href="#s5">05 · Associations</a>
       <a href="#s6">EX · The Work</a>
-      <a href="#s7">07 · Country</a>
       <a href="#s9">09 · Employment</a>
       <a href="#s10">10 · Work Undertaken</a>
       <a href="#documents">↓ Documents</a>
@@ -536,17 +539,6 @@
         </div>
       </section>
 
-      <!-- 07-08 -->
-      <section class="tpl" id="s7">
-        <div class="reveal">
-          <div class="secnum">Sections 07 – 08</div>
-          <h2 class="sechead">Country &amp; languages.</h2>
-          <div style="margin-top:24px;">
-            <div class="kv"><div class="k">07 · Countries of Work</div><div class="v">Philippines<span class="note">Every system below was built for, and runs inside, the Philippine regulatory and business context — BIR, withholding, data privacy under RA 10173.</span></div></div>
-            <div class="kv"><div class="k">08 · Languages</div><div class="v">Filipino — read, write, speak · English — read, write, speak</div></div>
-          </div>
-        </div>
-      </section>
     </div>
   </div>
 </div>
