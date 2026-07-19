@@ -548,20 +548,6 @@
                 <a class="asg-link" href="https://all-stars.ph" target="_blank" rel="noopener">Open ↗</a>
               </div>
             </div>
-            <div class="work-card">
-              <div class="work-chrome"><i></i><i></i><i></i><span>sanmiguelfoods.com</span></div>
-              <div class="work-shot"><img src="work/sanmiguelfoods.jpg" alt="San Miguel Foods website" loading="lazy"></div>
-              <div class="work-meta">
-                <div><h4>San Miguel Foods</h4><p>Design work for one of the country's largest food companies</p></div>
-                <a class="asg-link" href="https://sanmiguelfoods.com" target="_blank" rel="noopener">Open ↗</a>
-              </div>
-            </div>
-            <div class="work-card wip">
-              <div>
-                <h4>In build</h4>
-                <p>Casa, plus the firm's internal platforms — ops, sign, and the Accountinus back office.</p>
-              </div>
-            </div>
             <div class="work-card wide">
               <div class="work-chrome"><i></i><i></i><i></i><span>post205.com</span></div>
               <div class="work-shot live"><img src="work/post205.jpg" alt="POST205 website" loading="lazy"><iframe src="https://post205.com" title="Live: post205.com" loading="lazy" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></div>
@@ -793,11 +779,6 @@
     });
   }, { rootMargin: "-30% 0px -55% 0px" });
   document.querySelectorAll("section.tpl, section.deep-band").forEach(function (s) { secObs.observe(s); });
-
-  // Screenshot cards are static: show the top of the page.
-  document.querySelectorAll(".work-shot:not(.live) img").forEach(function (img) {
-    img.style.animation = "none";
-  });
 
   // Live cards: render the real site at 1200px, scale proportionally into the frame
   function tuneFrames() {
