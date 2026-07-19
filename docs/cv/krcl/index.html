@@ -253,6 +253,12 @@
     animation: shotscroll 14s linear infinite;
   }
   .work-shot:hover img { animation-play-state: paused; }
+  /* live cards: the real site, rendered at 1200px and proportionally scaled down */
+  .work-shot.live img { animation: none; }
+  .work-shot.live iframe {
+    position: absolute; top: 0; left: 0; width: 1200px; border: 0;
+    transform-origin: 0 0; pointer-events: none; background: var(--surface);
+  }
   /* linear scroll with short holds at each end; JS sets per-card duration for constant speed */
   @keyframes shotscroll {
     0%, 7%   { transform: translateY(0); }
@@ -483,7 +489,7 @@
           <div class="work-grid">
             <div class="work-card">
               <div class="work-chrome"><i></i><i></i><i></i><span>piandre.com</span></div>
-              <div class="work-shot"><img src="work/piandre.jpg" alt="Piandré Salon website" loading="lazy"></div>
+              <div class="work-shot live"><img src="work/piandre.jpg" alt="Piandré Salon website" loading="lazy"><iframe src="https://piandre.com" title="Live: https://piandre.com" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
               <div class="work-meta">
                 <div><h4>Piandré Salon</h4><p>The Philippines' largest single-owned salon chain — site, booking, store</p></div>
                 <a class="asg-link" href="https://piandre.com" target="_blank" rel="noopener">Open ↗</a>
@@ -499,7 +505,7 @@
             </div>
             <div class="work-card">
               <div class="work-chrome"><i></i><i></i><i></i><span>impact.ahalearningcenter.com</span></div>
-              <div class="work-shot"><img src="work/aha-impact.jpg" alt="AHA Learning Center impact site" loading="lazy"></div>
+              <div class="work-shot live"><img src="work/aha-impact.jpg" alt="AHA Learning Center impact site" loading="lazy"><iframe src="https://impact.ahalearningcenter.com" title="Live: https://impact.ahalearningcenter.com" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
               <div class="work-meta">
                 <div><h4>AHA Learning Center</h4><p>Impact and transparency platform for a literacy nonprofit</p></div>
                 <a class="asg-link" href="https://impact.ahalearningcenter.com" target="_blank" rel="noopener">Open ↗</a>
@@ -507,7 +513,7 @@
             </div>
             <div class="work-card">
               <div class="work-chrome"><i></i><i></i><i></i><span>archionarchitects.com</span></div>
-              <div class="work-shot"><img src="work/archion.jpg" alt="Archion Architects website" loading="lazy"></div>
+              <div class="work-shot live"><img src="work/archion.jpg" alt="Archion Architects website" loading="lazy"><iframe src="https://archionarchitects.com" title="Live: https://archionarchitects.com" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
               <div class="work-meta">
                 <div><h4>Archion Architects</h4><p>Architecture firm — 196-project portfolio and admin platform</p></div>
                 <a class="asg-link" href="https://archionarchitects.com" target="_blank" rel="noopener">Open ↗</a>
@@ -515,7 +521,7 @@
             </div>
             <div class="work-card">
               <div class="work-chrome"><i></i><i></i><i></i><span>molaveartstudio.com</span></div>
-              <div class="work-shot"><img src="work/molaveart.jpg" alt="Molave Art Studio website" loading="lazy"></div>
+              <div class="work-shot live"><img src="work/molaveart.jpg" alt="Molave Art Studio website" loading="lazy"><iframe src="https://molaveartstudio.com" title="Live: https://molaveartstudio.com" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
               <div class="work-meta">
                 <div><h4>Molave Art Studio</h4><p>Makati printmaking studio — generative art, gallery, inquiries</p></div>
                 <a class="asg-link" href="https://molaveartstudio.com" target="_blank" rel="noopener">Open ↗</a>
@@ -523,7 +529,7 @@
             </div>
             <div class="work-card">
               <div class="work-chrome"><i></i><i></i><i></i><span>ac1996.com</span></div>
-              <div class="work-shot"><img src="work/ac1996.jpg" alt="AC 1996 alumni website" loading="lazy"></div>
+              <div class="work-shot live"><img src="work/ac1996.jpg" alt="AC 1996 alumni website" loading="lazy"><iframe src="https://ac1996.com" title="Live: https://ac1996.com" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
               <div class="work-meta">
                 <div><h4>AC 1996</h4><p>Assumption College batch platform — pledges, payments, homecoming</p></div>
                 <a class="asg-link" href="https://ac1996.com" target="_blank" rel="noopener">Open ↗</a>
@@ -531,7 +537,7 @@
             </div>
             <div class="work-card">
               <div class="work-chrome"><i></i><i></i><i></i><span>01bigfight.com</span></div>
-              <div class="work-shot"><img src="work/bigfight.jpg" alt="01 Big Fight alumni website" loading="lazy"></div>
+              <div class="work-shot live"><img src="work/bigfight.jpg" alt="01 Big Fight alumni website" loading="lazy"><iframe src="https://01bigfight.com" title="Live: https://01bigfight.com" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
               <div class="work-meta">
                 <div><h4>01 Big Fight</h4><p>Ateneo HS 2001 alumni platform — launched and live</p></div>
                 <a class="asg-link" href="https://01bigfight.com" target="_blank" rel="noopener">Open ↗</a>
@@ -791,6 +797,19 @@
   }
   tuneShots();
   window.addEventListener("resize", tuneShots);
+
+  // Live cards: render the real site at 1200px, scale proportionally into the frame
+  function tuneFrames() {
+    document.querySelectorAll(".work-shot.live").forEach(function (shot) {
+      var f = shot.querySelector("iframe");
+      if (!f) return;
+      var s = shot.clientWidth / 1200;
+      f.style.transform = "scale(" + s + ")";
+      f.style.height = Math.ceil(shot.clientHeight / s) + "px";
+    });
+  }
+  tuneFrames();
+  window.addEventListener("resize", tuneFrames);
 
   // Systems counter
   var target = 12, el = document.getElementById("count-systems"), started = false;
