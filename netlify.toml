@@ -106,3 +106,10 @@
   from = "/stagepro/*"
   to = "https://stagepro-ph.netlify.app/:splat"
   status = 200
+
+# ─── CV dossier embed (post205.com/docs/cv/krcl frames the homepage) ───
+[[headers]]
+  for = "/"
+  [headers.values]
+    X-Frame-Options = "ALLOW-VIA-CSP"
+    Content-Security-Policy = "frame-ancestors 'self'"
