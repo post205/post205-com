@@ -767,24 +767,10 @@
   }, { rootMargin: "-30% 0px -55% 0px" });
   document.querySelectorAll("section.tpl, section.deep-band").forEach(function (s) { secObs.observe(s); });
 
-  // Screenshot cards: constant scroll speed, starting from the top when the card enters view
-  function tuneShots() {
-    document.querySelectorAll(".work-shot:not(.live) img").forEach(function (img) {
-      function set() {
-        var travel = img.getBoundingClientRect().height - img.parentElement.getBoundingClientRect().height;
-        if (travel <= 0) { img.style.animation = "none"; return; }
-        var SPEED = 70; // px per second while scrolling
-        var dur = Math.min(26, Math.max(8, travel / (0.43 * SPEED)));
-        img.style.animationDuration = dur.toFixed(1) + "s";
-        img.style.animationPlayState = "paused";
-        new IntersectionObserver(function (entries, o) {
-          if (entries[0].isIntersecting) { img.style.animationPlayState = "running"; o.disconnect(); }
-        }, { threshold: 0.3 }).observe(img.parentElement);
-      }
-      if (img.complete) set(); else img.addEventListener("load", set);
-    });
-  }
-  tuneShots();
+  // Screenshot cards are static: show the top of the page.
+  document.querySelectorAll(".work-shot:not(.live) img").forEach(function (img) {
+    img.style.animation = "none";
+  });
 
   // Live cards: render the real site at 1200px, scale proportionally into the frame
   function tuneFrames() {
