@@ -490,11 +490,19 @@
               </div>
             </div>
             <div class="work-card">
-              <div class="work-chrome"><i></i><i></i><i></i><span>sanmiguelfoods.com</span></div>
-              <div class="work-shot"><img src="work/sanmiguelfoods.jpg" alt="San Miguel Foods website" loading="lazy"></div>
+              <div class="work-chrome"><i></i><i></i><i></i><span>molaveartstudio.com</span></div>
+              <div class="work-shot live"><img src="work/molaveart.jpg" alt="Molave Art Studio website" loading="lazy"><iframe src="https://molaveartstudio.com" title="Live: https://molaveartstudio.com" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
               <div class="work-meta">
-                <div><h4>San Miguel Foods</h4><p>Design work for one of the country's largest food companies</p></div>
-                <a class="asg-link" href="https://sanmiguelfoods.com" target="_blank" rel="noopener">Open ↗</a>
+                <div><h4>Molave Art Studio</h4><p>Makati printmaking studio — generative art, gallery, inquiries</p></div>
+                <a class="asg-link" href="https://molaveartstudio.com" target="_blank" rel="noopener">Open ↗</a>
+              </div>
+            </div>
+            <div class="work-card">
+              <div class="work-chrome"><i></i><i></i><i></i><span>01bigfight.com</span></div>
+              <div class="work-shot live"><img src="work/bigfight.jpg" alt="01 Big Fight alumni website" loading="lazy"><iframe src="https://01bigfight.com" title="Live: https://01bigfight.com" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+              <div class="work-meta">
+                <div><h4>01 Big Fight</h4><p>Ateneo HS 2001 alumni platform — launched and live</p></div>
+                <a class="asg-link" href="https://01bigfight.com" target="_blank" rel="noopener">Open ↗</a>
               </div>
             </div>
             <div class="work-card">
@@ -514,14 +522,6 @@
               </div>
             </div>
             <div class="work-card">
-              <div class="work-chrome"><i></i><i></i><i></i><span>molaveartstudio.com</span></div>
-              <div class="work-shot live"><img src="work/molaveart.jpg" alt="Molave Art Studio website" loading="lazy"><iframe src="https://molaveartstudio.com" title="Live: https://molaveartstudio.com" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
-              <div class="work-meta">
-                <div><h4>Molave Art Studio</h4><p>Makati printmaking studio — generative art, gallery, inquiries</p></div>
-                <a class="asg-link" href="https://molaveartstudio.com" target="_blank" rel="noopener">Open ↗</a>
-              </div>
-            </div>
-            <div class="work-card">
               <div class="work-chrome"><i></i><i></i><i></i><span>ac1996.com</span></div>
               <div class="work-shot live"><img src="work/ac1996.jpg" alt="AC 1996 alumni website" loading="lazy"><iframe src="https://ac1996.com" title="Live: https://ac1996.com" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
               <div class="work-meta">
@@ -530,11 +530,11 @@
               </div>
             </div>
             <div class="work-card">
-              <div class="work-chrome"><i></i><i></i><i></i><span>01bigfight.com</span></div>
-              <div class="work-shot live"><img src="work/bigfight.jpg" alt="01 Big Fight alumni website" loading="lazy"><iframe src="https://01bigfight.com" title="Live: https://01bigfight.com" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+              <div class="work-chrome"><i></i><i></i><i></i><span>sanmiguelfoods.com</span></div>
+              <div class="work-shot"><img src="work/sanmiguelfoods.jpg" alt="San Miguel Foods website" loading="lazy"></div>
               <div class="work-meta">
-                <div><h4>01 Big Fight</h4><p>Ateneo HS 2001 alumni platform — launched and live</p></div>
-                <a class="asg-link" href="https://01bigfight.com" target="_blank" rel="noopener">Open ↗</a>
+                <div><h4>San Miguel Foods</h4><p>Design work for one of the country's largest food companies</p></div>
+                <a class="asg-link" href="https://sanmiguelfoods.com" target="_blank" rel="noopener">Open ↗</a>
               </div>
             </div>
             <div class="work-card wip">
@@ -767,22 +767,24 @@
   }, { rootMargin: "-30% 0px -55% 0px" });
   document.querySelectorAll("section.tpl, section.deep-band").forEach(function (s) { secObs.observe(s); });
 
-  // Work cards: constant scroll speed regardless of page height
+  // Screenshot cards: constant scroll speed, starting from the top when the card enters view
   function tuneShots() {
-    document.querySelectorAll(".work-shot img").forEach(function (img, i) {
+    document.querySelectorAll(".work-shot:not(.live) img").forEach(function (img) {
       function set() {
         var travel = img.getBoundingClientRect().height - img.parentElement.getBoundingClientRect().height;
         if (travel <= 0) { img.style.animation = "none"; return; }
         var SPEED = 70; // px per second while scrolling
         var dur = Math.min(26, Math.max(8, travel / (0.43 * SPEED)));
         img.style.animationDuration = dur.toFixed(1) + "s";
-        img.style.animationDelay = (-(i * 1.7) % dur).toFixed(1) + "s";
+        img.style.animationPlayState = "paused";
+        new IntersectionObserver(function (entries, o) {
+          if (entries[0].isIntersecting) { img.style.animationPlayState = "running"; o.disconnect(); }
+        }, { threshold: 0.3 }).observe(img.parentElement);
       }
       if (img.complete) set(); else img.addEventListener("load", set);
     });
   }
   tuneShots();
-  window.addEventListener("resize", tuneShots);
 
   // Live cards: render the real site at 1200px, scale proportionally into the frame
   function tuneFrames() {
