@@ -28,6 +28,13 @@
     X-Frame-Options = "ALLOWALL"
     Content-Security-Policy = "frame-ancestors 'self' https://post205.com https://sign.post205.com"
 
+# The CPD demo is embedded live inside /work (same handoff trick as StagePro).
+[[headers]]
+  for = "/cpd/*"
+  [headers.values]
+    X-Frame-Options = "ALLOWALL"
+    Content-Security-Policy = "frame-ancestors 'self' https://post205.com"
+
 # Keep the shareable AIOS links page out of search engines
 [[headers]]
   for = "/aios"
@@ -117,5 +124,16 @@
 # ─── CV dossier: keep out of search engines (page + files) ───
 [[headers]]
   for = "/docs/cv/krcl/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# ─── BNI one-to-one dance card: private, keep out of search ───
+[[headers]]
+  for = "/bni/1-2-1"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/bni/1-2-1.html"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"

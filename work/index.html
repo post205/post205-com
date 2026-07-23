@@ -73,13 +73,18 @@
     button { font-family: inherit; }
     a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-    /* ── NAV (dark masthead, same family as index) ── */
+    /* ── NAV: transparent over the dark masthead, one subtle border only after scroll ── */
     nav {
-      position: sticky; top: 0; z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: 14px 48px;
+      background: transparent;
+      border-bottom: 1px solid transparent;
+      transition: background .3s ease, border-color .3s ease;
+    }
+    nav.scrolled {
       background: rgba(15, 20, 22, 0.97);
-      border-bottom: 2px solid var(--nav-accent);
+      border-bottom-color: rgba(59, 209, 211, .32);
     }
     .nav-logo { display: flex; align-items: center; text-decoration: none; }
     .nav-logo img { height: 26px; width: auto; mix-blend-mode: screen; opacity: 0.9; }
@@ -100,11 +105,11 @@
     .masthead {
       background: #0f1416;
       border-bottom: 2px solid var(--nav-accent);
-      padding: 96px 48px 84px;
+      padding: 150px 48px 92px;
       position: relative;
       overflow: hidden;
     }
-    .masthead-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+    .masthead-inner { max-width: 1340px; margin: 0 auto; position: relative; z-index: 1; }
     .sec-field { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
     .masthead-eyebrow {
       font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .16em;
@@ -120,7 +125,7 @@
       color: #a7c4c4; max-width: 62ch;
     }
     .masthead-lede b { color: #e8f2f2; font-weight: 700; }
-    @media (max-width: 640px) { .masthead { padding: 64px 20px 56px; } }
+    @media (max-width: 640px) { .masthead { padding: 116px 20px 60px; } }
 
     /* ── SECTIONS ── */
     main { display: block; }
@@ -128,7 +133,22 @@
       padding: 84px 48px;
       border-top: 1px solid var(--border);
     }
-    .wk-inner { max-width: 1100px; margin: 0 auto; }
+    .wk-inner { max-width: 1340px; margin: 0 auto; }
+
+    /* caption band: eyebrow + H2 left, prose right — the work below stays the frame */
+    .wk-cap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 14px 56px; align-items: end; margin-bottom: 34px; }
+    .wk-cap h2 { margin-bottom: 0; }
+    .wk-cap-r p:last-of-type { margin-bottom: 0; }
+    .wk-cap-r .wk-link { margin-top: 14px; }
+    @media (max-width: 900px) { .wk-cap { grid-template-columns: 1fr; gap: 6px; align-items: start; } .wk-cap h2 { margin-bottom: 14px; } }
+    /* eyebrow types in (steps clip), paragraphs stagger up */
+    .wk-cap .wk-eyebrow { clip-path: inset(0 101% 0 0); }
+    .wk-cap.in .wk-eyebrow { animation: eyType .7s steps(20, end) .1s forwards; }
+    @keyframes eyType { to { clip-path: inset(0 -2% 0 0); } }
+    .wk-cap-r p { opacity: 0; transform: translateY(10px); transition: opacity .55s cubic-bezier(0.16,1,0.3,1), transform .55s cubic-bezier(0.16,1,0.3,1); }
+    .wk-cap.in .wk-cap-r p { opacity: 1; transform: none; }
+    .wk-cap.in .wk-cap-r p:nth-of-type(2) { transition-delay: .14s; }
+    .wk-cap.in .wk-cap-r p:nth-of-type(3) { transition-delay: .28s; }
     .wk-eyebrow {
       font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .14em;
       text-transform: uppercase; color: var(--text-3); margin-bottom: 14px;
@@ -183,6 +203,10 @@
       .decode-wait { visibility: visible; }
       .mw-boot::after { animation: none; opacity: 0; }
       .mw-live { animation: none; opacity: .8; }
+      .live-frame.loading .lf-scan { animation: none; opacity: .4; }
+      .lf-iframe { transition: opacity .2s linear; }
+      .wk-cap .wk-eyebrow { clip-path: none; animation: none; }
+      .wk-cap-r p { opacity: 1; transform: none; transition: none; }
     }
 
     /* browser chrome (same vocabulary as index) */
@@ -206,6 +230,55 @@
       font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .08em;
       text-transform: uppercase; color: var(--text-3); margin-top: 10px;
     }
+
+    /* ── LIVE FRAMES: the real sites, mounted in giant windows ── */
+    .live-frame { margin: 0; border-radius: 8px; }
+    figure.mock-win { margin: 0; }
+    .lf-stage {
+      position: relative; overflow: hidden; background: #0e1a1a;
+      width: 100%; aspect-ratio: 16 / 10; max-height: 78vh;
+    }
+    .lf-stage.tall { max-height: 74vh; }
+    .lf-shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+    .lf-scan {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0;
+      background: repeating-linear-gradient(to bottom, rgba(59,209,211,.10) 0 2px, transparent 2px 6px);
+      transition: opacity .3s;
+    }
+    .live-frame.loading .lf-scan { opacity: 1; animation: lfScan 1.1s steps(6, end) infinite; }
+    @keyframes lfScan { 0% { background-position: 0 0; } 100% { background-position: 0 24px; } }
+    .lf-iframe {
+      position: absolute; top: 0; left: 0; z-index: 3; border: 0; background: #fff;
+      width: 1360px; transform-origin: 0 0; opacity: 0; pointer-events: none;
+      transition: opacity .55s ease, transform .8s cubic-bezier(.22,1,.36,1);
+    }
+    .live-frame.live .lf-iframe { opacity: 1; }
+    .live-frame.interactive .lf-iframe { pointer-events: auto; }
+    .live-frame.interactive { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .lf-status {
+      font-family: ui-monospace, monospace; font-size: 8.5px; letter-spacing: .1em;
+      color: #5a7473; margin-left: 8px; flex-shrink: 0; white-space: nowrap;
+    }
+    .live-frame.loading .lf-status { color: #d8b23a; }
+    .live-frame.live .lf-status { color: #2ecc71; }
+    .mw-browse {
+      flex-shrink: 0; margin-left: 8px; border: 1px solid rgba(59,209,211,.4); border-radius: 3px;
+      background: transparent; color: #3BD1D3; font-family: ui-monospace, monospace;
+      font-size: 8.5px; letter-spacing: .08em; text-transform: uppercase;
+      padding: 3px 8px; cursor: pointer; transition: background .15s;
+    }
+    .mw-browse:hover { background: rgba(59,209,211,.14); }
+    .live-frame.interactive .mw-browse { background: #3BD1D3; color: #021616; font-weight: 700; }
+    .mw-open {
+      flex-shrink: 0; margin-left: 8px; color: #8fb8b8; text-decoration: none;
+      font-family: ui-monospace, monospace; font-size: 8.5px; letter-spacing: .08em; text-transform: uppercase;
+      padding: 3px 2px; white-space: nowrap;
+    }
+    .mw-open:hover { color: #f0f0f2; }
+    @media (max-width: 767px) { .mw-browse { display: none; } .lf-status { display: none; } }
+
+    /* one wide band, centered, for our inline mocks */
+    .band { max-width: 940px; margin-left: auto; margin-right: auto; }
 
     /* two-up stage */
     .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; margin-top: 34px; }
@@ -325,11 +398,9 @@
     .tg-msg b { color: var(--text); }
     .beat-cap { text-align: center; font-family: ui-monospace, monospace; font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); margin-top: 16px; }
 
-    /* live proof card (Molave, under the replay) */
-    .proof-card { display: grid; grid-template-columns: 220px 1fr; gap: 20px; align-items: center; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); padding: 16px; margin-top: 26px; max-width: 760px; }
-    .proof-card img { border: 1px solid var(--border-2); border-radius: 5px; }
-    .proof-body p { font-size: 14px; color: var(--text-2); line-height: 1.7; margin-bottom: 12px; max-width: 52ch; }
-    @media (max-width: 640px) { .proof-card { grid-template-columns: 1fr; } }
+    /* live proof (Molave, under the replay) */
+    .proof-lede { display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; margin: 40px 0 18px; }
+    .proof-lede p { margin-bottom: 0; }
 
     /* ── 03 PIANDRE tabs ── */
     .fb-tabs { display: flex; gap: 2px; margin: 30px 0 2px; }
@@ -394,14 +465,17 @@
     .math-row.total .v { color: var(--accent-text); font-weight: 700; font-size: 15px; }
     .sample-tag { display: inline-block; font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); border: 1px solid var(--border-2); border-radius: 3px; padding: 3px 8px; margin-top: 12px; }
 
-    /* ── 05 / 06 card grids ── */
-    .site-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 34px; }
+    /* ── 05 / 07 grids: live windows with a caption footer ── */
+    .site-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 34px; }
     .site-grid.two { grid-template-columns: repeat(2, 1fr); }
     @media (max-width: 900px) { .site-grid, .site-grid.two { grid-template-columns: 1fr; } }
-    .site-card { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); overflow: hidden; text-decoration: none; display: block; transition: border-color .15s; }
-    .site-card:hover { border-color: var(--border-2); }
-    .site-card img { width: 100%; height: auto; border-bottom: 1px solid var(--border); }
-    .sc-body { padding: 16px 18px 18px; }
+    .site-cell .mock-win { border-radius: 8px 8px 0 0; }
+    .sc-body {
+      display: block; padding: 16px 18px 18px; text-decoration: none;
+      border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px;
+      background: var(--surface); transition: border-color .15s, background .15s;
+    }
+    .sc-body:hover { border-color: var(--border-2); background: #fdffff; }
     .sc-name { font-size: 15px; font-weight: 800; color: var(--text); }
     .sc-host { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .07em; text-transform: uppercase; color: var(--accent-text); margin-top: 3px; }
     .sc-line { font-size: 13px; color: var(--text-2); line-height: 1.6; margin-top: 8px; }
@@ -464,14 +538,18 @@
 <!-- ── 01 READING ── -->
 <section class="wk" id="reading">
   <div class="wk-inner">
-    <div class="rv">
-      <div class="wk-eyebrow"><span class="n">01</span> &middot; Reading</div>
-      <h2>The news, with nothing on top of it.</h2>
-      <p>Advocates Philippines has reported for decision makers for years. The reporting was never the problem. The reading was.</p>
-      <p>So we built them a home with no ads, no pop-ups, and nothing that follows you down the page. You open a story and it lets you read.</p>
+    <div class="wk-cap rv">
+      <div class="wk-cap-l">
+        <div class="wk-eyebrow"><span class="n">01</span> &middot; Reading</div>
+        <h2>The news, with nothing on top of it.</h2>
+      </div>
+      <div class="wk-cap-r">
+        <p>Advocates Philippines has reported for decision makers for years. The reporting was never the problem. The reading was.</p>
+        <p>So we built them a home with no ads, no pop-ups, and nothing that follows you down the page. You open a story and it lets you read.</p>
+      </div>
     </div>
 
-    <div class="duo rv">
+    <div class="duo rv" style="margin-top:0;">
       <div>
         <div class="clutter-count" id="clutterCount"><span class="cc-n" id="clutterN">3</span><span id="clutterTxt">things between you and the story</span></div>
         <div class="mock-win">
@@ -522,13 +600,19 @@
 
       <div>
         <div class="clutter-count clear"><span class="cc-n">0</span><span>things between you and the story</span></div>
-        <div class="mock-win">
+        <figure class="mock-win live-frame" data-live="https://advocatesomi.com">
           <div class="mock-bar">
             <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
             <div class="mock-url">advocatesomi.com</div>
+            <span class="lf-status" aria-hidden="true"></span>
+            <button class="mw-browse" type="button" hidden>Browse live</button>
+            <a class="mw-open" href="https://advocatesomi.com" target="_blank" rel="noopener">Open &#8599;</a>
           </div>
-          <img src="/images/work/advocates-article-desk.webp" alt="An article on Advocates Philippines, headline and text with nothing on top" width="1440" height="900" loading="lazy" decoding="async">
-        </div>
+          <div class="lf-stage">
+            <img class="lf-shot" src="/images/work/advocates-article-desk.webp" alt="An article on Advocates Philippines, headline and text with nothing on top" width="1440" height="900" loading="lazy" decoding="async">
+            <div class="lf-scan" aria-hidden="true"></div>
+          </div>
+        </figure>
         <div class="shot-note">The real thing, as it looks today.</div>
       </div>
     </div>
@@ -543,14 +627,18 @@
 <!-- ── 02 GETTING PAID ── -->
 <section class="wk" id="paid">
   <div class="wk-inner">
-    <div class="rv">
-      <div class="wk-eyebrow"><span class="n">02</span> &middot; Getting paid</div>
-      <h2>Bayad na po.</h2>
-      <p>Here, paying means transferring and sending a screenshot. Tama naman. It works.</p>
-      <p>So instead of forcing carts and card gateways on people, we gave the screenshot a home. The client reports the payment. The dashboard files it. The owner's Telegram pings the moment it is filed.</p>
+    <div class="wk-cap rv">
+      <div class="wk-cap-l">
+        <div class="wk-eyebrow"><span class="n">02</span> &middot; Getting paid</div>
+        <h2>Bayad na po.</h2>
+      </div>
+      <div class="wk-cap-r">
+        <p>Here, paying means transferring and sending a screenshot. Tama naman. It works.</p>
+        <p>So instead of forcing carts and card gateways on people, we gave the screenshot a home. The client reports the payment. The dashboard files it. The owner's Telegram pings the moment it is filed.</p>
+      </div>
     </div>
 
-    <div class="rv" id="payReplay">
+    <div class="rv band" id="payReplay">
       <div class="pay-steps" role="tablist" aria-label="Payment replay steps">
         <button class="pay-step on" type="button" data-beat="0" role="tab" aria-selected="true">1 &middot; Client reports</button>
         <button class="pay-step" type="button" data-beat="1" role="tab" aria-selected="false">2 &middot; Dashboard files</button>
@@ -599,16 +687,28 @@
       </div>
     </div>
 
-    <div class="rv" style="margin-top:28px;">
+    <div class="rv band" style="margin-top:28px;">
       <p>Nobody logs in to check. The message finds you.</p>
     </div>
 
-    <div class="proof-card rv">
-      <img src="/images/work/molave-desk.webp" alt="Molave Art Studio website" width="1440" height="900" loading="lazy" decoding="async">
-      <div class="proof-body">
+    <div class="rv">
+      <div class="proof-lede">
         <p>This is not a demo everywhere. At Molave Art Studio, a print sells by GCash and the studio's back office files it.</p>
         <a class="wk-link" href="https://molaveartstudio.com" target="_blank" rel="noopener">molaveartstudio.com <span aria-hidden="true">&rarr;</span></a>
       </div>
+      <figure class="mock-win live-frame" data-live="https://molaveartstudio.com">
+        <div class="mock-bar">
+          <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+          <div class="mock-url">molaveartstudio.com</div>
+          <span class="lf-status" aria-hidden="true"></span>
+          <button class="mw-browse" type="button" hidden>Browse live</button>
+          <a class="mw-open" href="https://molaveartstudio.com" target="_blank" rel="noopener">Open &#8599;</a>
+        </div>
+        <div class="lf-stage tall">
+          <img class="lf-shot" src="/images/work/molave-desk.webp" alt="Molave Art Studio website" width="1440" height="900" loading="lazy" decoding="async">
+          <div class="lf-scan" aria-hidden="true"></div>
+        </div>
+      </figure>
     </div>
   </div>
 </section>
@@ -616,11 +716,15 @@
 <!-- ── 03 PIANDRE ── -->
 <section class="wk" id="piandre">
   <div class="wk-inner">
-    <div class="rv">
-      <div class="wk-eyebrow"><span class="n">03</span> &middot; A salon since 1987</div>
-      <h2>Piandr&eacute;, front and back.</h2>
-      <p>Piandr&eacute; has been cutting hair since 1987, longer than most software companies have been alive. Seventeen branches. One family.</p>
-      <p>The website is the part you can see: booking, the store, gift certificates. The forms ask one thing at a time and behave on a phone, because that is where clients book. Behind them are the screens the family reads every morning. Built to their rules, not a template's.</p>
+    <div class="wk-cap rv">
+      <div class="wk-cap-l">
+        <div class="wk-eyebrow"><span class="n">03</span> &middot; A salon since 1987</div>
+        <h2>Piandr&eacute;, front and back.</h2>
+      </div>
+      <div class="wk-cap-r">
+        <p>Piandr&eacute; has been cutting hair since 1987, longer than most software companies have been alive. Seventeen branches. One family.</p>
+        <p>The website is the part you can see: booking, the store, gift certificates. The forms ask one thing at a time and behave on a phone, because that is where clients book. Behind them are the screens the family reads every morning. Built to their rules, not a template's.</p>
+      </div>
     </div>
 
     <div class="rv">
@@ -630,21 +734,34 @@
       </div>
 
       <div class="fb-panel on" id="fb-front" role="tabpanel">
-        <div class="duo" style="margin-top:0;">
-          <div>
-            <div class="mock-win">
-              <div class="mock-bar"><div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div><div class="mock-url">piandre.com</div></div>
-              <img src="/images/work/piandre-desk.webp" alt="Piandre salon website homepage" width="1440" height="900" loading="lazy" decoding="async">
+        <div>
+          <figure class="mock-win live-frame" data-live="https://piandre.com">
+            <div class="mock-bar">
+              <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+              <div class="mock-url">piandre.com</div>
+              <span class="lf-status" aria-hidden="true"></span>
+              <button class="mw-browse" type="button" hidden>Browse live</button>
+              <a class="mw-open" href="https://piandre.com" target="_blank" rel="noopener">Open &#8599;</a>
             </div>
-            <div class="shot-note">Booking, store, gift certificates</div>
-          </div>
-          <div>
-            <div class="mock-win">
-              <div class="mock-bar"><div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div><div class="mock-url">piandre.com/salons</div></div>
-              <img src="/images/work/piandre-salons-desk.webp" alt="Piandre salons page with a 3D map of all seventeen branches" width="1440" height="900" loading="lazy" decoding="async">
+            <div class="lf-stage tall">
+              <img class="lf-shot" src="/images/work/piandre-desk.webp" alt="Piandre salon website homepage" width="1440" height="900" loading="lazy" decoding="async">
+              <div class="lf-scan" aria-hidden="true"></div>
             </div>
-            <div class="shot-note">Seventeen branches on one 3D map</div>
-          </div>
+          </figure>
+          <div class="shot-note">Booking, store, gift certificates</div>
+        </div>
+        <div style="margin-top:26px;">
+          <figure class="mock-win">
+            <div class="mock-bar">
+              <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+              <div class="mock-url">piandre.com/salons</div>
+              <a class="mw-open" href="https://piandre.com/salons/" target="_blank" rel="noopener">Open &#8599;</a>
+            </div>
+            <div class="lf-stage tall">
+              <img class="lf-shot" src="/images/work/piandre-salons-desk.webp" alt="Piandre salons page with a 3D map of all seventeen branches" width="1440" height="900" loading="lazy" decoding="async">
+            </div>
+          </figure>
+          <div class="shot-note">Seventeen branches on one 3D map</div>
         </div>
       </div>
 
@@ -687,13 +804,17 @@
 <!-- ── 04 COOPERATIVE ── -->
 <section class="wk" id="coop">
   <div class="wk-inner">
-    <div class="rv">
-      <div class="wk-eyebrow"><span class="n">04</span> &middot; The cooperative</div>
-      <h2>Hi Maria! Ito po ang pera n'yo.</h2>
-      <p>A cooperative runs on trust in the numbers. So the portal opens with the numbers, in the member's own language.</p>
+    <div class="wk-cap rv">
+      <div class="wk-cap-l">
+        <div class="wk-eyebrow"><span class="n">04</span> &middot; The cooperative</div>
+        <h2>Hi Maria! Ito po ang pera n'yo.</h2>
+      </div>
+      <div class="wk-cap-r">
+        <p>A cooperative runs on trust in the numbers. So the portal opens with the numbers, in the member's own language.</p>
+      </div>
     </div>
 
-    <div class="coop-wrap rv-kids">
+    <div class="coop-wrap rv-kids band" style="margin-top:0;">
       <div>
         <div class="member-card">
           <div class="mc-top">
@@ -726,7 +847,7 @@
       </div>
     </div>
 
-    <div class="rv" style="margin-top:30px;">
+    <div class="rv band" style="margin-top:30px;">
       <p>The math that decides a loan is shown to the member, not kept in a drawer. When people can see the rules, they do not have to ask permission to understand them.</p>
       <p>That is what we think software is for.</p>
     </div>
@@ -736,38 +857,73 @@
 <!-- ── 05 COMING HOME ── -->
 <section class="wk" id="home">
   <div class="wk-inner">
-    <div class="rv">
-      <div class="wk-eyebrow"><span class="n">05</span> &middot; Coming home</div>
-      <h2>Three batches came home.</h2>
-      <p>Reunions run on volunteers with day jobs. Pledges, auctions, ticket payments. Somebody's classmate ends up doing accounting at midnight.</p>
-      <p>We built the sites that took that job. The batchmates got to just come home.</p>
+    <div class="wk-cap rv">
+      <div class="wk-cap-l">
+        <div class="wk-eyebrow"><span class="n">05</span> &middot; Coming home</div>
+        <h2>Three batches came home.</h2>
+      </div>
+      <div class="wk-cap-r">
+        <p>Reunions run on volunteers with day jobs. Pledges, auctions, ticket payments. Somebody's classmate ends up doing accounting at midnight.</p>
+        <p>We built the sites that took that job. The batchmates got to just come home.</p>
+      </div>
     </div>
 
-    <div class="site-grid rv-kids">
-      <a class="site-card" href="https://01bigfight.com" target="_blank" rel="noopener">
-        <img src="/images/work/bigfight-desk.webp" alt="01 Big Fight homecoming site for Ateneo High School batch 2001" width="1440" height="900" loading="lazy" decoding="async">
-        <div class="sc-body">
+    <div class="site-grid rv-kids" style="margin-top:0;">
+      <div class="site-cell">
+        <figure class="mock-win live-frame" data-live="https://01bigfight.com">
+          <div class="mock-bar">
+            <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+            <div class="mock-url">01bigfight.com</div>
+            <span class="lf-status" aria-hidden="true"></span>
+            <a class="mw-open" href="https://01bigfight.com" target="_blank" rel="noopener">Open &#8599;</a>
+          </div>
+          <div class="lf-stage">
+            <img class="lf-shot" src="/images/work/bigfight-desk.webp" alt="01 Big Fight homecoming site for Ateneo High School batch 2001" width="1440" height="900" loading="lazy" decoding="async">
+            <div class="lf-scan" aria-hidden="true"></div>
+          </div>
+        </figure>
+        <a class="sc-body" href="https://01bigfight.com" target="_blank" rel="noopener">
           <div class="sc-name">01 Big Fight</div>
           <div class="sc-host">AHS 2001 &middot; 01bigfight.com</div>
           <div class="sc-line">Pledges tracked from promise to paid.</div>
-        </div>
-      </a>
-      <a class="site-card" href="https://ac1996.com" target="_blank" rel="noopener">
-        <img src="/images/work/ac1996-desk.webp" alt="AC 1996 homecoming site for Assumption College batch 1996" width="1440" height="900" loading="lazy" decoding="async">
-        <div class="sc-body">
+        </a>
+      </div>
+      <div class="site-cell">
+        <figure class="mock-win live-frame" data-live="https://ac1996.com">
+          <div class="mock-bar">
+            <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+            <div class="mock-url">ac1996.com</div>
+            <span class="lf-status" aria-hidden="true"></span>
+            <a class="mw-open" href="https://ac1996.com" target="_blank" rel="noopener">Open &#8599;</a>
+          </div>
+          <div class="lf-stage">
+            <img class="lf-shot" src="/images/work/ac1996-desk.webp" alt="AC 1996 homecoming site for Assumption College batch 1996" width="1440" height="900" loading="lazy" decoding="async">
+            <div class="lf-scan" aria-hidden="true"></div>
+          </div>
+        </figure>
+        <a class="sc-body" href="https://ac1996.com" target="_blank" rel="noopener">
           <div class="sc-name">AC 1996</div>
           <div class="sc-host">Assumption College &middot; ac1996.com</div>
           <div class="sc-line">Auctions that ran themselves.</div>
-        </div>
-      </a>
-      <a class="site-card" href="https://povedans.com" target="_blank" rel="noopener">
-        <img src="/images/work/povedans-desk.webp" alt="Poveda 2002 homecoming pledge site at povedans.com" width="1440" height="900" loading="lazy" decoding="async">
-        <div class="sc-body">
+        </a>
+      </div>
+      <div class="site-cell">
+        <figure class="mock-win">
+          <div class="mock-bar">
+            <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+            <div class="mock-url">povedans.com</div>
+            <a class="mw-open" href="https://povedans.com" target="_blank" rel="noopener">Open &#8599;</a>
+          </div>
+          <div class="lf-stage">
+            <img class="lf-shot" src="/images/work/povedans-desk.webp" alt="Poveda 2002 homecoming pledge site at povedans.com" width="1440" height="900" loading="lazy" decoding="async">
+          </div>
+        </figure>
+        <a class="sc-body" href="https://povedans.com" target="_blank" rel="noopener">
           <div class="sc-name">Poveda 2002</div>
           <div class="sc-host">povedans.com</div>
           <div class="sc-line">Payments verified, receipts sent.</div>
-        </div>
-      </a>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -775,28 +931,49 @@
 <!-- ── 06 THE BREADTH ── -->
 <section class="wk" id="breadth">
   <div class="wk-inner">
-    <div class="rv">
-      <div class="wk-eyebrow"><span class="n">06</span> &middot; The breadth</div>
-      <h2>The work, seen directly.</h2>
-      <p>Archion has designed hospitals, schools, and homes for decades, across the Philippines and beyond. Most firms show you ten photos and call it a portfolio.</p>
-      <p>Their site plots every project on a map instead. You do not take their word for the breadth. You look at it.</p>
+    <div class="wk-cap rv">
+      <div class="wk-cap-l">
+        <div class="wk-eyebrow"><span class="n">06</span> &middot; The breadth</div>
+        <h2>The work, seen directly.</h2>
+      </div>
+      <div class="wk-cap-r">
+        <p>Archion has designed hospitals, schools, and homes for decades, across the Philippines and beyond. Most firms show you ten photos and call it a portfolio.</p>
+        <p>Their site plots every project on a map instead. You do not take their word for the breadth. You look at it.</p>
+      </div>
     </div>
 
-    <div class="duo rv">
-      <div>
-        <div class="mock-win">
-          <div class="mock-bar"><div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div><div class="mock-url">archionarchitects.com</div></div>
-          <img src="/images/work/archion-desk.webp" alt="Archion Architects homepage" width="1440" height="900" loading="lazy" decoding="async">
+    <div class="rv">
+      <figure class="mock-win live-frame" data-live="https://archionarchitects.com/projects/">
+        <div class="mock-bar">
+          <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+          <div class="mock-url">archionarchitects.com/projects</div>
+          <span class="lf-status" aria-hidden="true"></span>
+          <button class="mw-browse" type="button" hidden>Browse live</button>
+          <a class="mw-open" href="https://archionarchitects.com/projects/" target="_blank" rel="noopener">Open &#8599;</a>
         </div>
-        <div class="shot-note">The practice</div>
-      </div>
-      <div>
-        <div class="mock-win">
-          <div class="mock-bar"><div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div><div class="mock-url">archionarchitects.com/projects</div></div>
-          <img src="/images/work/archion-map-desk.webp" alt="Archion Architects projects page, a 3D map with projects plotted across the country" width="1440" height="900" loading="lazy" decoding="async">
+        <div class="lf-stage tall">
+          <img class="lf-shot" src="/images/work/archion-map-desk.webp" alt="Archion Architects projects page, a 3D map with projects plotted across the country" width="1440" height="900" loading="lazy" decoding="async">
+          <div class="lf-scan" aria-hidden="true"></div>
         </div>
-        <div class="shot-note">The projects, plotted</div>
-      </div>
+      </figure>
+      <div class="shot-note">The projects, plotted</div>
+    </div>
+
+    <div class="rv" style="margin-top:26px;">
+      <figure class="mock-win live-frame" data-live="https://archionarchitects.com">
+        <div class="mock-bar">
+          <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+          <div class="mock-url">archionarchitects.com</div>
+          <span class="lf-status" aria-hidden="true"></span>
+          <button class="mw-browse" type="button" hidden>Browse live</button>
+          <a class="mw-open" href="https://archionarchitects.com" target="_blank" rel="noopener">Open &#8599;</a>
+        </div>
+        <div class="lf-stage tall">
+          <img class="lf-shot" src="/images/work/archion-desk.webp" alt="Archion Architects homepage" width="1440" height="900" loading="lazy" decoding="async">
+          <div class="lf-scan" aria-hidden="true"></div>
+        </div>
+      </figure>
+      <div class="shot-note">The practice</div>
     </div>
 
     <div class="rv" style="margin-top:28px;">
@@ -814,22 +991,43 @@
     </div>
 
     <div class="site-grid two rv-kids">
-      <a class="site-card" href="https://molaveartstudio.com" target="_blank" rel="noopener">
-        <img src="/images/work/molave-desk.webp" alt="Molave Art Studio website, a printmaking studio in Makati" width="1440" height="900" loading="lazy" decoding="async">
-        <div class="sc-body">
+      <div class="site-cell">
+        <figure class="mock-win live-frame" data-live="https://molaveartstudio.com">
+          <div class="mock-bar">
+            <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+            <div class="mock-url">molaveartstudio.com</div>
+            <span class="lf-status" aria-hidden="true"></span>
+            <button class="mw-browse" type="button" hidden>Browse live</button>
+            <a class="mw-open" href="https://molaveartstudio.com" target="_blank" rel="noopener">Open &#8599;</a>
+          </div>
+          <div class="lf-stage">
+            <img class="lf-shot" src="/images/work/molave-desk.webp" alt="Molave Art Studio website, a printmaking studio in Makati" width="1440" height="900" loading="lazy" decoding="async">
+            <div class="lf-scan" aria-hidden="true"></div>
+          </div>
+        </figure>
+        <a class="sc-body" href="https://molaveartstudio.com" target="_blank" rel="noopener">
           <div class="sc-name">Molave Art Studio</div>
           <div class="sc-host">molaveartstudio.com</div>
           <div class="sc-line">A printmaking studio in Makati. The site draws its own art the way the studio does. Every visit, a new print.</div>
-        </div>
-      </a>
-      <a class="site-card" href="/cpd/">
-        <img src="/images/work/cpd-desk.webp" alt="UAP CPD events demo with evaluations and certificates" width="1440" height="900" loading="lazy" decoding="async">
-        <div class="sc-body">
+        </a>
+      </div>
+      <div class="site-cell">
+        <figure class="mock-win">
+          <div class="mock-bar">
+            <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+            <div class="mock-url">post205.com/cpd</div>
+            <a class="mw-open" href="/cpd/">Open &#8599;</a>
+          </div>
+          <div class="lf-stage">
+            <img class="lf-shot" src="/images/work/cpd-desk.webp" alt="UAP CPD events demo with evaluations and certificates" width="1440" height="900" loading="lazy" decoding="async">
+          </div>
+        </figure>
+        <a class="sc-body" href="/cpd/">
           <div class="sc-name">UAP CPD events</div>
           <div class="sc-host">post205.com/cpd</div>
           <div class="sc-line">For architects: evaluations, certificates, and the PRC-ready log run themselves. The organizers get to watch the talks.</div>
-        </div>
-      </a>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -837,28 +1035,46 @@
 <!-- ── 08 GIVING ── -->
 <section class="wk" id="giving">
   <div class="wk-inner">
-    <div class="rv">
-      <div class="wk-eyebrow"><span class="n">08</span> &middot; Giving</div>
-      <h2>Saan napunta?</h2>
-      <p>AHA teaches children to read. Every donor everywhere asks the same question: saan napunta ang pera?</p>
-      <p>The site answers before anyone asks. The children, the numbers, the receipts.</p>
+    <div class="wk-cap rv">
+      <div class="wk-cap-l">
+        <div class="wk-eyebrow"><span class="n">08</span> &middot; Giving</div>
+        <h2>Saan napunta?</h2>
+      </div>
+      <div class="wk-cap-r">
+        <p>AHA teaches children to read. Every donor everywhere asks the same question: saan napunta ang pera?</p>
+        <p>The site answers before anyone asks. The children, the numbers, the receipts.</p>
+      </div>
     </div>
 
-    <div class="duo rv">
-      <div>
-        <div class="mock-win">
-          <div class="mock-bar"><div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div><div class="mock-url">impact.ahalearningcenter.com</div></div>
-          <img src="/images/work/aha-levels-desk.webp" alt="AHA impact page, one dot per learner grouped by reading level" width="1440" height="900" loading="lazy" decoding="async">
+    <div class="rv">
+      <figure class="mock-win live-frame" data-live="https://impact.ahalearningcenter.com">
+        <div class="mock-bar">
+          <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+          <div class="mock-url">impact.ahalearningcenter.com</div>
+          <span class="lf-status" aria-hidden="true"></span>
+          <button class="mw-browse" type="button" hidden>Browse live</button>
+          <a class="mw-open" href="https://impact.ahalearningcenter.com" target="_blank" rel="noopener">Open &#8599;</a>
         </div>
-        <div class="shot-note">One dot per learner, grouped by reading level</div>
-      </div>
-      <div>
-        <div class="mock-win">
-          <div class="mock-bar"><div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div><div class="mock-url">impact.ahalearningcenter.com</div></div>
-          <img src="/images/work/aha-trend-desk.webp" alt="AHA impact page, attendance and engagement trend through the year" width="1440" height="900" loading="lazy" decoding="async">
+        <div class="lf-stage tall">
+          <img class="lf-shot" src="/images/work/aha-levels-desk.webp" alt="AHA impact page, one dot per learner grouped by reading level" width="1440" height="900" loading="lazy" decoding="async">
+          <div class="lf-scan" aria-hidden="true"></div>
         </div>
-        <div class="shot-note">Attendance and engagement through the year</div>
-      </div>
+      </figure>
+      <div class="shot-note">One dot per learner, grouped by reading level</div>
+    </div>
+
+    <div class="rv band" style="margin-top:26px;">
+      <figure class="mock-win">
+        <div class="mock-bar">
+          <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+          <div class="mock-url">impact.ahalearningcenter.com</div>
+          <a class="mw-open" href="https://impact.ahalearningcenter.com" target="_blank" rel="noopener">Open &#8599;</a>
+        </div>
+        <div class="lf-stage">
+          <img class="lf-shot" src="/images/work/aha-trend-desk.webp" alt="AHA impact page, attendance and engagement trend through the year" width="1440" height="900" loading="lazy" decoding="async">
+        </div>
+      </figure>
+      <div class="shot-note">Attendance and engagement through the year</div>
     </div>
 
     <div class="rv" style="margin-top:28px;">
@@ -902,6 +1118,16 @@
     } catch (e) {}
   }
   tickTime(); setInterval(tickTime, 30000);
+
+  /* nav: transparent over the masthead, dark + one border once past it */
+  var navEl = document.querySelector('nav');
+  var mastheadEl = document.querySelector('.masthead');
+  function navState() {
+    var limit = mastheadEl.offsetTop + mastheadEl.offsetHeight - navEl.offsetHeight;
+    navEl.classList.toggle('scrolled', window.scrollY > limit);
+  }
+  navState();
+
   var scrlTick = false;
   window.addEventListener('scroll', function () {
     if (scrlTick) return; scrlTick = true;
@@ -910,6 +1136,7 @@
       var max = document.documentElement.scrollHeight - window.innerHeight;
       var p = max > 0 ? Math.round((window.scrollY / max) * 100) : 0;
       hudScrl.textContent = 'SCRL ' + String(Math.min(100, Math.max(0, p))).padStart(3, '0');
+      navState();
     });
   }, { passive: true });
 
@@ -1198,7 +1425,8 @@
     document.querySelectorAll('.mock-bar').forEach(function (bar) {
       var pip = document.createElement('span');
       pip.className = 'mw-live';
-      bar.appendChild(pip);
+      var anchor = bar.querySelector('.lf-status') || bar.querySelector('.mw-open');
+      if (anchor) { bar.insertBefore(pip, anchor); } else { bar.appendChild(pip); }
     });
     if (reduced || !('IntersectionObserver' in window)) return;
     var io = new IntersectionObserver(function (es) {
@@ -1209,6 +1437,158 @@
       });
     }, { threshold: 0.35 });
     document.querySelectorAll('.mock-win').forEach(function (el) { io.observe(el); });
+  })();
+
+  /* ═══ LIVE FRAMES: the real sites, mounted in the windows ═══
+     Desktop-scale render (1360px logical, scaled to fit), lazy mount/unmount
+     with a hard cap, screenshot placeholder underneath, crossfade on load.
+     pointer-events off until BROWSE LIVE, so scroll never gets trapped. */
+  (function liveFrames() {
+    var frames = Array.prototype.slice.call(document.querySelectorAll('.live-frame[data-live]'));
+    if (!frames.length) return;
+    var LOGICAL = 1360;
+    var isMobile = matchMedia('(max-width: 767px)').matches;
+    var MAX = isMobile ? 2 : 3;
+    var mounted = [];
+    var active = null;
+
+    function layout(f) {
+      var ifr = f._ifr; if (!ifr) return;
+      var stage = f.querySelector('.lf-stage');
+      var w = stage.clientWidth, h = stage.clientHeight;
+      if (!w || !h) return;
+      var S = w / LOGICAL;
+      ifr.style.width = LOGICAL + 'px';
+      ifr.style.height = Math.ceil(h / S) + 'px';
+      ifr.style.transform = 'scale(' + (f.classList.contains('live') ? S : S * 1.015) + ')';
+    }
+
+    function release(f) {
+      if (!f || !f.classList.contains('interactive')) return;
+      f.classList.remove('interactive');
+      var b = f.querySelector('.mw-browse');
+      if (b) b.textContent = 'Browse live';
+      if (active === f) active = null;
+    }
+
+    function unmount(f) {
+      if (!f._ifr) return;
+      release(f);
+      f._ifr.remove(); f._ifr = null;
+      f.classList.remove('live', 'loading');
+      var st = f.querySelector('.lf-status'); if (st) st.textContent = '';
+      var b = f.querySelector('.mw-browse'); if (b) b.hidden = true;
+      var i = mounted.indexOf(f); if (i > -1) mounted.splice(i, 1);
+    }
+
+    function dist(f) {
+      var r = f.getBoundingClientRect();
+      return Math.abs(r.top + r.height / 2 - innerHeight / 2);
+    }
+
+    function mount(f) {
+      if (f._ifr || f._dead) return;
+      while (mounted.length >= MAX) {
+        var far = null, fd = -1;
+        mounted.forEach(function (m) { var d = dist(m); if (d > fd) { fd = d; far = m; } });
+        if (!far || fd <= dist(f)) return;   /* everything mounted is closer; wait */
+        unmount(far);
+      }
+      var stage = f.querySelector('.lf-stage');
+      var st = f.querySelector('.lf-status');
+      var ifr = document.createElement('iframe');
+      ifr.className = 'lf-iframe';
+      ifr.setAttribute('title', 'Live site: ' + f.getAttribute('data-live'));
+      ifr.setAttribute('aria-hidden', 'true');
+      ifr.setAttribute('tabindex', '-1');
+      f._ifr = ifr;
+      mounted.push(f);
+      f.classList.add('loading');
+      if (st) st.textContent = 'LOADING LIVE';
+      ifr.addEventListener('load', function () {
+        if (f._ifr !== ifr) return;
+        f.classList.remove('loading');
+        f.classList.add('live');
+        layout(f);                            /* scale settles 1.015 -> 1 */
+        if (st) st.textContent = 'LIVE';
+        var b = f.querySelector('.mw-browse');
+        if (b && !isMobile) b.hidden = false;
+      });
+      ifr.addEventListener('error', function () {
+        f._dead = true; unmount(f);           /* screenshot stays as the fallback */
+      });
+      ifr.src = f.getAttribute('data-live');
+      stage.appendChild(ifr);
+      layout(f);
+    }
+
+    /* want-list via IO; a slow retry loop settles mounts around the cap */
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (en) {
+          var f = en.target;
+          f._want = en.isIntersecting;
+          if (en.isIntersecting) { mount(f); }
+          else if (f._ifr) { unmount(f); }
+        });
+      }, { rootMargin: '600px 0px 600px 0px', threshold: 0 });
+      frames.forEach(function (f) { io.observe(f); });
+      setInterval(function () {
+        if (document.hidden) return;
+        frames
+          .filter(function (f) { return f._want && !f._ifr && !f._dead; })
+          .sort(function (a, b) { return dist(a) - dist(b); })
+          .forEach(mount);
+      }, 900);
+    } else {
+      frames.slice(0, MAX).forEach(mount);
+    }
+
+    /* BROWSE LIVE: one interactive frame at a time, Escape releases */
+    frames.forEach(function (f) {
+      var b = f.querySelector('.mw-browse');
+      if (!b) return;
+      b.addEventListener('click', function () {
+        if (f.classList.contains('interactive')) { release(f); return; }
+        if (active) release(active);
+        f.classList.add('interactive');
+        active = f;
+        b.textContent = '✕ release';
+      });
+    });
+    window.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && active) release(active);
+    });
+
+    /* rescale on resize + when a tab panel becomes visible */
+    var rzT;
+    window.addEventListener('resize', function () {
+      clearTimeout(rzT);
+      rzT = setTimeout(function () { mounted.forEach(layout); }, 150);
+    });
+    document.querySelectorAll('.fb-tab').forEach(function (t) {
+      t.addEventListener('click', function () {
+        requestAnimationFrame(function () { mounted.forEach(layout); });
+      });
+    });
+
+    /* scroll-linked micro-parallax, desktop only */
+    if (!reduced && !isMobile) {
+      var pTick = false;
+      var par = function () {
+        pTick = false;
+        frames.forEach(function (f) {
+          var r = f.getBoundingClientRect();
+          if (r.bottom < -60 || r.top > innerHeight + 60) return;
+          var c = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
+          var y = Math.max(-10, Math.min(10, -c * 14));
+          f.style.translate = '0 ' + y.toFixed(1) + 'px';
+        });
+      };
+      window.addEventListener('scroll', function () {
+        if (pTick) return; pTick = true; requestAnimationFrame(par);
+      }, { passive: true });
+    }
   })();
 })();
 </script>
