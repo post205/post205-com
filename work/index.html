@@ -101,8 +101,11 @@
       background: #0f1416;
       border-bottom: 2px solid var(--nav-accent);
       padding: 96px 48px 84px;
+      position: relative;
+      overflow: hidden;
     }
-    .masthead-inner { max-width: 1100px; margin: 0 auto; }
+    .masthead-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+    .sec-field { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
     .masthead-eyebrow {
       font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .16em;
       text-transform: uppercase; color: #6fc9ca; margin-bottom: 26px;
@@ -148,16 +151,38 @@
     .wk-link:hover { color: var(--text); border-color: var(--text-3); }
     @media (max-width: 640px) { .wk { padding: 60px 20px; } }
 
-    /* reveal */
-    .rv { opacity: 0; transform: translateY(16px); transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1); }
+    /* reveal (quiet rise, homepage v3 curve) */
+    .rv { opacity: 0; transform: translateY(16px) scale(.988); transition: opacity .6s cubic-bezier(0.16,1,0.3,1), transform .6s cubic-bezier(0.16,1,0.3,1); }
     .rv.in { opacity: 1; transform: none; }
-    .rv-kids > * { opacity: 0; transform: translateY(14px); transition: opacity .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1); }
+    .rv-kids > * { opacity: 0; transform: translateY(15px) scale(.988); transition: opacity .55s cubic-bezier(0.16,1,0.3,1), transform .55s cubic-bezier(0.16,1,0.3,1); }
     .rv-kids.in > * { opacity: 1; transform: none; }
-    .rv-kids.in > *:nth-child(2) { transition-delay: .08s; }
-    .rv-kids.in > *:nth-child(3) { transition-delay: .16s; }
-    .rv-kids.in > *:nth-child(4) { transition-delay: .24s; }
+    .rv-kids.in > *:nth-child(2) { transition-delay: .1s; }
+    .rv-kids.in > *:nth-child(3) { transition-delay: .2s; }
+    .rv-kids.in > *:nth-child(4) { transition-delay: .3s; }
+    .rv-kids.in > *:nth-child(5) { transition-delay: .4s; }
+    .rv-kids.in > *:nth-child(6) { transition-delay: .5s; }
+
+    /* decode-in: headlines hold layout, characters resolve in JS */
+    .decode-wait { visibility: hidden; }
+
+    /* mock windows boot with a two-beat scanline flicker when they enter */
+    .mock-win { position: relative; }
+    .mw-boot::after {
+      content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none;
+      background: repeating-linear-gradient(to bottom, rgba(59,209,211,.14) 0 2px, transparent 2px 5px);
+      animation: mwBoot .32s steps(3, end) forwards;
+    }
+    @keyframes mwBoot { 0% { opacity: 1; } 60% { opacity: .35; } 100% { opacity: 0; } }
+
+    /* live pip in every mock chrome */
+    .mw-live { width: 6px; height: 6px; border-radius: 50%; background: #2ecc71; margin-left: 6px; flex-shrink: 0; animation: mwLive 2.4s ease-in-out infinite; }
+    @keyframes mwLive { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+
     @media (prefers-reduced-motion: reduce) {
       .rv, .rv-kids > * { opacity: 1; transform: none; transition: none; }
+      .decode-wait { visibility: visible; }
+      .mw-boot::after { animation: none; opacity: 0; }
+      .mw-live { animation: none; opacity: .8; }
     }
 
     /* browser chrome (same vocabulary as index) */
@@ -300,6 +325,12 @@
     .tg-msg b { color: var(--text); }
     .beat-cap { text-align: center; font-family: ui-monospace, monospace; font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); margin-top: 16px; }
 
+    /* live proof card (Molave, under the replay) */
+    .proof-card { display: grid; grid-template-columns: 220px 1fr; gap: 20px; align-items: center; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); padding: 16px; margin-top: 26px; max-width: 760px; }
+    .proof-card img { border: 1px solid var(--border-2); border-radius: 5px; }
+    .proof-body p { font-size: 14px; color: var(--text-2); line-height: 1.7; margin-bottom: 12px; max-width: 52ch; }
+    @media (max-width: 640px) { .proof-card { grid-template-columns: 1fr; } }
+
     /* ── 03 PIANDRE tabs ── */
     .fb-tabs { display: flex; gap: 2px; margin: 30px 0 2px; }
     .fb-tab {
@@ -376,8 +407,10 @@
     .sc-line { font-size: 13px; color: var(--text-2); line-height: 1.6; margin-top: 8px; }
 
     /* ── CLOSING ── */
-    .closing { background: var(--surface-deep); padding: 92px 48px; }
-    .closing-inner { max-width: 860px; margin: 0 auto; }
+    .closing { background: var(--surface-deep); padding: 92px 48px; position: relative; overflow: hidden; }
+    .closing-inner { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+    .px-grid { position: absolute; right: 48px; top: 48px; z-index: 0; pointer-events: none; opacity: .8; }
+    @media (max-width: 860px) { .px-grid { right: 20px; top: 24px; } }
     .closing .wk-eyebrow { color: #6fc9ca; }
     .closing h2 { font-size: clamp(28px, 4.4vw, 48px); font-weight: 800; line-height: 1.08; letter-spacing: -0.01em; color: #f0f4f4; margin-bottom: 22px; }
     .closing p { font-size: 15.5px; line-height: 1.75; color: #a7c4c4; max-width: 62ch; margin-bottom: 16px; }
@@ -494,7 +527,7 @@
             <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
             <div class="mock-url">advocatesomi.com</div>
           </div>
-          <img src="/images/work/advocates-article-desk.webp" alt="An article on Advocates Philippines, headline and text with nothing on top" width="1440" height="900" loading="lazy">
+          <img src="/images/work/advocates-article-desk.webp" alt="An article on Advocates Philippines, headline and text with nothing on top" width="1440" height="900" loading="lazy" decoding="async">
         </div>
         <div class="shot-note">The real thing, as it looks today.</div>
       </div>
@@ -569,6 +602,14 @@
     <div class="rv" style="margin-top:28px;">
       <p>Nobody logs in to check. The message finds you.</p>
     </div>
+
+    <div class="proof-card rv">
+      <img src="/images/work/molave-desk.webp" alt="Molave Art Studio website" width="1440" height="900" loading="lazy" decoding="async">
+      <div class="proof-body">
+        <p>This is not a demo everywhere. At Molave Art Studio, a print sells by GCash and the studio's back office files it.</p>
+        <a class="wk-link" href="https://molaveartstudio.com" target="_blank" rel="noopener">molaveartstudio.com <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -579,7 +620,7 @@
       <div class="wk-eyebrow"><span class="n">03</span> &middot; A salon since 1987</div>
       <h2>Piandr&eacute;, front and back.</h2>
       <p>Piandr&eacute; has been cutting hair since 1987, longer than most software companies have been alive. Seventeen branches. One family.</p>
-      <p>The website is the part you can see: booking, the store, gift certificates. Behind it are the screens the family reads every morning. Built to their rules, not a template's.</p>
+      <p>The website is the part you can see: booking, the store, gift certificates. The forms ask one thing at a time and behave on a phone, because that is where clients book. Behind them are the screens the family reads every morning. Built to their rules, not a template's.</p>
     </div>
 
     <div class="rv">
@@ -593,14 +634,14 @@
           <div>
             <div class="mock-win">
               <div class="mock-bar"><div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div><div class="mock-url">piandre.com</div></div>
-              <img src="/images/work/piandre-desk.webp" alt="Piandre salon website homepage" width="1440" height="900" loading="lazy">
+              <img src="/images/work/piandre-desk.webp" alt="Piandre salon website homepage" width="1440" height="900" loading="lazy" decoding="async">
             </div>
             <div class="shot-note">Booking, store, gift certificates</div>
           </div>
           <div>
             <div class="mock-win">
               <div class="mock-bar"><div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div><div class="mock-url">piandre.com/salons</div></div>
-              <img src="/images/work/piandre-salons-desk.webp" alt="Piandre salons page with a 3D map of all seventeen branches" width="1440" height="900" loading="lazy">
+              <img src="/images/work/piandre-salons-desk.webp" alt="Piandre salons page with a 3D map of all seventeen branches" width="1440" height="900" loading="lazy" decoding="async">
             </div>
             <div class="shot-note">Seventeen branches on one 3D map</div>
           </div>
@@ -704,7 +745,7 @@
 
     <div class="site-grid rv-kids">
       <a class="site-card" href="https://01bigfight.com" target="_blank" rel="noopener">
-        <img src="/images/work/bigfight-desk.webp" alt="01 Big Fight homecoming site for Ateneo High School batch 2001" width="1440" height="900" loading="lazy">
+        <img src="/images/work/bigfight-desk.webp" alt="01 Big Fight homecoming site for Ateneo High School batch 2001" width="1440" height="900" loading="lazy" decoding="async">
         <div class="sc-body">
           <div class="sc-name">01 Big Fight</div>
           <div class="sc-host">AHS 2001 &middot; 01bigfight.com</div>
@@ -712,7 +753,7 @@
         </div>
       </a>
       <a class="site-card" href="https://ac1996.com" target="_blank" rel="noopener">
-        <img src="/images/work/ac1996-desk.webp" alt="AC 1996 homecoming site for Assumption College batch 1996" width="1440" height="900" loading="lazy">
+        <img src="/images/work/ac1996-desk.webp" alt="AC 1996 homecoming site for Assumption College batch 1996" width="1440" height="900" loading="lazy" decoding="async">
         <div class="sc-body">
           <div class="sc-name">AC 1996</div>
           <div class="sc-host">Assumption College &middot; ac1996.com</div>
@@ -720,7 +761,7 @@
         </div>
       </a>
       <a class="site-card" href="https://povedans.com" target="_blank" rel="noopener">
-        <img src="/images/work/povedans-desk.webp" alt="Poveda 2002 homecoming pledge site at povedans.com" width="1440" height="900" loading="lazy">
+        <img src="/images/work/povedans-desk.webp" alt="Poveda 2002 homecoming pledge site at povedans.com" width="1440" height="900" loading="lazy" decoding="async">
         <div class="sc-body">
           <div class="sc-name">Poveda 2002</div>
           <div class="sc-host">povedans.com</div>
@@ -731,17 +772,50 @@
   </div>
 </section>
 
-<!-- ── 06 THE CRAFT ── -->
+<!-- ── 06 THE BREADTH ── -->
+<section class="wk" id="breadth">
+  <div class="wk-inner">
+    <div class="rv">
+      <div class="wk-eyebrow"><span class="n">06</span> &middot; The breadth</div>
+      <h2>The work, seen directly.</h2>
+      <p>Archion has designed hospitals, schools, and homes for decades, across the Philippines and beyond. Most firms show you ten photos and call it a portfolio.</p>
+      <p>Their site plots every project on a map instead. You do not take their word for the breadth. You look at it.</p>
+    </div>
+
+    <div class="duo rv">
+      <div>
+        <div class="mock-win">
+          <div class="mock-bar"><div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div><div class="mock-url">archionarchitects.com</div></div>
+          <img src="/images/work/archion-desk.webp" alt="Archion Architects homepage" width="1440" height="900" loading="lazy" decoding="async">
+        </div>
+        <div class="shot-note">The practice</div>
+      </div>
+      <div>
+        <div class="mock-win">
+          <div class="mock-bar"><div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div><div class="mock-url">archionarchitects.com/projects</div></div>
+          <img src="/images/work/archion-map-desk.webp" alt="Archion Architects projects page, a 3D map with projects plotted across the country" width="1440" height="900" loading="lazy" decoding="async">
+        </div>
+        <div class="shot-note">The projects, plotted</div>
+      </div>
+    </div>
+
+    <div class="rv" style="margin-top:28px;">
+      <a class="wk-link" href="https://archionarchitects.com/projects/" target="_blank" rel="noopener">archionarchitects.com/projects <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ── 07 THE CRAFT ── -->
 <section class="wk" id="craft">
   <div class="wk-inner">
     <div class="rv">
-      <div class="wk-eyebrow"><span class="n">06</span> &middot; The craft</div>
+      <div class="wk-eyebrow"><span class="n">07</span> &middot; The craft</div>
       <h2>Made for people who make things.</h2>
     </div>
 
     <div class="site-grid two rv-kids">
       <a class="site-card" href="https://molaveartstudio.com" target="_blank" rel="noopener">
-        <img src="/images/work/molave-desk.webp" alt="Molave Art Studio website, a printmaking studio in Makati" width="1440" height="900" loading="lazy">
+        <img src="/images/work/molave-desk.webp" alt="Molave Art Studio website, a printmaking studio in Makati" width="1440" height="900" loading="lazy" decoding="async">
         <div class="sc-body">
           <div class="sc-name">Molave Art Studio</div>
           <div class="sc-host">molaveartstudio.com</div>
@@ -749,7 +823,7 @@
         </div>
       </a>
       <a class="site-card" href="/cpd/">
-        <img src="/images/work/cpd-desk.webp" alt="UAP CPD events demo with evaluations and certificates" width="1440" height="900" loading="lazy">
+        <img src="/images/work/cpd-desk.webp" alt="UAP CPD events demo with evaluations and certificates" width="1440" height="900" loading="lazy" decoding="async">
         <div class="sc-body">
           <div class="sc-name">UAP CPD events</div>
           <div class="sc-host">post205.com/cpd</div>
@@ -760,11 +834,11 @@
   </div>
 </section>
 
-<!-- ── 07 GIVING ── -->
+<!-- ── 08 GIVING ── -->
 <section class="wk" id="giving">
   <div class="wk-inner">
     <div class="rv">
-      <div class="wk-eyebrow"><span class="n">07</span> &middot; Giving</div>
+      <div class="wk-eyebrow"><span class="n">08</span> &middot; Giving</div>
       <h2>Saan napunta?</h2>
       <p>AHA teaches children to read. Every donor everywhere asks the same question: saan napunta ang pera?</p>
       <p>The site answers before anyone asks. The children, the numbers, the receipts.</p>
@@ -774,12 +848,22 @@
       <div>
         <div class="mock-win">
           <div class="mock-bar"><div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div><div class="mock-url">impact.ahalearningcenter.com</div></div>
-          <img src="/images/work/aha-desk.webp" alt="AHA Learning Center impact site showing programs and transparency numbers" width="1440" height="900" loading="lazy">
+          <img src="/images/work/aha-levels-desk.webp" alt="AHA impact page, one dot per learner grouped by reading level" width="1440" height="900" loading="lazy" decoding="async">
         </div>
+        <div class="shot-note">One dot per learner, grouped by reading level</div>
       </div>
       <div>
-        <p style="margin-top:8px;"><a class="wk-link" href="https://impact.ahalearningcenter.com" target="_blank" rel="noopener">impact.ahalearningcenter.com <span aria-hidden="true">&rarr;</span></a></p>
+        <div class="mock-win">
+          <div class="mock-bar"><div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div><div class="mock-url">impact.ahalearningcenter.com</div></div>
+          <img src="/images/work/aha-trend-desk.webp" alt="AHA impact page, attendance and engagement trend through the year" width="1440" height="900" loading="lazy" decoding="async">
+        </div>
+        <div class="shot-note">Attendance and engagement through the year</div>
       </div>
+    </div>
+
+    <div class="rv" style="margin-top:28px;">
+      <p>The numbers are live. Every learner is assessed on five reading levels, and the page draws what moved. It used to be 110 spreadsheets someone cleaned by hand.</p>
+      <a class="wk-link" href="https://impact.ahalearningcenter.com" target="_blank" rel="noopener">impact.ahalearningcenter.com <span aria-hidden="true">&rarr;</span></a>
     </div>
   </div>
 </section>
@@ -839,8 +923,19 @@
       es.forEach(function (en) {
         if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0 });
     rvEls.forEach(function (el) { io.observe(el); });
+    /* sweep fallback: anything scrolled past that IO missed still reveals */
+    var sweep = setInterval(function () {
+      var pending = 0;
+      rvEls.forEach(function (el) {
+        if (el.classList.contains('in')) return;
+        pending++;
+        var b = el.getBoundingClientRect();
+        if (b.top < innerHeight * 0.92 && b.bottom > 0) { el.classList.add('in'); io.unobserve(el); }
+      });
+      if (!pending) clearInterval(sweep);
+    }, 1500);
   }
 
   /* ── 01: the clutter game ── */
@@ -918,6 +1013,203 @@
       });
     });
   });
+
+  /* ═══ v3 motifs, ported from the homepage engine ═══
+     One motif: the logo's 15x5 pixel grid. One rAF per canvas, paused
+     offscreen, DPR-capped, static under prefers-reduced-motion. */
+  var DPR = Math.min(window.devicePixelRatio || 1, 1.75);
+  /* deterministic per-cell randoms: rebuilds reproduce the same texture */
+  var seedRand = function (i) { var x = Math.sin((i + 1) * 127.1) * 43758.5453; return x - Math.floor(x); };
+  var glyphAt = function (x) {
+    if (x > 0.985) return '₱';
+    if (x > 0.96) return x * 1000 % 1 > 0.5 ? '2' : '5';
+    return x * 100 % 1 > 0.5 ? '1' : '0';
+  };
+  var randGlyph = function () {
+    var x = Math.random();
+    if (x > 0.985) return '₱';
+    if (x > 0.96) return Math.random() > 0.5 ? '2' : '5';
+    return Math.random() > 0.5 ? '1' : '0';
+  };
+
+  /* ── decode-in: every section H2 resolves through the 0/1 stream once ── */
+  (function decode() {
+    if (reduced || !('IntersectionObserver' in window)) return;
+    var SCRAM = '010101201510';
+    function run(el, dur) {
+      var final_ = el.textContent;
+      var n = final_.length, t0 = performance.now();
+      el.classList.remove('decode-wait');
+      (function step(now) {
+        var k = Math.min(1, (now - t0) / dur);
+        var solid = Math.floor(k * n), out = final_.slice(0, solid);
+        for (var i = solid; i < n; i++) {
+          var ch = final_[i];
+          out += (ch === ' ') ? ' ' : SCRAM[(Math.random() * SCRAM.length) | 0];
+        }
+        el.textContent = out;
+        if (k < 1) requestAnimationFrame(step);
+        else el.textContent = final_;
+      })(t0);
+    }
+    var hs = document.querySelectorAll('.wk h2, .closing h2');
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        run(en.target, 540);
+      });
+    }, { threshold: 0.5 });
+    hs.forEach(function (el) {
+      if (el.childElementCount) return;
+      el.classList.add('decode-wait');
+      io.observe(el);
+    });
+  })();
+
+  /* ── living field: the masthead breathes like the homepage hero ── */
+  (function field() {
+    var host = document.querySelector('.masthead');
+    if (!host || reduced) return;
+    var cv = document.createElement('canvas');
+    cv.className = 'sec-field';
+    host.insertBefore(cv, host.firstChild);
+    var ctx = cv.getContext('2d');
+    var W, H, cell, cols, rows, glyphs, alphas, heat;
+    var px = -1e4, py = -1e4;
+    var lastW = 0, lastH = 0;
+    var o = { ink: '#3BD1D3', idle: 0.012, idleVar: 0.03, wake: 0.28, cap: 0.3, cell: 30, radius: 150 };
+
+    function build() {
+      var b = host.getBoundingClientRect();
+      if (glyphs && Math.round(b.width) === lastW && Math.round(b.height) === lastH) return;
+      lastW = Math.round(b.width); lastH = Math.round(b.height);
+      W = Math.max(1, b.width); H = Math.max(1, b.height);
+      cv.width = W * DPR; cv.height = H * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      cell = o.cell;
+      cols = Math.ceil(W / cell); rows = Math.ceil(H / cell);
+      ctx.font = Math.round(cell * 0.42) + 'px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      var n = cols * rows;
+      glyphs = new Array(n); alphas = new Float32Array(n); heat = new Float32Array(n);
+      for (var i = 0; i < n; i++) {
+        var c_ = i % cols;
+        /* thin toward the left where the words live; the right edge hums */
+        var k = 0.18 + 0.82 * Math.pow(Math.min(1, (c_ * cell) / Math.max(1, W)), 1.6);
+        glyphs[i] = glyphAt(seedRand(i));
+        alphas[i] = (o.idle + seedRand(i + 7919) * o.idleVar) * k;
+      }
+    }
+    build();
+
+    host.addEventListener('pointermove', function (e) {
+      var b = cv.getBoundingClientRect();
+      px = e.clientX - b.left; py = e.clientY - b.top;
+    }, { passive: true });
+    host.addEventListener('pointerleave', function () { px = py = -1e4; });
+
+    var visible = false, raf = 0, last = 0, t0 = performance.now();
+    new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        visible = en.isIntersecting;
+        if (visible) { cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop); }
+      });
+    }, { threshold: 0 }).observe(host);
+    var rT; window.addEventListener('resize', function () { clearTimeout(rT); rT = setTimeout(build, 200); });
+
+    var R = o.radius, R2 = R * R;
+    function loop(now) {
+      if (!visible || document.hidden) return;
+      raf = requestAnimationFrame(loop);
+      if (now - last < 50) return;               /* 20fps: a hum, not a show */
+      var dt = last ? (now - last) / 1000 : 0.05;
+      last = now;
+      var t = (now - t0) / 1000;
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = o.ink;
+      var decay = Math.exp(-dt * 2.4);
+      for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+        var i = r * cols + c;
+        var h = heat[i];
+        if (h > 0.004) heat[i] = h * decay;
+        if (px > -1e3) {
+          var dx = c * cell + cell / 2 - px, dy = r * cell + cell / 2 - py;
+          var d2 = dx * dx + dy * dy;
+          if (d2 < R2) { var v = o.wake * (1 - Math.sqrt(d2) / R); if (v > heat[i]) heat[i] = v; }
+        }
+        var a = alphas[i] * (0.7 + 0.3 * Math.sin(t * 0.35 + c * 0.3 + r * 0.5)) + h;
+        if (a < 0.012) continue;
+        ctx.globalAlpha = Math.min(o.cap, a);
+        ctx.fillText(glyphs[i], c * cell + cell / 2, r * cell + cell / 2);
+      }
+      ctx.globalAlpha = 1;
+      glyphs[(Math.random() * glyphs.length) | 0] = randGlyph();
+    }
+  })();
+
+  /* ── pixel-grid accent: the 15x5 logo bitmap shimmers in the closing panel ── */
+  (function pxGrid() {
+    var host = document.querySelector('.closing');
+    if (!host) return;
+    var M = ['001011101110111', '100000101010100', '010011101010111', '000010001010001', '100011101110111'];
+    var MC = 15, MR = 5, S = 8, D = 6;           /* cell pitch 8, dot 6 */
+    var W = MC * S - (S - D), H = MR * S - (S - D);
+    var cv = document.createElement('canvas');
+    cv.className = 'px-grid';
+    cv.width = W * DPR; cv.height = H * DPR;
+    cv.style.width = W + 'px'; cv.style.height = H + 'px';
+    cv.setAttribute('aria-hidden', 'true');
+    host.appendChild(cv);
+    var ctx = cv.getContext('2d');
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    function draw(t) {
+      ctx.clearRect(0, 0, W, H);
+      for (var r = 0; r < MR; r++) for (var c = 0; c < MC; c++) {
+        var on = M[r][c] === '1';
+        var i = r * MC + c;
+        var a = on ? 0.5 + 0.4 * Math.sin(t * 1.1 + seedRand(i) * 6.28) : 0.07;
+        ctx.globalAlpha = reduced ? (on ? 0.75 : 0.07) : a;
+        ctx.fillStyle = '#3BD1D3';
+        ctx.fillRect(c * S, r * S, D, D);
+      }
+      ctx.globalAlpha = 1;
+    }
+    if (reduced || !('IntersectionObserver' in window)) { draw(0); return; }
+    var visible = false, raf = 0, last = 0;
+    function loop(now) {
+      if (!visible || document.hidden) return;
+      raf = requestAnimationFrame(loop);
+      if (now - last < 66) return;               /* 15fps is plenty for a shimmer */
+      last = now;
+      draw(now / 1000);
+    }
+    new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        visible = en.isIntersecting;
+        if (visible) { cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop); }
+      });
+    }, { threshold: 0 }).observe(host);
+    draw(0);
+  })();
+
+  /* ── mock chrome: live pip + boot scanline on entry ── */
+  (function mocks() {
+    document.querySelectorAll('.mock-bar').forEach(function (bar) {
+      var pip = document.createElement('span');
+      pip.className = 'mw-live';
+      bar.appendChild(pip);
+    });
+    if (reduced || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        en.target.classList.add('mw-boot');
+      });
+    }, { threshold: 0.35 });
+    document.querySelectorAll('.mock-win').forEach(function (el) { io.observe(el); });
+  })();
 })();
 </script>
 
