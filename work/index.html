@@ -207,6 +207,8 @@
       .lf-iframe { transition: opacity .2s linear; }
       .wk-cap .wk-eyebrow { clip-path: none; animation: none; }
       .wk-cap-r p { opacity: 1; transform: none; transition: none; }
+      .live-chip i { animation: none; }
+      .lw-b, .lw-evt { opacity: 1; transform: none; animation: none !important; }
     }
 
     /* browser chrome (same vocabulary as index) */
@@ -398,24 +400,113 @@
     .tg-msg b { color: var(--text); }
     .beat-cap { text-align: center; font-family: ui-monospace, monospace; font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); margin-top: 16px; }
 
-    /* live proof (Molave, under the replay) */
-    .proof-lede { display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; margin: 40px 0 18px; }
-    .proof-lede p { margin-bottom: 0; }
-
-    /* ── 03 PIANDRE tabs ── */
-    .fb-tabs { display: flex; gap: 2px; margin: 30px 0 2px; }
-    .fb-tab {
-      padding: 12px 22px; font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .09em;
-      text-transform: uppercase; color: var(--text-3); background: var(--surface); border: 1px solid var(--border);
-      cursor: pointer; transition: color .15s, background .15s, border-color .15s;
+    /* ── value-first anatomy: live chip, behind-it label, alternative band ── */
+    .live-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .13em;
+      text-transform: uppercase; color: var(--accent-text);
+      background: var(--accent-dim); border: 1px solid var(--accent-border);
+      border-radius: 3px; padding: 5px 10px; margin-bottom: 12px;
     }
-    .fb-tab:first-child { border-radius: 6px 0 0 0; }
-    .fb-tab:last-child { border-radius: 0 6px 0 0; }
-    .fb-tab:hover:not(.on) { color: var(--text-2); }
-    .fb-tab.on { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
-    .fb-panel { display: none; border: 1px solid var(--border); border-radius: 0 6px 6px 6px; background: var(--surface); padding: 24px; }
-    .fb-panel.on { display: block; animation: beatIn .45s cubic-bezier(.22,1,.36,1); }
-    @media (prefers-reduced-motion: reduce) { .fb-panel.on { animation: none; } }
+    .live-chip i { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: mwLive 2.4s ease-in-out infinite; }
+    .behind-label {
+      font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .13em;
+      text-transform: uppercase; color: var(--text-3); margin: 38px 0 14px;
+    }
+    .alt-band {
+      margin-top: 36px; border: 1px solid var(--border-2); border-radius: 8px;
+      background: #e9eeed; padding: 22px 24px 24px;
+    }
+    .alt-label {
+      font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .13em;
+      text-transform: uppercase; color: var(--text-3); margin-bottom: 18px;
+    }
+    .alt-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px 32px; align-items: start; }
+    @media (max-width: 860px) { .alt-grid { grid-template-columns: 1fr; } }
+    .alt-visual { filter: grayscale(.85); opacity: .93; }
+    .alt-facts { list-style: none; max-width: 56ch; }
+    .alt-facts li { font-size: 14px; line-height: 1.7; color: var(--text-2); padding: 11px 0; border-top: 1px solid var(--border); }
+    .alt-facts li:first-child { border-top: none; padding-top: 0; }
+    .alt-mini {
+      margin-top: 12px; border: 1px solid var(--border); border-radius: 8px;
+      background: #e9eeed; padding: 13px 15px;
+    }
+    .alt-mini .alt-label { margin-bottom: 6px; }
+    .alt-mini p { font-size: 13px; color: var(--text-2); margin: 0; line-height: 1.65; max-width: none; }
+
+    /* small desaturated mini mocks inside alternative bands */
+    .mini { border: 1px solid var(--border-2); border-radius: 7px; background: #f4f6f5; overflow: hidden; }
+    .mini-bar {
+      background: #55605e; padding: 6px 11px; font-family: ui-monospace, monospace;
+      font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: #d7dedc;
+    }
+    .mini-body { padding: 13px; }
+    .mini-msg {
+      max-width: 86%; background: #fff; border: 1px solid var(--border); border-radius: 9px;
+      padding: 7px 11px; margin-bottom: 8px; font-size: 12px; line-height: 1.5; color: var(--text-2);
+    }
+    .mini-msg.me { margin-left: auto; background: #dfe5e3; }
+    .mini-att { display: flex; align-items: center; gap: 7px; font-family: ui-monospace, monospace; font-size: 10px; color: var(--text-2); }
+    .mini-att .ph { width: 34px; height: 26px; border-radius: 3px; background: linear-gradient(135deg, #b9c4c1, #8fa09c); flex-shrink: 0; }
+    .mini-time { font-family: ui-monospace, monospace; font-size: 8.5px; color: var(--text-3); margin: 0 4px 8px; }
+    .mini-time.r { text-align: right; }
+    .mini-thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .mini-thumbs i { display: block; aspect-ratio: 4 / 3; border-radius: 3px; background: linear-gradient(135deg, #c3ccc9, #97a6a2); }
+    .mini-chipline { display: inline-flex; align-items: center; gap: 7px; margin-top: 11px; border: 1px dashed var(--border-2); border-radius: 4px; padding: 5px 9px; font-family: ui-monospace, monospace; font-size: 9.5px; color: var(--text-2); }
+    .mini-sheet { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: #fff; }
+    .mini-sheet .rw { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; }
+    .mini-sheet .rw span { border-top: 1px solid var(--border); border-left: 1px solid var(--border); padding: 5px 7px; font-family: ui-monospace, monospace; font-size: 8.5px; color: var(--text-3); white-space: nowrap; overflow: hidden; min-height: 22px; }
+    .mini-sheet .rw:first-child span { border-top: none; background: #e6eae9; color: var(--text-2); }
+    .mini-sheet .rw span:first-child { border-left: none; }
+    .mini-gc { border: 1px dashed var(--border-2); border-radius: 6px; padding: 12px 14px; background: #fff; }
+    .mini-gc .h { font-family: Georgia, serif; font-size: 13px; font-weight: 700; color: var(--text-2); margin-bottom: 8px; letter-spacing: .04em; }
+    .mini-gc .l { display: flex; justify-content: space-between; gap: 10px; font-family: ui-monospace, monospace; font-size: 9.5px; color: var(--text-3); padding: 5px 0; border-bottom: 1px dotted var(--border-2); }
+    .mini-gc .l:last-child { border-bottom: none; }
+    .mini-file { display: flex; align-items: center; gap: 11px; padding: 12px 13px; background: #fff; border: 1px solid var(--border); border-radius: 6px; }
+    .mini-file svg { flex-shrink: 0; color: var(--text-3); }
+    .mini-file .fn { font-family: ui-monospace, monospace; font-size: 11px; color: var(--text); font-weight: 600; }
+    .mini-file .fm { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+
+    /* ── 03 BOOKINGS: Little Way sample mock ── */
+    .lw-wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 26px; align-items: start; margin-top: 0; }
+    @media (max-width: 860px) { .lw-wrap { grid-template-columns: 1fr; } }
+    .lw-chat { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); padding: 15px; }
+    .lw-t { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px; }
+    .lw-b { opacity: 0; transform: translateY(9px); margin-bottom: 9px; }
+    .lw-wrap.in .lw-b { animation: lwIn .45s cubic-bezier(.22,1,.36,1) forwards; }
+    .lw-wrap.in .lw-b1 { animation-delay: .15s; }
+    .lw-wrap.in .lw-b2 { animation-delay: .8s; }
+    .lw-wrap.in .lw-b3 { animation-delay: 1.6s; }
+    .lw-wrap.in .lw-b4 { animation-delay: 2.5s; }
+    @keyframes lwIn { to { opacity: 1; transform: none; } }
+    .lw-bubble { border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; font-size: 12.5px; line-height: 1.55; color: var(--text-2); background: #fff; max-width: 88%; }
+    .lw-b.me .lw-bubble { margin-left: auto; background: var(--accent); border-color: var(--accent); color: var(--on-accent); max-width: 70%; text-align: center; font-weight: 700; }
+    .lw-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .lw-chip { border: 1px solid var(--border-2); border-radius: 4px; padding: 4px 9px; font-family: ui-monospace, monospace; font-size: 10px; color: var(--text-2); background: var(--surface); }
+    .lw-chip.sel { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .lw-cal { border: 1px solid var(--border-2); border-radius: 8px; overflow: hidden; background: var(--surface); }
+    .lw-cal-bar { background: var(--surface-deep); padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .lw-cal-bar span { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: #8fb8b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lw-days { display: grid; grid-template-columns: repeat(5, 1fr); border-bottom: 1px solid var(--border); }
+    .lw-days span { padding: 7px 2px; text-align: center; font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .05em; text-transform: uppercase; color: var(--text-3); border-left: 1px solid var(--border); white-space: nowrap; overflow: hidden; }
+    .lw-days span:first-child { border-left: none; }
+    .lw-grid { display: grid; grid-template-columns: repeat(5, 1fr); }
+    .lw-col {
+      position: relative; min-height: 250px; border-left: 1px solid var(--border);
+      background: repeating-linear-gradient(to bottom, transparent 0 49px, var(--border) 49px 50px);
+    }
+    .lw-col:first-child { border-left: none; }
+    .lw-evt {
+      position: absolute; left: 5px; right: 5px; top: 104px; z-index: 1;
+      background: var(--accent); color: var(--on-accent); border-radius: 5px;
+      padding: 7px 8px; font-size: 10px; line-height: 1.45;
+      opacity: 0; transform: translateX(-14px); overflow: hidden;
+    }
+    .lw-evt b { display: block; font-size: 10.5px; }
+    .lw-evt .tm { font-family: ui-monospace, monospace; font-size: 8.5px; opacity: .85; }
+    .lw-wrap.in .lw-evt { animation: lwEvt .55s cubic-bezier(.22,1,.36,1) 3.3s forwards; }
+    @keyframes lwEvt { to { opacity: 1; transform: none; } }
+    .lw-evt.ghost { background: var(--surface-2); color: var(--text-2); opacity: 1; transform: none; animation: none !important; }
 
     /* back office sample */
     .bo { border: 1px solid var(--border-2); border-radius: 7px; overflow: hidden; }
@@ -438,7 +529,7 @@
     .bo-bl { font-family: ui-monospace, monospace; font-size: 9px; color: var(--text-3); width: 62px; flex-shrink: 0; text-transform: uppercase; letter-spacing: .04em; }
     .bo-track { flex: 1; height: 10px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
     .bo-fill { height: 100%; background: var(--accent); border-radius: 3px; width: 0; transition: width 1s cubic-bezier(.22,1,.36,1) .25s; }
-    .in .bo-fill, .fb-panel.on .bo-fill { width: var(--w); }
+    .in .bo-fill { width: var(--w); }
     @media (prefers-reduced-motion: reduce) { .bo-fill { transition: none; width: var(--w); } }
     .bo-bv { font-family: ui-monospace, monospace; font-size: 9.5px; color: var(--text-2); width: 48px; text-align: right; flex-shrink: 0; }
 
@@ -466,9 +557,6 @@
     .sample-tag { display: inline-block; font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); border: 1px solid var(--border-2); border-radius: 3px; padding: 3px 8px; margin-top: 12px; }
 
     /* ── 05 / 07 grids: live windows with a caption footer ── */
-    .site-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 34px; }
-    .site-grid.two { grid-template-columns: repeat(2, 1fr); }
-    @media (max-width: 900px) { .site-grid, .site-grid.two { grid-template-columns: 1fr; } }
     .site-cell .mock-win { border-radius: 8px 8px 0 0; }
     .sc-body {
       display: block; padding: 16px 18px 18px; text-decoration: none;
@@ -548,8 +636,29 @@
       </div>
     </div>
 
-    <div class="duo rv" style="margin-top:0;">
-      <div>
+    <div class="rv" style="margin-top:0;">
+      <div class="live-chip"><i aria-hidden="true"></i>Today &middot; Live</div>
+      <div class="clutter-count clear"><span class="cc-n">0</span><span>things between you and the story</span></div>
+      <figure class="mock-win live-frame" data-live="https://advocatesomi.com">
+        <div class="mock-bar">
+          <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+          <div class="mock-url">advocatesomi.com</div>
+          <span class="lf-status" aria-hidden="true"></span>
+          <button class="mw-browse" type="button" hidden>Browse live</button>
+          <a class="mw-open" href="https://advocatesomi.com" target="_blank" rel="noopener">Open &#8599;</a>
+        </div>
+        <div class="lf-stage tall">
+          <img class="lf-shot" src="/images/work/advocates-article-desk.webp" alt="An article on Advocates Philippines, headline and text with nothing on top" width="1440" height="900" loading="lazy" decoding="async">
+          <div class="lf-scan" aria-hidden="true"></div>
+        </div>
+      </figure>
+      <div class="shot-note">The real thing, as it looks today.</div>
+    </div>
+
+    <div class="alt-band rv">
+      <div class="alt-label">The alternative</div>
+      <div class="alt-grid">
+        <div class="alt-visual">
         <div class="clutter-count" id="clutterCount"><span class="cc-n" id="clutterN">3</span><span id="clutterTxt">things between you and the story</span></div>
         <div class="mock-win">
           <div class="mock-bar">
@@ -595,24 +704,11 @@
           </div>
         </div>
         <div class="shot-note">A simulation. Close everything to reach the story.</div>
-      </div>
-
-      <div>
-        <div class="clutter-count clear"><span class="cc-n">0</span><span>things between you and the story</span></div>
-        <figure class="mock-win live-frame" data-live="https://advocatesomi.com">
-          <div class="mock-bar">
-            <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
-            <div class="mock-url">advocatesomi.com</div>
-            <span class="lf-status" aria-hidden="true"></span>
-            <button class="mw-browse" type="button" hidden>Browse live</button>
-            <a class="mw-open" href="https://advocatesomi.com" target="_blank" rel="noopener">Open &#8599;</a>
-          </div>
-          <div class="lf-stage">
-            <img class="lf-shot" src="/images/work/advocates-article-desk.webp" alt="An article on Advocates Philippines, headline and text with nothing on top" width="1440" height="900" loading="lazy" decoding="async">
-            <div class="lf-scan" aria-hidden="true"></div>
-          </div>
-        </figure>
-        <div class="shot-note">The real thing, as it looks today.</div>
+        </div>
+        <ul class="alt-facts">
+          <li>A cookie wall, a newsletter modal, an ad that plays itself. On most news sites you close three things before the first paragraph.</li>
+          <li>And while you read, the page watches you.</li>
+        </ul>
       </div>
     </div>
 
@@ -632,12 +728,31 @@
         <h2>Bayad na po.</h2>
       </div>
       <div class="wk-cap-r">
-        <p>Here, paying means transferring and sending a screenshot. Tama naman. It works.</p>
-        <p>So instead of forcing carts and card gateways on people, we gave the screenshot a home. The client reports the payment. The dashboard files it. The owner's Telegram pings the moment it is filed.</p>
+        <p>Molave Art Studio sells original prints from a printmaking studio in Makati. Here, paying means transferring and sending a screenshot. Tama naman. It works.</p>
+        <p>So instead of forcing carts and card gateways on the studio's buyers, we gave the screenshot a home. The buyer reports the payment. The studio's dashboard files it. The owner's Telegram pings the moment it is filed.</p>
       </div>
     </div>
 
-    <div class="rv band" id="payReplay">
+    <div class="rv" style="margin-top:0;">
+      <div class="live-chip"><i aria-hidden="true"></i>Today &middot; Live</div>
+      <figure class="mock-win live-frame" data-live="https://molaveartstudio.com">
+        <div class="mock-bar">
+          <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+          <div class="mock-url">molaveartstudio.com</div>
+          <span class="lf-status" aria-hidden="true"></span>
+          <button class="mw-browse" type="button" hidden>Browse live</button>
+          <a class="mw-open" href="https://molaveartstudio.com" target="_blank" rel="noopener">Open &#8599;</a>
+        </div>
+        <div class="lf-stage tall">
+          <img class="lf-shot" src="/images/work/molave-desk.webp" alt="Molave Art Studio website" width="1440" height="900" loading="lazy" decoding="async">
+          <div class="lf-scan" aria-hidden="true"></div>
+        </div>
+      </figure>
+      <div class="shot-note">A print sells by GCash. The back office files it.</div>
+    </div>
+
+    <div class="behind-label rv">What happens behind it</div>
+    <div class="rv band" id="payReplay" style="margin-top:0;">
       <div class="pay-steps" role="tablist" aria-label="Payment replay steps">
         <button class="pay-step on" type="button" data-beat="0" role="tab" aria-selected="true">1 &middot; Client reports</button>
         <button class="pay-step" type="button" data-beat="1" role="tab" aria-selected="false">2 &middot; Dashboard files</button>
@@ -686,38 +801,119 @@
       </div>
     </div>
 
-    <div class="rv band" style="margin-top:28px;">
+    <div class="rv band" style="margin-top:24px;">
       <p>Nobody logs in to check. The message finds you.</p>
     </div>
 
-    <div class="rv">
-      <div class="proof-lede">
-        <p>This is not a demo everywhere. At Molave Art Studio, a print sells by GCash and the studio's back office files it.</p>
-        <a class="wk-link" href="https://molaveartstudio.com" target="_blank" rel="noopener">molaveartstudio.com <span aria-hidden="true">&rarr;</span></a>
+    <div class="alt-band rv">
+      <div class="alt-label">The alternative</div>
+      <div class="alt-grid">
+        <div class="alt-visual">
+          <div class="mini">
+            <div class="mini-bar">Chat thread &middot; payments</div>
+            <div class="mini-body">
+              <div class="mini-msg me"><span class="mini-att"><span class="ph" aria-hidden="true"></span>IMG_2381.jpg</span></div>
+              <div class="mini-msg me">Paid na po, sent the transfer</div>
+              <div class="mini-time r">9:42 PM</div>
+              <div class="mini-msg">Noted po, will check the bank app tonight</div>
+              <div class="mini-time">11:03 PM</div>
+            </div>
+          </div>
+          <div class="shot-note">A simulation, from a familiar routine.</div>
+        </div>
+        <ul class="alt-facts">
+          <li>Bank transfer, then a screenshot into a chat thread.</li>
+          <li>Someone checks each one against the bank app at night, one by one.</li>
+          <li>Carts and card gateways assume cards. Most buyers here pay by GCash.</li>
+        </ul>
       </div>
-      <figure class="mock-win live-frame" data-live="https://molaveartstudio.com">
-        <div class="mock-bar">
-          <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
-          <div class="mock-url">molaveartstudio.com</div>
-          <span class="lf-status" aria-hidden="true"></span>
-          <button class="mw-browse" type="button" hidden>Browse live</button>
-          <a class="mw-open" href="https://molaveartstudio.com" target="_blank" rel="noopener">Open &#8599;</a>
-        </div>
-        <div class="lf-stage tall">
-          <img class="lf-shot" src="/images/work/molave-desk.webp" alt="Molave Art Studio website" width="1440" height="900" loading="lazy" decoding="async">
-          <div class="lf-scan" aria-hidden="true"></div>
-        </div>
-      </figure>
+    </div>
+
+    <div class="rv" style="margin-top:28px;">
+      <a class="wk-link" href="https://molaveartstudio.com" target="_blank" rel="noopener">molaveartstudio.com <span aria-hidden="true">&rarr;</span></a>
     </div>
   </div>
 </section>
 
-<!-- ── 03 PIANDRE ── -->
+<!-- ── 03 BOOKINGS ── -->
+<section class="wk" id="bookings">
+  <div class="wk-inner">
+    <div class="wk-cap rv">
+      <div class="wk-cap-l">
+        <div class="wk-eyebrow"><span class="n">03</span> &middot; Bookings</div>
+        <h2>The back office they already know.</h2>
+      </div>
+      <div class="wk-cap-r">
+        <p>Little Way Playschool is launching soon. Visits and trial classes will book themselves on the site.</p>
+        <p>Every booking writes straight into the school's own Google Calendar. No new system to learn. The teachers open the calendar they already use, and the day is there.</p>
+      </div>
+    </div>
+
+    <div class="lw-wrap rv" style="margin-top:0;">
+      <div class="lw-chat" aria-hidden="true">
+        <div class="lw-t">On the site</div>
+        <div class="lw-b lw-b1 me"><div class="lw-bubble">Book a Visit</div></div>
+        <div class="lw-b lw-b2">
+          <div class="lw-bubble">Hello po! When would you like to visit?
+            <span class="lw-chips"><span class="lw-chip">Mon 10</span><span class="lw-chip">Tue 11</span><span class="lw-chip sel">Wed 12</span></span>
+          </div>
+        </div>
+        <div class="lw-b lw-b3">
+          <div class="lw-bubble">Wednesday it is. What time?
+            <span class="lw-chips"><span class="lw-chip">9:00</span><span class="lw-chip sel">10:30</span><span class="lw-chip">2:00</span></span>
+          </div>
+        </div>
+        <div class="lw-b lw-b4">
+          <div class="lw-bubble">Confirmed. Wednesday, August 12, 10:30 AM. See you and Amara!</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="lw-cal" aria-hidden="true">
+          <div class="lw-cal-bar"><span>The school's Google Calendar</span><span>Aug 10&ndash;14</span></div>
+          <div class="lw-days"><span>Mon 10</span><span>Tue 11</span><span>Wed 12</span><span>Thu 13</span><span>Fri 14</span></div>
+          <div class="lw-grid">
+            <div class="lw-col"></div>
+            <div class="lw-col"><div class="lw-evt ghost" style="top:54px;"><b>Storytime</b><span class="tm">9:00 AM</span></div></div>
+            <div class="lw-col"><div class="lw-evt"><b>Visit &middot; Amara D.</b><span class="tm">10:30 AM</span></div></div>
+            <div class="lw-col"><div class="lw-evt ghost" style="top:154px;"><b>Staff meeting</b><span class="tm">3:00 PM</span></div></div>
+            <div class="lw-col"></div>
+          </div>
+        </div>
+        <span class="sample-tag">Sample data &middot; Launching soon</span>
+      </div>
+    </div>
+
+    <div class="alt-band rv">
+      <div class="alt-label">The alternative</div>
+      <div class="alt-grid">
+        <div class="alt-visual">
+          <div class="mini">
+            <div class="mini-bar">Message thread &middot; inquiries</div>
+            <div class="mini-body">
+              <div class="mini-msg me">Hi po! Available pa po ba ang trial class this week?</div>
+              <div class="mini-time r">Tuesday, 9:12 PM</div>
+              <div class="mini-msg">Hello po! Yes, we have slots. What day are you thinking?</div>
+              <div class="mini-time">Wednesday, 3:40 PM</div>
+            </div>
+          </div>
+          <div class="shot-note">A simulation, from a familiar routine.</div>
+        </div>
+        <ul class="alt-facts">
+          <li>Bookings by message thread. The school replies when it can, and the parent waits.</li>
+          <li>Two families promised the same slot is a problem nobody sees until both arrive.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 04 PIANDRE ── -->
 <section class="wk" id="piandre">
   <div class="wk-inner">
     <div class="wk-cap rv">
       <div class="wk-cap-l">
-        <div class="wk-eyebrow"><span class="n">03</span> &middot; A salon since 1987</div>
+        <div class="wk-eyebrow"><span class="n">04</span> &middot; A salon since 1987</div>
         <h2>Piandr&eacute;, front and back.</h2>
       </div>
       <div class="wk-cap-r">
@@ -727,13 +923,8 @@
     </div>
 
     <div class="rv">
-      <div class="fb-tabs" role="tablist" aria-label="Piandre front and back">
-        <button class="fb-tab on" type="button" data-fb="front" role="tab" aria-selected="true">The front</button>
-        <button class="fb-tab" type="button" data-fb="back" role="tab" aria-selected="false">The back</button>
-      </div>
-
-      <div class="fb-panel on" id="fb-front" role="tabpanel">
-        <div>
+      <div>
+          <div class="live-chip"><i aria-hidden="true"></i>Today &middot; Live</div>
           <figure class="mock-win live-frame" data-live="https://piandre.com">
             <div class="mock-bar">
               <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
@@ -764,7 +955,8 @@
         </div>
       </div>
 
-      <div class="fb-panel" id="fb-back" role="tabpanel" hidden>
+      <div class="behind-label">What happens behind it</div>
+      <div>
         <div class="bo">
           <div class="bo-bar"><span>Piandr&eacute; back office</span><span class="bo-tag">Sample view &middot; real one is private</span></div>
           <div class="bo-grid">
@@ -794,6 +986,26 @@
       </div>
     </div>
 
+    <div class="alt-band rv">
+      <div class="alt-label">The alternative</div>
+      <div class="alt-grid">
+        <div class="alt-visual">
+          <div class="mini-gc">
+            <div class="h">GIFT CERTIFICATE</div>
+            <div class="l"><span>No. ______</span><span>Amount &#8369;______</span></div>
+            <div class="l"><span>Issued by ______</span><span>Valid until ______</span></div>
+            <div class="l"><span>Redeemed at ______</span><span>Signed ______</span></div>
+          </div>
+          <div class="shot-note">Paper, filled in by hand.</div>
+        </div>
+        <ul class="alt-facts">
+          <li>Booking by phone call, at the hours the phones are busiest.</li>
+          <li>Gift certificates on paper, reconciled by hand.</li>
+          <li>Records in a desktop system only the front desk could open.</li>
+        </ul>
+      </div>
+    </div>
+
     <div class="rv" style="margin-top:28px;">
       <a class="wk-link" href="https://piandre.com" target="_blank" rel="noopener">piandre.com <span aria-hidden="true">&rarr;</span></a>
     </div>
@@ -805,7 +1017,7 @@
   <div class="wk-inner">
     <div class="wk-cap rv">
       <div class="wk-cap-l">
-        <div class="wk-eyebrow"><span class="n">04</span> &middot; The cooperative</div>
+        <div class="wk-eyebrow"><span class="n">05</span> &middot; The cooperative</div>
         <h2>Hi Maria! Ito po ang pera n'yo.</h2>
       </div>
       <div class="wk-cap-r">
@@ -850,6 +1062,25 @@
       <p>The math that decides a loan is shown to the member, not kept in a drawer. When people can see the rules, they do not have to ask permission to understand them.</p>
       <p>That is what we think software is for.</p>
     </div>
+
+    <div class="alt-band rv band">
+      <div class="alt-label">The alternative</div>
+      <div class="alt-grid">
+        <div class="alt-visual">
+          <div class="mini-file">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div>
+              <div class="fn">member-records.xls</div>
+              <div class="fm">On the treasurer's computer</div>
+            </div>
+          </div>
+        </div>
+        <ul class="alt-facts">
+          <li>The records lived in one file, on one computer.</li>
+          <li>A member who wanted their balance asked the treasurer, and waited.</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -858,71 +1089,57 @@
   <div class="wk-inner">
     <div class="wk-cap rv">
       <div class="wk-cap-l">
-        <div class="wk-eyebrow"><span class="n">05</span> &middot; Coming home</div>
-        <h2>Three batches came home.</h2>
+        <div class="wk-eyebrow"><span class="n">06</span> &middot; Coming home</div>
+        <h2>The batch came home.</h2>
       </div>
       <div class="wk-cap-r">
-        <p>Reunions run on volunteers with day jobs. Pledges, auctions, ticket payments. Somebody's classmate ends up doing accounting at midnight.</p>
-        <p>We built the sites that took that job. The batchmates got to just come home.</p>
+        <p>Reunions run on volunteers with day jobs. AC 1996 came home with a pledge board and an auction, and both ran themselves.</p>
+        <p>A pledge is tracked from promise to paid. A bid updates for everyone at once.</p>
       </div>
     </div>
 
-    <div class="site-grid rv-kids" style="margin-top:0;">
-      <div class="site-cell">
-        <figure class="mock-win live-frame" data-live="https://01bigfight.com">
-          <div class="mock-bar">
-            <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
-            <div class="mock-url">01bigfight.com</div>
-            <span class="lf-status" aria-hidden="true"></span>
-            <a class="mw-open" href="https://01bigfight.com" target="_blank" rel="noopener">Open &#8599;</a>
+    <div class="rv" style="margin-top:0;">
+      <div class="live-chip"><i aria-hidden="true"></i>Today &middot; Live</div>
+      <figure class="mock-win live-frame" data-live="https://ac1996.com/auction/">
+        <div class="mock-bar">
+          <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
+          <div class="mock-url">ac1996.com/auction</div>
+          <span class="lf-status" aria-hidden="true"></span>
+          <button class="mw-browse" type="button" hidden>Browse live</button>
+          <a class="mw-open" href="https://ac1996.com/auction/" target="_blank" rel="noopener">Open &#8599;</a>
+        </div>
+        <div class="lf-stage tall">
+          <img class="lf-shot" src="/images/work/ac1996-desk.webp" alt="AC 1996 homecoming site for Assumption College batch 1996, pledge board and auction" width="1440" height="900" loading="lazy" decoding="async">
+          <div class="lf-scan" aria-hidden="true"></div>
+        </div>
+      </figure>
+      <div class="shot-note">The auction, still live at ac1996.com</div>
+    </div>
+
+    <div class="alt-band rv">
+      <div class="alt-label">The alternative</div>
+      <div class="alt-grid">
+        <div class="alt-visual">
+          <div class="mini">
+            <div class="mini-bar">Group chat &middot; batch treasurer</div>
+            <div class="mini-body">
+              <div class="mini-msg me"><span class="mini-att"><span class="ph" aria-hidden="true"></span>payment-proof-04.jpg</span></div>
+              <div class="mini-msg me"><span class="mini-att"><span class="ph" aria-hidden="true"></span>payment-proof-05.jpg</span></div>
+              <div class="mini-msg">Checking these tonight after work, salamat!</div>
+              <div class="mini-time">11:48 PM</div>
+            </div>
           </div>
-          <div class="lf-stage">
-            <img class="lf-shot" src="/images/work/bigfight-desk.webp" alt="01 Big Fight homecoming site for Ateneo High School batch 2001" width="1440" height="900" loading="lazy" decoding="async">
-            <div class="lf-scan" aria-hidden="true"></div>
-          </div>
-        </figure>
-        <a class="sc-body" href="https://01bigfight.com" target="_blank" rel="noopener">
-          <div class="sc-name">01 Big Fight</div>
-          <div class="sc-host">AHS 2001 &middot; 01bigfight.com</div>
-          <div class="sc-line">Pledges tracked from promise to paid.</div>
-        </a>
+          <div class="shot-note">A simulation, from a familiar routine.</div>
+        </div>
+        <ul class="alt-facts">
+          <li>Pledges in a group chat. Payments verified screenshot by screenshot.</li>
+          <li>Somebody's classmate ends up doing accounting at midnight.</li>
+        </ul>
       </div>
-      <div class="site-cell">
-        <figure class="mock-win live-frame" data-live="https://ac1996.com">
-          <div class="mock-bar">
-            <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
-            <div class="mock-url">ac1996.com</div>
-            <span class="lf-status" aria-hidden="true"></span>
-            <a class="mw-open" href="https://ac1996.com" target="_blank" rel="noopener">Open &#8599;</a>
-          </div>
-          <div class="lf-stage">
-            <img class="lf-shot" src="/images/work/ac1996-desk.webp" alt="AC 1996 homecoming site for Assumption College batch 1996" width="1440" height="900" loading="lazy" decoding="async">
-            <div class="lf-scan" aria-hidden="true"></div>
-          </div>
-        </figure>
-        <a class="sc-body" href="https://ac1996.com" target="_blank" rel="noopener">
-          <div class="sc-name">AC 1996</div>
-          <div class="sc-host">Assumption College &middot; ac1996.com</div>
-          <div class="sc-line">Auctions that ran themselves.</div>
-        </a>
-      </div>
-      <div class="site-cell">
-        <figure class="mock-win">
-          <div class="mock-bar">
-            <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
-            <div class="mock-url">povedans.com</div>
-            <a class="mw-open" href="https://povedans.com" target="_blank" rel="noopener">Open &#8599;</a>
-          </div>
-          <div class="lf-stage">
-            <img class="lf-shot" src="/images/work/povedans-desk.webp" alt="Poveda 2002 homecoming pledge site at povedans.com" width="1440" height="900" loading="lazy" decoding="async">
-          </div>
-        </figure>
-        <a class="sc-body" href="https://povedans.com" target="_blank" rel="noopener">
-          <div class="sc-name">Poveda 2002</div>
-          <div class="sc-host">povedans.com</div>
-          <div class="sc-line">Payments verified, receipts sent.</div>
-        </a>
-      </div>
+    </div>
+
+    <div class="rv" style="margin-top:28px;">
+      <a class="wk-link" href="https://ac1996.com/auction/" target="_blank" rel="noopener">ac1996.com/auction <span aria-hidden="true">&rarr;</span></a>
     </div>
   </div>
 </section>
@@ -932,7 +1149,7 @@
   <div class="wk-inner">
     <div class="wk-cap rv">
       <div class="wk-cap-l">
-        <div class="wk-eyebrow"><span class="n">06</span> &middot; The breadth</div>
+        <div class="wk-eyebrow"><span class="n">07</span> &middot; The breadth</div>
         <h2>The work, seen directly.</h2>
       </div>
       <div class="wk-cap-r">
@@ -942,6 +1159,7 @@
     </div>
 
     <div class="rv">
+      <div class="live-chip"><i aria-hidden="true"></i>Today &middot; Live</div>
       <figure class="mock-win live-frame" data-live="https://archionarchitects.com/projects/">
         <div class="mock-bar">
           <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
@@ -975,6 +1193,25 @@
       <div class="shot-note">The practice</div>
     </div>
 
+    <div class="alt-band rv">
+      <div class="alt-label">The alternative</div>
+      <div class="alt-grid">
+        <div class="alt-visual">
+          <div class="mini">
+            <div class="mini-bar">A typical firm site &middot; portfolio</div>
+            <div class="mini-body">
+              <div class="mini-thumbs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <span class="mini-chipline">portfolio.pdf &middot; sent on request</span>
+            </div>
+          </div>
+        </div>
+        <ul class="alt-facts">
+          <li>Ten photos on a page, and a PDF when someone asks for more.</li>
+          <li>Decades of work, invisible.</li>
+        </ul>
+      </div>
+    </div>
+
     <div class="rv" style="margin-top:28px;">
       <a class="wk-link" href="https://archionarchitects.com/projects/" target="_blank" rel="noopener">archionarchitects.com/projects <span aria-hidden="true">&rarr;</span></a>
     </div>
@@ -985,11 +1222,11 @@
 <section class="wk" id="craft">
   <div class="wk-inner">
     <div class="rv">
-      <div class="wk-eyebrow"><span class="n">07</span> &middot; The craft</div>
+      <div class="wk-eyebrow"><span class="n">08</span> &middot; The craft</div>
       <h2>Made for people who make things.</h2>
     </div>
 
-    <div class="site-grid two rv-kids">
+    <div class="band rv" style="margin-top:34px;">
       <div class="site-cell">
         <figure class="mock-win live-frame" data-live="https://molaveartstudio.com">
           <div class="mock-bar">
@@ -1010,23 +1247,6 @@
           <div class="sc-line">A printmaking studio in Makati. The site draws its own art the way the studio does. Every visit, a new print.</div>
         </a>
       </div>
-      <div class="site-cell">
-        <figure class="mock-win live-frame" data-live="/cpd/">
-          <div class="mock-bar">
-            <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
-            <div class="mock-url">post205.com/cpd</div>
-            <a class="mw-open" href="/cpd/">Open &#8599;</a>
-          </div>
-          <div class="lf-stage">
-            <img class="lf-shot" src="/images/work/cpd-desk.webp" alt="UAP CPD events demo with evaluations and certificates" width="1440" height="900" loading="lazy" decoding="async">
-          </div>
-        </figure>
-        <a class="sc-body" href="/cpd/">
-          <div class="sc-name">UAP CPD events</div>
-          <div class="sc-host">post205.com/cpd</div>
-          <div class="sc-line">For architects: evaluations, certificates, and the PRC-ready log run themselves. The organizers get to watch the talks.</div>
-        </a>
-      </div>
     </div>
   </div>
 </section>
@@ -1036,7 +1256,7 @@
   <div class="wk-inner">
     <div class="wk-cap rv">
       <div class="wk-cap-l">
-        <div class="wk-eyebrow"><span class="n">08</span> &middot; Giving</div>
+        <div class="wk-eyebrow"><span class="n">09</span> &middot; Giving</div>
         <h2>Saan napunta?</h2>
       </div>
       <div class="wk-cap-r">
@@ -1046,6 +1266,7 @@
     </div>
 
     <div class="rv">
+      <div class="live-chip"><i aria-hidden="true"></i>Today &middot; Live</div>
       <figure class="mock-win live-frame" data-live="https://impact.ahalearningcenter.com">
         <div class="mock-bar">
           <div class="m-dot m-r"></div><div class="m-dot m-y"></div><div class="m-dot m-g"></div>
@@ -1076,8 +1297,31 @@
       <div class="shot-note">Attendance and engagement through the year</div>
     </div>
 
+    <div class="alt-band rv">
+      <div class="alt-label">The alternative</div>
+      <div class="alt-grid">
+        <div class="alt-visual">
+          <div class="mini">
+            <div class="mini-bar">Spreadsheet 1 of 110</div>
+            <div class="mini-body">
+              <div class="mini-sheet" aria-hidden="true">
+                <div class="rw"><span>Learner</span><span>Level</span><span>Attnd</span><span>Notes</span></div>
+                <div class="rw"><span>J. dela C.</span><span>2??</span><span>ok</span><span>see tab 3</span></div>
+                <div class="rw"><span>ANA (new)</span><span>-</span><span></span><span>ask teacher</span></div>
+                <div class="rw"><span>mikey</span><span>3</span><span>8/10</span><span>moved?</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul class="alt-facts">
+          <li>110 free-form spreadsheets, cleaned by hand.</li>
+          <li>Stale for months at a time.</li>
+        </ul>
+      </div>
+    </div>
+
     <div class="rv" style="margin-top:28px;">
-      <p>The numbers are live. Every learner is assessed on five reading levels, and the page draws what moved. It used to be 110 spreadsheets someone cleaned by hand.</p>
+      <p>The numbers are live now. Every learner is assessed on five reading levels, and the page draws what moved.</p>
       <a class="wk-link" href="https://impact.ahalearningcenter.com" target="_blank" rel="noopener">impact.ahalearningcenter.com <span aria-hidden="true">&rarr;</span></a>
     </div>
   </div>
@@ -1221,24 +1465,6 @@
       });
     }, { threshold: 0.25 }).observe(replay);
   } else { visible = true; schedule(); }
-
-  /* ── 03: front/back tabs ── */
-  var fbTabs = Array.prototype.slice.call(document.querySelectorAll('.fb-tab'));
-  fbTabs.forEach(function (t) {
-    t.addEventListener('click', function () {
-      fbTabs.forEach(function (o) {
-        var on = o === t;
-        o.classList.toggle('on', on);
-        o.setAttribute('aria-selected', on ? 'true' : 'false');
-      });
-      ['front', 'back'].forEach(function (k) {
-        var p = document.getElementById('fb-' + k);
-        var on = t.getAttribute('data-fb') === k;
-        p.classList.toggle('on', on);
-        if (on) { p.removeAttribute('hidden'); } else { p.setAttribute('hidden', ''); }
-      });
-    });
-  });
 
   /* ═══ v3 motifs, ported from the homepage engine ═══
      One motif: the logo's 15x5 pixel grid. One rAF per canvas, paused
@@ -1579,16 +1805,11 @@
       if (e.key === 'Escape' && active) release(active);
     });
 
-    /* rescale on resize + when a tab panel becomes visible */
+    /* rescale on resize */
     var rzT;
     window.addEventListener('resize', function () {
       clearTimeout(rzT);
       rzT = setTimeout(function () { mounted.forEach(layout); }, 150);
-    });
-    document.querySelectorAll('.fb-tab').forEach(function (t) {
-      t.addEventListener('click', function () {
-        requestAnimationFrame(function () { mounted.forEach(layout); });
-      });
     });
 
     /* scroll-linked micro-parallax, desktop only */
