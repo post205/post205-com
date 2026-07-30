@@ -127,6 +127,12 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
+# ─── Internal pages (/in/*): private, keep out of search ───
+[[headers]]
+  for = "/in/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
 # ─── BNI one-to-one dance card: private, keep out of search ───
 [[headers]]
   for = "/bni/1-2-1"
