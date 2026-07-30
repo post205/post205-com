@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Process Mapping · POST205 Internal</title>
 <style>
@@ -45,6 +45,16 @@
     padding: 24px;
   }
   .gate-card { max-width: 420px; width: 100%; }
+  /* the 15x5 logo pixel grid — same matrix as the homepage and email logo */
+  .logo-grid { display: grid; grid-template-columns: repeat(15, 12px); grid-auto-rows: 12px; gap: 3px; margin-bottom: 26px; }
+  .logo-grid i { display: block; border-radius: 2px; background: rgba(59, 209, 211, 0.07); }
+  .logo-grid i.on { background: var(--accent-bright); }
+  .closing { position: relative; }
+  .closing .logo-grid { position: absolute; right: 56px; top: 50%; transform: translateY(-50%); grid-template-columns: repeat(15, 10px); grid-auto-rows: 10px; gap: 2.5px; margin: 0; }
+  .closing .logo-grid i { background: rgba(59, 209, 211, 0.06); }
+  .closing .logo-grid i.on { background: var(--accent-bright); }
+  @media (max-width: 900px) { .closing .logo-grid { display: none; } }
+  .tick { font-variant-numeric: tabular-nums; }
   .gate-label {
     font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
     text-transform: uppercase; color: #7aacac; margin-bottom: 18px;
@@ -81,7 +91,7 @@
     position: absolute; inset: 0;
     display: none;
     align-items: center; justify-content: center;
-    padding: 40px 56px 24px;
+    padding: 28px 56px 20px;
   }
   .slide.active { display: flex; }
   .frame { width: 100%; max-width: 1160px; max-height: 100%; overflow-y: auto; }
@@ -110,7 +120,7 @@
   }
   .card {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 7px; padding: 20px 22px;
+    border-radius: 7px; padding: 18px 20px;
   }
   .card p { color: var(--text-2); font-size: 14px; }
   .card p + p { margin-top: 10px; }
@@ -120,10 +130,12 @@
   .card.status.good .tag { color: var(--good); }
   .card.status.bad .tag { color: var(--bad); }
 
-  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
-  .stack { display: grid; gap: 12px; }
-  .card-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
-  .card-row.two { grid-template-columns: repeat(2, 1fr); }
+  .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; align-items: start; }
+  .cols > * { min-width: 0; }
+  .stack { display: grid; gap: 10px; }
+  .card-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+  .card-row > * { min-width: 0; }
+  .card-row.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   /* Slide 01 */
   .title-cols { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: start; }
@@ -166,7 +178,7 @@
 
   /* Slide 10 — escalation table */
   .table-scroll {
-    overflow-x: auto; margin-top: 20px;
+    overflow-x: auto; margin-top: 14px;
     background: var(--surface); border: 1px solid var(--border); border-radius: 7px;
   }
   table { border-collapse: collapse; width: 100%; min-width: 720px; }
@@ -247,12 +259,41 @@
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
   }
+
+  /* ── Mobile ───────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    #pass { font-size: 16px; } /* below 16px iOS zooms on focus and stays zoomed */
+    #open { padding: 13px 22px; }
+    .logo-grid { grid-template-columns: repeat(15, 9px); grid-auto-rows: 9px; gap: 2.5px; }
+    .slide { padding: 20px 20px 14px; align-items: flex-start; }
+    .frame { padding-top: 4px; }
+    .cols, .card-row, .card-row.two, .title-cols, .canon, .moves { grid-template-columns: minmax(0, 1fr); }
+    .title-cols { gap: 24px; }
+    .cols { gap: 16px; }
+    .moves { gap: 12px; margin-top: 16px; }
+    .card-row { margin-top: 14px; }
+    .shape-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .cols.sources { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .chain { flex-direction: column; gap: 6px; }
+    .chain-arrow { align-self: flex-start; transform: rotate(90deg); padding-left: 18px; }
+    th, td { padding: 8px 10px; font-size: 12.5px; }
+    .closing { margin: 20px calc(50% - 50vw) 0; padding: 24px 20px 28px; }
+    #bar {
+      height: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px));
+      padding: 0 14px env(safe-area-inset-bottom, 0px);
+      gap: 14px;
+    }
+    #deck { inset: 0 0 calc(var(--bar-h) + env(safe-area-inset-bottom, 0px)) 0; }
+    .nav-btn { padding: 15px 16px; } /* 44px tap target */
+    #counter { min-width: 56px; }
+  }
 </style>
 </head>
 <body>
 
 <div id="gate">
   <form class="gate-card" id="gate-form">
+    <div class="logo-grid" id="gate-grid" aria-hidden="true"></div>
     <p class="gate-label">POST205 · INTERNAL</p>
     <h1>Come on in.</h1>
     <p class="gate-sub">You&rsquo;ll need the passphrase. It&rsquo;s in the team chat, or ask Toffer.</p>
@@ -297,14 +338,51 @@ const gate = document.getElementById('gate');
 const err = document.getElementById('gate-err');
 const passEl = document.getElementById('pass');
 
+/* ── the 15x5 logo bitmap: same matrix as the homepage and email logo ──── */
+const M = ['001011101110111', '100000101010100', '010011101010111', '000010001010001', '100011101110111'];
+function buildGrid(el) {
+  for (let r = 0; r < 5; r++) for (let c = 0; c < 15; c++) {
+    const i = document.createElement('i');
+    if (M[r][c] === '1') i.className = 'on';
+    el.appendChild(i);
+  }
+}
+const gateGrid = document.getElementById('gate-grid');
+buildGrid(gateGrid);
+if (!still) {
+  animate(gateGrid.querySelectorAll('i'), {
+    opacity: [0, 1], scale: [0.3, 1], duration: 620, ease: 'outExpo',
+    delay: stagger(22, { grid: [15, 5], from: 'center' })
+  });
+}
+
 document.getElementById('gate-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   err.textContent = '';
   try {
     const html = await unlock(passEl.value);
-    document.getElementById('deck').innerHTML = html;
-    gate.remove();
-    initDeck();
+    const deck = document.getElementById('deck');
+    deck.innerHTML = html;
+    // the closing band gets its own logo grid, like the homepage's pixel field
+    const closing = deck.querySelector('.closing');
+    if (closing) {
+      const g = document.createElement('div');
+      g.className = 'logo-grid';
+      g.setAttribute('aria-hidden', 'true');
+      buildGrid(g);
+      closing.appendChild(g);
+    }
+    if (still) {
+      gate.remove();
+      initDeck();
+    } else {
+      // the gate lifts like the homepage boot shutter; slide 1 enters beneath it
+      initDeck();
+      animate(gate, {
+        translateY: '-100%', duration: 560, ease: 'inOutCirc',
+        onComplete: () => gate.remove()
+      });
+    }
   } catch {
     err.textContent = 'That’s not it. Try again.';
     passEl.select();
@@ -365,17 +443,61 @@ function initDeck() {
     });
   };
 
+  // Verified stats tick up as their slide enters.
+  const tick = (slide) => {
+    slide.querySelectorAll('.tick').forEach((el) => {
+      const n = parseInt(el.dataset.n, 10);
+      const comma = el.dataset.f === 'comma';
+      const obj = { v: 0 };
+      animate(obj, {
+        v: n, duration: 1100, ease: 'outExpo', delay: 380,
+        onUpdate: () => {
+          const x = Math.round(obj.v);
+          el.textContent = comma ? x.toLocaleString('en-US') : String(x);
+        }
+      });
+    });
+  };
+
+  // Slide 14: the logo grid assembles in the closing band.
+  const drawClose = (slide) => {
+    const cells = slide.querySelectorAll('.closing .logo-grid i');
+    if (!cells.length) return;
+    animate(cells, {
+      opacity: [0, 1], scale: [0.3, 1], duration: 620, ease: 'outExpo',
+      delay: stagger(20, { grid: [15, 5], from: 'first', start: 400 })
+    });
+  };
+
+  // The counter digits decode on every slide change.
+  const setCounter = (final) => {
+    if (still) { counter.textContent = final; return; }
+    const obj = { p: 0 };
+    animate(obj, {
+      p: 1, duration: 240, ease: 'linear',
+      onUpdate: () => {
+        counter.textContent = obj.p >= 1 ? final
+          : final.replace(/\d/g, (d) => (obj.p > 0.5 && Math.random() > 0.5) ? d : String((Math.random() * 10) | 0));
+      },
+      onComplete: () => { counter.textContent = final; }
+    });
+  };
+
   function show(n) {
     i = Math.max(0, Math.min(slides.length - 1, n));
     slides.forEach((s, k) => s.classList.toggle('active', k === i));
-    counter.textContent = `${pad(i + 1)} / ${pad(slides.length)}`;
-    fill.style.width = `${((i + 1) / slides.length) * 100}%`;
+    setCounter(`${pad(i + 1)} / ${pad(slides.length)}`);
+    const pct = `${((i + 1) / slides.length) * 100}%`;
+    if (still) fill.style.width = pct;
+    else animate(fill, { width: pct, duration: 500, ease: 'outExpo' });
     const slide = slides[i];
     slide.querySelector('.frame').scrollTop = 0;
     if (still) return; // end state is the CSS default; nothing to animate
     enter(slide);
     if (slide.classList.contains('slide-shapes')) drawShapes(slide);
     if (slide.classList.contains('slide-chain')) drawChain(slide);
+    if (slide.classList.contains('slide-close')) drawClose(slide);
+    tick(slide);
   }
 
   document.getElementById('next').addEventListener('click', () => show(i + 1));
