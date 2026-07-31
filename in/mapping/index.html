@@ -60,10 +60,8 @@
   .gate-card { position: relative; z-index: 1; }
   .tick { font-variant-numeric: tabular-nums; }
 
-  /* kawa-style ornaments: breathing lattice behind the slides, resolving logo top-right */
+  /* breathing lattice behind the slides — the login field on light, logo lives inside it */
   .slide-lattice { position: absolute; inset: 0; pointer-events: none; }
-  .slide-badge { position: absolute; top: 24px; right: 56px; pointer-events: none; }
-  @media (max-width: 768px) { .slide-badge { display: none; } }
 
   /* inline SVG diagrams: same stroke language as the four shapes */
   .diagram { margin: 18px 0 0; }
@@ -261,25 +259,29 @@
   /* ── Bottom bar ───────────────────────────────────────── */
   #bar {
     position: fixed; left: 0; right: 0; bottom: 0; height: var(--bar-h);
-    display: none; align-items: center; gap: 24px;
+    display: none; align-items: center; gap: 20px;
     padding: 0 24px;
-    background: var(--black); border-top: 1px solid var(--border);
+    background: transparent; /* the field runs underneath; the bar is just quiet marks */
     z-index: 5;
   }
   #bar.on { display: flex; }
   #counter {
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.09em;
-    color: var(--text-3); flex: none; min-width: 72px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.09em;
+    color: var(--text-3); opacity: 0.65; flex: none; min-width: 60px;
   }
-  #rail { flex: 1; height: 2px; background: var(--border); border-radius: 1px; }
-  #rail-fill { height: 100%; width: 0; background: var(--accent); border-radius: 1px; }
+  #pips { flex: 1; display: flex; justify-content: center; gap: 7px; }
+  .pip {
+    width: 5px; height: 5px; padding: 0; border: 0; border-radius: 1px;
+    background: rgba(14, 154, 157, 0.18); cursor: pointer;
+  }
+  .pip.on { background: var(--accent); }
+  .pip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .nav-btn {
-    background: transparent; border: 1px solid var(--border-2); border-radius: 4px;
-    color: var(--text-2); font-family: var(--mono); font-size: 11px; font-weight: 700;
-    letter-spacing: 0.09em; text-transform: uppercase;
-    padding: 7px 16px; cursor: pointer; flex: none;
+    background: transparent; border: 0; color: var(--text-3);
+    font-size: 18px; line-height: 1;
+    padding: 12px 14px; cursor: pointer; flex: none; opacity: 0.7;
   }
-  .nav-btn:hover { border-color: var(--accent); color: var(--accent); transition: color 0.15s, border-color 0.15s; }
+  .nav-btn:hover { color: var(--accent); opacity: 1; transition: color 0.15s, opacity 0.15s; }
   .nav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -313,6 +315,7 @@
     #deck { inset: 0 0 calc(var(--bar-h) + env(safe-area-inset-bottom, 0px)) 0; }
     .nav-btn { padding: 15px 16px; } /* 44px tap target */
     #counter { min-width: 56px; }
+    #pips { display: none; } /* swipe + chevrons carry it; 5px pips are no tap target */
   }
 </style>
 </head>
@@ -322,7 +325,7 @@
   <form class="gate-card" id="gate-form">
     <p class="gate-label">POST205 · INTERNAL</p>
     <h1>Come on in.</h1>
-    <p class="gate-sub">Nasa team chat ang passphrase. O tanungin si Toffer.</p>
+    <p class="gate-sub">Team access only. The passphrase is in the chat, or ask Toffer.</p>
     <input id="user" type="text" name="username" autocomplete="username" aria-label="Username"
            placeholder="USERNAME" autocapitalize="none" spellcheck="false" autofocus>
     <div class="gate-row">
@@ -338,9 +341,9 @@
 
 <div id="bar">
   <span id="counter">01 / 14</span>
-  <div id="rail" aria-hidden="true"><div id="rail-fill"></div></div>
-  <button class="nav-btn" id="prev" aria-label="Previous slide">‹ Prev</button>
-  <button class="nav-btn" id="next" aria-label="Next slide">Next ›</button>
+  <div id="pips" aria-hidden="true"></div>
+  <button class="nav-btn" id="prev" aria-label="Previous slide">‹</button>
+  <button class="nav-btn" id="next" aria-label="Next slide">›</button>
 </div>
 
 <script type="module">
@@ -394,18 +397,21 @@ function slideLattice(host) {
     P = W < 700 ? 18 : 24;
     D = P - Math.max(4, Math.round(P / 3));
     const cols = Math.ceil(W / P), rows = Math.ceil(H / P);
+    const bx = Math.max(2, cols - 15 - 3), by = 2;  /* logo inside the field, top-right — gate parity */
     cells = [];
     for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
       const i = r * cols + c;
       /* full field: every cell drawn, dim — texture, not confetti (same move as /work) */
       const s = seedRand(i * 3 + 2), m = seedRand(i * 7 + 4);
+      const br = r - by, bc = c - bx;
+      const inLogo = br >= 0 && br < 5 && bc >= 0 && bc < 15 && M[br][bc] === '1';
       cells.push({
-        x: c * P, y: r * P,
+        x: c * P, y: r * P, inLogo,
         r: TEAL[0] + (MUTE[0] - TEAL[0]) * m,
         g: TEAL[1] + (MUTE[1] - TEAL[1]) * m,
         b: TEAL[2] + (MUTE[2] - TEAL[2]) * m,
         base: 0.03 + 0.10 * s,     /* wide spread: some cells clearly darker, like the closing band */
-        freq: 0.4 + 0.6 * seedRand(i * 5 + 9),
+        freq: inLogo ? 1.1 : 0.4 + 0.6 * seedRand(i * 5 + 9),
         phase: s * Math.PI * 2
       });
     }
@@ -416,9 +422,13 @@ function slideLattice(host) {
     /* cells hold their positions; each one dims and brightens on its own
        seeded rhythm — the /work footer behavior, nothing travels */
     for (const k of cells) {
-      const al = t === null ? k.base : k.base + 0.04 * Math.sin(t * k.freq + k.phase);
+      const al = k.inLogo
+        ? (t === null ? 0.42 : 0.36 + 0.12 * Math.sin(t * k.freq + k.phase))
+        : (t === null ? k.base : k.base + 0.04 * Math.sin(t * k.freq + k.phase));
       if (al <= 0) continue;
-      ctx.fillStyle = 'rgba(' + (k.r | 0) + ',' + (k.g | 0) + ',' + (k.b | 0) + ',' + al.toFixed(3) + ')';
+      ctx.fillStyle = k.inLogo
+        ? 'rgba(' + TEAL[0] + ',' + TEAL[1] + ',' + TEAL[2] + ',' + al.toFixed(3) + ')'
+        : 'rgba(' + (k.r | 0) + ',' + (k.g | 0) + ',' + (k.b | 0) + ',' + al.toFixed(3) + ')';
       ctx.fillRect(k.x + 1.5, k.y + 1.5, D, D);
     }
   }
@@ -431,44 +441,7 @@ function slideLattice(host) {
   return { draw };
 }
 
-/* the 15x5 logo resolving cell by cell in seeded shuffled order — each cell
-   snaps in hot, then settles into a seeded mix with a faint breath (kawa load.js) */
-function logoBadge(host) {
-  const P = 7, cells = [];
-  for (let r = 0; r < 5; r++) for (let c = 0; c < 15; c++) if (M[r][c] === '1') cells.push({ x: c * P, y: r * P });
-  const order = cells.map((_, i) => i);
-  for (let i = order.length - 1; i > 0; i--) {
-    const j = Math.floor(seedRand(i * 17 + 3) * (i + 1));
-    const t2 = order[i]; order[i] = order[j]; order[j] = t2;
-  }
-  cells.forEach((k, i) => { k.at = (order.indexOf(i) / cells.length) * 0.8; k.seed = seedRand(i * 7 + 5); });
-  const cw = 15 * P, ch = 5 * P;
-  const cv = document.createElement('canvas');
-  cv.className = 'slide-badge';
-  cv.setAttribute('aria-hidden', 'true');
-  cv.width = Math.round(cw * DPR2); cv.height = Math.round(ch * DPR2);
-  cv.style.width = cw + 'px'; cv.style.height = ch + 'px';
-  host.appendChild(cv);
-  const ctx = cv.getContext('2d');
-  ctx.setTransform(DPR2, 0, 0, DPR2, 0, 0);
-  function draw(t, p) {
-    ctx.clearRect(0, 0, cw, ch);
-    for (const k of cells) {
-      const a = Math.max(0, Math.min(1, (p - k.at) / 0.2));
-      if (a <= 0) continue;
-      let al, m;
-      if (a < 1) { m = 0; al = 0.15 + 0.75 * a; }  /* arriving — hot teal snap */
-      else {
-        m = k.seed * 0.3;
-        al = t === null ? 0.42 : 0.38 + 0.09 * Math.sin(t * (0.6 + k.seed) + k.seed * 6.28);
-      }
-      const cr = TEAL[0] + (MUTE[0] - TEAL[0]) * m, cg = TEAL[1] + (MUTE[1] - TEAL[1]) * m, cb = TEAL[2] + (MUTE[2] - TEAL[2]) * m;
-      ctx.fillStyle = 'rgba(' + (cr | 0) + ',' + (cg | 0) + ',' + (cb | 0) + ',' + al.toFixed(3) + ')';
-      ctx.fillRect(k.x + 1, k.y + 1, P - 2, P - 2);
-    }
-  }
-  return { draw };
-}
+/* (the slide logo lives inside slideLattice now, gate parity — no separate badge) */
 /* ── pixel field (ported from /work): dim cells fill the host, each breathing
    on its own seed; the 15x5 logo sits bright inside the field, top-right ── */
 function pxField(host) {
@@ -620,19 +593,24 @@ function initDeck() {
   const deck = document.getElementById('deck');
   const slides = [...deck.querySelectorAll('.slide')];
   const counter = document.getElementById('counter');
-  const fill = document.getElementById('rail-fill');
+  const pipsHost = document.getElementById('pips');
+  const pips = slides.map((_, k) => {
+    const b = document.createElement('button');
+    b.className = 'pip';
+    b.setAttribute('aria-label', 'Go to slide ' + (k + 1));
+    b.addEventListener('click', () => show(k));
+    pipsHost.appendChild(b);
+    return b;
+  });
   let i = 0;
 
   deck.classList.add('on');
   document.getElementById('bar').classList.add('on');
 
-  // kawa treatment: breathing lattice behind the field, resolving logo per slide
+  // the login field, light: one breathing lattice behind all slides, logo inside it
   const lattice = slideLattice(deck);
-  const badges = slides.map((s) => logoBadge(s));
-  const rp = { p: 1 }; // logo resolve progress for the active slide
   if (still) {
     lattice.draw(null);
-    badges.forEach((b) => b.draw(null, 1));
   } else {
     let lastB = 0;
     const loopBg = (now) => {
@@ -640,7 +618,6 @@ function initDeck() {
       if (document.hidden || now - lastB < 66) return; /* 15fps is plenty for a shimmer */
       lastB = now;
       lattice.draw(now / 1000);
-      badges[i].draw(now / 1000, rp.p);
     };
     requestAnimationFrame(loopBg);
   }
@@ -648,8 +625,8 @@ function initDeck() {
   const pad = (n) => String(n).padStart(2, '0');
 
   // Shared enter timeline, reused on every slide change.
-  const enter = (slide) => createTimeline({ defaults: { ease: 'outExpo', duration: 520 } })
-    .add(slide, { opacity: [0, 1], translateY: [10, 0] })
+  const enter = (slide, dir) => createTimeline({ defaults: { ease: 'outExpo', duration: 520 } })
+    .add(slide, { opacity: [0, 1], translateX: [(dir || 1) * 36, 0] })
     .add(slide.querySelectorAll('.rise'), {
       opacity: [0, 1],
       translateY: [8, 0],
@@ -728,19 +705,29 @@ function initDeck() {
   };
 
   function show(n) {
-    i = Math.max(0, Math.min(slides.length - 1, n));
-    slides.forEach((s, k) => s.classList.toggle('active', k === i));
-    setCounter(`${pad(i + 1)} / ${pad(slides.length)}`);
-    const pct = `${((i + 1) / slides.length) * 100}%`;
-    if (still) fill.style.width = pct;
-    else animate(fill, { width: pct, duration: 500, ease: 'outExpo' });
+    const target = Math.max(0, Math.min(slides.length - 1, n));
+    const dir = target >= i ? 1 : -1;
+    const prev = slides[i];
+    i = target;
     const slide = slides[i];
+    setCounter(`${pad(i + 1)} / ${pad(slides.length)}`);
+    pips.forEach((b, k) => b.classList.toggle('on', k === i));
     slide.querySelector('.frame').scrollTop = 0;
     if (slide.classList.contains('slide-close')) drawClose(); // sizes the field; static under reduced motion
-    if (still) return; // end state is the CSS default; nothing to animate
-    rp.p = 0;
-    animate(rp, { p: 1, duration: 900, ease: 'outExpo', delay: 180 }); // logo re-resolves per slide
-    enter(slide);
+    if (still) {
+      slides.forEach((s, k) => s.classList.toggle('active', k === i));
+      return; // end state is the CSS default; nothing to animate
+    }
+    if (prev !== slide && prev.classList.contains('active')) {
+      // outgoing slide glides away in the travel direction
+      animate(prev, {
+        opacity: [1, 0], translateX: [0, -dir * 28], duration: 260, ease: 'outQuad',
+        onComplete: () => { prev.classList.remove('active'); prev.style.opacity = ''; prev.style.transform = ''; }
+      });
+    }
+    slide.style.opacity = ''; slide.style.transform = '';
+    slide.classList.add('active');
+    enter(slide, dir);
     if (slide.querySelector('.draw')) drawShapes(slide);
     if (slide.classList.contains('slide-chain')) drawChain(slide);
     tick(slide);
@@ -748,6 +735,38 @@ function initDeck() {
 
   document.getElementById('next').addEventListener('click', () => show(i + 1));
   document.getElementById('prev').addEventListener('click', () => show(i - 1));
+
+  // scroll advances the deck — one gesture, one slide; inner content scrolls first
+  let lock = false, acc = 0;
+  const advance = (dir) => {
+    if (lock) return;
+    lock = true; acc = 0;
+    show(i + dir);
+    setTimeout(() => { lock = false; }, 620);
+  };
+  document.addEventListener('wheel', (e) => {
+    const f = slides[i].querySelector('.frame');
+    if (Math.abs(e.deltaY) >= Math.abs(e.deltaX)) {
+      // let a scrollable frame consume vertical scroll until it hits its edge
+      if (e.deltaY > 0 && f.scrollTop + f.clientHeight < f.scrollHeight - 2) return;
+      if (e.deltaY < 0 && f.scrollTop > 2) return;
+    }
+    e.preventDefault();
+    if (lock) return;
+    const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    if (d === 0) return;
+    if ((acc > 0) !== (d > 0)) acc = 0;
+    acc += d;
+    if (Math.abs(acc) > 90) advance(acc > 0 ? 1 : -1);
+  }, { passive: false });
+
+  // horizontal swipe on touch — vertical touch keeps scrolling the frame
+  let tx = 0, ty = 0;
+  document.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) advance(dx < 0 ? 1 : -1);
+  }, { passive: true });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
