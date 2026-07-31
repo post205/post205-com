@@ -384,16 +384,14 @@ function slideLattice(host) {
   host.insertBefore(cv, host.firstChild);
   const ctx = cv.getContext('2d');
   const P = 12;                     /* quarter-area cells: 8px dots on a 12px pitch */
-  const VX = 6, VY = 3;             /* drift speed, px/s — a slow diagonal current */
-  let W = 0, H = 0, FW = 0, FH = 0, cells = [];
+  let W = 0, H = 0, cells = [];
   function build() {
     W = host.clientWidth; H = host.clientHeight;
     if (!W || !H) return false;
     cv.width = Math.round(W * DPR2); cv.height = Math.round(H * DPR2);
     cv.style.width = W + 'px'; cv.style.height = H + 'px';
     ctx.setTransform(DPR2, 0, 0, DPR2, 0, 0);
-    const cols = Math.ceil(W / P) + 2, rows = Math.ceil(H / P) + 2;
-    FW = cols * P; FH = rows * P;
+    const cols = Math.ceil(W / P), rows = Math.ceil(H / P);
     cells = [];
     for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
       const i = r * cols + c;
@@ -413,18 +411,13 @@ function slideLattice(host) {
   }
   function draw(t) {
     ctx.clearRect(0, 0, W, H);
-    /* toroidal drift: the field slides on a slow diagonal, cells recycling
-       across the edges — constant motion, no restart, no randomness */
-    const ox = t === null ? 0 : (t * VX) % FW;
-    const oy = t === null ? 0 : (t * VY) % FH;
+    /* cells hold their positions; each one dims and brightens on its own
+       seeded rhythm — the /work footer behavior, nothing travels */
     for (const k of cells) {
-      const al = t === null ? k.base : k.base + 0.03 * Math.sin(t * k.freq + k.phase);
+      const al = t === null ? k.base : k.base + 0.04 * Math.sin(t * k.freq + k.phase);
       if (al <= 0) continue;
-      const px = ((k.x - ox) % FW + FW) % FW - P;
-      const py = ((k.y - oy) % FH + FH) % FH - P;
-      if (px > W || py > H) continue;
       ctx.fillStyle = 'rgba(' + (k.r | 0) + ',' + (k.g | 0) + ',' + (k.b | 0) + ',' + al.toFixed(3) + ')';
-      ctx.fillRect(px + 2, py + 2, P - 4, P - 4);
+      ctx.fillRect(k.x + 2, k.y + 2, P - 4, P - 4);
     }
   }
   build();
@@ -617,7 +610,7 @@ function initDeck() {
     let lastB = 0;
     const loopBg = (now) => {
       requestAnimationFrame(loopBg);
-      if (document.hidden || now - lastB < 33) return; /* 30fps: drift needs it, shimmer doesn't mind */
+      if (document.hidden || now - lastB < 66) return; /* 15fps is plenty for a shimmer */
       lastB = now;
       lattice.draw(now / 1000);
       badges[i].draw(now / 1000, rp.p);
