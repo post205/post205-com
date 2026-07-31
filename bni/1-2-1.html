@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <meta name="robots" content="noindex, nofollow">
+  <title>1-2-1 Form · Toffer Lorenzana · POST205</title>
+  <meta name="description" content="A BNI one-to-one form for Toffer Lorenzana, Founder of POST205. Who I am and how to refer me.">
+  <link rel="canonical" href="https://post205.com/bni/1-2-1">
+
+  <meta property="og:title" content="Toffer Lorenzana · 1-2-1 · POST205">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://post205.com/bni/1-2-1">
+  <meta property="og:image" content="https://post205.com/bni/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Toffer Lorenzana, Founder of POST205, BNI All-Stars 1-2-1 form">
+  <meta property="og:description" content="BNI All-Stars one-to-one. Who I am, how to refer me, and what I'll do for you first.">
+  <meta property="og:site_name" content="POST205">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Toffer Lorenzana · 1-2-1 · POST205">
+  <meta name="twitter:description" content="BNI All-Stars one-to-one. Who I am, how to refer me, and what I'll do for you first.">
+  <meta name="twitter:image" content="https://post205.com/bni/og.png">
+  <meta name="twitter:image:alt" content="Toffer Lorenzana, Founder of POST205, BNI All-Stars 1-2-1 form">
+
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+  <script>
+    /* boot plays once per session; repeat visits + reduced motion + embedded
+       frames go straight in (same guard + key as the homepage) */
+    try {
+      if (sessionStorage.getItem('p205boot121') === '1' ||
+          window.self !== window.top ||
+          matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('no-boot');
+      }
+    } catch (e) { document.documentElement.classList.add('no-boot'); }
+  </script>
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black:        #e7efee;
+      --surface:      #f7fcfc;
+      --surface-2:    #dce8e7;
+      --border:       #c7d9d7;
+      --border-2:     #b1c8c5;
+      --text:         #0b1b1b;
+      --text-2:       #41585a;
+      --text-3:       #5a7473;
+      --accent:       #0e9a9d;
+      --accent-text:  #0f7476;
+      --on-accent:    #ffffff;
+      --hero-bg:      #0f1416;
+      --nav-accent:   #3BD1D3;
+      --logo-blend:   screen;
+      --logo-filter:  none;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    a { color: var(--accent-text); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── boot overlay: covers instantly, lifts like a shutter when ready ── */
+    #p205-boot { position: fixed; inset: 0; z-index: 100000; background: #0f1416; transform: translateY(0); will-change: transform; }
+    #p205-boot.lift { transition: transform .55s cubic-bezier(0.16, 1, 0.3, 1); transform: translateY(-100%); }
+    #p205-boot canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .boot-read { position: absolute; left: 22px; bottom: 20px; font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .1em; color: #6fc9ca; text-transform: uppercase; line-height: 1.9; user-select: none; }
+    .boot-read b { color: #3BD1D3; font-weight: 400; }
+    .boot-pct { position: absolute; right: 22px; bottom: 16px; font-family: ui-monospace, monospace; font-size: 26px; letter-spacing: .06em; color: #3BD1D3; user-select: none; font-weight: 400; }
+    .no-boot #p205-boot { display: none; }
+    .decode-wait { visibility: hidden; }
+
+    @keyframes pageReveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: no-preference) {
+      .dc-wrap, footer { opacity: 0; animation: pageReveal .6s cubic-bezier(.22,1,.36,1) forwards; }
+      .dc-wrap { animation-delay: .12s; }
+      footer { animation-delay: .24s; }
+    }
+
+    /* Nav — transparent over the dark hero, solid on scroll */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px;
+      background: transparent; border-bottom: none; box-shadow: none;
+      transition: background .3s ease, box-shadow .3s ease;
+    }
+    nav.nav-solid { background: rgba(15,20,22,0.97); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 26px; width: auto; mix-blend-mode: var(--logo-blend); filter: var(--logo-filter); opacity: 0.9; }
+    .nav-hud { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+    .nav-hud canvas { display: block; }
+    .hud-txt { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .12em; color: #7aacac; text-transform: uppercase; user-select: none; }
+    @media (max-width: 640px) { .hud-txt { display: none; } }
+
+    /* Dark hero band — homepage-style living binary field behind the text */
+    .page-hero { background: var(--hero-bg); padding: 120px 24px 80px; position: relative; overflow: hidden; min-height: 92vh; display: flex; align-items: center; }
+    .hero-binary { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .hero-binary canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .page-hero-inner { max-width: 1040px; margin: 0 auto; width: 100%; position: relative; z-index: 1; }
+    .hero-text { max-width: 620px; }
+    .hero-meta { margin-top: 22px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.10); font-family: ui-monospace, monospace; font-size: 12px; letter-spacing: .03em; line-height: 1.7; color: #8aa7a8; }
+    .hero-meta .since { color: var(--nav-accent); text-transform: uppercase; letter-spacing: .1em; font-size: 11px; }
+    .hero-meta .addr { color: #b9d2d2; margin-top: 6px; }
+    .dc-eyebrow { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em; color: var(--nav-accent); text-transform: uppercase; margin-bottom: 18px; }
+    .page-hero h1 { font-size: clamp(34px, 6vw, 54px); font-weight: 800; line-height: 1.08; margin-bottom: 14px; letter-spacing: -0.015em; color: #f4f7f7; }
+    .dc-role { font-size: 16px; color: #b9d2d2; line-height: 1.5; }
+    .dc-role strong { color: #e6f2f2; font-weight: 700; }
+    .dc-role .sep { color: #4a6668; padding: 0 7px; }
+    .dc-intro { font-size: 16px; color: #a9c6c6; line-height: 1.65; margin-top: 22px; max-width: 54ch; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.10); }
+    .dc-intro em { color: var(--nav-accent); font-style: normal; font-weight: 600; }
+
+    /* Content — light teal field */
+    .dc-wrap { max-width: 760px; margin: 0 auto; padding: 12px 24px 72px; position: relative; overflow: hidden; }
+    .dc-wrap > *:not(.sec-field) { position: relative; z-index: 1; }
+
+    section.dc-sec { padding: 48px 0; border-bottom: 1px solid var(--border); }
+    section.dc-sec:last-of-type { border-bottom: none; }
+    .dc-kicker { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.14em; color: var(--accent-text); text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: baseline; gap: 10px; }
+    .dc-kicker .num { color: var(--text-3); }
+    .dc-h { font-size: clamp(22px, 3.4vw, 28px); font-weight: 800; letter-spacing: -0.01em; color: var(--text); margin-bottom: 22px; line-height: 1.15; }
+    .dc-lead { font-size: 16px; color: var(--text-2); max-width: 62ch; margin-bottom: 24px; }
+
+    /* GAINS grid */
+    .gains { display: grid; gap: 2px; background: var(--border); border: 1px solid var(--border); }
+    .gains > div { background: var(--surface); padding: 20px 22px; }
+    .gains dt { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-text); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+    .gains dt .g { font-size: 15px; font-weight: 800; color: var(--accent); width: 1.2em; }
+    .gains dd { font-size: 15px; color: var(--text-2); line-height: 1.6; }
+    .gains dd + dd { margin-top: 8px; }
+    .gains dd b, .creed .v b, .person-desire b { font-weight: 700; }
+
+    /* Person / philosophy block */
+    .person-desire { background: var(--hero-bg); color: #dfeeee; padding: 30px 30px; border-radius: 4px; font-size: 19px; line-height: 1.55; margin-bottom: 26px; }
+    .person-desire b { color: var(--nav-accent); }
+    .creed { display: grid; gap: 14px; }
+    .creed .row { display: grid; grid-template-columns: 130px 1fr; gap: 18px; align-items: baseline; }
+    .creed .k { font-family: ui-monospace, monospace; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--accent-text); }
+    .creed .v { font-size: 15px; color: var(--text-2); line-height: 1.6; }
+    .creed .v b { color: var(--text); }
+    @media (max-width: 560px) { .creed .row { grid-template-columns: 1fr; gap: 4px; } }
+
+    /* referral cards */
+    .cards { display: grid; gap: 2px; background: var(--border); border: 1px solid var(--border); }
+    .cards > div { background: var(--surface); padding: 20px 22px; }
+    .cards h3 { font-size: 13px; font-family: ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-text); margin-bottom: 8px; }
+    .cards p { font-size: 15px; color: var(--text-2); line-height: 1.6; }
+
+    /* the ask callout */
+    .ask { background: var(--surface); border: 1px solid var(--border-2); border-left: 3px solid var(--accent); padding: 24px 26px; border-radius: 4px; }
+    .ask .thisweek { font-size: clamp(19px, 3vw, 24px); font-weight: 800; color: var(--text); line-height: 1.3; letter-spacing: -0.01em; }
+    .ask .standing { font-size: 15px; color: var(--text-2); margin-top: 14px; line-height: 1.6; }
+    .ask .notfor { font-size: 13px; color: var(--text-3); margin-top: 14px; font-family: ui-monospace, monospace; letter-spacing: .02em; }
+
+    /* fill-in blanks — the few things only Toffer can confirm */
+    .blank { display: block; margin-top: 10px; padding: 12px 14px; border: 1px dashed var(--border-2); border-radius: 4px; background: rgba(255,255,255,.4); font-size: 14px; color: var(--text-3); font-style: italic; }
+    .blank::before { content: "✎ "; font-style: normal; color: var(--accent); }
+
+    .give-list { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .give-list li { font-family: ui-monospace, monospace; font-size: 12px; letter-spacing: .02em; color: var(--text-2); background: var(--surface-2); border: 1px solid var(--border); padding: 6px 11px; border-radius: 999px; }
+
+    /* Footer — calling card */
+    footer { background:#0f1416; border-top:none; display:flex; flex-direction:column; align-items:center; gap:26px; padding:60px 20px 44px; position: relative; overflow: hidden; }
+    footer > *:not(.foot-field) { position: relative; z-index: 1; }
+    .cc-card { display:inline-block; }
+    .cc-grid { display:inline-grid; grid-template-columns:auto auto auto; align-items:center; justify-items:center; row-gap:5px; }
+    .cc-lbl { font-family: ui-monospace,monospace; font-size:10px; letter-spacing:.18em; color:#6fc9ca; text-transform:uppercase; text-decoration:none; white-space:nowrap; }
+    a.cc-lbl:hover { color:#a7c4c4; }
+    .cc-lbl-ig  { grid-row:1; grid-column:1 / 3; }
+    .cc-br-top  { grid-row:2; grid-column:1 / 3; }
+    .cc-at   { grid-row:3; grid-column:1; }
+    .cc-core { grid-row:3; grid-column:2; }
+    .cc-tld  { grid-row:3; grid-column:3; }
+    .cc-br-bot  { grid-row:4; grid-column:2 / 4; }
+    .cc-lbl-web { grid-row:5; grid-column:2 / 4; }
+    .cc-bracket { width:100%; height:7px; border:1px solid rgba(255,255,255,.32); justify-self:stretch; }
+    .cc-br-top { border-bottom:none; }
+    .cc-br-bot { border-top:none; }
+    .cc-ch { font-size: clamp(17px,2.6vw,24px); font-weight:600; letter-spacing:.01em; color:#f4f7f7; }
+    .cc-meta { font-family: ui-monospace,monospace; font-size:9px; letter-spacing:.06em; color:#5a7473; text-align:center; }
+    .cc-meta a { color:#6fc9ca; text-decoration:none; }
+    .cc-meta a:hover { color:#a7c4c4; }
+
+    .sec-field, .foot-field { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .cc-lbl-web::before { content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #3BD1D3; margin-right: 7px; vertical-align: 1px; animation: hudPip 2.4s ease-in-out infinite; }
+    @keyframes hudPip { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { .cc-lbl-web::before { animation: none; opacity: .8; } .decode-wait { visibility: visible; } #p205-boot { display: none; } }
+
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      .page-hero { padding: 100px 20px 64px; min-height: 88vh; }
+      .dc-wrap { padding: 8px 20px 56px; }
+      section.dc-sec { padding: 40px 0; }
+      .person-desire { padding: 24px 22px; font-size: 18px; }
+      footer { padding: 48px 20px calc(56px + env(safe-area-inset-bottom, 0px)); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── BOOT: binary assembles the 205, then the shutter lifts (once per session) ── -->
+<div id="p205-boot" aria-hidden="true">
+  <canvas id="bootCv"></canvas>
+  <div class="boot-read" id="bootRead"></div>
+  <div class="boot-pct" id="bootPct">0%</div>
+</div>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png" alt="POST205">
+  </a>
+  <div class="nav-hud" aria-hidden="true">
+    <span class="hud-txt" id="hudTime">MNL --:--</span>
+    <span class="hud-txt" id="hudScrl">SCRL 000</span>
+    <canvas id="hudPx" width="66" height="22"></canvas>
+  </div>
+</nav>
+
+<section class="page-hero" id="hero">
+  <div class="hero-binary" aria-hidden="true"></div>
+  <div class="page-hero-inner">
+    <div class="hero-text">
+      <div class="dc-eyebrow">BNI All-Stars · 1-2-1 Form</div>
+      <h1>Toffer Lorenzana</h1>
+      <p class="dc-role">
+        <strong>Founder, POST205</strong><span class="sep">·</span>Workflow Automation Systems<span class="sep">·</span>BNI All-Stars, Taguig
+      </p>
+      <div class="hero-meta">
+        <div class="since">Building since 2015 · Based in Makati</div>
+        <div class="addr">3/F LZF Building, 25A Timog Avenue,<br>South Triangle, Quezon City</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="dc-wrap">
+
+  <!-- 1. GAINS -->
+  <section class="dc-sec">
+    <div class="dc-kicker"><span class="num">01</span> The GAINS Profile</div>
+    <h2 class="dc-h">Goals, Accomplishments, Interests, Networks, Skills</h2>
+    <dl class="gains">
+      <div>
+        <dt><span class="g">G</span> Goals</dt>
+        <dd>POST205 to <b>₱1,000,000 a month</b>, recurring. And a Philippines where a business can outlast its founder.</dd>
+      </div>
+      <div>
+        <dt><span class="g">A</span> Accomplishments</dt>
+        <dd><b>Eight years in BNI, zero absence.</b></dd>
+        <dd><b>200+ websites, 50+ back-office systems</b> since 2015. Moved the whole shop to an AI-compatible stack, all in one month.</dd>
+      </div>
+      <div>
+        <dt><span class="g">I</span> Interests</dt>
+        <dd>Business, philosophy, and art.</dd>
+      </div>
+      <div>
+        <dt><span class="g">N</span> Networks</dt>
+        <dd>BNI All-Stars. UP Diliman Fine Arts, Assumption San Lorenzo Batch '96, Ateneo Batch 2001, LFM.</dd>
+      </div>
+      <div>
+        <dt><span class="g">S</span> Skills</dt>
+        <dd>Coding, writing, painting.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <!-- 2. The Person -->
+  <section class="dc-sec">
+    <div class="dc-kicker"><span class="num">02</span> The Person</div>
+    <h2 class="dc-h">Past the business card</h2>
+    <div class="person-desire">
+      My burning desire is to <b>affect culture.</b>
+    </div>
+    <p class="dc-lead">Film and video, then marketing, then teaching web design and development, then an agency. Now POST205. Makati, two kids.</p>
+    <div class="creed">
+      <div class="row"><div class="k">On success</div><div class="v"><b>The quality and quantity of my no's.</b> I'm measured by what I turn down.</div></div>
+      <div class="row"><div class="k">On growth</div><div class="v"><b>Pain and reflection.</b> Seek the pain, sit with it, act.</div></div>
+      <div class="row"><div class="k">On wealth</div><div class="v">Hindi ka yayaman kung <b>matigas ang ulo, balat-sibuyas, o mapagmataas.</b></div></div>
+      <div class="row"><div class="k">On people</div><div class="v">To connect, you need similarity. To have something to say, difference.</div></div>
+    </div>
+  </section>
+
+  <!-- 3. How to refer me -->
+  <section class="dc-sec">
+    <div class="dc-kicker"><span class="num">03</span> How to Refer Me</div>
+    <h2 class="dc-h">So you can spot me a client without thinking twice</h2>
+    <div class="cards">
+      <div>
+        <h3>Bragging point</h3>
+        <p>Hindi ko inaayos. Sinasakyan ko.</p>
+      </div>
+      <div>
+        <h3>Key situation (my trigger)</h3>
+        <p>You hear an owner say the team is drowning in Viber and Telegram, that things stall the moment they step away, or they're fully booked but still tight.</p>
+      </div>
+      <div>
+        <h3>Golden-goose referral partner</h3>
+        <p>Anyone already selling to owner-run, multi-branch service businesses: salon and spa suppliers, aesthetic-equipment reps, POS and payments, coaches for clinics. They meet my client every day.</p>
+      </div>
+      <div>
+        <h3>Contact sphere / power team</h3>
+        <p>My BNI All-Stars Power Team: accounting, business law, marketing, sales training, coaching, travel, freight. If that's your need, I'll make the intro.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. My specific ask -->
+  <section class="dc-sec">
+    <div class="dc-kicker"><span class="num">04</span> My Specific Ask</div>
+    <div class="ask">
+      <div class="thisweek">This week, connect me with Foot Zone. A multi-branch foot spa run over Viber and Telegram.</div>
+      <p class="standing">No Foot Zone in your network? Founder-led businesses, 15 to 50 employees, with a systems problem, not a marketing problem.</p>
+      <p class="notfor">Not for me: enterprise or the big-taxpayer tier.</p>
+    </div>
+  </section>
+
+
+
+</div>
+
+<footer>
+  <div class="cc-card">
+    <div class="cc-grid">
+      <a class="cc-lbl cc-lbl-ig" href="https://instagram.com/post205" target="_blank" rel="noopener">Instagram</a>
+      <div class="cc-bracket cc-br-top"></div>
+      <span class="cc-ch cc-at">@</span><span class="cc-ch cc-core">post205</span><span class="cc-ch cc-tld">.com</span>
+      <div class="cc-bracket cc-br-bot"></div>
+      <div class="cc-lbl cc-lbl-web">You're here</div>
+    </div>
+  </div>
+  <div class="cc-meta">© 2026 POST205, Inc. · <a href="https://www.linkedin.com/in/tofferlorenzana" target="_blank" rel="noopener">in/tofferlorenzana</a> · <a href="https://instagram.com/toffspot" target="_blank" rel="noopener">@toffspot</a></div>
+</footer>
+
+<script>
+  (function(){ var n = document.querySelector('nav'); if(!n) return;
+    var f = function(){ n.classList.toggle('nav-solid', window.scrollY > 10); };
+    f(); window.addEventListener('scroll', f, { passive: true });
+  })();
+</script>
+
+<script>
+/* ===== the machine — ported from the homepage: boot -> living 205 field ======
+   One motif: the logo's 15x5 pixel grid. Vanilla, no deps. */
+(function () {
+  'use strict';
+
+  var M = ['001011101110111', '100000101010100', '010011101010111', '000010001010001', '100011101110111'];
+  var MC = 15, MR = 5;
+
+  var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var DPR = Math.min(window.devicePixelRatio || 1, 1.75);
+  var easeOutExpo = function (t) { return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t); };
+  var randGlyph = function () {
+    var x = Math.random();
+    if (x > 0.985) return '₱';
+    if (x > 0.96) return Math.random() > 0.5 ? '2' : '5';
+    return Math.random() > 0.5 ? '1' : '0';
+  };
+  var seedRand = function (i) { var x = Math.sin((i + 1) * 127.1) * 43758.5453; return x - Math.floor(x); };
+  var glyphAt = function (x) {
+    if (x > 0.985) return '₱';
+    if (x > 0.96) return x * 1000 % 1 > 0.5 ? '2' : '5';
+    return x * 100 % 1 > 0.5 ? '1' : '0';
+  };
+
+  var wantBoot = /[?&]boot=1/.test(location.search);
+  if (wantBoot) document.documentElement.classList.remove('no-boot');
+  var BOOT = !document.documentElement.classList.contains('no-boot');
+  try { sessionStorage.setItem('p205boot121', '1'); } catch (e) {}
+
+  var revealFired = false;
+  function fireReveal() { if (revealFired) return; revealFired = true; window.dispatchEvent(new Event('p205:reveal')); }
+
+  /* ── boot overlay: digits assemble the 205, shutter lifts ──────────────── */
+  (function boot() {
+    var box = document.getElementById('p205-boot');
+    if (!box) return;
+    if (!BOOT) { box.remove(); fireReveal(); return; }
+    var cv = document.getElementById('bootCv');
+    var read = document.getElementById('bootRead');
+    var pctEl = document.getElementById('bootPct');
+    var ctx = cv.getContext('2d');
+    var W = innerWidth, H = innerHeight;
+    cv.width = W * DPR; cv.height = H * DPR;
+    ctx.scale(DPR, DPR);
+    var bmpW = Math.min(W * 0.72, 440);
+    var cell = bmpW / MC;
+    var cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
+    var x0 = (W - bmpW) / 2, y0 = (H - cell * MR) / 2 - H * 0.04;
+    var mnl = new Intl.DateTimeFormat('en-PH', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Manila' }).format(new Date());
+    read.innerHTML = 'POST205 · MNL ' + mnl + '<br>LOADING';
+    var cells = [], reveals = [];
+    for (var gr = 0; gr < rows; gr++) for (var gc = 0; gc < cols; gc++) {
+      var cx = gc * cell, cy = gr * cell;
+      var bc = Math.floor((cx + cell / 2 - x0) / cell), br = Math.floor((cy + cell / 2 - y0) / cell);
+      var inBmp = br >= 0 && br < MR && bc >= 0 && bc < MC && M[br][bc] === '1';
+      var cl = { x: cx, y: cy, g: randGlyph(), ig: Math.random() * 420, on: inBmp, rv: -1 };
+      cells.push(cl);
+      if (inBmp) reveals.push(cl);
+    }
+    reveals.sort(function () { return Math.random() - 0.5; });
+    reveals.forEach(function (cl, i) { cl.rv = 380 + (i / Math.max(1, reveals.length - 1)) * 900; });
+    var t0 = performance.now(), LIFT = 1650, dead = false, raf = 0;
+    var fontPx = Math.max(10, cell * 0.5);
+    ctx.font = fontPx + 'px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    function frame(now) {
+      if (dead) return;
+      var t = now - t0;
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < cells.length; i++) {
+        var cl = cells[i];
+        if (t < cl.ig) continue;
+        if (cl.rv >= 0 && t >= cl.rv) {
+          var k = easeOutExpo(Math.min(1, (t - cl.rv) / 160));
+          ctx.globalAlpha = k; ctx.fillStyle = '#3BD1D3';
+          ctx.fillRect(cl.x + 1, cl.y + 1, cell - 2, cell - 2);
+        } else {
+          var settle = t < 420 ? 0.16 : Math.max(0.035, 0.16 - (t - 420) / 900 * 0.125);
+          ctx.globalAlpha = settle; ctx.fillStyle = '#9adedf';
+          if (Math.random() > 0.992) cl.g = randGlyph();
+          ctx.fillText(cl.g, cl.x + cell / 2, cl.y + cell / 2);
+        }
+      }
+      ctx.globalAlpha = 1;
+      var pct = Math.min(100, Math.round(t / 1280 * 100));
+      pctEl.textContent = pct + '%';
+      if (pct >= 100 && read.innerHTML.indexOf('READY') === -1) { read.innerHTML = 'POST205 · MNL ' + mnl + '<br><b>READY.</b>'; }
+      if (t >= LIFT) { end(); return; }
+      raf = requestAnimationFrame(frame);
+    }
+    function end() { if (dead) return; dead = true; cancelAnimationFrame(raf); box.classList.add('lift'); fireReveal(); setTimeout(function () { box.remove(); }, 650); }
+    box.addEventListener('pointerdown', end);
+    window.addEventListener('keydown', end, { once: true });
+    setTimeout(end, 3200);
+    raf = requestAnimationFrame(frame);
+  })();
+
+  /* ── living binary hero (the hidden 205, revealed on hover + a slow sweep) ── */
+  (function field() {
+    var host = document.querySelector('.hero-binary');
+    var hero = document.querySelector('.page-hero');
+    if (!host || !hero) return;
+    var cv = document.createElement('canvas');
+    host.appendChild(cv);
+    var ctx = cv.getContext('2d');
+    var W, H, cell, cols, rows, fontPx, glyph, base, heat, inBmp, px = -1e4, py = -1e4, lastW = 0, lastH = 0;
+    function build() {
+      var b = host.getBoundingClientRect();
+      if (glyph && Math.round(b.width) === lastW && Math.round(b.height) === lastH) return;
+      lastW = Math.round(b.width); lastH = Math.round(b.height);
+      W = Math.max(1, b.width); H = Math.max(1, b.height);
+      cv.width = W * DPR; cv.height = H * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      cell = Math.max(15, Math.min(21, W / 64));
+      cols = Math.ceil(W / cell); rows = Math.ceil(H / cell);
+      fontPx = Math.max(9, cell * 0.58);
+      ctx.font = fontPx + 'px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      var mobile = W < 640;
+      var bw = mobile ? W * 0.92 : W * 0.56;
+      var bx = mobile ? W * 0.04 : W * 0.03;
+      var bcell = bw / MC, bh = bcell * MR;
+      var by = mobile ? H * 0.10 : (H - bh) / 2;
+      var n = cols * rows;
+      glyph = new Array(n); base = new Float32Array(n); heat = new Float32Array(n); inBmp = new Uint8Array(n);
+      for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+        var i = r * cols + c;
+        glyph[i] = glyphAt(seedRand(i));
+        base[i] = 0.055 + seedRand(i + 7919) * 0.085;
+        var cx = c * cell + cell / 2, cy = r * cell + cell / 2;
+        var mc = Math.floor((cx - bx) / bcell), mr = Math.floor((cy - by) / (bh / MR));
+        inBmp[i] = (mr >= 0 && mr < MR && mc >= 0 && mc < MC && M[mr][mc] === '1') ? 1 : 0;
+      }
+    }
+    build();
+    if (REDUCE) {
+      for (var r0 = 0; r0 < rows; r0++) for (var c0 = 0; c0 < cols; c0++) {
+        var i0 = r0 * cols + c0;
+        ctx.globalAlpha = base[i0];
+        ctx.fillStyle = inBmp[i0] ? '#3BD1D3' : '#9adedf';
+        ctx.fillText(glyph[i0], c0 * cell + cell / 2, r0 * cell + cell / 2);
+      }
+      return;
+    }
+    hero.addEventListener('pointermove', function (e) { var b = cv.getBoundingClientRect(); px = e.clientX - b.left; py = e.clientY - b.top; }, { passive: true });
+    hero.addEventListener('pointerleave', function () { px = py = -1e4; });
+    hero.addEventListener('pointerdown', function (e) { var b = cv.getBoundingClientRect(); splash(e.clientX - b.left, e.clientY - b.top, 220, 1); }, { passive: true });
+    function splash(sx, sy, rad, amt) {
+      var r1 = Math.max(0, Math.floor((sy - rad) / cell)), r2 = Math.min(rows - 1, Math.ceil((sy + rad) / cell));
+      var c1 = Math.max(0, Math.floor((sx - rad) / cell)), c2 = Math.min(cols - 1, Math.ceil((sx + rad) / cell));
+      for (var r = r1; r <= r2; r++) for (var c = c1; c <= c2; c++) {
+        var dx = c * cell + cell / 2 - sx, dy = r * cell + cell / 2 - sy, d = Math.sqrt(dx * dx + dy * dy);
+        if (d < rad) { var i = r * cols + c, v = amt * (1 - d / rad); if (v > heat[i]) heat[i] = Math.min(1, v); }
+      }
+    }
+    var visible = true, hidden = false, raf = 0, last = 0, tStart = performance.now(), sweepT = -2400;
+    window.addEventListener('p205:reveal', function () { sweepT = performance.now() + 1400; });
+    new IntersectionObserver(function (es) { es.forEach(function (en) { visible = en.isIntersecting; if (visible) kick(); }); }, { threshold: 0 }).observe(host);
+    document.addEventListener('visibilitychange', function () { hidden = document.hidden; if (!hidden) kick(); });
+    var resizeT; window.addEventListener('resize', function () { clearTimeout(resizeT); resizeT = setTimeout(build, 180); });
+    function kick() { cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop); }
+    function loop(now) {
+      if (!visible || hidden) return;
+      raf = requestAnimationFrame(loop);
+      if (now - last < 33) return;
+      var dt = last ? (now - last) / 1000 : 0.033; last = now;
+      var t = (now - tStart) / 1000;
+      if (px > -1e3) splash(px, py, 175, 1);
+      var sw = (now - sweepT) / 2200, sweepOn = sw >= 0 && sw <= 1;
+      if (sw > 1) sweepT = now + 6500 + Math.random() * 2500;
+      ctx.clearRect(0, 0, W, H);
+      var decay = Math.exp(-dt * 2.2), flips = 6;
+      for (var pass = 0; pass < 2; pass++) {
+        ctx.fillStyle = pass ? '#3BD1D3' : '#9adedf';
+        for (var r = 0; r < rows; r++) {
+          var breathR = Math.sin(t * 0.45 + r * 0.35);
+          for (var c = 0; c < cols; c++) {
+            var i = r * cols + c;
+            if ((inBmp[i] === 1) !== (pass === 1)) continue;
+            var h = heat[i];
+            if (h > 0.003) { heat[i] = h * decay; if (h > 0.45 && Math.random() > 0.6) glyph[i] = randGlyph(); }
+            var a = base[i] * (0.75 + 0.25 * Math.sin(t * 0.4 + c * 0.22 + breathR));
+            if (pass) {
+              a += h * 1.0;
+              if (sweepOn) { var band = Math.abs((r + c) / (rows + cols) - sw); if (band < 0.07) a += (1 - band / 0.07) * 0.17; }
+            } else { a += h * 0.42; }
+            if (a < 0.015) continue;
+            ctx.globalAlpha = Math.min(pass ? 0.95 : 0.5, a);
+            if (pass && h > 0.3) { ctx.fillRect(c * cell + 1.5, r * cell + 1.5, cell - 3, cell - 3); }
+            else { ctx.fillText(glyph[i], c * cell + cell / 2, r * cell + cell / 2); }
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+      while (flips--) glyph[(Math.random() * glyph.length) | 0] = randGlyph();
+    }
+    kick();
+  })();
+
+  /* ── eyebrow decodes in on reveal ──────────────────────────────────────── */
+  (function decode() {
+    if (REDUCE) return;
+    window.addEventListener('p205:reveal', function () {
+      var el = document.querySelector('.dc-eyebrow'); if (!el) return;
+      var SCRAM = '010101201510', final_ = el.textContent, t0 = performance.now(), DUR = 560;
+      (function step(now) {
+        var k = Math.min(1, (now - t0) / DUR), solid = Math.floor(k * final_.length), out = final_.slice(0, solid);
+        for (var i = solid; i < final_.length; i++) { out += final_[i] === ' ' ? ' ' : SCRAM[(Math.random() * SCRAM.length) | 0]; }
+        el.textContent = out;
+        if (k < 1) requestAnimationFrame(step); else el.textContent = final_;
+      })(t0);
+    });
+  })();
+
+  /* ── ambient fields for the content + footer ───────────────────────────── */
+  function makeField(host, o) {
+    if (!host || REDUCE) return;
+    var cv = document.createElement('canvas');
+    cv.className = o.cls || 'sec-field';
+    host.insertBefore(cv, host.firstChild);
+    var ctx = cv.getContext('2d');
+    var W, H, cell, cols, rows, glyphs, alphas, heat, px = -1e4, py = -1e4, lastW = 0, lastH = 0;
+    function build() {
+      var b = host.getBoundingClientRect();
+      if (glyphs && Math.round(b.width) === lastW && Math.round(b.height) === lastH) return;
+      lastW = Math.round(b.width); lastH = Math.round(b.height);
+      W = Math.max(1, b.width); H = Math.max(1, b.height);
+      cv.width = W * DPR; cv.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      cell = o.cell || 30; cols = Math.ceil(W / cell); rows = Math.ceil(H / cell);
+      ctx.font = Math.round(cell * 0.42) + 'px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      var n = cols * rows; glyphs = new Array(n); alphas = new Float32Array(n); heat = new Float32Array(n);
+      for (var i = 0; i < n; i++) {
+        var r_ = (i / cols) | 0, c_ = i % cols, k = 1;
+        if (o.centerThin) {
+          var dx_ = (c_ * cell + cell / 2 - W / 2) / (W * 0.5), dy_ = (r_ * cell + cell / 2 - H / 2) / (H * 0.62);
+          var edge = Math.min(1, Math.sqrt(dx_ * dx_ + dy_ * dy_)); k = 0.15 + 0.85 * edge * edge;
+        }
+        glyphs[i] = glyphAt(seedRand(i)); alphas[i] = (o.idle + seedRand(i + 7919) * o.idleVar) * k;
+      }
+    }
+    build();
+    host.addEventListener('pointermove', function (e) { var b = cv.getBoundingClientRect(); px = e.clientX - b.left; py = e.clientY - b.top; }, { passive: true });
+    host.addEventListener('pointerleave', function () { px = py = -1e4; });
+    var visible = false, raf = 0, last = 0, t0 = performance.now();
+    new IntersectionObserver(function (es) { es.forEach(function (en) { visible = en.isIntersecting; if (visible) { cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop); } }); }, { threshold: 0 }).observe(host);
+    var rT; window.addEventListener('resize', function () { clearTimeout(rT); rT = setTimeout(build, 200); });
+    var R = o.radius || 140, R2 = R * R;
+    function loop(now) {
+      if (!visible || document.hidden) return;
+      raf = requestAnimationFrame(loop);
+      if (now - last < 50) return;
+      var dt = last ? (now - last) / 1000 : 0.05; last = now; var t = (now - t0) / 1000;
+      ctx.clearRect(0, 0, W, H); ctx.fillStyle = o.ink; var decay = Math.exp(-dt * 2.4);
+      for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+        var i = r * cols + c, h = heat[i];
+        if (h > 0.004) heat[i] = h * decay;
+        if (px > -1e3) { var dx = c * cell + cell / 2 - px, dy = r * cell + cell / 2 - py, d2 = dx * dx + dy * dy; if (d2 < R2) { var v = o.wake * (1 - Math.sqrt(d2) / R); if (v > heat[i]) heat[i] = v; } }
+        var a = alphas[i] * (0.7 + 0.3 * Math.sin(t * 0.35 + c * 0.3 + r * 0.5)) + h;
+        if (a < 0.012) continue;
+        ctx.globalAlpha = Math.min(o.cap, a); ctx.fillText(glyphs[i], c * cell + cell / 2, r * cell + cell / 2);
+      }
+      ctx.globalAlpha = 1; glyphs[(Math.random() * glyphs.length) | 0] = randGlyph();
+    }
+  }
+  makeField(document.querySelector('.dc-wrap'), { ink: '#0e9a9d', idle: 0.024, idleVar: 0.034, wake: 0.20, cap: 0.22, cell: 32 });
+  makeField(document.querySelector('footer'),   { cls: 'foot-field', ink: '#3BD1D3', idle: 0.015, idleVar: 0.035, wake: 0.3, cap: 0.32, centerThin: true });
+
+  /* ── nav HUD ───────────────────────────────────────────────────────────── */
+  (function hud() {
+    var MCn = 15;
+    var cv = document.getElementById('hudPx'), timeEl = document.getElementById('hudTime'), scrlEl = document.getElementById('hudScrl');
+    if (!cv) return;
+    var ctx = cv.getContext('2d'), d = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = 66 * d; cv.height = 22 * d; cv.style.width = '66px'; cv.style.height = '22px'; ctx.scale(d, d);
+    function draw(p) { ctx.clearRect(0, 0, 66, 22); var lit = Math.round(p * MCn); for (var i = 0; i < MCn; i++) { ctx.globalAlpha = i < lit ? 1 : 0.16; ctx.fillStyle = '#3BD1D3'; ctx.fillRect(3 + i * 4, 9, 3, 3); } ctx.globalAlpha = 1; }
+    function mnl() { try { timeEl.textContent = 'MNL ' + new Intl.DateTimeFormat('en-PH', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Manila' }).format(new Date()); } catch (e) { timeEl.textContent = ''; } }
+    mnl(); setInterval(mnl, 30000);
+    var ticking = false;
+    function onScroll() { if (ticking) return; ticking = true; requestAnimationFrame(function () { ticking = false; var max = document.documentElement.scrollHeight - innerHeight; var p = max > 0 ? Math.min(1, scrollY / max) : 0; draw(p); scrlEl.textContent = 'SCRL ' + String(Math.round(p * 100)).padStart(3, '0'); }); }
+    addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  })();
+})();
+</script>
+
+</body>
+</html>
