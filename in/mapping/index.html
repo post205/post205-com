@@ -60,11 +60,10 @@
   .gate-card { position: relative; z-index: 1; }
   .tick { font-variant-numeric: tabular-nums; }
 
-  /* faint logo grid ornament on every slide, top-right */
-  .slide-px { position: absolute; top: 22px; right: 56px; grid-template-columns: repeat(15, 5px); grid-auto-rows: 5px; gap: 1.5px; margin: 0; pointer-events: none; }
-  .slide-px i { background: rgba(14, 154, 157, 0.05); border-radius: 1px; }
-  .slide-px i.on { background: rgba(14, 154, 157, 0.28); }
-  @media (max-width: 768px) { .slide-px { display: none; } }
+  /* kawa-style ornaments: breathing lattice behind the slides, resolving logo top-right */
+  .slide-lattice { position: absolute; inset: 0; pointer-events: none; }
+  .slide-badge { position: absolute; top: 24px; right: 56px; pointer-events: none; }
+  @media (max-width: 768px) { .slide-badge { display: none; } }
 
   /* inline SVG diagrams: same stroke language as the four shapes */
   .diagram { margin: 18px 0 0; }
@@ -364,12 +363,100 @@ const passEl = document.getElementById('pass');
 
 /* ── the 15x5 logo bitmap: same matrix as the homepage and email logo ──── */
 const M = ['001011101110111', '100000101010100', '010011101010111', '000010001010001', '100011101110111'];
-function buildGrid(el) {
-  for (let r = 0; r < 5; r++) for (let c = 0; c < 15; c++) {
-    const i = document.createElement('i');
-    if (M[r][c] === '1') i.className = 'on';
-    el.appendChild(i);
+const seedRand = (i) => { const x = Math.sin((i + 1) * 127.1) * 43758.5453; return x - Math.floor(x); };
+const DPR2 = Math.min(window.devicePixelRatio || 1, 2);
+/* light-field palette anchors (kawa mixes FIRE↔DUN; we mix Body Teal↔muted teal-gray) */
+const TEAL = [14, 154, 157], MUTE = [90, 116, 115];
+
+/* sparse ambient lattice on the light field — every cell breathes on its own
+   seeded frequency and phase, same grammar as kawa's load backdrop */
+function slideLattice(host) {
+  const cv = document.createElement('canvas');
+  cv.className = 'slide-lattice';
+  cv.setAttribute('aria-hidden', 'true');
+  host.insertBefore(cv, host.firstChild);
+  const ctx = cv.getContext('2d');
+  const P = 24;
+  let W = 0, H = 0, cells = [];
+  function build() {
+    W = host.clientWidth; H = host.clientHeight;
+    if (!W || !H) return false;
+    cv.width = Math.round(W * DPR2); cv.height = Math.round(H * DPR2);
+    cv.style.width = W + 'px'; cv.style.height = H + 'px';
+    ctx.setTransform(DPR2, 0, 0, DPR2, 0, 0);
+    const cols = Math.ceil(W / P), rows = Math.ceil(H / P);
+    cells = [];
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const i = r * cols + c;
+      if (seedRand(i + 6151) > 0.14) continue;      /* sparse — most cells stay field */
+      const s = seedRand(i * 3 + 2), m = seedRand(i * 7 + 4);
+      cells.push({
+        x: c * P, y: r * P,
+        r: TEAL[0] + (MUTE[0] - TEAL[0]) * m,
+        g: TEAL[1] + (MUTE[1] - TEAL[1]) * m,
+        b: TEAL[2] + (MUTE[2] - TEAL[2]) * m,
+        base: 0.025 + 0.04 * s,
+        freq: 0.4 + 0.6 * seedRand(i * 5 + 9),
+        phase: s * Math.PI * 2
+      });
+    }
+    return true;
   }
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    for (const k of cells) {
+      const al = t === null ? k.base : k.base + 0.03 * Math.sin(t * k.freq + k.phase);
+      if (al <= 0) continue;
+      ctx.fillStyle = 'rgba(' + (k.r | 0) + ',' + (k.g | 0) + ',' + (k.b | 0) + ',' + al.toFixed(3) + ')';
+      ctx.fillRect(k.x + 3, k.y + 3, P - 6, P - 6);
+    }
+  }
+  build();
+  let rz;
+  window.addEventListener('resize', () => {
+    clearTimeout(rz);
+    rz = setTimeout(() => { if ((host.clientWidth !== W || host.clientHeight !== H) && build()) draw(still ? null : 0); }, 200);
+  });
+  return { draw };
+}
+
+/* the 15x5 logo resolving cell by cell in seeded shuffled order — each cell
+   snaps in hot, then settles into a seeded mix with a faint breath (kawa load.js) */
+function logoBadge(host) {
+  const P = 7, cells = [];
+  for (let r = 0; r < 5; r++) for (let c = 0; c < 15; c++) if (M[r][c] === '1') cells.push({ x: c * P, y: r * P });
+  const order = cells.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(seedRand(i * 17 + 3) * (i + 1));
+    const t2 = order[i]; order[i] = order[j]; order[j] = t2;
+  }
+  cells.forEach((k, i) => { k.at = (order.indexOf(i) / cells.length) * 0.8; k.seed = seedRand(i * 7 + 5); });
+  const cw = 15 * P, ch = 5 * P;
+  const cv = document.createElement('canvas');
+  cv.className = 'slide-badge';
+  cv.setAttribute('aria-hidden', 'true');
+  cv.width = Math.round(cw * DPR2); cv.height = Math.round(ch * DPR2);
+  cv.style.width = cw + 'px'; cv.style.height = ch + 'px';
+  host.appendChild(cv);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(DPR2, 0, 0, DPR2, 0, 0);
+  function draw(t, p) {
+    ctx.clearRect(0, 0, cw, ch);
+    for (const k of cells) {
+      const a = Math.max(0, Math.min(1, (p - k.at) / 0.2));
+      if (a <= 0) continue;
+      let al, m;
+      if (a < 1) { m = 0; al = 0.15 + 0.75 * a; }  /* arriving — hot teal snap */
+      else {
+        m = k.seed * 0.6;
+        al = t === null ? 0.34 : 0.30 + 0.08 * Math.sin(t * (0.6 + k.seed) + k.seed * 6.28);
+      }
+      const cr = TEAL[0] + (MUTE[0] - TEAL[0]) * m, cg = TEAL[1] + (MUTE[1] - TEAL[1]) * m, cb = TEAL[2] + (MUTE[2] - TEAL[2]) * m;
+      ctx.fillStyle = 'rgba(' + (cr | 0) + ',' + (cg | 0) + ',' + (cb | 0) + ',' + al.toFixed(3) + ')';
+      ctx.fillRect(k.x + 1, k.y + 1, P - 2, P - 2);
+    }
+  }
+  return { draw };
 }
 /* ── pixel field (ported from /work): dim cells fill the host, each breathing
    on its own seed; the 15x5 logo sits bright inside the field, top-right ── */
@@ -489,14 +576,24 @@ function initDeck() {
   deck.classList.add('on');
   document.getElementById('bar').classList.add('on');
 
-  // faint logo-grid ornament on every slide
-  slides.forEach((s) => {
-    const g = document.createElement('div');
-    g.className = 'logo-grid slide-px';
-    g.setAttribute('aria-hidden', 'true');
-    buildGrid(g);
-    s.appendChild(g);
-  });
+  // kawa treatment: breathing lattice behind the field, resolving logo per slide
+  const lattice = slideLattice(deck);
+  const badges = slides.map((s) => logoBadge(s));
+  const rp = { p: 1 }; // logo resolve progress for the active slide
+  if (still) {
+    lattice.draw(null);
+    badges.forEach((b) => b.draw(null, 1));
+  } else {
+    let lastB = 0;
+    const loop15 = (now) => {
+      requestAnimationFrame(loop15);
+      if (document.hidden || now - lastB < 66) return; /* 15fps is plenty */
+      lastB = now;
+      lattice.draw(now / 1000);
+      badges[i].draw(now / 1000, rp.p);
+    };
+    requestAnimationFrame(loop15);
+  }
 
   const pad = (n) => String(n).padStart(2, '0');
 
@@ -507,12 +604,7 @@ function initDeck() {
       opacity: [0, 1],
       translateY: [8, 0],
       delay: stagger(45)
-    }, '<-=380')
-    .add(slide.querySelectorAll('.slide-px i'), {
-      opacity: [0, 1],
-      duration: 300,
-      delay: stagger(5, { grid: [15, 5], from: 'first' })
-    }, '<-=420');
+    }, '<-=380');
 
   // Any slide with .draw paths gets the whiteboard stroke-draw, marker order.
   // Diagram labels hide first, then fade in once their shapes exist.
@@ -596,6 +688,8 @@ function initDeck() {
     slide.querySelector('.frame').scrollTop = 0;
     if (slide.classList.contains('slide-close')) drawClose(); // sizes the field; static under reduced motion
     if (still) return; // end state is the CSS default; nothing to animate
+    rp.p = 0;
+    animate(rp, { p: 1, duration: 900, ease: 'outExpo', delay: 180 }); // logo re-resolves per slide
     enter(slide);
     if (slide.querySelector('.draw')) drawShapes(slide);
     if (slide.classList.contains('slide-chain')) drawChain(slide);
