@@ -28,6 +28,8 @@
   html, body { height: 100%; }
   html { overflow: hidden; } /* kills the transient scrollbar during load/inject */
   html, body { overscroll-behavior: none; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; } /* no font inflation on iOS rotate */
+  button, input, .nav-btn, .slide { touch-action: manipulation; } /* rapid Next taps must not double-tap zoom */
   body {
     background: var(--black);
     color: var(--text);
@@ -88,7 +90,8 @@
   #pass {
     flex: 1; min-width: 0;
     background: #123434; border: 1px solid #1e4a4a; border-radius: 4px;
-    color: #f0f7f7; font-family: var(--mono); font-size: 15px;
+    color: #f0f7f7; font-family: var(--mono);
+    font-size: 16px; /* unconditional: below 16px iOS zooms on focus at ANY width, incl. landscape */
     letter-spacing: 0.09em; padding: 11px 14px;
   }
   #pass:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 1px; }
@@ -283,7 +286,6 @@
 
   /* ── Mobile ───────────────────────────────────────────── */
   @media (max-width: 768px) {
-    #pass { font-size: 16px; } /* below 16px iOS zooms on focus and stays zoomed */
     #open { padding: 13px 22px; }
     .logo-grid { grid-template-columns: repeat(15, 9px); grid-auto-rows: 9px; gap: 2.5px; }
     .slide { padding: 20px 20px 14px; align-items: flex-start; }
@@ -414,7 +416,13 @@ function pxField(host) {
   }
   if (build()) draw(0);
   let rz;
-  window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (build()) draw(0); }, 200); });
+  // iOS fires resize on every scroll (address-bar collapse): rebuild only on a real size change
+  window.addEventListener('resize', () => {
+    clearTimeout(rz);
+    rz = setTimeout(() => {
+      if ((host.clientWidth !== W || host.clientHeight !== H) && build()) draw(0);
+    }, 200);
+  });
   const ensure = () => { if (!W && build()) draw(0); };
   if (still || !('IntersectionObserver' in window)) return { ensure };
   let visible = false, raf = 0, last = 0;
