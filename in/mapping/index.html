@@ -27,6 +27,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { height: 100%; }
   html { overflow: hidden; } /* kills the transient scrollbar during load/inject */
+  html, body { overscroll-behavior: none; }
   body {
     background: var(--black);
     color: var(--text);
@@ -113,7 +114,8 @@
     padding: 28px 56px 20px;
   }
   .slide.active { display: flex; }
-  .frame { width: 100%; max-width: 1160px; max-height: 100%; overflow-y: auto; }
+  .frame { width: 100%; max-width: 1160px; max-height: 100%; overflow-y: auto; scrollbar-width: none; }
+  .frame::-webkit-scrollbar { display: none; } /* frames scroll (wheel/touch) but never flash a bar */
 
   .eyebrow {
     font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
