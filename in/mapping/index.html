@@ -322,7 +322,7 @@
   <form class="gate-card" id="gate-form">
     <p class="gate-label">POST205 · INTERNAL</p>
     <h1>Come on in.</h1>
-    <p class="gate-sub">You&rsquo;ll need the passphrase. It&rsquo;s in the team chat, or ask Toffer.</p>
+    <p class="gate-sub">Nasa team chat ang passphrase. O tanungin si Toffer.</p>
     <input id="user" type="text" name="username" autocomplete="username" aria-label="Username"
            placeholder="USERNAME" autocapitalize="none" spellcheck="false" autofocus>
     <div class="gate-row">
@@ -383,14 +383,16 @@ function slideLattice(host) {
   cv.setAttribute('aria-hidden', 'true');
   host.insertBefore(cv, host.firstChild);
   const ctx = cv.getContext('2d');
-  const P = 12;                     /* quarter-area cells: 8px dots on a 12px pitch */
-  let W = 0, H = 0, cells = [];
+  /* the login field's geometry, on the light ground */
+  let W = 0, H = 0, P = 24, D = 16, cells = [];
   function build() {
     W = host.clientWidth; H = host.clientHeight;
     if (!W || !H) return false;
     cv.width = Math.round(W * DPR2); cv.height = Math.round(H * DPR2);
     cv.style.width = W + 'px'; cv.style.height = H + 'px';
     ctx.setTransform(DPR2, 0, 0, DPR2, 0, 0);
+    P = W < 700 ? 18 : 24;
+    D = P - Math.max(4, Math.round(P / 3));
     const cols = Math.ceil(W / P), rows = Math.ceil(H / P);
     cells = [];
     for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
@@ -402,7 +404,7 @@ function slideLattice(host) {
         r: TEAL[0] + (MUTE[0] - TEAL[0]) * m,
         g: TEAL[1] + (MUTE[1] - TEAL[1]) * m,
         b: TEAL[2] + (MUTE[2] - TEAL[2]) * m,
-        base: 0.02 + 0.05 * s,
+        base: 0.03 + 0.10 * s,     /* wide spread: some cells clearly darker, like the closing band */
         freq: 0.4 + 0.6 * seedRand(i * 5 + 9),
         phase: s * Math.PI * 2
       });
@@ -417,7 +419,7 @@ function slideLattice(host) {
       const al = t === null ? k.base : k.base + 0.04 * Math.sin(t * k.freq + k.phase);
       if (al <= 0) continue;
       ctx.fillStyle = 'rgba(' + (k.r | 0) + ',' + (k.g | 0) + ',' + (k.b | 0) + ',' + al.toFixed(3) + ')';
-      ctx.fillRect(k.x + 2, k.y + 2, P - 4, P - 4);
+      ctx.fillRect(k.x + 1.5, k.y + 1.5, D, D);
     }
   }
   build();
@@ -540,6 +542,31 @@ function pxField(host) {
 
 pxField(gate);
 let closingField = null;
+
+/* decode-in: gate text resolves from glyphs, the homepage move */
+function decodeIn(el, delay) {
+  const final = el.textContent;
+  const GL = '01·▪▫/|\\<>#+';
+  const obj = { p: 0 };
+  el.textContent = '';
+  animate(obj, {
+    p: 1, duration: 750, ease: 'outExpo', delay,
+    onUpdate: () => {
+      const n = Math.floor(obj.p * final.length);
+      let out = final.slice(0, n);
+      for (let k = n; k < final.length; k++) {
+        const ch = final[k];
+        out += ch === ' ' ? ' ' : (seedRand(k * 13 + ((obj.p * 60) | 0)) > 0.5 ? GL[(seedRand(k + ((obj.p * 90) | 0)) * GL.length) | 0] : ch);
+      }
+      el.textContent = out;
+    },
+    onComplete: () => { el.textContent = final; }
+  });
+}
+if (!still) {
+  decodeIn(document.querySelector('.gate-label'), 150);
+  decodeIn(document.querySelector('.gate-sub'), 350);
+}
 
 const userEl = document.getElementById('user');
 const NAMES = ['toffer', 'bernice'];
