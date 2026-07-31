@@ -26,6 +26,7 @@
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { height: 100%; }
+  html { overflow: hidden; } /* kills the transient scrollbar during load/inject */
   body {
     background: var(--black);
     color: var(--text);
@@ -55,6 +56,24 @@
   .closing .logo-grid i.on { background: var(--accent-bright); }
   @media (max-width: 900px) { .closing .logo-grid { display: none; } }
   .tick { font-variant-numeric: tabular-nums; }
+
+  /* faint logo grid ornament on every slide, top-right */
+  .slide-px { position: absolute; top: 22px; right: 56px; grid-template-columns: repeat(15, 5px); grid-auto-rows: 5px; gap: 1.5px; margin: 0; pointer-events: none; }
+  .slide-px i { background: rgba(14, 154, 157, 0.05); border-radius: 1px; }
+  .slide-px i.on { background: rgba(14, 154, 157, 0.28); }
+  @media (max-width: 768px) { .slide-px { display: none; } }
+
+  /* inline SVG diagrams: same stroke language as the four shapes */
+  .diagram { margin: 18px 0 0; }
+  .diagram svg {
+    display: block; width: 100%; max-width: 880px; height: auto;
+    stroke: var(--accent); stroke-width: 2.5; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  .diagram .dlabel {
+    stroke: none; fill: var(--text-3);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  }
   .gate-label {
     font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
     text-transform: uppercase; color: #7aacac; margin-bottom: 18px;
@@ -277,6 +296,8 @@
     .chain { flex-direction: column; gap: 6px; }
     .chain-arrow { align-self: flex-start; transform: rotate(90deg); padding-left: 18px; }
     th, td { padding: 8px 10px; font-size: 12.5px; }
+    .diagram { overflow-x: auto; } /* diagram scrolls in its own container, labels stay legible */
+    .diagram svg { min-width: 560px; }
     .closing { margin: 20px calc(50% - 50vw) 0; padding: 24px 20px 28px; }
     #bar {
       height: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px));
@@ -406,6 +427,15 @@ function initDeck() {
   deck.classList.add('on');
   document.getElementById('bar').classList.add('on');
 
+  // faint logo-grid ornament on every slide
+  slides.forEach((s) => {
+    const g = document.createElement('div');
+    g.className = 'logo-grid slide-px';
+    g.setAttribute('aria-hidden', 'true');
+    buildGrid(g);
+    s.appendChild(g);
+  });
+
   const pad = (n) => String(n).padStart(2, '0');
 
   // Shared enter timeline, reused on every slide change.
@@ -415,21 +445,38 @@ function initDeck() {
       opacity: [0, 1],
       translateY: [8, 0],
       delay: stagger(45)
-    }, '<-=380');
+    }, '<-=380')
+    .add(slide.querySelectorAll('.slide-px i'), {
+      opacity: [0, 1],
+      duration: 300,
+      delay: stagger(5, { grid: [15, 5], from: 'first' })
+    }, '<-=420');
 
-  // Slide 04: draw the shapes on, marker order.
+  // Any slide with .draw paths gets the whiteboard stroke-draw, marker order.
+  // Diagram labels hide first, then fade in once their shapes exist.
   const drawShapes = (slide) => {
-    slide.querySelectorAll('.draw').forEach((p) => {
+    const paths = slide.querySelectorAll('.draw');
+    paths.forEach((p) => {
       const len = p.getTotalLength();
       p.style.strokeDasharray = len;
       p.style.strokeDashoffset = len;
     });
-    animate(slide.querySelectorAll('.draw'), {
+    animate(paths, {
       strokeDashoffset: 0,
       duration: 700,
       ease: 'inOutCirc',
-      delay: stagger(180, { start: 260 })
+      delay: stagger(paths.length > 10 ? 90 : 180, { start: 260 })
     });
+    const labels = slide.querySelectorAll('.dlabel');
+    if (labels.length) {
+      labels.forEach((l) => { l.style.opacity = 0; });
+      animate(labels, {
+        opacity: [0, 1],
+        duration: 400,
+        ease: 'outExpo',
+        delay: stagger(40, { start: 800 })
+      });
+    }
   };
 
   // Slide 12: the chain assembles left to right.
@@ -494,7 +541,7 @@ function initDeck() {
     slide.querySelector('.frame').scrollTop = 0;
     if (still) return; // end state is the CSS default; nothing to animate
     enter(slide);
-    if (slide.classList.contains('slide-shapes')) drawShapes(slide);
+    if (slide.querySelector('.draw')) drawShapes(slide);
     if (slide.classList.contains('slide-chain')) drawChain(slide);
     if (slide.classList.contains('slide-close')) drawClose(slide);
     tick(slide);
