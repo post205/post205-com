@@ -365,8 +365,9 @@ const passEl = document.getElementById('pass');
 const M = ['001011101110111', '100000101010100', '010011101010111', '000010001010001', '100011101110111'];
 const seedRand = (i) => { const x = Math.sin((i + 1) * 127.1) * 43758.5453; return x - Math.floor(x); };
 const DPR2 = Math.min(window.devicePixelRatio || 1, 2);
-/* light-field palette anchors (kawa mixes FIRE↔DUN; we mix Body Teal↔muted teal-gray) */
-const TEAL = [14, 154, 157], MUTE = [90, 116, 115];
+/* light-field palette anchors (kawa mixes FIRE↔DUN; we stay inside the teal family
+   — a gray partner reads as dirt on the off-white field) */
+const TEAL = [14, 154, 157], MUTE = [64, 168, 164];
 
 /* sparse ambient lattice on the light field — every cell breathes on its own
    seeded frequency and phase, same grammar as kawa's load backdrop */
@@ -395,7 +396,7 @@ function slideLattice(host) {
         r: TEAL[0] + (MUTE[0] - TEAL[0]) * m,
         g: TEAL[1] + (MUTE[1] - TEAL[1]) * m,
         b: TEAL[2] + (MUTE[2] - TEAL[2]) * m,
-        base: 0.025 + 0.04 * s,
+        base: 0.035 + 0.05 * s,
         freq: 0.4 + 0.6 * seedRand(i * 5 + 9),
         phase: s * Math.PI * 2
       });
@@ -448,8 +449,8 @@ function logoBadge(host) {
       let al, m;
       if (a < 1) { m = 0; al = 0.15 + 0.75 * a; }  /* arriving — hot teal snap */
       else {
-        m = k.seed * 0.6;
-        al = t === null ? 0.34 : 0.30 + 0.08 * Math.sin(t * (0.6 + k.seed) + k.seed * 6.28);
+        m = k.seed * 0.3;
+        al = t === null ? 0.42 : 0.38 + 0.09 * Math.sin(t * (0.6 + k.seed) + k.seed * 6.28);
       }
       const cr = TEAL[0] + (MUTE[0] - TEAL[0]) * m, cg = TEAL[1] + (MUTE[1] - TEAL[1]) * m, cb = TEAL[2] + (MUTE[2] - TEAL[2]) * m;
       ctx.fillStyle = 'rgba(' + (cr | 0) + ',' + (cg | 0) + ',' + (cb | 0) + ',' + al.toFixed(3) + ')';
