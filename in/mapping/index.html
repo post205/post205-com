@@ -52,10 +52,10 @@
   .logo-grid i { display: block; border-radius: 2px; background: rgba(59, 209, 211, 0.07); }
   .logo-grid i.on { background: var(--accent-bright); }
   .closing { position: relative; }
-  .closing .logo-grid { position: absolute; right: 56px; top: 50%; transform: translateY(-50%); grid-template-columns: repeat(15, 10px); grid-auto-rows: 10px; gap: 2.5px; margin: 0; }
-  .closing .logo-grid i { background: rgba(59, 209, 211, 0.06); }
-  .closing .logo-grid i.on { background: var(--accent-bright); }
-  @media (max-width: 900px) { .closing .logo-grid { display: none; } }
+  .closing p { position: relative; z-index: 1; }
+  /* canvas pixel field (ported from /work): dim breathing cells, logo bright inside */
+  .px-grid { position: absolute; inset: 0; pointer-events: none; }
+  .gate-card { position: relative; z-index: 1; }
   .tick { font-variant-numeric: tabular-nums; }
 
   /* faint logo grid ornament on every slide, top-right */
@@ -316,7 +316,6 @@
 
 <div id="gate">
   <form class="gate-card" id="gate-form">
-    <div class="logo-grid" id="gate-grid" aria-hidden="true"></div>
     <p class="gate-label">POST205 · INTERNAL</p>
     <h1>Come on in.</h1>
     <p class="gate-sub">You&rsquo;ll need the passphrase. It&rsquo;s in the team chat, or ask Toffer.</p>
@@ -370,14 +369,73 @@ function buildGrid(el) {
     el.appendChild(i);
   }
 }
-const gateGrid = document.getElementById('gate-grid');
-buildGrid(gateGrid);
-if (!still) {
-  animate(gateGrid.querySelectorAll('i'), {
-    opacity: [0, 1], scale: [0.3, 1], duration: 620, ease: 'outExpo',
-    delay: stagger(22, { grid: [15, 5], from: 'center' })
-  });
+/* ── pixel field (ported from /work): dim cells fill the host, each breathing
+   on its own seed; the 15x5 logo sits bright inside the field, top-right ── */
+function pxField(host) {
+  const cv = document.createElement('canvas');
+  cv.className = 'px-grid';
+  cv.setAttribute('aria-hidden', 'true');
+  host.insertBefore(cv, host.firstChild);
+  const ctx = cv.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 1.75);
+  const seedRand = (i) => { const x = Math.sin((i + 1) * 127.1) * 43758.5453; return x - Math.floor(x); };
+  let W = 0, H = 0, cols = 0, rows = 0, S = 0, D = 0, bx = 0, by = 0;
+  function build() {
+    W = host.clientWidth; H = host.clientHeight;
+    if (!W || !H) { W = 0; return false; }
+    cv.width = W * DPR; cv.height = H * DPR;
+    cv.style.width = W + 'px'; cv.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    S = W < 700 ? 18 : 24;                     /* cell pitch */
+    D = S - Math.max(4, Math.round(S / 3));    /* dot size */
+    cols = Math.ceil(W / S); rows = Math.ceil(H / S);
+    bx = Math.max(2, cols - 15 - 3);           /* logo top-right, clear of the text */
+    by = 2;
+    return true;
+  }
+  function cellAlpha(r, c, t) {
+    const br = r - by, bc = c - bx;
+    const inLogo = br >= 0 && br < 5 && bc >= 0 && bc < 15 && M[br][bc] === '1';
+    const i = r * cols + c, sr = seedRand(i);
+    if (inLogo) return still ? 0.75 : 0.45 + 0.35 * Math.sin(t * 1.1 + sr * 6.28);
+    const base = 0.03 + sr * 0.07;
+    return still ? base : base + 0.04 * Math.sin(t * 0.7 + sr * 6.28);
+  }
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#3BD1D3';
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const a = cellAlpha(r, c, t);
+      if (a <= 0) continue;
+      ctx.globalAlpha = a;
+      ctx.fillRect(c * S, r * S, D, D);
+    }
+    ctx.globalAlpha = 1;
+  }
+  if (build()) draw(0);
+  let rz;
+  window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (build()) draw(0); }, 200); });
+  const ensure = () => { if (!W && build()) draw(0); };
+  if (still || !('IntersectionObserver' in window)) return { ensure };
+  let visible = false, raf = 0, last = 0;
+  function loop(now) {
+    if (!visible || document.hidden || !cv.isConnected) return;
+    raf = requestAnimationFrame(loop);
+    if (now - last < 66) return;               /* 15fps is plenty for a shimmer */
+    last = now;
+    draw(now / 1000);
+  }
+  new IntersectionObserver((es) => {
+    es.forEach((en) => {
+      visible = en.isIntersecting;
+      if (visible) { ensure(); cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop); }
+    });
+  }, { threshold: 0 }).observe(cv);
+  return { ensure };
 }
+
+pxField(gate);
+let closingField = null;
 
 document.getElementById('gate-form').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -386,15 +444,9 @@ document.getElementById('gate-form').addEventListener('submit', async (e) => {
     const html = await unlock(passEl.value);
     const deck = document.getElementById('deck');
     deck.innerHTML = html;
-    // the closing band gets its own logo grid, like the homepage's pixel field
+    // the closing band gets the same pixel field as /work's closing panel
     const closing = deck.querySelector('.closing');
-    if (closing) {
-      const g = document.createElement('div');
-      g.className = 'logo-grid';
-      g.setAttribute('aria-hidden', 'true');
-      buildGrid(g);
-      closing.appendChild(g);
-    }
+    if (closing) closingField = pxField(closing);
     if (still) {
       gate.remove();
       initDeck();
@@ -508,15 +560,8 @@ function initDeck() {
     });
   };
 
-  // Slide 14: the logo grid assembles in the closing band.
-  const drawClose = (slide) => {
-    const cells = slide.querySelectorAll('.closing .logo-grid i');
-    if (!cells.length) return;
-    animate(cells, {
-      opacity: [0, 1], scale: [0.3, 1], duration: 620, ease: 'outExpo',
-      delay: stagger(20, { grid: [15, 5], from: 'first', start: 400 })
-    });
-  };
+  // Slide 14: size the closing pixel field once its band is visible.
+  const drawClose = () => { if (closingField) closingField.ensure(); };
 
   // The counter digits decode on every slide change.
   const setCounter = (final) => {
@@ -541,11 +586,11 @@ function initDeck() {
     else animate(fill, { width: pct, duration: 500, ease: 'outExpo' });
     const slide = slides[i];
     slide.querySelector('.frame').scrollTop = 0;
+    if (slide.classList.contains('slide-close')) drawClose(); // sizes the field; static under reduced motion
     if (still) return; // end state is the CSS default; nothing to animate
     enter(slide);
     if (slide.querySelector('.draw')) drawShapes(slide);
     if (slide.classList.contains('slide-chain')) drawChain(slide);
-    if (slide.classList.contains('slide-close')) drawClose(slide);
     tick(slide);
   }
 
