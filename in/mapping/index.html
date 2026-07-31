@@ -86,14 +86,17 @@
   }
   .gate-sub { color: #a9c3c1; margin-bottom: 26px; }
   .gate-row { display: flex; gap: 10px; }
-  #pass {
-    flex: 1; min-width: 0;
+  #user, #pass {
+    min-width: 0; width: 100%;
     background: #123434; border: 1px solid #1e4a4a; border-radius: 4px;
     color: #f0f7f7; font-family: var(--mono);
     font-size: 16px; /* unconditional: below 16px iOS zooms on focus at ANY width, incl. landscape */
     letter-spacing: 0.09em; padding: 11px 14px;
   }
-  #pass:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 1px; }
+  #user { margin-bottom: 10px; }
+  #pass { flex: 1; }
+  #user::placeholder, #pass::placeholder { color: #4d7472; font-size: 11px; letter-spacing: 0.12em; }
+  #user:focus-visible, #pass:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 1px; }
   #open {
     background: var(--accent-bright); color: #021616; border: 0; border-radius: 4px;
     font-family: var(--mono); font-size: 11px; font-weight: 700;
@@ -320,8 +323,11 @@
     <p class="gate-label">POST205 · INTERNAL</p>
     <h1>Come on in.</h1>
     <p class="gate-sub">You&rsquo;ll need the passphrase. It&rsquo;s in the team chat, or ask Toffer.</p>
+    <input id="user" type="text" name="username" autocomplete="username" aria-label="Username"
+           placeholder="USERNAME" autocapitalize="none" spellcheck="false" autofocus>
     <div class="gate-row">
-      <input id="pass" type="password" autocomplete="off" aria-label="Passphrase" autofocus>
+      <input id="pass" type="password" name="password" autocomplete="current-password"
+             aria-label="Passphrase" placeholder="PASSPHRASE">
       <button id="open" type="submit">Open</button>
     </div>
     <p id="gate-err" aria-live="polite"></p>
@@ -542,9 +548,23 @@ function pxField(host) {
 pxField(gate);
 let closingField = null;
 
+const userEl = document.getElementById('user');
+const NAMES = ['toffer', 'bernice'];
+
 document.getElementById('gate-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   err.textContent = '';
+  if (!NAMES.includes(userEl.value.trim().toLowerCase())) {
+    err.textContent = 'That’s not it. Try again.';
+    userEl.select();
+    if (!still) {
+      animate(userEl, {
+        keyframes: [{ x: -6 }, { x: 6 }, { x: -6 }, { x: 6 }, { x: 0 }],
+        duration: 340, ease: 'inOutCirc'
+      });
+    }
+    return;
+  }
   try {
     const html = await unlock(passEl.value);
     const deck = document.getElementById('deck');
