@@ -23,6 +23,24 @@ shape is recognizable next time.
 
 ## Log (newest first)
 
+### 2026-07-30 · internal mapping deck (`in/mapping`, encrypted payload)
+
+| Shipped | Why it's slop | Fixed to | Rule it broke |
+|---|---|---|---|
+| "A diamond is a question, not a stage." (slide headline) | "X, not Y" negative parallelism in a headline. Got a pass because it came from the approved spec; spec copy isn't exempt. | "Every diamond is a question." | Hard Bans → negative parallelism |
+| "One head can't be handed over. A wall can." (bold standalone) | Too poetic, one-liner drop. Parallel aphorism standing in for an actual explanation. Toffer wants brevity AND clarity; a quotable that needs decoding is neither. | "The point of mapping is to move the process out of the owner's head and onto a wall, because a wall is something the next person can read." | cut quotables; say the working sentence |
+| "Hindi kasama diyan ang Chocolate Kiss: that handover worked…" | Compressed aside that assumes context the reader never got. Summarizing without setup reads as a non sequitur. | Expanded: "Chocolate Kiss is the example everyone reaches for, and it's the wrong one: …" | clarity over compression; give the setup |
+| "These aren't rivals. They're all correct. The question is what the client is complaining about." | Staccato triplet again, opened with a negation of a rivalry nobody proposed. | "All five are standard tools, and the client's complaint tells you which one to reach for." | three-short-declaratives ban; state the positive |
+| "A hundred years of people worked on this before us. We didn't invent it. We borrowed it, and…" / "…use it well: walk in with a marker and ask what actually happens." | "Didn't invent / borrowed" is negation-then-replacement in short dramatic beats; the marker line is a quotable drop. | (interim fix was itself flagged, next row) | negative parallelism; cut quotables |
+| "We took their work and made it simple enough that a small team can use it on a Monday morning." | "Monday morning" is manufactured folksy detail; "made it simple enough" is self-congratulation. Tone drift: the fix for one slop shape introduced another. | "The method is about a hundred years old. It started with the Gilbreths' process charts in the 1920s, and everything in this deck came from the people who kept refining it." | tone drift; state facts, don't perform them |
+
+
+| Shipped | Why it's slop | Fixed to | Rule it broke |
+|---|---|---|---|
+| "Four shapes. One whiteboard. Forty-five minutes." (and the closing echo "Four shapes. One marker. The nerve to ask what actually happens.") | Three varied short declaratives for drama — the staccato-triplet AI cadence. | "It fits on one whiteboard and takes about forty-five minutes." / "walk in with a marker and ask what actually happens." | three-short-declaratives ban; three-item-list tell |
+| "Four shapes on one whiteboard, forty-five minutes, and the process is out of their head and on the wall." (the first "fix" of the line above) | Same triad wearing commas. Reformatting a three-item list is not removing it — the enumeration is the slop, not the periods. | Dropped the enumeration and said the thing: "It fits on one whiteboard and takes about forty-five minutes." | three-item-list tell — applies to any punctuation |
+
+
 ### 2026-06-23 · homepage demos (`index.html`)
 
 | Shipped | Why it's slop | Fixed to | Rule it broke |
