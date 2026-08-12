@@ -635,54 +635,78 @@ window.addEventListener('unhandledrejection', function (e) {
 
 <!-- 17 -->
 <section class="slide" data-title="Seventy percent">
+  <template class="notes"><span class="cue">Open the lesson</span>
+    <p>For anyone building agents, <strong>this is the one that matters most</strong>.</p>
+    <p>You ask for done. You get seventy percent.</p>
+    <p>So you give feedback and it fixes one thing. More feedback, it fixes another. You claw your way to ninety that way, one round at a time.</p>
+    <p><strong>Ask them:</strong> how many of you have gone back and forth like this?</p>
+    <p>Then the turn: what if it checked its own work, and kept checking until it was actually done and could show you why it was confident?</p>
+  </template>
   <div class="frame">
     <p class="lesson rise"><span class="ln">Lesson 06</span><span class="lt">Verify everything</span></p>
     <h2 class="rise">You ask for done. You get seventy percent.</h2>
-    <div class="cols" style="margin-top:24px">
-      <div class="lede rise">
-        <p>So you give feedback and it fixes one thing. You give more feedback and it fixes another. You claw your way up to ninety that way, one round at a time.</p>
-      </div>
-      <div class="card key rise">
-        <p class="tag">The question</p>
-        <p>What if it checked its own work, and kept checking until the thing was actually finished and it could show you why it was confident?</p>
-      </div>
+    <div class="diagram">
+      <svg viewBox="0 0 1000 190" role="img" aria-label="Quality climbs from seventy to ninety over feedback rounds and stalls short of done">
+        <path class="draw" d="M70 150 H930"/>
+        <path class="draw" d="M70 150 V40"/>
+        <rect class="draw" x="110" y="98" width="96" height="52"/>
+        <rect class="draw" x="246" y="80" width="96" height="70"/>
+        <rect class="draw" x="382" y="68" width="96" height="82"/>
+        <rect class="draw" x="518" y="62" width="96" height="88"/>
+        <path class="draw" style="stroke-dasharray:7 9" d="M70 46 H930"/>
+        <text class="dlabel" x="158" y="88" text-anchor="middle">70%</text>
+        <text class="dlabel" x="566" y="52" text-anchor="middle">90%</text>
+        <text class="dsub" x="700" y="112">FEEDBACK. FEEDBACK. FEEDBACK.</text>
+        <text class="dsub" x="930" y="36" text-anchor="end">DONE</text>
+      </svg>
     </div>
-    <p class="foot rise">For anyone building agents, this is the one that matters most.</p>
   </div>
 </section>
 
-<!-- 18 -->
 <section class="slide" data-title="How to verify">
+  <template class="notes"><span class="cue">The setup</span>
+    <p>The setup is <strong>simpler than you think</strong>.</p>
+    <p>Ask yourself what you would do to check the work. Would you look at it? Would you test it? Would you run the signup yourself and see what happens?</p>
+    <p>Whatever that is, <strong>it can do it</strong>.</p>
+    <p>It can drive a browser. Run tests. Read its own output back. Come at the same thing from a few different angles and tell you where they disagree.</p>
+    <p><em>Beat here. Let it land before the next slide.</em></p>
+  </template>
   <div class="frame">
     <p class="lesson rise"><span class="ln">Lesson 06</span><span class="lt">Verify everything</span></p>
-    <h2 class="rise">The setup is simpler than you think.</h2>
-    <div class="cols" style="margin-top:24px">
-      <div class="lede rise">
-        <p>Ask yourself what you would do to check the work. Would you look at it? Would you test it? Would you run the signup yourself and see what happens?</p>
-        <p>Whatever that is, it can do it.</p>
-      </div>
-      <div class="card key rise">
-        <p class="tag">What it can already do</p>
-        <p>Drive a browser. Run tests. Read its own output back. Come at the same thing from a few different angles and tell you where they disagree.</p>
-      </div>
-    </div>
+    <p class="mono-huge rise">Whatever you would do to check it, <em>it can do.</em></p>
   </div>
 </section>
 
-<!-- 19 -->
 <section class="slide" data-title="Screenshot loop">
+  <template class="notes"><span class="cue">My example</span>
+    <p>Every site I build goes through a <strong>screenshot loop</strong>.</p>
+    <p>It takes the screenshots and checks the balance itself. Checks it on mobile. Then it clicks every button, submits every form, and confirms the formatting held.</p>
+    <p>All the things I used to squint at myself.</p>
+    <p><strong>Close the lesson:</strong> start making your AI verify the work you do. Make it prove to you that the work is complete.</p>
+  </template>
   <div class="frame">
     <p class="lesson rise"><span class="ln">Lesson 06</span><span class="lt">Verify everything</span></p>
-    <h2 class="rise">Every site I build goes through a screenshot loop.</h2>
-    <div class="lede rise">
-      <p>It takes the screenshots and checks the balance itself. Checks it on mobile. Then it clicks every button, submits every form, and confirms the formatting held.</p>
-      <p>All the things I used to squint at myself.</p>
+    <h2 class="rise">Make it prove the work is done.</h2>
+    <div class="diagram">
+      <svg viewBox="0 0 1000 220" role="img" aria-label="A loop: build, screenshot, check, fix, and back to build">
+        <rect class="draw" x="24" y="72" width="150" height="60" rx="6"/>
+        <path class="draw" d="M174 102 H244"/>
+        <rect class="draw" x="244" y="72" width="176" height="60" rx="6"/>
+        <path class="draw" d="M420 102 H490"/>
+        <rect class="draw" x="490" y="72" width="150" height="60" rx="6"/>
+        <path class="draw" d="M640 102 H710"/>
+        <rect class="draw" x="710" y="72" width="150" height="60" rx="6"/>
+        <path class="draw" d="M860 102 H920 V186 H99 V132"/>
+        <text class="dlabel" x="99" y="108" text-anchor="middle">Build</text>
+        <text class="dlabel" x="332" y="108" text-anchor="middle">Screenshot</text>
+        <text class="dlabel" x="565" y="108" text-anchor="middle">Click it</text>
+        <text class="dlabel" x="785" y="108" text-anchor="middle">Fix</text>
+        <text class="dsub" x="500" y="176" text-anchor="middle">UNTIL NOTHING IS WRONG</text>
+      </svg>
     </div>
-    <p class="foot rise">Start making your AI verify the work you do. Make it prove to you that the work is complete.</p>
   </div>
 </section>
 
-<!-- 20 -->
 <section class="slide" data-title="Access">
   <div class="frame">
     <p class="lesson rise"><span class="ln">Lesson 07</span><span class="lt">Grant access carefully</span></p>
@@ -1260,6 +1284,7 @@ function slideInfo(n) {
     n: n + 1,
     total: slides.length,
     title: (h ? h.textContent : (s.dataset.title || '')).trim().slice(0, 90),
+    notes: (s.querySelector('template.notes') || {}).innerHTML || '',
     lesson: lesson ? [...lesson.children].map(x => x.textContent.trim()).join(' \u00b7 ')
                    : ((s.querySelector('.part') || {}).textContent || '').trim()
   };
