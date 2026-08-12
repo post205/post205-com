@@ -60,6 +60,18 @@
     font-family: var(--mono); font-size: 16px; letter-spacing: 0.18em;
     text-transform: uppercase; color: var(--accent); margin-bottom: 26px;
   }
+  .lesson {
+    display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 24px;
+  }
+  .lesson .ln {
+    font-family: var(--mono); font-weight: 700; font-size: clamp(20px, 2vw, 30px);
+    color: var(--accent); letter-spacing: 0.01em; flex: none;
+  }
+  .lesson .lt {
+    font-family: var(--mono); font-size: 15px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--text-3);
+  }
+
   .part {
     font-family: var(--mono); font-size: 16px; letter-spacing: 0.18em;
     text-transform: uppercase; color: var(--text-3); margin-bottom: 22px;
@@ -230,6 +242,7 @@
     .lede { font-size: clamp(19px, 1.7vw, 25px); }
     .lede p + p { margin-top: 14px; }
     .foot { margin-top: 22px; }
+    .lesson { margin-bottom: 18px; }
     .card-row, .moves, .layers, .rhythm, .steps { margin-top: 22px; }
     .card { padding: 20px 22px; }
     .layers li { padding: 12px 0; }
@@ -250,6 +263,8 @@
     .quote { font-size: clamp(34px, 9.6vw, 56px); }
     .mono-huge { font-size: clamp(30px, 8vw, 48px); }
     .lede { font-size: 19px; max-width: none; }
+    .lesson .ln { font-size: 20px; }
+    .lesson .lt { font-size: 13px; }
     .cols, .card-row, .card-row.two, .title-cols, .steps { grid-template-columns: minmax(0, 1fr); }
     .cols { gap: 22px; }
     .title-cols { gap: 30px; align-items: start; }
@@ -322,7 +337,7 @@
 <!-- 03 -->
 <section class="slide" data-title="Two reasons">
   <div class="frame">
-    <p class="part rise">Lesson 01 · Why you're here</p>
+    <p class="lesson rise"><span class="ln">Lesson 01</span><span class="lt">Why you're here</span></p>
     <h2 class="rise">Two reasons people get into this.</h2>
     <div class="card-row two">
       <div class="card rise">
@@ -343,7 +358,7 @@
 <!-- 04 -->
 <section class="slide" data-title="Where the edge is">
   <div class="frame">
-    <p class="part rise">Lesson 01 · Why you're here</p>
+    <p class="lesson rise"><span class="ln">Lesson 01</span><span class="lt">Why you're here</span></p>
     <h2 class="rise">Everyone is offering AI services now.</h2>
     <div class="cols" style="margin-top:24px">
       <div class="lede rise">
@@ -361,7 +376,7 @@
 <!-- 05 -->
 <section class="slide" data-title="Just build it">
   <div class="frame">
-    <p class="part rise">Lesson 01 · Why you're here</p>
+    <p class="lesson rise"><span class="ln">Lesson 01</span><span class="lt">Why you're here</span></p>
     <p class="mono-huge rise">I stopped writing proposals. I build the thing, show it, and ask if they want to <em>pay for it.</em></p>
     <p class="foot rise">It is a lot easier than explaining what I would have built.</p>
   </div>
@@ -370,7 +385,7 @@
 <!-- 06 -->
 <section class="slide" data-title="Tools don't matter">
   <div class="frame">
-    <p class="part rise">Lesson 02 · Tools</p>
+    <p class="lesson rise"><span class="ln">Lesson 02</span><span class="lt">Tools</span></p>
     <h2 class="rise">Tools don't matter.</h2>
     <div class="lede rise">
       <p>I am saying that as someone addicted to Claude Code.</p>
@@ -383,7 +398,7 @@
 <!-- 07 -->
 <section class="slide" data-title="Context">
   <div class="frame">
-    <p class="part rise">Lesson 02 · Tools</p>
+    <p class="lesson rise"><span class="ln">Lesson 02</span><span class="lt">Tools</span></p>
     <h2 class="rise">When Claude Code goes down I switch to Codex.</h2>
     <div class="cols" style="margin-top:24px">
       <div class="lede rise">
@@ -401,7 +416,7 @@
 <!-- 08 -->
 <section class="slide" data-title="AI native">
   <div class="frame">
-    <p class="part rise">Lesson 03 · Being AI native</p>
+    <p class="lesson rise"><span class="ln">Lesson 03</span><span class="lt">Being AI native</span></p>
     <p class="mono-huge rise">Being AI native is <em>what you reach for first.</em></p>
     <p class="foot rise">Something lands on your desk. Your first move is either to try AI on it, or to do it the way you have always done it. That is the whole difference.</p>
   </div>
@@ -410,7 +425,7 @@
 <!-- 09 -->
 <section class="slide" data-title="To what extent">
   <div class="frame">
-    <p class="part rise">Lesson 03 · Being AI native</p>
+    <p class="lesson rise"><span class="ln">Lesson 03</span><span class="lt">Being AI native</span></p>
     <h2 class="rise">The question changed.</h2>
     <div class="card-row two">
       <div class="card rise">
@@ -431,7 +446,7 @@
 <!-- 10 -->
 <section class="slide" data-title="Same model">
   <div class="frame">
-    <p class="part rise">Lesson 04 · AI isn't the valuable part</p>
+    <p class="lesson rise"><span class="ln">Lesson 04</span><span class="lt">AI isn't the valuable part</span></p>
     <h2 class="rise">We are all using the same model.</h2>
     <div class="lede rise">
       <p>Everyone assumes the prize goes to whoever has the best prompt, the newest model, the fanciest skills. Any of us can open Opus 5 this afternoon.</p>
@@ -444,7 +459,7 @@
 <!-- 11 -->
 <section class="slide" data-title="Mistakes">
   <div class="frame">
-    <p class="part rise">Lesson 04 · AI isn't the valuable part</p>
+    <p class="lesson rise"><span class="ln">Lesson 04</span><span class="lt">AI isn't the valuable part</span></p>
     <h2 class="rise">Six months of teaching it my mistakes.</h2>
     <div class="cols" style="margin-top:24px">
       <div class="lede rise">
@@ -462,7 +477,7 @@
 <!-- 12 -->
 <section class="slide" data-title="Negative prompts">
   <div class="frame">
-    <p class="part rise">Lesson 04 · AI isn't the valuable part</p>
+    <p class="lesson rise"><span class="ln">Lesson 04</span><span class="lt">AI isn't the valuable part</span></p>
     <h2 class="rise">Most of what I write down is what <em>not</em> to do.</h2>
     <div class="cols" style="margin-top:22px">
       <div class="lede rise">
@@ -482,7 +497,7 @@
 <!-- 13 -->
 <section class="slide" data-title="Context engineering">
   <div class="frame">
-    <p class="part rise">Lesson 04 · AI isn't the valuable part</p>
+    <p class="lesson rise"><span class="ln">Lesson 04</span><span class="lt">AI isn't the valuable part</span></p>
     <p class="tag rise">My definition</p>
     <p class="mono-huge rise" style="max-width:24ch">Context engineering is <em>everything you put in</em> around the model.</p>
     <p class="foot rise">Your knowledge, your prompts, your instructions, your skills, the systems you build around it. It is how you apply your own brain onto a powerful AI model.</p>
@@ -492,7 +507,7 @@
 <!-- 14 -->
 <section class="slide" data-title="Manage it">
   <div class="frame">
-    <p class="part rise">Lesson 05 · Managing</p>
+    <p class="lesson rise"><span class="ln">Lesson 05</span><span class="lt">Managing</span></p>
     <h2 class="rise">Stop talking to it. Start managing it.</h2>
     <div class="cols" style="margin-top:24px">
       <div class="lede rise">
@@ -510,7 +525,7 @@
 <!-- 15 -->
 <section class="slide" data-title="Pre-mortem">
   <div class="frame">
-    <p class="part rise">Lesson 05 · Managing</p>
+    <p class="lesson rise"><span class="ln">Lesson 05</span><span class="lt">Managing</span></p>
     <h2 class="rise">It is trained to please you.</h2>
     <div class="lede rise">
       <p>Ask what it thinks of your plan and it will tell you the plan is great. Every plan has blind spots, and that one will agree with all of yours.</p>
@@ -531,7 +546,7 @@
 <!-- 16 -->
 <section class="slide" data-title="Finish line">
   <div class="frame">
-    <p class="part rise">Lesson 05 · Managing</p>
+    <p class="lesson rise"><span class="ln">Lesson 05</span><span class="lt">Managing</span></p>
     <h2 class="rise">Give it a finish line.</h2>
     <div class="cols" style="margin-top:24px">
       <div class="lede rise">
@@ -551,7 +566,7 @@
 <!-- 17 -->
 <section class="slide" data-title="Seventy percent">
   <div class="frame">
-    <p class="part rise">Lesson 06 · Verify everything</p>
+    <p class="lesson rise"><span class="ln">Lesson 06</span><span class="lt">Verify everything</span></p>
     <h2 class="rise">You ask for done. You get seventy percent.</h2>
     <div class="cols" style="margin-top:24px">
       <div class="lede rise">
@@ -569,7 +584,7 @@
 <!-- 18 -->
 <section class="slide" data-title="How to verify">
   <div class="frame">
-    <p class="part rise">Lesson 06 · Verify everything</p>
+    <p class="lesson rise"><span class="ln">Lesson 06</span><span class="lt">Verify everything</span></p>
     <h2 class="rise">The setup is simpler than you think.</h2>
     <div class="cols" style="margin-top:24px">
       <div class="lede rise">
@@ -587,7 +602,7 @@
 <!-- 19 -->
 <section class="slide" data-title="Screenshot loop">
   <div class="frame">
-    <p class="part rise">Lesson 06 · Verify everything</p>
+    <p class="lesson rise"><span class="ln">Lesson 06</span><span class="lt">Verify everything</span></p>
     <h2 class="rise">Every site I build goes through a screenshot loop.</h2>
     <div class="lede rise">
       <p>It takes the screenshots and checks the balance itself. Checks it on mobile. Then it clicks every button, submits every form, and confirms the formatting held.</p>
@@ -600,7 +615,7 @@
 <!-- 20 -->
 <section class="slide" data-title="Access">
   <div class="frame">
-    <p class="part rise">Lesson 07 · Grant access carefully</p>
+    <p class="lesson rise"><span class="ln">Lesson 07</span><span class="lt">Grant access carefully</span></p>
     <p class="mono-huge rise">If it can reach something, assume it will <em>eventually use it.</em></p>
     <p class="foot rise">Handing an agent a tool and telling it not to touch that tool is handing someone a credit card and asking them not to spend. One day they spend.</p>
   </div>
@@ -609,7 +624,7 @@
 <!-- 21 -->
 <section class="slide" data-title="Two layers">
   <div class="frame">
-    <p class="part rise">Lesson 07 · Grant access carefully</p>
+    <p class="lesson rise"><span class="ln">Lesson 07</span><span class="lt">Grant access carefully</span></p>
     <h2 class="rise">You can tell it to only write drafts.</h2>
     <div class="lede rise">
       <p>It will write drafts. Then one day it sends one, because the send tool was sitting there the whole time.</p>
@@ -631,7 +646,7 @@
 <!-- 22 -->
 <section class="slide" data-title="Non-deterministic">
   <div class="frame">
-    <p class="part rise">Lesson 07 · Grant access carefully</p>
+    <p class="lesson rise"><span class="ln">Lesson 07</span><span class="lt">Grant access carefully</span></p>
     <h2 class="rise">Run the same prompt a hundred times, get a hundred results.</h2>
     <div class="cols" style="margin-top:24px">
       <div class="lede rise">
@@ -649,7 +664,7 @@
 <!-- 23 -->
 <section class="slide" data-title="One success">
   <div class="frame">
-    <p class="part rise">Lesson 08 · One success is not proof</p>
+    <p class="lesson rise"><span class="ln">Lesson 08</span><span class="lt">One success is not proof</span></p>
     <h2 class="rise">Your agent worked once.</h2>
     <div class="cols" style="margin-top:24px">
       <div class="lede rise">
