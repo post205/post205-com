@@ -1199,6 +1199,11 @@ document.addEventListener('keydown', (e) => {
 const RT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpa3VoY2FheHhzYWRsd2VwYmxmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNTc0MzMsImV4cCI6MjA5MjYzMzQzM30.yV2uutaX523kPtCKMea6dH-Hk4DkX5_ZwHAjCNXx610';
 const RT_URL = 'wss://dikuhcaaxxsadlwepblf.supabase.co/realtime/v1/websocket?apikey=' + RT_KEY + '&vsn=1.0.0';
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';   /* no O/0/I/1 */
+/* Safari throws on storage in private browsing / lockdown mode. A dead
+   remote must never take the slides down with it. */
+let memRoom = null;
+const roomGet = () => { try { return sessionStorage.getItem('deckRoom') || memRoom; } catch { return memRoom; } };
+const roomSet = (v) => { memRoom = v; try { sessionStorage.setItem('deckRoom', v); } catch {} };
 
 const pair = document.getElementById('pair');
 const pcode = document.getElementById('pcode');
@@ -1241,9 +1246,7 @@ function setStat(t) { if (pstat) pstat.textContent = t; }
 
 function openRoom(silent) {
   giveUp = false;
-  const code = sessionStorage.getItem('deckRoom') || (() => {
-    const c = newCode(); sessionStorage.setItem('deckRoom', c); return c;
-  })();
+  const code = roomGet() || (() => { const c = newCode(); roomSet(c); return c; })();
   room = 'deck-' + code;
   pcode.textContent = code;
   if (!silent) setStat('Opening room...');
@@ -1312,9 +1315,8 @@ function openRoom(silent) {
 /* iOS discards background tabs; rejoin the same room on the way back */
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState !== 'visible') return;
-  if (sessionStorage.getItem('deckRoom') && (!sock || sock.readyState > 1)) openRoom(true);
+  try { if (roomGet() && (!sock || sock.readyState > 1)) openRoom(true); } catch {}
 });
-if (sessionStorage.getItem('deckRoom')) openRoom(true);
 
 function togglePair() {
   if (!sock || sock.readyState > 1) { pair.hidden = false; openRoom(); }
@@ -1337,6 +1339,9 @@ window.addEventListener('hashchange', () => {
   if (n !== i) show(n);
 });
 if (!still && start === 0) decodeIn(document.getElementById('boot'), 220);
+
+/* Slides are up. Only now do we touch the remote, and never fatally. */
+try { if (roomGet()) openRoom(true); } catch (e) { setStat('Remote unavailable.'); }
 </script>
 </body>
 </html>

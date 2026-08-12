@@ -133,7 +133,7 @@ function connect(code) {
       $('view').classList.add('on');
       $('dot').classList.add('on');
       $('conn').textContent = 'connected';
-      localStorage.setItem('deckRoom', code);
+      try { localStorage.setItem('deckRoom', code); } catch {}
       if (!started) { started = Date.now(); tick(); }
       joinedAt = Date.now();
       clearInterval(hello);
@@ -204,7 +204,7 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && room && (!sock || sock.readyState > 1)) connect(room.slice(5));
 });
 
-const saved = localStorage.getItem('deckRoom');
+let saved = null; try { saved = localStorage.getItem('deckRoom'); } catch {}
 if (saved) $('code').value = saved;
 $('code').focus();
 </script>
