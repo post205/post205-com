@@ -205,9 +205,8 @@ window.addEventListener('unhandledrejection', function (e) {
     width: 100%; height: auto; display: block;
     /* the art shares the deck's ground, so screen drops it and the lattice runs behind;
        the soft edge stops the frame reading as a pasted rectangle */
-    mix-blend-mode: screen;
-    -webkit-mask-image: radial-gradient(ellipse 76% 74% at 50% 50%, #000 62%, transparent 100%);
-    mask-image: radial-gradient(ellipse 76% 74% at 50% 50%, #000 62%, transparent 100%);
+    /* transparent PNGs: the object floats straight on the field, no panel, no mask */
+    filter: drop-shadow(0 22px 46px rgba(0, 0, 0, 0.55));
   }
   .split h1.display, .split .slide h2 { max-width: 14ch; }
   .split .mono-huge { max-width: 15ch; font-size: clamp(30px, 3.3vw, 54px); }
@@ -411,7 +410,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="part rise">Where I'm coming from</p>
     <h2 class="rise">I read the thinking.</h2>
       </div>
-      <figure class="art rise"><img src="img/thinking.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/thinking.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -428,15 +427,15 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 01</span><span class="lt">Why you're here</span></p>
     <h2 class="rise">Two reasons people get into this.</h2>
     <div class="diagram">
-      <svg viewBox="0 0 900 200" role="img" aria-label="Two doors: start your own thing, or be the AI person where you work">
-        <rect class="draw" x="90" y="30" width="290" height="140" rx="4"/>
-        <path class="draw" d="M344 100 h14"/>
-        <rect class="draw" x="520" y="30" width="290" height="140" rx="4"/>
-        <path class="draw" d="M774 100 h14"/>
-        <text class="dlabel" x="235" y="95" text-anchor="middle">Start your own thing</text>
-        <text class="dsub" x="235" y="125" text-anchor="middle">FIND CLIENTS. SELL WHAT YOU BUILD.</text>
-        <text class="dlabel" x="665" y="95" text-anchor="middle">Be the AI person</text>
-        <text class="dsub" x="665" y="125" text-anchor="middle">SAME SKILLS, AIMED INWARD.</text>
+      <svg viewBox="0 0 900 210" role="img" aria-label="Two doors: start your own thing, or be the AI person where you work">
+        <rect class="draw" x="46" y="24" width="360" height="156" rx="4"/>
+        <path class="draw" d="M372 102 h16"/>
+        <rect class="draw" x="494" y="24" width="360" height="156" rx="4"/>
+        <path class="draw" d="M820 102 h16"/>
+        <text class="dlabel" x="226" y="94" text-anchor="middle">Start your own thing</text>
+        <text class="dsub" x="226" y="130" text-anchor="middle">FIND CLIENTS. SELL WHAT YOU BUILD.</text>
+        <text class="dlabel" x="674" y="94" text-anchor="middle">Be the AI person</text>
+        <text class="dsub" x="674" y="130" text-anchor="middle">SAME SKILLS, AIMED INWARD.</text>
       </svg>
     </div>
   </div>
@@ -455,7 +454,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 01</span><span class="lt">Why you're here</span></p>
     <h2 class="rise">Everyone is offering AI services now.</h2>
       </div>
-      <figure class="art rise"><img src="img/noisy.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/noisy.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -472,7 +471,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 01</span><span class="lt">Why you're here</span></p>
     <p class="mono-huge rise">I stopped writing proposals. I just <em>build the thing.</em></p>
       </div>
-      <figure class="art rise"><img src="img/build.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/build.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -490,7 +489,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 02</span><span class="lt">Tools</span></p>
     <h2 class="rise">Tools don't matter.</h2>
       </div>
-      <figure class="art rise"><img src="img/tools.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/tools.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -538,7 +537,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 03</span><span class="lt">Being AI native</span></p>
     <p class="mono-huge rise">Being AI native is <em>what you reach for first.</em></p>
       </div>
-      <figure class="art rise"><img src="img/reach.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/reach.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -579,7 +578,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 04</span><span class="lt">AI isn't the valuable part</span></p>
     <h2 class="rise">We are all using the same model.</h2>
       </div>
-      <figure class="art rise"><img src="img/samemodel.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/samemodel.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -597,7 +596,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 04</span><span class="lt">AI isn't the valuable part</span></p>
     <h2 class="rise">Six months of teaching it my mistakes.</h2>
       </div>
-      <figure class="art rise"><img src="img/mistakes.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/mistakes.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -616,7 +615,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 04</span><span class="lt">AI isn't the valuable part</span></p>
     <h2 class="rise">Most of what I write down is what <em>not</em> to do.</h2>
       </div>
-      <figure class="art rise"><img src="img/donts.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/donts.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -633,7 +632,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 04</span><span class="lt">AI isn't the valuable part</span></p>
     <p class="mono-huge rise" style="max-width:24ch">Context engineering is <em>everything you put in</em> around the model.</p>
       </div>
-      <figure class="art rise"><img src="img/contexteng.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/contexteng.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -652,7 +651,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 05</span><span class="lt">Managing</span></p>
     <h2 class="rise">Stop talking to it. Start managing it.</h2>
       </div>
-      <figure class="art rise"><img src="img/managing.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/managing.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -670,7 +669,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 05</span><span class="lt">Managing</span></p>
     <h2 class="rise">It is trained to please you.</h2>
       </div>
-      <figure class="art rise"><img src="img/please.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/please.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -690,7 +689,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 05</span><span class="lt">Managing</span></p>
     <h2 class="rise">Give it a finish line.</h2>
       </div>
-      <figure class="art rise"><img src="img/finishline.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/finishline.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -718,7 +717,7 @@ window.addEventListener('unhandledrejection', function (e) {
         <path class="draw" style="stroke-dasharray:7 9" d="M70 46 H930"/>
         <text class="dlabel" x="158" y="88" text-anchor="middle">70%</text>
         <text class="dlabel" x="566" y="52" text-anchor="middle">90%</text>
-        <text class="dsub" x="700" y="112">FEEDBACK. FEEDBACK. FEEDBACK.</text>
+        <text class="dsub" x="640" y="176">FEEDBACK. FEEDBACK. FEEDBACK.</text>
         <text class="dsub" x="930" y="36" text-anchor="end">DONE</text>
       </svg>
     </div>
@@ -740,7 +739,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 06</span><span class="lt">Verify everything</span></p>
     <p class="mono-huge rise">Whatever you would do to check it, <em>it can do.</em></p>
       </div>
-      <figure class="art rise"><img src="img/verify.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/verify.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -765,12 +764,12 @@ window.addEventListener('unhandledrejection', function (e) {
         <rect class="draw" x="490" y="72" width="150" height="60" rx="6"/>
         <path class="draw" d="M640 102 H710"/>
         <rect class="draw" x="710" y="72" width="150" height="60" rx="6"/>
-        <path class="draw" d="M860 102 H920 V186 H99 V132"/>
+        <path class="draw" d="M860 102 H920 V178 H99 V132"/>
         <text class="dlabel" x="99" y="108" text-anchor="middle">Build</text>
         <text class="dlabel" x="332" y="108" text-anchor="middle">Screenshot</text>
         <text class="dlabel" x="565" y="108" text-anchor="middle">Click it</text>
         <text class="dlabel" x="785" y="108" text-anchor="middle">Fix</text>
-        <text class="dsub" x="500" y="176" text-anchor="middle">UNTIL NOTHING IS WRONG</text>
+        <text class="dsub" x="500" y="212" text-anchor="middle">UNTIL NOTHING IS WRONG</text>
       </svg>
     </div>
   </div>
@@ -788,7 +787,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 07</span><span class="lt">Grant access carefully</span></p>
     <p class="mono-huge rise">If it can reach something, assume it will <em>eventually use it.</em></p>
       </div>
-      <figure class="art rise"><img src="img/access.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/access.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -816,9 +815,9 @@ window.addEventListener('unhandledrejection', function (e) {
         <path class="draw" d="M690 132 L710 150 L690 168"/>
         <text class="dsub" x="330" y="206" text-anchor="middle">PROMPT LAYER</text>
         <text class="dsub" x="690" y="206" text-anchor="middle">TOOL LAYER</text>
-        <text class="dlabel" x="120" y="60" >It wants to send</text>
-        <text class="dsub" x="410" y="46">RULES SAY DON'T. IT CROSSES ANYWAY.</text>
-        <text class="dsub" x="726" y="146">NO TOOL. NO SEND.</text>
+        <text class="dlabel" x="24" y="60">It wants to send</text>
+        <text class="dsub" x="360" y="34">RULES SAY DON'T. IT CROSSES ANYWAY.</text>
+        <text class="dsub" x="716" y="182">NO TOOL. NO SEND.</text>
       </svg>
     </div>
   </div>
@@ -837,7 +836,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="lesson rise"><span class="ln">Lesson 07</span><span class="lt">Grant access carefully</span></p>
     <h2 class="rise">Run the same prompt a hundred times, get a hundred results.</h2>
       </div>
-      <figure class="art rise"><img src="img/hundred.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/hundred.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -867,7 +866,7 @@ window.addEventListener('unhandledrejection', function (e) {
         <rect class="draw" x="586" y="120" width="22" height="20"/>
         <rect class="draw" x="656" y="66" width="22" height="74"/>
         <rect class="draw" x="726" y="104" width="22" height="36"/>
-        <text class="dsub" x="140" y="38" text-anchor="start">THE ONE YOU SAW</text>
+        <text class="dsub" x="150" y="42" text-anchor="start">THE ONE YOU SAW</text>
         <text class="dsub" x="500" y="164" text-anchor="middle">THE SAME AGENT, RUN AGAIN AND AGAIN</text>
       </svg>
     </div>
@@ -886,7 +885,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="part rise">Part 2 · What we're building</p>
     <p class="mono-huge rise">An AI that knows your business, reaches your tools, does your repeatable work, and eventually <em>moves before you ask.</em></p>
       </div>
-      <figure class="art rise"><img src="img/aios.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/aios.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -904,7 +903,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="tag rise">The test I hold it to</p>
     <p class="mono-huge rise" style="max-width:26ch">While you are away from your desk, it notices one real event and produces something <em>faster and more accurate</em> than what you would have made yourself.</p>
       </div>
-      <figure class="art rise"><img src="img/awaytest.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/awaytest.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -1075,7 +1074,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <h2 class="rise">Day 1 is one word.</h2>
     <p class="mono-huge rise" style="max-width:12ch"><em>/onboard</em></p>
       </div>
-      <figure class="art rise"><img src="img/onboard.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/onboard.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -1094,7 +1093,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="tag rise">The one rule I will not bend</p>
     <h2 class="rise">Paste your writing. Do not type it.</h2>
       </div>
-      <figure class="art rise"><img src="img/paste.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/paste.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -1137,7 +1136,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="sendoff rise"><strong>Clone it, make it yours, and let it learn how you work.</strong></p>
     <p class="rise"><a class="repo" href="https://github.com/post205/claude-aios-starter">github.com/post205/claude-aios-starter</a></p>
       </div>
-      <figure class="art rise"><img src="img/onesmall.jpg" alt="" loading="lazy"></figure>
+      <figure class="art rise"><img src="img/onesmall.png" alt="" loading="lazy"></figure>
     </div>
   </div>
 </section>
