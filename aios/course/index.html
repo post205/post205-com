@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Build Your Own AI Operating System · POST205</title>
+<meta name="description" content="A crash course on building your own AI Operating System. Why the owner becomes the bottleneck, and what to do about it.">
+<meta property="og:title" content="Build Your Own AI Operating System">
+<meta property="og:description" content="Your business runs on you. Here is how to build something that runs with you.">
+<meta property="og:image" content="https://post205.com/images/og-aios.png">
+<meta property="og:type" content="website">
+<style>
+  :root {
+    /* on-dark field. Teal Strike is the only accent; hardcoded light inks per DESIGN.md */
+    --ground:     #071717;
+    --surface:    #0F2727;
+    --surface-2:  #143434;
+    --border:     #1d4747;
+    --border-2:   #2a5f5f;
+    --text:       #f2f9f9;
+    --text-2:     #b6d0ce;
+    --text-3:     #7aacac;
+    --accent:     #3BD1D3;
+    --good:       #4ad9a0;
+    --bad:        #ff9a86;
+    --mono: ui-monospace, monospace;
+    --sans: system-ui, -apple-system, sans-serif;
+    --bar-h: 56px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  html { overflow: hidden; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  html, body { overscroll-behavior: none; }
+  button, .nav-btn, .slide { touch-action: manipulation; }
+  body {
+    background: var(--ground);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 20px;
+    line-height: 1.6;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  strong { font-weight: 700; color: var(--text); }
+
+  /* ── Deck shell ───────────────────────────────────────── */
+  #deck { position: fixed; inset: 0 0 var(--bar-h) 0; }
+  .slide {
+    position: absolute; inset: 0;
+    display: none; align-items: center; justify-content: center;
+    padding: 40px 72px 28px;
+  }
+  .slide.active { display: flex; }
+  .frame { width: 100%; max-width: 1320px; max-height: 100%; overflow-y: auto; scrollbar-width: none; }
+  .frame::-webkit-scrollbar { display: none; }
+  .slide-lattice { position: absolute; inset: 0; pointer-events: none; }
+
+  /* ── Type — sized to be read from the back of a room ──── */
+  .eyebrow {
+    font-family: var(--mono); font-size: 14px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 26px;
+  }
+  .part {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 22px;
+  }
+  h1.display {
+    font-weight: 800; font-size: clamp(52px, 7.6vw, 124px); line-height: 1.02;
+    letter-spacing: -0.025em; margin-bottom: 34px; max-width: 17ch;
+  }
+  .slide h2 {
+    font-weight: 800; font-size: clamp(38px, 5vw, 74px); line-height: 1.05;
+    letter-spacing: -0.02em; margin-bottom: 26px; max-width: 20ch;
+  }
+  .slide h3 { font-weight: 700; font-size: 26px; letter-spacing: -0.01em; margin-bottom: 8px; }
+  .lede { color: var(--text-2); max-width: 42ch; font-size: clamp(21px, 1.9vw, 29px); line-height: 1.5; }
+  .lede p + p { margin-top: 20px; }
+  .lede strong { color: var(--text); }
+  .foot { color: var(--text-3); margin-top: 34px; font-size: 19px; max-width: 62ch; }
+
+  /* the single huge line — used where one sentence carries the slide */
+  .mono-huge {
+    font-weight: 800; font-size: clamp(40px, 5.6vw, 88px); line-height: 1.08;
+    letter-spacing: -0.02em; max-width: 22ch;
+  }
+  .mono-huge em { font-style: normal; color: var(--accent); }
+
+  .quote {
+    font-weight: 800; font-size: clamp(44px, 6.4vw, 104px); line-height: 1.05;
+    letter-spacing: -0.025em; max-width: 15ch; color: var(--text);
+  }
+
+  /* ── Blocks ───────────────────────────────────────────── */
+  .tag {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 10px;
+  }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 26px 28px;
+  }
+  .card p { color: var(--text-2); font-size: 19px; line-height: 1.5; }
+  .card.key { border-color: var(--accent); }
+  .card.key .tag { color: var(--accent); }
+
+  .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 46px; align-items: start; }
+  .cols > * { min-width: 0; }
+  .card-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
+  .card-row > * { min-width: 0; }
+  .card-row.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* numbered moves */
+  .moves { list-style: none; display: grid; gap: 22px; margin-top: 34px; }
+  .moves li { display: flex; gap: 22px; align-items: baseline; }
+  .moves .num {
+    font-family: var(--mono); font-size: 15px; color: var(--accent);
+    border: 1px solid var(--border-2); border-radius: 5px;
+    width: 36px; height: 36px; flex: none;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .moves h3 { margin-bottom: 2px; }
+  .moves p { color: var(--text-2); font-size: 19px; line-height: 1.45; }
+
+  /* the five layers */
+  .layers { list-style: none; display: grid; gap: 2px; margin-top: 30px; }
+  .layers li {
+    display: grid; grid-template-columns: 54px auto minmax(0, 1fr);
+    gap: 30px; align-items: baseline;
+    padding: 17px 0; border-bottom: 1px solid var(--border);
+  }
+  .layers li:first-child { border-top: 1px solid var(--border); }
+  .layers .n { font-family: var(--mono); font-size: 15px; color: var(--text-3); }
+  .layers .name {
+    font-weight: 800; font-size: clamp(24px, 2.5vw, 38px); letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+  .layers .what { color: var(--text-2); font-size: 20px; line-height: 1.4; }
+  .layers li.hot .what strong { color: var(--text); }
+
+  /* steps */
+  .steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; }
+  .steps li { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 28px 26px; }
+  .steps .n {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.12em;
+    color: var(--accent); display: block; margin-bottom: 14px;
+  }
+  .steps h3 { font-size: 28px; margin-bottom: 8px; }
+  .steps p { color: var(--text-2); font-size: 18px; line-height: 1.45; }
+  .steps code { font-family: var(--mono); font-size: 15px; color: var(--accent); word-break: break-all; }
+
+  /* rhythm rows */
+  .rhythm { list-style: none; display: grid; gap: 2px; margin-top: 30px; }
+  .rhythm li {
+    display: grid; grid-template-columns: minmax(0, 7ch) minmax(0, 11ch) minmax(0, 1fr);
+    gap: 26px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--border);
+  }
+  .rhythm li:first-child { border-top: 1px solid var(--border); }
+  .rhythm .when { font-family: var(--mono); font-size: 15px; color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; }
+  .rhythm .cmd { font-family: var(--mono); font-size: clamp(18px, 1.8vw, 24px); color: var(--accent); font-weight: 700; }
+  .rhythm .does { color: var(--text-2); font-size: 19px; line-height: 1.45; }
+
+  /* diagram */
+  .diagram { margin: 34px 0 0; }
+  .diagram svg {
+    display: block; width: 100%; max-width: 1080px; height: auto;
+    stroke: var(--accent); stroke-width: 2.5; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  .diagram .dlabel {
+    stroke: none; fill: var(--text-2);
+    font-family: var(--sans); font-size: 19px; font-weight: 700; letter-spacing: -0.01em;
+  }
+  .diagram .dsub {
+    stroke: none; fill: var(--text-3);
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em;
+  }
+
+  /* title slide */
+  .title-cols { display: grid; grid-template-columns: 1.5fr 1fr; gap: 64px; align-items: end; }
+  .meta { border-top: 1px solid var(--border-2); }
+  .meta div { border-bottom: 1px solid var(--border-2); padding: 15px 0; }
+  .meta dt {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 4px;
+  }
+  .meta dd { font-family: var(--mono); font-size: 15px; color: var(--text-2); line-height: 1.5; }
+
+  /* close */
+  .sendoff { margin-top: 40px; }
+  .sendoff strong { color: var(--accent); font-size: clamp(26px, 2.6vw, 40px); font-weight: 800; letter-spacing: -0.02em; }
+  .repo {
+    display: inline-block; margin-top: 30px;
+    font-family: var(--mono); font-size: clamp(16px, 1.7vw, 23px); color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 5px; padding: 15px 26px;
+    text-decoration: none; word-break: break-all;
+  }
+  .repo:hover { background: var(--accent); color: #021616; }
+  .repo:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+  /* ── Bottom bar ───────────────────────────────────────── */
+  #bar {
+    position: fixed; left: 0; right: 0; bottom: 0; height: var(--bar-h);
+    display: flex; align-items: center; gap: 22px; padding: 0 28px;
+    background: transparent; z-index: 5;
+  }
+  #counter {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em;
+    color: var(--text-3); opacity: 0.7; flex: none; min-width: 68px;
+  }
+  #pips { flex: 1; display: flex; justify-content: center; gap: 8px; }
+  .pip {
+    width: 6px; height: 6px; padding: 0; border: 0; border-radius: 1px;
+    background: rgba(59, 209, 211, 0.2); cursor: pointer;
+  }
+  .pip.on { background: var(--accent); }
+  .pip:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .nav-btn {
+    background: transparent; border: 0; color: var(--text-3);
+    font-size: 22px; line-height: 1; padding: 13px 15px; cursor: pointer; flex: none; opacity: 0.75;
+  }
+  .nav-btn:hover { color: var(--accent); opacity: 1; transition: color 0.15s, opacity 0.15s; }
+  .nav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ── Mobile ───────────────────────────────────────────── */
+  @media (max-width: 860px) {
+    body { font-size: 17px; }
+    .slide { padding: 24px 22px 16px; align-items: flex-start; }
+    .frame { padding-top: 6px; }
+    h1.display { font-size: clamp(38px, 10vw, 60px); margin-bottom: 22px; }
+    .slide h2 { font-size: clamp(30px, 8vw, 46px); margin-bottom: 18px; }
+    .quote { font-size: clamp(34px, 9.6vw, 56px); }
+    .mono-huge { font-size: clamp(30px, 8vw, 48px); }
+    .lede { font-size: 19px; max-width: none; }
+    .cols, .card-row, .card-row.two, .title-cols, .steps { grid-template-columns: minmax(0, 1fr); }
+    .cols { gap: 22px; }
+    .title-cols { gap: 30px; align-items: start; }
+    .card-row { margin-top: 20px; gap: 12px; }
+    .card { padding: 20px 22px; }
+    .layers li { grid-template-columns: 34px minmax(0, 1fr); gap: 8px 14px; padding: 14px 0; }
+    .layers .what { grid-column: 2; font-size: 17px; }
+    .layers .name { font-size: 26px; }
+    .rhythm li { grid-template-columns: minmax(0, 6ch) minmax(0, 1fr); gap: 6px 16px; }
+    .rhythm .does { grid-column: 2; font-size: 17px; }
+    .moves li { gap: 14px; }
+    .moves p { font-size: 17px; }
+    .steps li { padding: 20px 22px; }
+    .diagram { overflow-x: auto; }
+    .diagram svg { min-width: 700px; }
+    #bar {
+      height: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px));
+      padding: 0 14px env(safe-area-inset-bottom, 0px); gap: 14px;
+    }
+    #deck { inset: 0 0 calc(var(--bar-h) + env(safe-area-inset-bottom, 0px)) 0; }
+    .nav-btn { padding: 16px 17px; }
+    #pips { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<main id="deck" aria-label="Slides">
+
+<!-- 01 ───────────────────────────────────────────────────── -->
+<section class="slide slide-title" data-title="Title">
+  <div class="frame">
+    <p class="eyebrow rise" id="boot">POST205 · CRASH COURSE</p>
+    <div class="title-cols">
+      <div>
+        <h1 class="display rise">Your business runs on you.</h1>
+        <div class="lede rise">
+          <p>Which is fine, until it is the thing stopping you from growing.</p>
+          <p>Today we build something that runs <strong>with</strong> you.</p>
+        </div>
+      </div>
+      <dl class="meta rise">
+        <div><dt>What this is</dt><dd>Build your own AI Operating System</dd></div>
+        <div><dt>Who it's for</dt><dd>Owners who still catch everything</dd></div>
+        <div><dt>You need</dt><dd>A laptop. No coding.</dd></div>
+        <div><dt>Time</dt><dd>One sitting to start. A year to compound.</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- 02 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="Why">
+  <div class="frame">
+    <p class="part rise">Part 1 · Why we're doing this</p>
+    <p class="quote rise">&ldquo;Nasa ulo ko lahat.&rdquo;</p>
+    <div class="lede rise" style="margin-top:34px">
+      <p>Every owner says a version of this. It sounds like competence.</p>
+      <p>It is the bottleneck saying its own name out loud.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="The cost">
+  <div class="frame">
+    <p class="part rise">Part 1 · Why we're doing this</p>
+    <h2 class="rise">What it actually costs you</h2>
+    <div class="card-row">
+      <div class="card rise">
+        <p class="tag">The week</p>
+        <p>The same quote, the same follow-up, the same report. Work only you can do, because only you know how.</p>
+      </div>
+      <div class="card rise">
+        <p class="tag">The team</p>
+        <p>They wait for you. Every answer routes through one person, and that person is in a meeting.</p>
+      </div>
+      <div class="card rise">
+        <p class="tag">The ceiling</p>
+        <p>Growth means more of the thing that already fills your day. So you stop wanting it.</p>
+      </div>
+    </div>
+    <p class="foot rise">Hiring moves the ceiling. It does not move the bottleneck, because the knowledge is still in your head.</p>
+  </div>
+</section>
+
+<!-- 04 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="Why the chatbot fades">
+  <div class="frame">
+    <p class="part rise">Part 1 · Why we're doing this</p>
+    <h2 class="rise">You already tried AI. It faded by Thursday.</h2>
+    <div class="cols" style="margin-top:26px">
+      <div class="lede rise">
+        <p>You opened a tab. You asked good questions. The answers were fine.</p>
+        <p>Then Monday came and you had to explain your business all over again.</p>
+      </div>
+      <div class="card key rise">
+        <p class="tag">The reason</p>
+        <p>A chat window starts from zero every morning. It has never seen your calendar, your clients, or the way you write. Fluent and generic is the worst combination there is, because wrong reads as right.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="What this is">
+  <div class="frame">
+    <p class="part rise">Part 1 · What this is</p>
+    <p class="mono-huge rise">An AI that knows your business, reaches your tools, does your repeatable work, and eventually <em>moves before you ask.</em></p>
+    <p class="foot rise">We call it an AI Operating System. It lives in a folder on your laptop. You own it, you can read every file in it, and it gets better every week you use it.</p>
+  </div>
+</section>
+
+<!-- 06 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="The one test">
+  <div class="frame">
+    <p class="part rise">Part 1 · What this is</p>
+    <p class="tag rise">The one test that matters</p>
+    <p class="mono-huge rise" style="max-width:26ch">While you are away from your desk, it notices one real event and produces something <em>faster and more accurate</em> than what you would have made yourself.</p>
+    <p class="foot rise">Everything we build today points at that sentence. If a step does not move you toward it, we skip the step.</p>
+  </div>
+</section>
+
+<!-- 07 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="How you'll know">
+  <div class="frame">
+    <p class="part rise">Part 1 · What this is</p>
+    <h2 class="rise">How you'll know it's working</h2>
+    <div class="card-row">
+      <div class="card rise">
+        <p class="tag">One</p>
+        <p>Someone asks you a question, and you ask your AIOS too. Because it answers better, with the actual source.</p>
+      </div>
+      <div class="card rise">
+        <p class="tag">Two</p>
+        <p>You stop opening tabs. Something lands and your first move is to ask, instead of hunting across six apps.</p>
+      </div>
+      <div class="card rise">
+        <p class="tag">Three</p>
+        <p>You stop trying to remember. You trust the retrieval. It holds the facts, you hold the questions.</p>
+      </div>
+    </div>
+    <p class="foot rise">None of these are metrics. You feel all three, and you feel them in the same month.</p>
+  </div>
+</section>
+
+<!-- 08 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="Two frameworks">
+  <div class="frame">
+    <p class="part rise">Part 2 · The two things to learn</p>
+    <h2 class="rise">Two frameworks. Learn them in order.</h2>
+    <div class="card-row two">
+      <div class="card key rise">
+        <p class="tag">The Shift</p>
+        <h3>How you think</h3>
+        <p>The rewire. Three moves you run every time you decide to build something.</p>
+      </div>
+      <div class="card key rise">
+        <p class="tag">The Stack</p>
+        <h3>What you build</h3>
+        <p>The architecture. Five layers, in the order a person learns a job.</p>
+      </div>
+    </div>
+    <p class="foot rise">Skip the first one and the second is just a folder structure.</p>
+  </div>
+</section>
+
+<!-- 09 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="The Shift">
+  <div class="frame">
+    <p class="part rise">Part 2 · The Shift</p>
+    <h2 class="rise">Question &middot; Cut &middot; Build</h2>
+    <ol class="moves">
+      <li class="rise"><span class="num">1</span><div>
+        <h3>Question</h3>
+        <p>Stop asking &ldquo;how do I do this?&rdquo; Start asking &ldquo;can AI do this faster than me?&rdquo; Faster, not better. Better is a bonus.</p>
+      </div></li>
+      <li class="rise"><span class="num">2</span><div>
+        <h3>Cut</h3>
+        <p>Eliminate before you automate. If nobody would notice a task disappeared, kill it. Automating waste is waste that runs faster.</p>
+      </div></li>
+      <li class="rise"><span class="num">3</span><div>
+        <h3>Build</h3>
+        <p>Context before tools. Small blocks, tested one at a time. Boring wins.</p>
+      </div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 10 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="The Stack">
+  <div class="frame">
+    <p class="part rise">Part 2 · The Stack</p>
+    <h2 class="rise">You are onboarding a hire.</h2>
+    <ul class="layers">
+      <li class="rise"><span class="n">01</span><span class="name">Memory</span><span class="what">It knows your business</span></li>
+      <li class="rise"><span class="n">02</span><span class="name">Reach</span><span class="what">It touches your tools and data</span></li>
+      <li class="rise"><span class="n">03</span><span class="name">Skill</span><span class="what">It knows how to do the work</span></li>
+      <li class="rise hot"><span class="n">04</span><span class="name">Judgment</span><span class="what"><strong>It knows what it may decide alone</strong></span></li>
+      <li class="rise"><span class="n">05</span><span class="name">Initiative</span><span class="what">It moves before you ask</span></li>
+    </ul>
+    <p class="foot rise">That is how you would assess a new staff member. Nothing changes because the hire is a machine.</p>
+  </div>
+</section>
+
+<!-- 11 ───────────────────────────────────────────────────── -->
+<section class="slide slide-order" data-title="Build order">
+  <div class="frame">
+    <p class="part rise">Part 2 · The Stack</p>
+    <h2 class="rise">The order is the whole trick.</h2>
+    <div class="diagram">
+      <svg viewBox="0 0 1080 250" role="img" aria-label="Build order: Memory, then Reach and Skill in parallel, then Judgment, then Initiative">
+        <rect class="draw" x="14" y="94" width="176" height="62" rx="7"/>
+        <path class="draw" d="M190 125 H250"/>
+        <rect class="draw" x="250" y="34" width="176" height="62" rx="7"/>
+        <rect class="draw" x="250" y="154" width="176" height="62" rx="7"/>
+        <path class="draw" d="M426 65 H486 V125"/>
+        <path class="draw" d="M426 185 H486 V125"/>
+        <path class="draw" d="M486 125 H556"/>
+        <rect class="draw" x="556" y="94" width="196" height="62" rx="7"/>
+        <path class="draw" d="M752 125 H812"/>
+        <rect class="draw" x="812" y="94" width="196" height="62" rx="7"/>
+        <text class="dlabel" x="102" y="131" text-anchor="middle">Memory</text>
+        <text class="dlabel" x="338" y="71" text-anchor="middle">Reach</text>
+        <text class="dlabel" x="338" y="191" text-anchor="middle">Skill</text>
+        <text class="dlabel" x="654" y="131" text-anchor="middle">Judgment</text>
+        <text class="dlabel" x="910" y="131" text-anchor="middle">Initiative</text>
+        <text class="dsub" x="102" y="180" text-anchor="middle">FIRST. ALWAYS.</text>
+        <text class="dsub" x="910" y="180" text-anchor="middle">LAST. ALWAYS.</text>
+      </svg>
+    </div>
+    <p class="foot rise">Decide what it is allowed to do before you let it act unwatched. Reverse those two and you have handed a new hire the company card and gone on holiday.</p>
+  </div>
+</section>
+
+<!-- 12 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="Setup">
+  <div class="frame">
+    <p class="part rise">Part 3 · Setting it up</p>
+    <h2 class="rise">Three steps. Then you are running.</h2>
+    <ol class="steps">
+      <li class="rise"><span class="n">STEP 01</span>
+        <h3>Install VS Code</h3>
+        <p>The window everything happens in. Free.</p>
+        <p><code>code.visualstudio.com</code></p>
+      </li>
+      <li class="rise"><span class="n">STEP 02</span>
+        <h3>Add Claude Code</h3>
+        <p>Install the extension inside VS Code, then sign in.</p>
+        <p><code>claude.com/code</code></p>
+      </li>
+      <li class="rise"><span class="n">STEP 03</span>
+        <h3>Clone the starter</h3>
+        <p>The folder that becomes yours.</p>
+        <p><code>github.com/post205/claude-aios-starter</code></p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- 13 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="Day 1">
+  <div class="frame">
+    <p class="part rise">Part 3 · Setting it up</p>
+    <h2 class="rise">Day 1 is one word.</h2>
+    <p class="mono-huge rise" style="max-width:12ch"><em>/onboard</em></p>
+    <div class="cols" style="margin-top:32px">
+      <div class="lede rise">
+        <p>Seven questions. Fifteen minutes. Answer them out loud if that is easier.</p>
+        <p>At the end it writes your files and your AIOS knows who you are.</p>
+      </div>
+      <div class="card rise">
+        <p class="tag">What it asks</p>
+        <p>Who you are and what you sell. How you write. Your next 90 days. Where the money lands. Where you talk to people. Where the files live. What eats your week.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 14 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="The one rule">
+  <div class="frame">
+    <p class="part rise">Part 3 · Setting it up</p>
+    <p class="tag rise">The one rule I will not bend</p>
+    <h2 class="rise">Paste your writing. Do not type it.</h2>
+    <div class="lede rise">
+      <p>When it asks for two things you have written, open a real email and paste it raw. Typos included.</p>
+      <p>Anything you compose inside the chat is already shaped by the chat. Do that and you teach it a voice that is not yours, and every draft after that sounds like a stranger wearing your name.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 15 ───────────────────────────────────────────────────── -->
+<section class="slide" data-title="The rhythm">
+  <div class="frame">
+    <p class="part rise">Part 4 · Keeping it alive</p>
+    <h2 class="rise">Then it is a weekly habit.</h2>
+    <ul class="rhythm">
+      <li class="rise"><span class="when">Day 1</span><span class="cmd">/onboard</span><span class="does">It learns who you are and how you sound.</span></li>
+      <li class="rise"><span class="when">Week 1</span><span class="cmd">use it</span><span class="does">Real questions, real decisions. Write down what you decide.</span></li>
+      <li class="rise"><span class="when">Day 7</span><span class="cmd">/audit</span><span class="does">Scores the five layers out of 100 and names your biggest gap.</span></li>
+      <li class="rise"><span class="when">Day 14</span><span class="cmd">/level-up</span><span class="does">Finds one task worth automating and ships it with you.</span></li>
+      <li class="rise"><span class="when">Fridays</span><span class="cmd">/level-up</span><span class="does">One shipped thing per week. That is the whole discipline.</span></li>
+    </ul>
+    <p class="foot rise">Expect a low first score. Most honest setups start in the twenties. The number is a direction.</p>
+  </div>
+</section>
+
+<!-- 16 ───────────────────────────────────────────────────── -->
+<section class="slide slide-close" data-title="Close">
+  <div class="frame">
+    <p class="part rise">Close</p>
+    <h2 class="rise">One a week. Then look up in a year.</h2>
+    <div class="lede rise">
+      <p>You are not going to automate your job this afternoon. You are going to automate one small piece of it, and then another.</p>
+      <p>Kunin mo yung isa. Yung pinakamaliit. Start there.</p>
+    </div>
+    <p class="sendoff rise"><strong>Clone it, make it yours, and let it learn how you work.</strong></p>
+    <p class="rise"><a class="repo" href="https://github.com/post205/claude-aios-starter">github.com/post205/claude-aios-starter</a></p>
+  </div>
+</section>
+
+</main>
+
+<div id="bar">
+  <span id="counter">01 / 16</span>
+  <div id="pips" aria-hidden="true"></div>
+  <button class="nav-btn" id="prev" aria-label="Previous slide">&lsaquo;</button>
+  <button class="nav-btn" id="next" aria-label="Next slide">&rsaquo;</button>
+</div>
+
+<script type="module">
+import { animate, createTimeline, stagger } from '/js/vendor/anime.esm.min.js';
+
+const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* the 15x5 logo bitmap — same matrix as the homepage, the email logo, and /in/mapping */
+const M = ['001011101110111', '100000101010100', '010011101010111', '000010001010001', '100011101110111'];
+const seedRand = (i) => { const x = Math.sin((i + 1) * 127.1) * 43758.5453; return x - Math.floor(x); };
+const DPR2 = Math.min(window.devicePixelRatio || 1, 2);
+/* on-dark palette: Teal Strike, with a cooler partner so the field has grain */
+const TEAL = [59, 209, 211], MUTE = [26, 122, 130];
+
+/* breathing lattice behind every slide; the logo lives bright inside it, top-right */
+function slideLattice(host) {
+  const cv = document.createElement('canvas');
+  cv.className = 'slide-lattice';
+  cv.setAttribute('aria-hidden', 'true');
+  host.insertBefore(cv, host.firstChild);
+  const ctx = cv.getContext('2d');
+  let W = 0, H = 0, P = 26, D = 18, cells = [];
+  function build() {
+    W = host.clientWidth; H = host.clientHeight;
+    if (!W || !H) return false;
+    cv.width = Math.round(W * DPR2); cv.height = Math.round(H * DPR2);
+    cv.style.width = W + 'px'; cv.style.height = H + 'px';
+    ctx.setTransform(DPR2, 0, 0, DPR2, 0, 0);
+    P = W < 860 ? 20 : 26;
+    D = P - Math.max(4, Math.round(P / 3));
+    const cols = Math.ceil(W / P), rows = Math.ceil(H / P);
+    const bx = Math.max(2, cols - 15 - 3), by = 2;
+    cells = [];
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const i = r * cols + c;
+      const s = seedRand(i * 3 + 2), m = seedRand(i * 7 + 4);
+      const br = r - by, bc = c - bx;
+      const inLogo = br >= 0 && br < 5 && bc >= 0 && bc < 15 && M[br][bc] === '1';
+      cells.push({
+        x: c * P, y: r * P, inLogo,
+        r: TEAL[0] + (MUTE[0] - TEAL[0]) * m,
+        g: TEAL[1] + (MUTE[1] - TEAL[1]) * m,
+        b: TEAL[2] + (MUTE[2] - TEAL[2]) * m,
+        base: 0.025 + 0.075 * s,
+        freq: inLogo ? 1.1 : 0.8 + 1.2 * seedRand(i * 5 + 9),
+        phase: s * Math.PI * 2
+      });
+    }
+    return true;
+  }
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    for (const k of cells) {
+      const al = k.inLogo
+        ? (t === null ? 0.5 : 0.4 + 0.24 * Math.sin(t * k.freq + k.phase))
+        : (t === null ? k.base : k.base + 0.055 * Math.sin(t * k.freq + k.phase));
+      if (al <= 0) continue;
+      ctx.fillStyle = k.inLogo
+        ? 'rgba(' + TEAL[0] + ',' + TEAL[1] + ',' + TEAL[2] + ',' + al.toFixed(3) + ')'
+        : 'rgba(' + (k.r | 0) + ',' + (k.g | 0) + ',' + (k.b | 0) + ',' + al.toFixed(3) + ')';
+      ctx.fillRect(k.x + 1.5, k.y + 1.5, D, D);
+    }
+  }
+  build();
+  let rz;
+  window.addEventListener('resize', () => {
+    clearTimeout(rz);
+    rz = setTimeout(() => { if ((host.clientWidth !== W || host.clientHeight !== H) && build()) draw(still ? null : 0); }, 200);
+  });
+  return { draw };
+}
+
+/* decode-in: text resolves out of glyphs, the homepage move */
+function decodeIn(el, delay) {
+  const final = el.textContent;
+  const GL = '01·▪▫/|\\<>#+';
+  const obj = { p: 0 };
+  el.textContent = '';
+  animate(obj, {
+    p: 1, duration: 750, ease: 'outExpo', delay,
+    onUpdate: () => {
+      const n = Math.floor(obj.p * final.length);
+      let out = final.slice(0, n);
+      for (let k = n; k < final.length; k++) {
+        const ch = final[k];
+        out += ch === ' ' ? ' ' : (seedRand(k * 13 + ((obj.p * 60) | 0)) > 0.5 ? GL[(seedRand(k + ((obj.p * 90) | 0)) * GL.length) | 0] : ch);
+      }
+      el.textContent = out;
+    },
+    onComplete: () => { el.textContent = final; }
+  });
+}
+
+/* ── Deck ────────────────────────────────────────────────── */
+const deck = document.getElementById('deck');
+const slides = [...deck.querySelectorAll('.slide')];
+const counter = document.getElementById('counter');
+const pipsHost = document.getElementById('pips');
+const pips = slides.map((_, k) => {
+  const b = document.createElement('button');
+  b.className = 'pip';
+  b.setAttribute('aria-label', 'Go to slide ' + (k + 1));
+  b.addEventListener('click', () => show(k));
+  pipsHost.appendChild(b);
+  return b;
+});
+let i = 0;
+
+const lattice = slideLattice(deck);
+if (still) {
+  lattice.draw(null);
+} else {
+  let lastB = 0;
+  const loopBg = (now) => {
+    requestAnimationFrame(loopBg);
+    if (document.hidden || now - lastB < 66) return;   /* 15fps is plenty for a shimmer */
+    lastB = now;
+    lattice.draw(now / 1000);
+  };
+  requestAnimationFrame(loopBg);
+}
+
+const pad = (n) => String(n).padStart(2, '0');
+
+const enter = (slide, dir) => createTimeline({ defaults: { ease: 'outExpo', duration: 520 } })
+  .add(slide, { opacity: [0, 1], translateX: [(dir || 1) * 36, 0] })
+  .add(slide.querySelectorAll('.rise'), {
+    opacity: [0, 1], translateY: [10, 0], delay: stagger(52)
+  }, '<-=380');
+
+/* the build-order diagram draws itself, marker order */
+const drawShapes = (slide) => {
+  const paths = slide.querySelectorAll('.draw');
+  paths.forEach((p) => {
+    const len = p.getTotalLength();
+    p.style.strokeDasharray = len;
+    p.style.strokeDashoffset = len;
+  });
+  animate(paths, {
+    strokeDashoffset: 0, duration: 700, ease: 'inOutCirc',
+    delay: stagger(paths.length > 10 ? 90 : 150, { start: 260 })
+  });
+  const labels = slide.querySelectorAll('.dlabel, .dsub');
+  if (labels.length) {
+    labels.forEach((l) => { l.style.opacity = 0; });
+    animate(labels, { opacity: [0, 1], duration: 400, ease: 'outExpo', delay: stagger(40, { start: 900 }) });
+  }
+};
+
+const setCounter = (final) => {
+  if (still) { counter.textContent = final; return; }
+  const obj = { p: 0 };
+  animate(obj, {
+    p: 1, duration: 240, ease: 'linear',
+    onUpdate: () => {
+      counter.textContent = obj.p >= 1 ? final
+        : final.replace(/\d/g, (d) => (obj.p > 0.5 && Math.random() > 0.5) ? d : String((Math.random() * 10) | 0));
+    },
+    onComplete: () => { counter.textContent = final; }
+  });
+};
+
+function show(n) {
+  const target = Math.max(0, Math.min(slides.length - 1, n));
+  const dir = target >= i ? 1 : -1;
+  const prev = slides[i];
+  i = target;
+  const slide = slides[i];
+  setCounter(`${pad(i + 1)} / ${pad(slides.length)}`);
+  pips.forEach((b, k) => b.classList.toggle('on', k === i));
+  slide.querySelector('.frame').scrollTop = 0;
+  history.replaceState(null, '', '#' + (i + 1));   /* deep-link: jump straight to a slide mid-talk */
+  if (still) {
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    return;
+  }
+  if (prev !== slide && prev.classList.contains('active')) {
+    animate(prev, {
+      opacity: [1, 0], translateX: [0, -dir * 28], duration: 260, ease: 'outQuad',
+      onComplete: () => { prev.classList.remove('active'); prev.style.opacity = ''; prev.style.transform = ''; }
+    });
+  }
+  slide.style.opacity = ''; slide.style.transform = '';
+  slide.classList.add('active');
+  enter(slide, dir);
+  if (slide.querySelector('.draw')) drawShapes(slide);
+}
+
+document.getElementById('next').addEventListener('click', () => show(i + 1));
+document.getElementById('prev').addEventListener('click', () => show(i - 1));
+
+/* scroll advances the deck — one gesture, one slide; inner content scrolls first */
+let lock = false, acc = 0;
+const advance = (dir) => {
+  if (lock) return;
+  lock = true; acc = 0;
+  show(i + dir);
+  setTimeout(() => { lock = false; }, 620);
+};
+document.addEventListener('wheel', (e) => {
+  const f = slides[i].querySelector('.frame');
+  if (Math.abs(e.deltaY) >= Math.abs(e.deltaX)) {
+    if (e.deltaY > 0 && f.scrollTop + f.clientHeight < f.scrollHeight - 2) return;
+    if (e.deltaY < 0 && f.scrollTop > 2) return;
+  }
+  e.preventDefault();
+  if (lock) return;
+  const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+  if (d === 0) return;
+  if ((acc > 0) !== (d > 0)) acc = 0;
+  acc += d;
+  if (Math.abs(acc) > 90) advance(acc > 0 ? 1 : -1);
+}, { passive: false });
+
+let tx = 0, ty = 0;
+document.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+document.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) advance(dx < 0 ? 1 : -1);
+}, { passive: true });
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  else if (e.key === 'Home') { e.preventDefault(); show(0); }
+  else if (e.key === 'End') { e.preventDefault(); show(slides.length - 1); }
+});
+
+const start = Math.max(0, (parseInt(location.hash.slice(1), 10) || 1) - 1);
+show(start);
+window.addEventListener('hashchange', () => {
+  const n = (parseInt(location.hash.slice(1), 10) || 1) - 1;
+  if (n !== i) show(n);
+});
+if (!still && start === 0) decodeIn(document.getElementById('boot'), 220);
+</script>
+</body>
+</html>
