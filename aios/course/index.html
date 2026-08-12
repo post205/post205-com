@@ -272,7 +272,7 @@
       <div>
         <h1 class="display rise">AI should make you better at the thing you already do.</h1>
         <div class="lede rise">
-          <p>Six lessons, fifteen minutes. Everything I have worked out so far.</p>
+          <p>Everything I have worked out so far, then we set up yours.</p>
         </div>
       </div>
       <dl class="meta rise">
@@ -532,19 +532,124 @@
 </section>
 
 <!-- 17 -->
-<section class="slide" data-title="Verify">
+<section class="slide" data-title="Seventy percent">
   <div class="frame">
     <p class="part rise">Lesson 06 · Verify everything</p>
-    <h2 class="rise">Verify everything.</h2>
-    <div class="lede rise">
-      <p>Coming next.</p>
+    <h2 class="rise">You ask for done. You get seventy percent.</h2>
+    <div class="cols" style="margin-top:24px">
+      <div class="lede rise">
+        <p>So you give feedback and it fixes one thing. You give more feedback and it fixes another. You claw your way up to ninety that way, one round at a time.</p>
+      </div>
+      <div class="card key rise">
+        <p class="tag">The question</p>
+        <p>What if it checked its own work, and kept checking until the thing was actually finished and it could show you why it was confident?</p>
+      </div>
     </div>
+    <p class="foot rise">For anyone building agents, this is the one that matters most.</p>
+  </div>
+</section>
+
+<!-- 18 -->
+<section class="slide" data-title="How to verify">
+  <div class="frame">
+    <p class="part rise">Lesson 06 · Verify everything</p>
+    <h2 class="rise">The setup is simpler than you think.</h2>
+    <div class="cols" style="margin-top:24px">
+      <div class="lede rise">
+        <p>Ask yourself what you would do to check the work. Would you look at it? Would you test it? Would you run the signup yourself and see what happens?</p>
+        <p>Whatever that is, it can do it.</p>
+      </div>
+      <div class="card key rise">
+        <p class="tag">What it can already do</p>
+        <p>Drive a browser. Run tests. Read its own output back. Come at the same thing from a few different angles and tell you where they disagree.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 19 -->
+<section class="slide" data-title="Screenshot loop">
+  <div class="frame">
+    <p class="part rise">Lesson 06 · Verify everything</p>
+    <h2 class="rise">Every site I build goes through a screenshot loop.</h2>
+    <div class="lede rise">
+      <p>It takes the screenshots and checks the balance itself. Checks it on mobile. Then it clicks every button, submits every form, and confirms the formatting held.</p>
+      <p>All the things I used to squint at myself.</p>
+    </div>
+    <p class="foot rise">Start making your AI verify the work you do. Make it prove to you that the work is complete.</p>
+  </div>
+</section>
+
+<!-- 20 -->
+<section class="slide" data-title="Access">
+  <div class="frame">
+    <p class="part rise">Lesson 07 · Grant access carefully</p>
+    <p class="mono-huge rise">If it can reach something, assume it will <em>eventually use it.</em></p>
+    <p class="foot rise">Handing an agent a tool and telling it not to touch that tool is handing someone a credit card and asking them not to spend. One day they spend.</p>
+  </div>
+</section>
+
+<!-- 21 -->
+<section class="slide" data-title="Two layers">
+  <div class="frame">
+    <p class="part rise">Lesson 07 · Grant access carefully</p>
+    <h2 class="rise">You can tell it to only write drafts.</h2>
+    <div class="lede rise">
+      <p>It will write drafts. Then one day it sends one, because the send tool was sitting there the whole time.</p>
+    </div>
+    <div class="card-row two" style="margin-top:26px">
+      <div class="card rise">
+        <p class="tag">The prompt layer</p>
+        <p>Where you write the rules. The model reads them and mostly follows them.</p>
+      </div>
+      <div class="card key rise">
+        <p class="tag">The tool layer</p>
+        <p>Where you decide what it can physically do. Take the send tool away and it cannot send, whatever the prompt says.</p>
+      </div>
+    </div>
+    <p class="foot rise">A rule that lives in the prompt is a suggestion. A rule that lives in the tool is a restriction.</p>
+  </div>
+</section>
+
+<!-- 22 -->
+<section class="slide" data-title="Non-deterministic">
+  <div class="frame">
+    <p class="part rise">Lesson 07 · Grant access carefully</p>
+    <h2 class="rise">Run the same prompt a hundred times, get a hundred results.</h2>
+    <div class="cols" style="margin-top:24px">
+      <div class="lede rise">
+        <p>Swap the model and it comes at the problem differently again. This is why a written rule holds only most of the time.</p>
+      </div>
+      <div class="card key rise">
+        <p class="tag">Keys work the same way</p>
+        <p>Hand over your Google Workspace and it has your calendar. If it can create events, assume it will create events.</p>
+      </div>
+    </div>
+    <p class="foot rise">Go through every tool, every database, every file, every key. Then answer one question about each: can this thing send, or can it only draft?</p>
+  </div>
+</section>
+
+<!-- 23 -->
+<section class="slide" data-title="One success">
+  <div class="frame">
+    <p class="part rise">Lesson 08 · One success is not proof</p>
+    <h2 class="rise">Your agent worked once.</h2>
+    <div class="cols" style="margin-top:24px">
+      <div class="lede rise">
+        <p>You have proven it worked one time, on one output. The model is non-deterministic, so your real success rate is a range, and you have not measured it yet.</p>
+      </div>
+      <div class="card key rise">
+        <p class="tag">The fix</p>
+        <p>Evals. Run it many times against cases you already know the answer to, and score what comes back.</p>
+      </div>
+    </div>
+    <p class="foot rise">More on this next.</p>
   </div>
 </section>
 
 <!-- ═══ PART 2 · WHAT WE'RE BUILDING ═══════════════════════ -->
 
-<!-- 18 -->
+<!-- 24 -->
 <section class="slide" data-title="What this is">
   <div class="frame">
     <p class="part rise">Part 2 · What we're building</p>
@@ -553,7 +658,7 @@
   </div>
 </section>
 
-<!-- 19 -->
+<!-- 25 -->
 <section class="slide" data-title="The one test">
   <div class="frame">
     <p class="part rise">Part 2 · What we're building</p>
@@ -563,7 +668,7 @@
   </div>
 </section>
 
-<!-- 20 -->
+<!-- 26 -->
 <section class="slide" data-title="How you'll know">
   <div class="frame">
     <p class="part rise">Part 2 · What we're building</p>
@@ -581,7 +686,7 @@
   </div>
 </section>
 
-<!-- 21 -->
+<!-- 27 -->
 <section class="slide" data-title="Two frameworks">
   <div class="frame">
     <p class="part rise">Part 3 · The two frameworks</p>
@@ -602,7 +707,7 @@
   </div>
 </section>
 
-<!-- 22 -->
+<!-- 28 -->
 <section class="slide" data-title="The Shift">
   <div class="frame">
     <p class="part rise">Part 3 · The Shift</p>
@@ -624,7 +729,7 @@
   </div>
 </section>
 
-<!-- 23 -->
+<!-- 29 -->
 <section class="slide" data-title="The Stack">
   <div class="frame">
     <p class="part rise">Part 3 · The Stack</p>
@@ -640,7 +745,7 @@
   </div>
 </section>
 
-<!-- 24 -->
+<!-- 30 -->
 <section class="slide slide-order" data-title="Build order">
   <div class="frame">
     <p class="part rise">Part 3 · The Stack</p>
@@ -670,7 +775,7 @@
   </div>
 </section>
 
-<!-- 25 -->
+<!-- 31 -->
 <section class="slide" data-title="Setup">
   <div class="frame">
     <p class="part rise">Part 4 · Setting it up</p>
@@ -695,7 +800,7 @@
   </div>
 </section>
 
-<!-- 26 -->
+<!-- 32 -->
 <section class="slide" data-title="Day 1">
   <div class="frame">
     <p class="part rise">Part 4 · Setting it up</p>
@@ -714,7 +819,7 @@
   </div>
 </section>
 
-<!-- 27 -->
+<!-- 33 -->
 <section class="slide" data-title="The one rule">
   <div class="frame">
     <p class="part rise">Part 4 · Setting it up</p>
@@ -727,7 +832,7 @@
   </div>
 </section>
 
-<!-- 28 -->
+<!-- 34 -->
 <section class="slide" data-title="The rhythm">
   <div class="frame">
     <p class="part rise">Part 5 · Keeping it alive</p>
@@ -743,7 +848,7 @@
   </div>
 </section>
 
-<!-- 29 -->
+<!-- 35 -->
 <section class="slide slide-close" data-title="Close">
   <div class="frame">
     <p class="part rise">Close</p>
@@ -762,7 +867,7 @@
 
 
 <div id="bar">
-  <span id="counter">01 / 29</span>
+  <span id="counter">01 / 35</span>
   <div id="pips" aria-hidden="true"></div>
   <button class="nav-btn" id="prev" aria-label="Previous slide">&lsaquo;</button>
   <button class="nav-btn" id="next" aria-label="Next slide">&rsaquo;</button>
