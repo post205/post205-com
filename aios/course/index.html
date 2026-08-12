@@ -9,6 +9,28 @@
 <meta property="og:description" content="Six lessons. Fifteen minutes. The best thing you bring to AI is the part you already know.">
 <meta property="og:image" content="https://post205.com/images/og-aios.png">
 <meta property="og:type" content="website">
+<script>
+/* runs before anything else so it can catch a failing module */
+window.__deckErr = function (m) {
+  try {
+    var d = document.getElementById('jserr');
+    if (!d) {
+      d = document.createElement('div');
+      d.id = 'jserr';
+      d.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:99;background:#3a0f0f;color:#ffd9d2;'
+        + 'font:12px ui-monospace,monospace;padding:10px 14px;white-space:pre-wrap;max-height:42vh;overflow:auto';
+      (document.body || document.documentElement).appendChild(d);
+    }
+    d.textContent += m + '\n';
+  } catch (e) {}
+};
+window.addEventListener('error', function (e) {
+  window.__deckErr('JS ERROR: ' + (e.message || e.type) + (e.filename ? '  @' + e.filename.split('/').pop() + ':' + e.lineno : ''));
+});
+window.addEventListener('unhandledrejection', function (e) {
+  window.__deckErr('PROMISE REJECTED: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+});
+</script>
 <style>
   :root {
     /* on-dark field. Teal Strike is the only accent; hardcoded light inks per DESIGN.md */
@@ -50,7 +72,9 @@
     display: none; align-items: center; justify-content: center;
     padding: 40px 72px 28px;
   }
-  .slide.active { display: flex; }
+  /* until the script says it is ready, slide 1 shows on its own, so a
+     failed or blocked script still leaves something on the screen */
+  .slide.active, body:not(.ready) .slide:first-of-type { display: flex; }
   .frame { width: 100%; max-width: 1320px; max-height: 100%; overflow-y: auto; scrollbar-width: none; }
   .frame::-webkit-scrollbar { display: none; }
   .slide-lattice { position: absolute; inset: 0; pointer-events: none; }
@@ -965,9 +989,17 @@
 </div>
 
 <script type="module">
-import { animate, createTimeline, stagger } from '/js/vendor/anime.esm.min.js';
-
-const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let animate, createTimeline, stagger;
+let still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+try {
+  const A = await import('/js/vendor/anime.esm.min.js');
+  animate = A.animate; createTimeline = A.createTimeline; stagger = A.stagger;
+} catch (e) {
+  /* slow network, blocked request, bad MIME: present without motion */
+  window.__deckErr('animation library did not load, running without motion');
+  still = true;
+  animate = () => ({}); createTimeline = () => { const t = { add: () => t }; return t; }; stagger = () => 0;
+}
 
 /* the 15x5 logo bitmap — same matrix as the homepage, the email logo, and /in/mapping */
 const M = ['001011101110111', '100000101010100', '010011101010111', '000010001010001', '100011101110111'];
@@ -1338,6 +1370,7 @@ window.addEventListener('hashchange', () => {
   const n = (parseInt(location.hash.slice(1), 10) || 1) - 1;
   if (n !== i) show(n);
 });
+document.body.classList.add('ready');
 if (!still && start === 0) decodeIn(document.getElementById('boot'), 220);
 
 /* Slides are up. Only now do we touch the remote, and never fatally. */
