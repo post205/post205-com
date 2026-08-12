@@ -209,6 +209,37 @@
   .repo:hover { background: var(--accent); color: #021616; }
   .repo:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
 
+  /* ── Pairing overlay ──────────────────────────────────── */
+  #pair {
+    position: fixed; inset: 0; z-index: 20;
+    background: rgba(4, 14, 14, 0.94);
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  #pair[hidden] { display: none; }
+  .pair-card { text-align: center; max-width: 640px; }
+  .pair-label {
+    font-family: var(--mono); font-size: 16px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 24px;
+  }
+  .pair-code {
+    font-family: var(--mono); font-weight: 700; color: var(--accent);
+    font-size: clamp(72px, 15vw, 190px); line-height: 1; letter-spacing: 0.12em;
+  }
+  .pair-url {
+    font-family: var(--mono); font-size: clamp(18px, 2.2vw, 30px);
+    color: var(--text); margin-top: 26px; word-break: break-all;
+  }
+  .pair-status {
+    font-family: var(--mono); font-size: 15px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent); margin-top: 22px;
+  }
+  .pair-hint { color: var(--text-3); font-size: 17px; margin-top: 14px; }
+  #livedot {
+    position: fixed; right: 26px; bottom: calc(var(--bar-h) / 2 - 4px);
+    width: 8px; height: 8px; background: var(--accent); z-index: 6;
+  }
+  #livedot[hidden] { display: none; }
+
   /* ── Bottom bar ───────────────────────────────────────── */
   #bar {
     position: fixed; left: 0; right: 0; bottom: 0; height: var(--bar-h);
@@ -898,6 +929,17 @@
 
 
 
+<div id="pair" hidden>
+  <div class="pair-card">
+    <p class="pair-label">PRESENTER REMOTE</p>
+    <p class="pair-code" id="pcode">----</p>
+    <p class="pair-url">post205.com/aios/course/r</p>
+    <p class="pair-status" id="pstat">Opening room...</p>
+    <p class="pair-hint">Open that page on your phone and enter the code. Press P to hide.</p>
+  </div>
+</div>
+
+<div id="livedot" hidden></div>
 <div id="bar">
   <span id="counter">01 / 35</span>
   <div id="pips" aria-hidden="true"></div>
@@ -1089,6 +1131,7 @@ function show(n) {
   slide.classList.add('active');
   enter(slide, dir);
   if (slide.querySelector('.draw')) drawShapes(slide);
+  if (typeof pushState === 'function') pushState();
 }
 
 document.getElementById('next').addEventListener('click', () => show(i + 1));
@@ -1129,6 +1172,85 @@ document.addEventListener('keydown', (e) => {
   else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
   else if (e.key === 'Home') { e.preventDefault(); show(0); }
   else if (e.key === 'End') { e.preventDefault(); show(slides.length - 1); }
+});
+
+/* ── Presenter remote ─────────────────────────────────────
+   Phone and display each dial out to Supabase Realtime and meet
+   in a room. No shared network needed; both just need internet. */
+const RT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpa3VoY2FheHhzYWRsd2VwYmxmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNTc0MzMsImV4cCI6MjA5MjYzMzQzM30.yV2uutaX523kPtCKMea6dH-Hk4DkX5_ZwHAjCNXx610';
+const RT_URL = 'wss://dikuhcaaxxsadlwepblf.supabase.co/realtime/v1/websocket?apikey=' + RT_KEY + '&vsn=1.0.0';
+const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';   /* no O/0/I/1 */
+
+const pair = document.getElementById('pair');
+const pcode = document.getElementById('pcode');
+const pstat = document.getElementById('pstat');
+let sock = null, room = null, refN = 0, beat = 0;
+
+function newCode() {
+  let c = '';
+  const r = new Uint8Array(4);
+  crypto.getRandomValues(r);
+  for (const b of r) c += ALPHABET[b % ALPHABET.length];
+  return c;
+}
+
+function slideInfo(n) {
+  const s = slides[n];
+  if (!s) return null;
+  const lesson = s.querySelector('.lesson');
+  return {
+    n: n + 1,
+    total: slides.length,
+    title: (s.querySelector('h1, h2, .mono-huge') || {}).textContent?.trim().slice(0, 90) || (s.dataset.title || ''),
+    lesson: lesson ? [...lesson.children].map(x => x.textContent.trim()).join(' \u00b7 ') : ((s.querySelector('.part') || {}).textContent || '').trim()
+  };
+}
+
+function pushState() {
+  if (!sock || sock.readyState !== 1) return;
+  sock.send(JSON.stringify({
+    topic: 'realtime:' + room, event: 'broadcast',
+    payload: { type: 'broadcast', event: 'state', payload: { now: slideInfo(i), next: slideInfo(i + 1) } },
+    ref: String(++refN)
+  }));
+}
+
+function openRoom() {
+  room = 'deck-' + (sessionStorage.getItem('deckRoom') || (() => {
+    const c = newCode(); sessionStorage.setItem('deckRoom', c); return c;
+  })());
+  pcode.textContent = room.slice(5);
+  sock = new WebSocket(RT_URL);
+  sock.onopen = () => {
+    sock.send(JSON.stringify({
+      topic: 'realtime:' + room, event: 'phx_join',
+      payload: { config: { broadcast: { self: false, ack: false } } }, ref: String(++refN)
+    }));
+    beat = setInterval(() => {
+      if (sock.readyState === 1) sock.send(JSON.stringify({ topic: 'phoenix', event: 'heartbeat', payload: {}, ref: String(++refN) }));
+    }, 25000);
+  };
+  sock.onmessage = (e) => {
+    const m = JSON.parse(e.data);
+    if (m.event === 'phx_reply' && m.payload.status === 'ok') { pstat.textContent = 'Room open. Waiting for phone.'; return; }
+    if (m.event !== 'broadcast') return;
+    const p = m.payload.payload || {};
+    if (p.hello) { pstat.textContent = 'Phone connected.'; document.getElementById('livedot').hidden = false; pair.hidden = true; pushState(); return; }
+    if (p.go === 'next') show(i + 1);
+    else if (p.go === 'prev') show(i - 1);
+    else if (typeof p.goto === 'number') show(p.goto - 1);
+    pushState();
+  };
+  sock.onclose = () => { clearInterval(beat); pstat.textContent = 'Disconnected. Press P to retry.'; document.getElementById('livedot').hidden = true; };
+  sock.onerror = () => { pstat.textContent = 'Could not reach the room.'; };
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'p' && e.key !== 'P') return;
+  if (e.metaKey || e.ctrlKey) return;
+  e.preventDefault();
+  if (!sock) { pair.hidden = false; openRoom(); }
+  else pair.hidden = !pair.hidden;
 });
 
 const start = Math.max(0, (parseInt(location.hash.slice(1), 10) || 1) - 1);

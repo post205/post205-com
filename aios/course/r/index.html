@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Presenter Remote · POST205</title>
+<style>
+  :root {
+    --ground:#071717; --surface:#0F2727; --border:#1d4747; --border-2:#2a5f5f;
+    --text:#f2f9f9; --text-2:#b6d0ce; --text-3:#7aacac; --accent:#3BD1D3;
+    --mono: ui-monospace, monospace; --sans: system-ui, -apple-system, sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+  body {
+    background:var(--ground); color:var(--text); font-family:var(--sans);
+    min-height:100dvh; display:flex; flex-direction:column;
+    padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));
+    -webkit-font-smoothing:antialiased; overflow-x:clip;
+  }
+  button, input { touch-action:manipulation; font-family:inherit; }
+
+  .lbl { font-family:var(--mono); font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-3); }
+
+  /* pairing */
+  #gate { margin:auto; width:100%; max-width:420px; text-align:center; }
+  #gate h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; margin:14px 0 8px; }
+  #gate p.sub { color:var(--text-2); font-size:16px; margin-bottom:26px; }
+  #code {
+    width:100%; background:var(--surface); border:1px solid var(--border-2);
+    color:var(--accent); font-family:var(--mono); font-weight:700;
+    font-size:44px; letter-spacing:0.22em; text-align:center; text-transform:uppercase;
+    padding:16px 10px; border-radius:0;
+  }
+  #code:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  #join {
+    width:100%; margin-top:12px; background:var(--accent); color:#021616; border:0;
+    font-family:var(--mono); font-size:16px; font-weight:700; letter-spacing:0.1em;
+    text-transform:uppercase; padding:17px; cursor:pointer; border-radius:0;
+  }
+  #err { color:#ff9a86; font-size:15px; margin-top:14px; min-height:1.4em; }
+
+  /* presenter */
+  #view { display:none; flex-direction:column; flex:1; gap:14px; }
+  #view.on { display:flex; }
+  .top { display:flex; justify-content:space-between; align-items:baseline; }
+  .now-lesson { color:var(--accent); font-family:var(--mono); font-size:13px; letter-spacing:0.12em; text-transform:uppercase; }
+  .now-title { font-size:27px; font-weight:800; line-height:1.15; letter-spacing:-0.02em; margin-top:6px; }
+  .next-box { border-top:1px solid var(--border); padding-top:14px; }
+  .next-title { color:var(--text-2); font-size:19px; line-height:1.3; margin-top:6px; }
+  .spacer { flex:1; min-height:10px; }
+  .btns { display:grid; grid-template-columns:1fr 1.7fr; gap:10px; }
+  .btns button {
+    border:1px solid var(--border-2); background:var(--surface); color:var(--text);
+    font-family:var(--mono); font-size:17px; font-weight:700; letter-spacing:0.08em;
+    text-transform:uppercase; padding:30px 10px; border-radius:0; cursor:pointer;
+  }
+  .btns button:active { background:var(--border); }
+  #next { background:var(--accent); color:#021616; border-color:var(--accent); }
+  .foot-row { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:2px; }
+  select {
+    background:var(--surface); color:var(--text); border:1px solid var(--border-2);
+    font-family:var(--mono); font-size:14px; padding:11px 10px; border-radius:0; max-width:62%;
+  }
+  #clock { font-family:var(--mono); font-size:19px; color:var(--text-3); font-variant-numeric:tabular-nums; }
+  #dot { display:inline-block; width:8px; height:8px; background:#ff9a86; margin-right:7px; vertical-align:middle; }
+  #dot.on { background:var(--accent); }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <p class="lbl">POST205 · PRESENTER REMOTE</p>
+  <h1>Enter the code</h1>
+  <p class="sub">It is on the screen you are presenting from. Press P there if you do not see it.</p>
+  <input id="code" maxlength="4" autocomplete="off" autocapitalize="characters"
+         spellcheck="false" inputmode="text" placeholder="----" aria-label="Room code">
+  <button id="join">Connect</button>
+  <p id="err" aria-live="polite"></p>
+</div>
+
+<div id="view">
+  <div class="top">
+    <span class="lbl"><span id="dot"></span><span id="conn">connecting</span></span>
+    <span class="lbl" id="count">-- / --</span>
+  </div>
+  <div>
+    <p class="now-lesson" id="nowLesson"></p>
+    <p class="now-title" id="nowTitle">Waiting for the deck…</p>
+  </div>
+  <div class="next-box">
+    <p class="lbl">Next</p>
+    <p class="next-title" id="nextTitle">—</p>
+  </div>
+  <div class="spacer"></div>
+  <div class="btns">
+    <button id="prev">Prev</button>
+    <button id="next">Next</button>
+  </div>
+  <div class="foot-row">
+    <select id="jump" aria-label="Jump to slide"><option>Jump to slide…</option></select>
+    <span id="clock">00:00</span>
+  </div>
+</div>
+
+<script>
+const RT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpa3VoY2FheHhzYWRsd2VwYmxmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNTc0MzMsImV4cCI6MjA5MjYzMzQzM30.yV2uutaX523kPtCKMea6dH-Hk4DkX5_ZwHAjCNXx610';
+const RT_URL = 'wss://dikuhcaaxxsadlwepblf.supabase.co/realtime/v1/websocket?apikey=' + RT_KEY + '&vsn=1.0.0';
+const $ = (id) => document.getElementById(id);
+let sock = null, room = null, refN = 0, beat = 0, started = 0, total = 0;
+
+function send(event, payload) {
+  if (!sock || sock.readyState !== 1) return;
+  sock.send(JSON.stringify({ topic: 'realtime:' + room, event: 'broadcast',
+    payload: { type: 'broadcast', event, payload }, ref: String(++refN) }));
+}
+
+function connect(code) {
+  room = 'deck-' + code;
+  sock = new WebSocket(RT_URL);
+  sock.onopen = () => {
+    sock.send(JSON.stringify({ topic: 'realtime:' + room, event: 'phx_join',
+      payload: { config: { broadcast: { self: false, ack: false } } }, ref: String(++refN) }));
+    beat = setInterval(() => { if (sock.readyState === 1)
+      sock.send(JSON.stringify({ topic:'phoenix', event:'heartbeat', payload:{}, ref:String(++refN) })); }, 25000);
+  };
+  sock.onmessage = (e) => {
+    const m = JSON.parse(e.data);
+    if (m.event === 'phx_reply' && m.payload.status === 'ok') {
+      $('gate').style.display = 'none';
+      $('view').classList.add('on');
+      $('dot').classList.add('on');
+      $('conn').textContent = 'connected';
+      localStorage.setItem('deckRoom', code);
+      if (!started) { started = Date.now(); tick(); }
+      send('cmd', { hello: true });
+      keepAwake();
+      return;
+    }
+    if (m.event !== 'broadcast') return;
+    const p = m.payload.payload || {};
+    if (p.now) paint(p);
+  };
+  sock.onclose = () => { clearInterval(beat); $('dot').classList.remove('on'); $('conn').textContent = 'reconnecting'; setTimeout(() => connect(code), 2000); };
+  sock.onerror = () => { $('err').textContent = 'Could not reach the room.'; };
+}
+
+function paint(p) {
+  $('nowTitle').textContent = p.now.title || '';
+  $('nowLesson').textContent = p.now.lesson || '';
+  $('count').textContent = p.now.n + ' / ' + p.now.total;
+  $('nextTitle').textContent = p.next ? (p.next.title || '') : 'End of deck';
+  if (total !== p.now.total) {
+    total = p.now.total;
+    const j = $('jump');
+    j.innerHTML = '<option>Jump to slide…</option>';
+    for (let k = 1; k <= total; k++) {
+      const o = document.createElement('option'); o.value = k; o.textContent = 'Slide ' + k; j.appendChild(o);
+    }
+  }
+}
+
+function tick() {
+  const s = Math.floor((Date.now() - started) / 1000);
+  $('clock').textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  setTimeout(tick, 1000);
+}
+
+async function keepAwake() {
+  try { if ('wakeLock' in navigator) await navigator.wakeLock.request('screen'); } catch {}
+}
+
+$('join').addEventListener('click', () => {
+  const c = $('code').value.trim().toUpperCase();
+  if (c.length !== 4) { $('err').textContent = 'Four characters.'; return; }
+  $('err').textContent = '';
+  connect(c);
+});
+$('code').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('join').click(); });
+$('prev').addEventListener('click', () => send('cmd', { go: 'prev' }));
+$('next').addEventListener('click', () => send('cmd', { go: 'next' }));
+$('jump').addEventListener('change', (e) => {
+  const n = parseInt(e.target.value, 10);
+  if (n) send('cmd', { goto: n });
+  e.target.selectedIndex = 0;
+});
+
+const saved = localStorage.getItem('deckRoom');
+if (saved) $('code').value = saved;
+$('code').focus();
+</script>
+</body>
+</html>
