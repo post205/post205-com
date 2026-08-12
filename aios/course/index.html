@@ -197,6 +197,19 @@ window.addEventListener('unhandledrejection', function (e) {
   .rhythm .cmd { font-family: var(--mono); font-size: clamp(18px, 1.8vw, 24px); color: var(--accent); font-weight: 700; }
   .rhythm .does { color: var(--text-2); font-size: 19px; line-height: 1.45; }
 
+  /* live reasoning stream: what the model looks like while it works */
+  .think { display: grid; gap: 9px; align-content: center; min-height: 58vh; }
+  .think i {
+    display: block; height: 9px; border-radius: 2px;
+    background: var(--text-3); opacity: 0; transform: translateX(-10px);
+    transition: opacity .28s ease, transform .28s ease;
+  }
+  .think i.on { opacity: .28; transform: none; }
+  .think i.hot { background: var(--accent); }
+  .think i.hot.on { opacity: 1; box-shadow: 0 0 22px rgba(59,209,211,.45); }
+  .think i.cur { opacity: .85; background: var(--accent); }
+  @media (max-width: 860px) { .think { min-height: 34vh; gap: 7px; } .think i { height: 7px; } }
+
   /* generated art, blended onto the field */
   .split { display: grid; grid-template-columns: 1.05fr 1fr; gap: 54px; align-items: center; }
   .split > * { min-width: 0; }
@@ -405,7 +418,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="part rise">Where I'm coming from</p>
     <h2 class="rise">I read the thinking.</h2>
       </div>
-      <figure class="art rise"><img src="img/thinking.png" alt="" loading="lazy"></figure>
+      <div class="think rise" id="think" aria-hidden="true"></div>
     </div>
   </div>
 </section>
@@ -1240,6 +1253,7 @@ function show(n) {
   slide.classList.add('active');
   enter(slide, dir);
   if (slide.querySelector('.draw')) drawShapes(slide);
+  if (window.__think) (slide.querySelector('.think') ? window.__think.start() : window.__think.stop());
   if (typeof pushState === 'function') pushState();
 }
 
@@ -1424,6 +1438,35 @@ document.addEventListener('keydown', (e) => {
   e.preventDefault();
   togglePair();
 });
+
+/* slide 2 draws a reasoning trace as it happens, so the room sees the thing
+   he is describing instead of a picture of it */
+(function thinkStream() {
+  const host = document.getElementById('think');
+  if (!host) return;
+  const ROWS = 22, bars = [];
+  for (let k = 0; k < ROWS; k++) {
+    const b = document.createElement('i');
+    b.style.width = (34 + Math.round(seedRand(k * 7 + 1) * 58)) + '%';
+    if (k === 4 || k === 9 || k === 14 || k === 19) b.classList.add('hot');
+    host.appendChild(b); bars.push(b);
+  }
+  let t = null;
+  function run() {
+    bars.forEach(b => b.classList.remove('on', 'cur'));
+    if (still) { bars.forEach(b => b.classList.add('on')); return; }
+    let k = 0;
+    const step = () => {
+      if (k >= ROWS) { t = setTimeout(run, 2600); return; }
+      bars[k].classList.add('on', 'cur');
+      if (k > 0) bars[k - 1].classList.remove('cur');
+      k++;
+      t = setTimeout(step, bars[k - 1] && bars[k - 1].classList.contains('hot') ? 340 : 130);
+    };
+    step();
+  }
+  window.__think = { start: () => { clearTimeout(t); run(); }, stop: () => clearTimeout(t) };
+})();
 
 const start = Math.max(0, (parseInt(location.hash.slice(1), 10) || 1) - 1);
 show(start);

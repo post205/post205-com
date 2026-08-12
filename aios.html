@@ -261,6 +261,36 @@
   </style>
 </head>
 <body>
+<div id="gate" style="position:fixed;inset:0;z-index:9999;background:#0f1416;display:flex;align-items:center;justify-content:center;padding:24px">
+  <form id="gate-form" style="max-width:380px;width:100%">
+    <p style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7aacac;margin:0 0 16px">POST205 · AIOS</p>
+    <h1 style="font-size:34px;font-weight:800;letter-spacing:-.01em;color:#f4f7f7;margin:0 0 10px;line-height:1.1">Come on in.</h1>
+    <p style="color:#b9d2d2;margin:0 0 22px;font-size:15px">Enter the passcode from the session.</p>
+    <input id="gate-pass" type="text" inputmode="numeric" autocomplete="off" aria-label="Passcode" placeholder="PASSCODE"
+      style="width:100%;background:#123434;border:1px solid #1e4a4a;border-radius:4px;color:#f0f7f7;font-family:ui-monospace,monospace;font-size:16px;letter-spacing:.18em;padding:13px 15px;box-sizing:border-box">
+    <button type="submit" style="width:100%;margin-top:10px;background:#3BD1D3;color:#021616;border:0;border-radius:4px;font-family:ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:14px;cursor:pointer">Open</button>
+    <p id="gate-err" aria-live="polite" style="color:#ffb3a7;margin:12px 0 0;min-height:1.4em;font-size:14px"></p>
+  </form>
+</div>
+<script>
+(function(){
+  var ok=false; try{ ok = sessionStorage.getItem('aiosOpen')==='1'; }catch(e){}
+  var g=document.getElementById('gate');
+  if(ok){ g.remove(); return; }
+  document.documentElement.style.overflow='hidden';
+  var f=document.getElementById('gate-form');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var v=document.getElementById('gate-pass').value.trim();
+    if(v==='2015'){ try{sessionStorage.setItem('aiosOpen','1');}catch(e){}
+      document.documentElement.style.overflow=''; g.remove(); }
+    else { document.getElementById('gate-err').textContent='That\u2019s not it. Try again.';
+           document.getElementById('gate-pass').select(); }
+  });
+  document.getElementById('gate-pass').focus();
+})();
+</script>
+
 
 <nav>
   <a href="/" class="nav-logo">
