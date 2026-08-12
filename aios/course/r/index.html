@@ -109,6 +109,7 @@ const RT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 const RT_URL = 'wss://dikuhcaaxxsadlwepblf.supabase.co/realtime/v1/websocket?apikey=' + RT_KEY + '&vsn=1.0.0';
 const $ = (id) => document.getElementById(id);
 let sock = null, room = null, refN = 0, beat = 0, started = 0, total = 0;
+let hello = 0, gotState = false, joinedAt = 0;
 
 function send(event, payload) {
   if (!sock || sock.readyState !== 1) return;
@@ -134,15 +135,28 @@ function connect(code) {
       $('conn').textContent = 'connected';
       localStorage.setItem('deckRoom', code);
       if (!started) { started = Date.now(); tick(); }
+      joinedAt = Date.now();
+      clearInterval(hello);
       send('cmd', { hello: true });
+      /* the deck may be asleep, reloading, or not open yet — keep knocking */
+      hello = setInterval(() => {
+        if (gotState) { clearInterval(hello); return; }
+        send('cmd', { hello: true });
+        const secs = Math.round((Date.now() - joinedAt) / 1000);
+        if (secs > 8) {
+          $('conn').textContent = 'no deck yet';
+          $('nowTitle').textContent = 'The deck is not answering.';
+          $('nextTitle').textContent = 'Check the code is still on screen, then tap Remote on the deck again.';
+        }
+      }, 2000);
       keepAwake();
       return;
     }
     if (m.event !== 'broadcast') return;
     const p = m.payload.payload || {};
-    if (p.now) paint(p);
+    if (p.now) { gotState = true; $('conn').textContent = 'connected'; paint(p); }
   };
-  sock.onclose = () => { clearInterval(beat); $('dot').classList.remove('on'); $('conn').textContent = 'reconnecting'; setTimeout(() => connect(code), 2000); };
+  sock.onclose = () => { clearInterval(beat); clearInterval(hello); gotState = false; $('dot').classList.remove('on'); $('conn').textContent = 'reconnecting'; setTimeout(() => connect(code), 2000); };
   sock.onerror = () => { $('err').textContent = 'Could not reach the room.'; };
 }
 
@@ -184,6 +198,10 @@ $('jump').addEventListener('change', (e) => {
   const n = parseInt(e.target.value, 10);
   if (n) send('cmd', { goto: n });
   e.target.selectedIndex = 0;
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && room && (!sock || sock.readyState > 1)) connect(room.slice(5));
 });
 
 const saved = localStorage.getItem('deckRoom');

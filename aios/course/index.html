@@ -1193,7 +1193,9 @@ document.addEventListener('keydown', (e) => {
 
 /* ── Presenter remote ─────────────────────────────────────
    Phone and display each dial out to Supabase Realtime and meet
-   in a room. No shared network needed; both just need internet. */
+   in a room. No shared network needed; both just need internet.
+   Survives iOS discarding the tab: the room is restored on load
+   and the socket reconnects on its own. */
 const RT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpa3VoY2FheHhzYWRsd2VwYmxmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNTc0MzMsImV4cCI6MjA5MjYzMzQzM30.yV2uutaX523kPtCKMea6dH-Hk4DkX5_ZwHAjCNXx610';
 const RT_URL = 'wss://dikuhcaaxxsadlwepblf.supabase.co/realtime/v1/websocket?apikey=' + RT_KEY + '&vsn=1.0.0';
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';   /* no O/0/I/1 */
@@ -1201,7 +1203,8 @@ const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';   /* no O/0/I/1 */
 const pair = document.getElementById('pair');
 const pcode = document.getElementById('pcode');
 const pstat = document.getElementById('pstat');
-let sock = null, room = null, refN = 0, beat = 0;
+const presentBtn = document.getElementById('present');
+let sock = null, room = null, refN = 0, beat = 0, pulse = 0, retry = 0, giveUp = false, phoneOn = false;
 
 function newCode() {
   let c = '';
@@ -1215,11 +1218,13 @@ function slideInfo(n) {
   const s = slides[n];
   if (!s) return null;
   const lesson = s.querySelector('.lesson');
+  const h = s.querySelector('h1, h2, .mono-huge');
   return {
     n: n + 1,
     total: slides.length,
-    title: (s.querySelector('h1, h2, .mono-huge') || {}).textContent?.trim().slice(0, 90) || (s.dataset.title || ''),
-    lesson: lesson ? [...lesson.children].map(x => x.textContent.trim()).join(' \u00b7 ') : ((s.querySelector('.part') || {}).textContent || '').trim()
+    title: (h ? h.textContent : (s.dataset.title || '')).trim().slice(0, 90),
+    lesson: lesson ? [...lesson.children].map(x => x.textContent.trim()).join(' \u00b7 ')
+                   : ((s.querySelector('.part') || {}).textContent || '').trim()
   };
 }
 
@@ -1232,41 +1237,90 @@ function pushState() {
   }));
 }
 
-function openRoom() {
-  room = 'deck-' + (sessionStorage.getItem('deckRoom') || (() => {
+function setStat(t) { if (pstat) pstat.textContent = t; }
+
+function openRoom(silent) {
+  giveUp = false;
+  const code = sessionStorage.getItem('deckRoom') || (() => {
     const c = newCode(); sessionStorage.setItem('deckRoom', c); return c;
-  })());
-  pcode.textContent = room.slice(5);
-  sock = new WebSocket(RT_URL);
+  })();
+  room = 'deck-' + code;
+  pcode.textContent = code;
+  if (!silent) setStat('Opening room...');
+  try { sock = new WebSocket(RT_URL); } catch { setStat('Could not open a connection.'); return; }
+
   sock.onopen = () => {
+    retry = 0;
     sock.send(JSON.stringify({
       topic: 'realtime:' + room, event: 'phx_join',
       payload: { config: { broadcast: { self: false, ack: false } } }, ref: String(++refN)
     }));
+    clearInterval(beat);
     beat = setInterval(() => {
-      if (sock.readyState === 1) sock.send(JSON.stringify({ topic: 'phoenix', event: 'heartbeat', payload: {}, ref: String(++refN) }));
-    }, 25000);
+      if (sock && sock.readyState === 1)
+        sock.send(JSON.stringify({ topic: 'phoenix', event: 'heartbeat', payload: {}, ref: String(++refN) }));
+    }, 20000);
+    /* a late-joining phone picks the deck up without having to ask */
+    clearInterval(pulse);
+    pulse = setInterval(pushState, 3000);
   };
+
   sock.onmessage = (e) => {
     const m = JSON.parse(e.data);
-    if (m.event === 'phx_reply' && m.payload.status === 'ok') { pstat.textContent = 'Room open. Waiting for phone.'; return; }
+    if (m.event === 'phx_reply' && m.payload.status === 'ok' && !phoneOn) {
+      setStat('Room open. Waiting for phone.');
+    }
     if (m.event !== 'broadcast') return;
     const p = m.payload.payload || {};
-    if (p.hello) { pstat.textContent = 'Phone connected.'; document.getElementById('livedot').hidden = false; document.getElementById('present').classList.add('live'); pair.hidden = true; pushState(); return; }
+    if (p.hello) {
+      phoneOn = true;
+      setStat('Phone connected.');
+      document.getElementById('livedot').hidden = false;
+      presentBtn.classList.add('live');
+      pair.hidden = true;
+      pushState();
+      return;
+    }
+    /* any command is proof the phone is there, even after a tab reload */
+    if (!phoneOn) {
+      phoneOn = true;
+      setStat('Phone connected.');
+      document.getElementById('livedot').hidden = false;
+      presentBtn.classList.add('live');
+    }
     if (p.go === 'next') show(i + 1);
     else if (p.go === 'prev') show(i - 1);
     else if (typeof p.goto === 'number') show(p.goto - 1);
     pushState();
   };
-  sock.onclose = () => { clearInterval(beat); pstat.textContent = 'Disconnected. Press P to retry.'; document.getElementById('livedot').hidden = true; };
-  sock.onerror = () => { pstat.textContent = 'Could not reach the room.'; };
+
+  const dropped = () => {
+    clearInterval(beat); clearInterval(pulse);
+    phoneOn = false;
+    document.getElementById('livedot').hidden = true;
+    presentBtn.classList.remove('live');
+    if (giveUp) return;
+    retry++;
+    const wait = Math.min(1000 * retry, 8000);
+    setStat('Reconnecting...');
+    setTimeout(() => { if (!giveUp) openRoom(true); }, wait);
+  };
+  sock.onclose = dropped;
+  sock.onerror = () => { setStat('Trouble reaching the room.'); };
 }
 
+/* iOS discards background tabs; rejoin the same room on the way back */
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  if (sessionStorage.getItem('deckRoom') && (!sock || sock.readyState > 1)) openRoom(true);
+});
+if (sessionStorage.getItem('deckRoom')) openRoom(true);
+
 function togglePair() {
-  if (!sock) { pair.hidden = false; openRoom(); }
+  if (!sock || sock.readyState > 1) { pair.hidden = false; openRoom(); }
   else pair.hidden = !pair.hidden;
 }
-document.getElementById('present').addEventListener('click', togglePair);
+presentBtn.addEventListener('click', togglePair);
 document.getElementById('pdone').addEventListener('click', () => { pair.hidden = true; });
 pair.addEventListener('click', (e) => { if (e.target === pair) pair.hidden = true; });
 document.addEventListener('keydown', (e) => {
