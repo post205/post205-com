@@ -248,6 +248,7 @@ window.addEventListener('unhandledrejection', function (e) {
     text-decoration: none; word-break: break-all;
   }
   .repo:hover { background: var(--accent); color: #021616; }
+  .repo.big { font-size: clamp(24px, 3.2vw, 48px); padding: 20px 34px; margin-top: 22px; font-weight: 700; }
   .repo:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
 
   /* ── Pairing overlay ──────────────────────────────────── */
@@ -1034,28 +1035,20 @@ window.addEventListener('unhandledrejection', function (e) {
 
 <!-- 31 -->
 <section class="slide" data-title="Setup">
-  <template class="notes"><span class="cue">Part 4, the setup</span>
-    <p><strong>Step one:</strong> install VS Code. The window everything happens in. Free.</p>
-    <p><strong>Step two:</strong> add the Claude Code extension inside VS Code, then sign in.</p>
-    <p><strong>Step three:</strong> clone the starter. The folder that becomes yours.</p>
-    <p><em>Wait here until everyone has all three. Do not move on with someone stuck.</em></p>
+  <template class="notes"><span class="cue">Part 4, the handoff</span>
+    <p><strong>Everything is on one page. Send them there now.</strong></p>
+    <p><strong>post205.com/aios</strong> &mdash; three downloads, in order, numbered.</p>
+    <p>One, VS Code. Two, the Claude Code extension inside it. Three, clone the starter.</p>
+    <p><em>Stay on this slide. Wait until everyone has all three before moving on. Walk the room.</em></p>
   </template>
   <div class="frame">
     <p class="part rise">Part 4 · Setting it up</p>
-    <h2 class="rise">Three steps and you are running.</h2>
+    <h2 class="rise">Everything you need is here.</h2>
+    <p class="rise"><a class="repo big" href="https://post205.com/aios">post205.com/aios</a></p>
     <ol class="steps">
-      <li class="rise"><span class="n">STEP 01</span>
-        <h3>VS Code</h3>
-        <p><code>code.visualstudio.com</code></p>
-      </li>
-      <li class="rise"><span class="n">STEP 02</span>
-        <h3>Claude Code</h3>
-        <p><code>claude.com/code</code></p>
-      </li>
-      <li class="rise"><span class="n">STEP 03</span>
-        <h3>The starter</h3>
-        <p><code>github.com/post205/claude-aios-starter</code></p>
-      </li>
+      <li class="rise"><span class="n">STEP 01</span><h3>VS Code</h3></li>
+      <li class="rise"><span class="n">STEP 02</span><h3>Claude Code</h3></li>
+      <li class="rise"><span class="n">STEP 03</span><h3>The starter</h3></li>
     </ol>
   </div>
 </section>
@@ -1126,7 +1119,8 @@ window.addEventListener('unhandledrejection', function (e) {
     <p>Automate one small piece of your week. Next week, pick another.</p>
     <p><strong>Kunin mo yung isa. Yung pinakamaliit.</strong></p>
     <p>Clone it, make it yours, and let it learn how you work.</p>
-    <p><em>Leave the repo on screen while they clone.</em></p>
+    <p><strong>Everything is at post205.com/aios.</strong></p>
+    <p><em>Leave this on screen while they work.</em></p>
   </template>
   <div class="frame">
     <div class="split">
@@ -1134,7 +1128,7 @@ window.addEventListener('unhandledrejection', function (e) {
     <p class="part rise">Close</p>
     <h2 class="rise">Pick one small piece of your week.</h2>
     <p class="sendoff rise"><strong>Clone it, make it yours, and let it learn how you work.</strong></p>
-    <p class="rise"><a class="repo" href="https://github.com/post205/claude-aios-starter">github.com/post205/claude-aios-starter</a></p>
+    <p class="rise"><a class="repo big" href="https://post205.com/aios">post205.com/aios</a></p>
       </div>
       <figure class="art rise"><img src="img/onesmall.png" alt="" loading="lazy"></figure>
     </div>
