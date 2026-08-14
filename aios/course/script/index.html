@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Run sheet · AIOS Course</title>
+<style>
+  :root{--ground:#071717;--surface:#0F2727;--border:#1d4747;--border-2:#2a5f5f;
+    --text:#f2f9f9;--text-2:#b6d0ce;--text-3:#7aacac;--accent:#3BD1D3;
+    --mono:ui-monospace,monospace;--sans:system-ui,-apple-system,sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--ground);color:var(--text);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;padding:0 20px 90px;overflow-x:clip}
+  .wrap{max-width:940px;margin:0 auto}
+  header{padding:38px 0 22px;border-bottom:1px solid var(--border);margin-bottom:8px;
+    position:sticky;top:0;background:var(--ground);z-index:5}
+  .lbl{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3)}
+  h1{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:8px 0 4px}
+  .meta{color:var(--text-3);font-size:14px}
+  .row{display:grid;grid-template-columns:60px 1fr;gap:20px;padding:26px 0;border-bottom:1px solid var(--border)}
+  .num{font-family:var(--mono);font-size:15px;color:var(--text-3);padding-top:4px}
+  .les{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+  .say{font-size:25px;font-weight:800;letter-spacing:-.02em;line-height:1.2;margin-bottom:14px}
+  .cue{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:10px}
+  .notes p{font-size:17px;line-height:1.55;color:var(--text-2)}
+  .notes p+p{margin-top:11px}
+  .notes p.lead{font-size:19px;font-weight:700;color:var(--text)}
+  .notes strong{color:var(--accent);font-weight:700}
+  .notes em{font-style:normal;color:var(--text-3)}
+  .art{margin-top:14px;max-width:210px;opacity:.85}
+  .art img{width:100%;display:block}
+  #gate{position:fixed;inset:0;z-index:99;background:var(--ground);display:flex;align-items:center;justify-content:center;padding:24px}
+  .gc{max-width:360px;width:100%}
+  #pass{width:100%;background:var(--surface);border:1px solid var(--border-2);color:var(--accent);
+    font-family:var(--mono);font-size:20px;letter-spacing:.2em;text-align:center;padding:14px;border-radius:0}
+  #go{width:100%;margin-top:10px;background:var(--accent);color:#021616;border:0;font-family:var(--mono);
+    font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:14px;cursor:pointer;border-radius:0}
+  #err{color:#ff9a86;font-size:14px;margin-top:12px;min-height:1.3em}
+  @media print{#gate{display:none}body{background:#fff;color:#000}.notes p,.say{color:#000}}
+  @media(max-width:640px){.row{grid-template-columns:1fr;gap:6px}.num{padding:0}.say{font-size:21px}}
+</style>
+</head>
+<body>
+<div id="gate"><form class="gc" id="gf">
+  <p class="lbl">POST205 · RUN SHEET</p>
+  <h1>Your notes.</h1>
+  <p class="meta" style="margin-bottom:20px">The whole session, slides and script together.</p>
+  <input id="pass" inputmode="numeric" autocomplete="off" placeholder="PASSCODE" aria-label="Passcode">
+  <button id="go" type="submit">Open</button>
+  <p id="err" aria-live="polite"></p>
+</form></div>
+
+<div class="wrap">
+  <header>
+    <p class="lbl">POST205 · AIOS CRASH COURSE</p>
+    <h1>Run sheet</h1>
+    <p class="meta" id="count">Loading…</p>
+  </header>
+  <div id="list"></div>
+</div>
+
+<script>
+(function(){
+  var ok=false; try{ok=sessionStorage.getItem('aiosOpen')==='1'}catch(e){}
+  var g=document.getElementById('gate');
+  if(ok){g.remove();load();return}
+  document.documentElement.style.overflow='hidden';
+  document.getElementById('gf').addEventListener('submit',function(e){
+    e.preventDefault();
+    if(document.getElementById('pass').value.trim()==='2015'){
+      try{sessionStorage.setItem('aiosOpen','1')}catch(e){}
+      document.documentElement.style.overflow='';g.remove();load();
+    } else {document.getElementById('err').textContent='That’s not it. Try again.';
+            document.getElementById('pass').select();}
+  });
+  document.getElementById('pass').focus();
+})();
+
+/* read the deck itself, so this page can never drift out of sync with it */
+function load(){
+  fetch('../index.html').then(r=>r.text()).then(html=>{
+    var doc=new DOMParser().parseFromString(html,'text/html');
+    var slides=[...doc.querySelectorAll('.slide')], out='';
+    slides.forEach(function(s,i){
+      var les=s.querySelector('.lesson,.part');
+      var h=s.querySelector('h1,h2,.mono-huge');
+      var t=s.querySelector('template.notes');
+      var img=s.querySelector('.art img');
+      out+='<div class="row"><div class="num">'+String(i+1).padStart(2,'0')+'</div><div>'
+        +(les?'<div class="les">'+les.textContent.replace(/\s+/g,' ').trim()+'</div>':'')
+        +'<div class="say">'+(h?h.textContent.trim():'')+'</div>'
+        +'<div class="notes">'+(t?t.innerHTML:'<p><em>No notes on this slide.</em></p>')+'</div>'
+        +(img?'<figure class="art"><img src="'+img.getAttribute('src').replace('img/','../img/')+'" alt=""></figure>':'')
+        +'</div></div>';
+    });
+    document.getElementById('list').innerHTML=out;
+    document.getElementById('count').textContent=slides.length+' slides · read straight through, or scan the bold';
+  }).catch(function(){document.getElementById('count').textContent='Could not load the deck.';});
+}
+</script>
+</body>
+</html>
