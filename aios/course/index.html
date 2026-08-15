@@ -220,6 +220,11 @@ window.addEventListener('unhandledrejection', function (e) {
        the soft edge stops the frame reading as a pasted rectangle */
     /* transparent PNGs: the object floats straight on the field, no panel, no mask */
     filter: drop-shadow(0 22px 46px rgba(0, 0, 0, 0.55));
+    animation: artIn 1.5s cubic-bezier(.22,1,.36,1) both;
+  }
+  @keyframes artIn { from { opacity: 0; transform: translateY(16px) scale(.97); }
+                     to   { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .art img { animation: none; }
   }
   .split h1.display, .split .slide h2 { max-width: 14ch; }
   .split .mono-huge { max-width: 15ch; font-size: clamp(30px, 3.3vw, 54px); }
@@ -424,7 +429,7 @@ window.addEventListener('unhandledrejection', function (e) {
 </section>
 
 <!-- 03 -->
-<section class="slide" data-title="Two reasons">
+<section class="slide" data-title="Two reasons" data-pace="900">
   <template class="notes"><span class="cue">Lesson 1 opens</span>
     <p class="lead">There are really only <strong>two reasons</strong> people get into this.</p><p><strong>One.</strong> You start your own thing. You build with AI, you find clients, you sell what you build. That's the door I went through.</p><p><strong>Two.</strong> You become <strong>the AI person</strong> where you already work. Same skills, pointed inward.</p><p>Me, I came in through systems and automation. Then AI started automating <strong>faster than I could build</strong> the systems by hand.</p><p><em>Ask: which door are you walking through?</em></p></template>
   <div class="frame">
@@ -491,7 +496,7 @@ window.addEventListener('unhandledrejection', function (e) {
 </section>
 
 <!-- 07 -->
-<section class="slide" data-title="Context">
+<section class="slide" data-title="Context" data-pace="800">
   <template class="notes"><span class="cue">Lesson 2, the point</span>
     <p class="lead">Real example. When <strong>Claude Code goes down</strong>, I switch to Codex and keep working.</p><p>Same context, same files. <strong>I never re-brief anybody.</strong></p><p>Because everything the AI needs to know about me and my business is written down <strong>in one place</strong>, in plain files that I own.</p><p>So you stop waiting for the perfect tool. And you stop panicking when your favorite one <strong>gets replaced</strong>. Because it will.</p><p><em>Bridge: so if the tool is replaceable, what actually makes the difference?</em></p></template>
   <div class="frame">
@@ -658,7 +663,7 @@ window.addEventListener('unhandledrejection', function (e) {
 </section>
 
 <!-- 17 -->
-<section class="slide" data-title="Seventy percent">
+<section class="slide" data-title="Seventy percent" data-pace="950">
   <template class="notes"><span class="cue">Lesson 6 opens</span>
     <p class="lead">Lesson six. If you're building agents, <strong>this is the one that matters most</strong>.</p><p>You ask for done. You get <strong>seventy percent</strong>.</p><p>So you give feedback, it fixes one thing. More feedback, it fixes another. You <strong>claw your way to ninety</strong> like that, one round at a time.</p><p><em>Ask them: sino dito na ganito? How many of you have gone back and forth like this?</em></p><p>So here's the question. What if it <strong>checked its own work</strong>, and kept checking, until it was actually done and could show you <strong>why it was confident</strong>?</p></template>
   <div class="frame">
@@ -698,7 +703,7 @@ window.addEventListener('unhandledrejection', function (e) {
 </section>
 
 <!-- 19 -->
-<section class="slide" data-title="Screenshot loop">
+<section class="slide" data-title="Screenshot loop" data-pace="900">
   <template class="notes"><span class="cue">Lesson 6, my example</span>
     <p class="lead">Here's how I actually do it. Every site I build goes through a <strong>screenshot loop</strong>.</p><p>It takes the screenshots and <strong>checks the balance itself</strong>. Checks it on <strong>mobile</strong>. Then it clicks <strong>every button</strong>, submits <strong>every form</strong>, and confirms the formatting held.</p><p>All the things I used to squint at myself.</p><p>So start making your AI <strong>verify the work you do</strong>. Make it <strong>prove</strong> to you that the work is complete.</p></template>
   <div class="frame">
@@ -740,7 +745,7 @@ window.addEventListener('unhandledrejection', function (e) {
 </section>
 
 <!-- 21 -->
-<section class="slide" data-title="Two layers">
+<section class="slide" data-title="Two layers" data-pace="1100">
   <template class="notes"><span class="cue">Lesson 7, the mechanism</span>
     <p class="lead">Let me show you why. You can tell it to <strong>only write drafts</strong>.</p><p>And it will write drafts. Then one day it <strong>sends one</strong>, because the send tool was sitting there the whole time.</p><p>There are <strong>two layers</strong> here. The <strong>prompt layer</strong> is where you write the rules. The model reads them and <strong>mostly</strong> follows them.</p><p>The <strong>tool layer</strong> is where you decide what it can <strong>physically do</strong>. Take the send tool away and it cannot send, whatever the prompt says.</p><p>So: a rule in the prompt is a <strong>suggestion</strong>. A rule in the tool is a <strong>restriction</strong>.</p></template>
   <div class="frame">
@@ -782,7 +787,7 @@ window.addEventListener('unhandledrejection', function (e) {
 </section>
 
 <!-- 23 -->
-<section class="slide" data-title="One success">
+<section class="slide" data-title="One success" data-pace="700">
   <template class="notes"><span class="cue">Lesson 8</span>
     <p class="lead">Lesson eight, and this one's short. <strong>One success is not proof.</strong></p><p>Your agent worked. Okay. You've proven it worked <strong>one time</strong>, on <strong>one output</strong>.</p><p>These models are non-deterministic, so your real success rate is a <strong>range</strong>, and you haven't measured it yet.</p><p>The fix is <strong>evals</strong>. Run it many times against cases you already know the answer to, and <strong>score</strong> what comes back.</p><p><em>More on this next time.</em></p><p><em>Bridge: that is the thinking. Now let me show you what we are building.</em></p></template>
   <div class="frame">
@@ -881,7 +886,7 @@ window.addEventListener('unhandledrejection', function (e) {
 </section>
 
 <!-- 28 -->
-<section class="slide" data-title="The Shift">
+<section class="slide" data-title="The Shift" data-pace="420">
   <template class="notes"><span class="cue">The Shift, three moves</span>
     <p class="lead">The Shift. Three moves.</p><p><strong>Question.</strong> To what extent can AI do this? <strong>Faster is the bar.</strong> Better is a bonus.</p><p><strong>Cut.</strong> Eliminate before you automate. If nobody would notice a task disappeared, <strong>kill it</strong>. Automating waste just gives you waste that runs faster.</p><p><strong>Build.</strong> Context before tools. Small blocks, tested <strong>one at a time</strong>.</p></template>
   <div class="frame">
@@ -937,7 +942,7 @@ window.addEventListener('unhandledrejection', function (e) {
 </section>
 
 <!-- 30 -->
-<section class="slide slide-order" data-title="Build order">
+<section class="slide slide-order" data-title="Build order" data-pace="800">
   <template class="notes"><span class="cue">The order</span>
     <p class="lead">And the <strong>order</strong> is the whole trick.</p><p><strong>Memory first</strong>, always. Then Reach and Skill together.</p><p>But settle what it's allowed to do <strong>on its own</strong> before you let it run <strong>unwatched</strong>.</p><p>Reverse those two and you've handed a new hire the company card and gone on holiday.</p></template>
   <div class="frame">
@@ -1217,19 +1222,27 @@ const enter = (slide, dir) => createTimeline({ defaults: { ease: 'outExpo', dura
 /* the build-order diagram draws itself, marker order */
 const drawShapes = (slide) => {
   const paths = slide.querySelectorAll('.draw');
+  /* narrative diagrams unfold at speaking pace, so the picture arrives
+     with the sentence instead of a second after the slide */
+  const beat = parseInt(slide.dataset.pace || '0', 10);
+  const gap = beat || (paths.length > 10 ? 90 : 150);
+  const dur = beat ? Math.min(beat + 260, 900) : 700;
   paths.forEach((p) => {
     const len = p.getTotalLength();
     p.style.strokeDasharray = len;
     p.style.strokeDashoffset = len;
   });
   animate(paths, {
-    strokeDashoffset: 0, duration: 700, ease: 'inOutCirc',
-    delay: stagger(paths.length > 10 ? 90 : 150, { start: 260 })
+    strokeDashoffset: 0, duration: dur, ease: 'inOutCirc',
+    delay: stagger(gap, { start: beat ? 500 : 260 })
   });
   const labels = slide.querySelectorAll('.dlabel, .dsub');
   if (labels.length) {
     labels.forEach((l) => { l.style.opacity = 0; });
-    animate(labels, { opacity: [0, 1], duration: 400, ease: 'outExpo', delay: stagger(40, { start: 900 }) });
+    animate(labels, {
+      opacity: [0, 1], duration: 420, ease: 'outExpo',
+      delay: stagger(beat ? Math.round(gap * 0.9) : 40, { start: beat ? 800 : 900 })
+    });
   }
 };
 
