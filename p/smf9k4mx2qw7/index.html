@@ -74,9 +74,11 @@
     color:var(--smb); margin-bottom:18px;
   }
   h1{
-    font-family:var(--head); font-weight:700; font-size:clamp(32px,5.6vw,50px);
+    font-family:var(--head); font-weight:700; font-size:clamp(27px,5.6vw,50px);
     line-height:1.08; letter-spacing:-.02em; text-wrap:balance; color:var(--ink);
+    overflow-wrap:anywhere;
   }
+  h1 .dom{display:block; font-size:.82em; letter-spacing:-.025em}
   .mast .sub{margin-top:16px; font-size:19px; color:var(--ink-2); max-width:58ch}
   .meta{
     display:flex; flex-wrap:wrap; gap:8px 26px; margin-top:24px;
@@ -181,11 +183,69 @@
   a{color:var(--smb)}
   a:focus-visible{outline:2px solid var(--smb); outline-offset:2px}
 
-  @media (max-width:560px){
+  .hint{
+    display:none; font-family:var(--mono); font-size:10.5px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--muted); margin-top:9px;
+  }
+
+  @media (max-width:620px){
     body{font-size:16px}
-    .find{grid-template-columns:1fr}
+    .wrap{padding:0 18px 72px}
+    .brandbar .inner{padding:12px 18px}
+    .brandbar img{height:38px}
+    .brandbar .by{font-size:10px; letter-spacing:.1em}
+
+    .mast{padding:36px 0 22px; margin-bottom:34px}
+    .mast .sub{font-size:17px}
+    h2{font-size:22px}
+    section{margin-bottom:46px}
+    p.lead{font-size:17.5px}
+
+    /* two stat tiles across, not one long column */
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .stat{padding:14px}
+    .stat .n{font-size:25px}
+    .stat .l{font-size:13px}
+    .stats .stat:last-child{grid-column:1 / -1}
+
+    /* keep the chart readable: scroll it rather than shrink the labels away */
+    figure{padding:16px 14px 10px}
+    #chart{min-width:600px}
+    .chart-wrap .hint, figure .hint{display:block}
+    figcaption{font-size:13.5px}
+
+    /* tables become stacked cards — no sideways scrolling to read a row */
+    .tbl-wrap{border:none; background:transparent; overflow-x:visible}
+    table{min-width:0; width:100%; display:block; font-size:15px}
+    thead{display:none}
+    tbody{display:block}
+    tbody tr{
+      display:block; background:var(--surface); border:1px solid var(--line);
+      padding:12px 14px; margin-bottom:10px;
+    }
+    tbody tr:last-child{margin-bottom:0}
+    tbody td{
+      display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+      border:none; padding:4px 0; text-align:left;
+    }
+    tbody td::before{
+      content:attr(data-l); font-family:var(--mono); font-size:10px; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--muted); flex:0 0 auto;
+    }
+    tbody td.num{text-align:right}
+    tbody td:first-child{
+      display:block; font-family:var(--head); font-weight:600; font-size:16.5px; color:var(--ink);
+      padding:0 0 9px; margin-bottom:7px; border-bottom:1px solid var(--line);
+    }
+    tbody td:first-child::before{content:none}
+    tbody td.barcell{display:block; padding:9px 0 3px; width:auto}
+    tbody td.barcell::before{content:none}
+    .track,.fill{height:14px}
+
+    .find{grid-template-columns:1fr; padding:18px}
     .find .ev{grid-column:1}
     .sev{justify-self:start; margin:0 0 10px}
+    .note{padding:14px 16px; font-size:15px}
   }
 </style>
 </head>
@@ -202,8 +262,8 @@
 
   <header class="mast">
     <p class="eyebrow">Website Performance Review &nbsp;·&nbsp; 18 August 2026</p>
-    <h1>Twelve months of www.sanmiguelfoods.com</h1>
-    <p class="sub">What the traffic recovery actually looks like, who is reading the site, how AI systems are using it — and the four things currently leaking value.</p>
+    <h1>Twelve months of <span class="dom">www.sanmiguelfoods.com</span></h1>
+    <p class="sub">What the traffic recovery actually looks like, who is reading the site, and how AI systems are now using it.</p>
     <div class="meta">
       <span>Period <b>1 Aug 2025 – 31 Jul 2026</b></span>
       <span>Pages live <b>88</b></span>
@@ -217,7 +277,7 @@
     <div class="stats">
       <div class="stat"><div class="n">143,910</div><div class="l">Unique visitors</div><div class="d up">▲ 143% year on year</div></div>
       <div class="stat"><div class="n">247,315</div><div class="l">Page views</div><div class="d up">▲ 128% year on year</div></div>
-      <div class="stat"><div class="n">1.68</div><div class="l">Pages per visit</div><div class="d flat">Shallow — see finding 03</div></div>
+      <div class="stat"><div class="n">1.68</div><div class="l">Pages per visit</div><div class="d flat">Most visits stop at one page</div></div>
       <div class="stat"><div class="n">614</div><div class="l">Leads captured</div><div class="d flat">0.42% of visits</div></div>
       <div class="stat"><div class="n">50,092</div><div class="l">AI &amp; LLM crawler visits</div><div class="d up">34% the size of human traffic</div></div>
     </div>
@@ -232,6 +292,7 @@
         <span><i style="background:var(--smb)"></i>Unique visitors</span>
         <span><i style="background:var(--line-2)"></i>Partial month (1–18 Aug 2026)</span>
       </div>
+      <p class="hint">Swipe the chart sideways to see the full range &rarr;</p>
       <figcaption>Two structural breaks, not a smooth curve. Traffic fell from roughly 13,000 a month to roughly 4,000 in February 2024 and stayed flat there for seventeen months. It returned to roughly 12,000 in July 2025 and has held.</figcaption>
     </figure>
     <p>The averages tell it cleanly. Through the flat period the site averaged <strong>4,023 visitors a month</strong>. Over the last twelve months it averaged <strong>11,992</strong> — three times as many. August 2026 is tracking to roughly 10,600, its normal level for the month.</p>
@@ -244,16 +305,16 @@
       <table>
         <thead><tr><th>Market</th><th class="num">Visitors</th><th class="num">Share</th><th class="barcell">&nbsp;</th><th class="num">Pages / visit</th></tr></thead>
         <tbody>
-          <tr><td>Philippines</td><td class="num">83,265</td><td class="num">57.7%</td><td class="barcell"><span class="track"><span class="fill" style="width:100%"></span></span></td><td class="num">1.70</td></tr>
-          <tr><td>United States</td><td class="num">31,188</td><td class="num">21.6%</td><td class="barcell"><span class="track"><span class="fill" style="width:37.5%"></span></span></td><td class="num">1.49</td></tr>
-          <tr><td>Norway</td><td class="num">4,963</td><td class="num">3.4%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:6%"></span></span></td><td class="num">1.74</td></tr>
-          <tr><td>Singapore</td><td class="num">3,509</td><td class="num">2.4%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:4.2%"></span></span></td><td class="num">1.56</td></tr>
-          <tr><td>India</td><td class="num">2,526</td><td class="num">1.8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:3%"></span></span></td><td class="num">1.87</td></tr>
-          <tr><td>Japan</td><td class="num">1,797</td><td class="num">1.2%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:2.2%"></span></span></td><td class="num">1.82</td></tr>
-          <tr><td>Canada</td><td class="num">1,203</td><td class="num">0.8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:1.4%"></span></span></td><td class="num">1.86</td></tr>
-          <tr><td>China</td><td class="num">1,138</td><td class="num">0.8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:1.4%"></span></span></td><td class="num">1.57</td></tr>
-          <tr><td>Australia</td><td class="num">818</td><td class="num">0.6%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:1%"></span></span></td><td class="num">1.81</td></tr>
-          <tr><td>Hong Kong</td><td class="num">776</td><td class="num">0.5%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:0.9%"></span></span></td><td class="num">1.91</td></tr>
+          <tr><td>Philippines</td><td class="num" data-l="Visitors">83,265</td><td class="num" data-l="Share">57.7%</td><td class="barcell"><span class="track"><span class="fill" style="width:100%"></span></span></td><td class="num" data-l="Pages / visit">1.70</td></tr>
+          <tr><td>United States</td><td class="num" data-l="Visitors">31,188</td><td class="num" data-l="Share">21.6%</td><td class="barcell"><span class="track"><span class="fill" style="width:37.5%"></span></span></td><td class="num" data-l="Pages / visit">1.49</td></tr>
+          <tr><td>Norway</td><td class="num" data-l="Visitors">4,963</td><td class="num" data-l="Share">3.4%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:6%"></span></span></td><td class="num" data-l="Pages / visit">1.74</td></tr>
+          <tr><td>Singapore</td><td class="num" data-l="Visitors">3,509</td><td class="num" data-l="Share">2.4%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:4.2%"></span></span></td><td class="num" data-l="Pages / visit">1.56</td></tr>
+          <tr><td>India</td><td class="num" data-l="Visitors">2,526</td><td class="num" data-l="Share">1.8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:3%"></span></span></td><td class="num" data-l="Pages / visit">1.87</td></tr>
+          <tr><td>Japan</td><td class="num" data-l="Visitors">1,797</td><td class="num" data-l="Share">1.2%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:2.2%"></span></span></td><td class="num" data-l="Pages / visit">1.82</td></tr>
+          <tr><td>Canada</td><td class="num" data-l="Visitors">1,203</td><td class="num" data-l="Share">0.8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:1.4%"></span></span></td><td class="num" data-l="Pages / visit">1.86</td></tr>
+          <tr><td>China</td><td class="num" data-l="Visitors">1,138</td><td class="num" data-l="Share">0.8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:1.4%"></span></span></td><td class="num" data-l="Pages / visit">1.57</td></tr>
+          <tr><td>Australia</td><td class="num" data-l="Visitors">818</td><td class="num" data-l="Share">0.6%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:1%"></span></span></td><td class="num" data-l="Pages / visit">1.81</td></tr>
+          <tr><td>Hong Kong</td><td class="num" data-l="Visitors">776</td><td class="num" data-l="Share">0.5%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:0.9%"></span></span></td><td class="num" data-l="Pages / visit">1.91</td></tr>
         </tbody>
       </table>
     </div>
@@ -267,11 +328,11 @@
       <table>
         <thead><tr><th>Platform</th><th class="num">Share of visitors</th><th class="barcell">&nbsp;</th><th class="num">Pages / visit</th></tr></thead>
         <tbody>
-          <tr><td>Windows desktop</td><td class="num">34.8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:100%"></span></span></td><td class="num">1.87</td></tr>
-          <tr><td>Android phone</td><td class="num">27.4%</td><td class="barcell"><span class="track"><span class="fill" style="width:79%"></span></span></td><td class="num">1.63</td></tr>
-          <tr><td>iPhone / iPad</td><td class="num">20.0%</td><td class="barcell"><span class="track"><span class="fill" style="width:57%"></span></span></td><td class="num">1.49</td></tr>
-          <tr><td>Linux</td><td class="num">9.4%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:27%"></span></span></td><td class="num">1.35</td></tr>
-          <tr><td>Mac</td><td class="num">6.6%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:19%"></span></span></td><td class="num">1.74</td></tr>
+          <tr><td>Windows desktop</td><td class="num" data-l="Share of visitors">34.8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:100%"></span></span></td><td class="num" data-l="Pages / visit">1.87</td></tr>
+          <tr><td>Android phone</td><td class="num" data-l="Share of visitors">27.4%</td><td class="barcell"><span class="track"><span class="fill" style="width:79%"></span></span></td><td class="num" data-l="Pages / visit">1.63</td></tr>
+          <tr><td>iPhone / iPad</td><td class="num" data-l="Share of visitors">20.0%</td><td class="barcell"><span class="track"><span class="fill" style="width:57%"></span></span></td><td class="num" data-l="Pages / visit">1.49</td></tr>
+          <tr><td>Linux</td><td class="num" data-l="Share of visitors">9.4%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:27%"></span></span></td><td class="num" data-l="Pages / visit">1.35</td></tr>
+          <tr><td>Mac</td><td class="num" data-l="Share of visitors">6.6%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:19%"></span></span></td><td class="num" data-l="Pages / visit">1.74</td></tr>
         </tbody>
       </table>
     </div>
@@ -285,12 +346,12 @@
       <table>
         <thead><tr><th>Crawler</th><th>Reads the site for</th><th class="num">Share</th><th class="barcell">&nbsp;</th></tr></thead>
         <tbody>
-          <tr><td>ChatGPT</td><td>Answering questions inside ChatGPT</td><td class="num">74%</td><td class="barcell"><span class="track"><span class="fill" style="width:100%"></span></span></td></tr>
-          <tr><td>Bytespider</td><td>ByteDance / TikTok AI</td><td class="num">8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:11%"></span></span></td></tr>
-          <tr><td>facebookexternalhit</td><td>Meta link previews and indexing</td><td class="num">7%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:9%"></span></span></td></tr>
-          <tr><td>Amazonbot</td><td>Alexa and Amazon AI</td><td class="num">3%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:4%"></span></span></td></tr>
-          <tr><td>Applebot</td><td>Siri and Apple Intelligence</td><td class="num">2%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:3%"></span></span></td></tr>
-          <tr><td>OpenAI Search</td><td>ChatGPT web search results</td><td class="num">2%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:3%"></span></span></td></tr>
+          <tr><td>ChatGPT</td><td data-l="Reads it for">Answering questions inside ChatGPT</td><td class="num" data-l="Share">74%</td><td class="barcell"><span class="track"><span class="fill" style="width:100%"></span></span></td></tr>
+          <tr><td>Bytespider</td><td data-l="Reads it for">ByteDance / TikTok AI</td><td class="num" data-l="Share">8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:11%"></span></span></td></tr>
+          <tr><td>facebookexternalhit</td><td data-l="Reads it for">Meta link previews and indexing</td><td class="num" data-l="Share">7%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:9%"></span></span></td></tr>
+          <tr><td>Amazonbot</td><td data-l="Reads it for">Alexa and Amazon AI</td><td class="num" data-l="Share">3%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:4%"></span></span></td></tr>
+          <tr><td>Applebot</td><td data-l="Reads it for">Siri and Apple Intelligence</td><td class="num" data-l="Share">2%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:3%"></span></span></td></tr>
+          <tr><td>OpenAI Search</td><td data-l="Reads it for">ChatGPT web search results</td><td class="num" data-l="Share">2%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:3%"></span></span></td></tr>
         </tbody>
       </table>
     </div>
@@ -299,26 +360,8 @@
   </section>
 
   <section>
-    <div class="shead"><h2>What is leaking</h2><span class="tag">Four findings</span></div>
+    <div class="shead"><h2>What stands out</h2><span class="tag">Three observations</span></div>
     <div class="finds">
-
-      <div class="find">
-        <span class="sev fix">Fix</span>
-        <div>
-          <h3>614 leads arrived and none of them left a record</h3>
-          <p>The platform counts 614 leads for the year, but the site's form records are empty — every one of those leads is a phone tap or an email click that goes straight to a mailbox, untracked and unrouted. Business Opportunities carries six programmes: Chick-n-Juicy franchise, three reseller programmes, broiler contract growing and cassava assembly. Not one has a form that records who asked, for what, and whether anyone replied.</p>
-          <div class="ev">Platform form submissions: 0 records · leads reported: 614 · conversion 0.42%</div>
-        </div>
-      </div>
-
-      <div class="find">
-        <span class="sev fix">Fix</span>
-        <div>
-          <h3>An "Under Construction" page is live, indexable and listed for AI</h3>
-          <p>www.sanmiguelfoods.com/under-construction returns a normal page, carries no no-index instruction, sits in the public sitemap and is named in llms.txt. Google can serve it and ChatGPT can cite it. It is a two-minute fix.</p>
-          <div class="ev">HTTP 200 · in sitemap.xml · in llms.txt · no robots meta tag</div>
-        </div>
-      </div>
 
       <div class="find">
         <span class="sev watch">Watch</span>
@@ -350,38 +393,8 @@
     </div>
   </section>
 
-  <section>
-    <div class="shead"><h2>What we would do next</h2><span class="tag">In order</span></div>
-    <ol class="steps">
-      <li><div>
-        <h3>Put a real inquiry form on every business opportunity</h3>
-        <p>Six programmes, one form each, routed to the right desk with an automatic acknowledgement to the sender. Turns 614 anonymous taps a year into a named, trackable pipeline the business development team can work.</p>
-      </div></li>
-      <li><div>
-        <h3>Clear the under-construction page and tighten the sitemap</h3>
-        <p>No-index or remove it, then re-submit. Quick, and it stops a placeholder from representing the brand in search results and in AI answers.</p>
-      </div></li>
-      <li><div>
-        <h3>Add structured data across the site</h3>
-        <p>Organisation and contact markup on the homepage, brand records on the brand pages, article markup on the fifty-plus stories. This is what turns "an AI read the page" into "an AI quoted San Miguel Foods correctly". At 50,092 crawler visits a year, the leverage is immediate.</p>
-      </div></li>
-      <li><div>
-        <h3>Fix the mobile reading path</h3>
-        <p>Related-story links, a clear route from any landing page into Brands and Business Opportunities, and a menu that works with one thumb. Moving 1.68 pages per visit to 2.2 is roughly 79,000 additional page views a year at current traffic.</p>
-      </div></li>
-      <li><div>
-        <h3>Give Exports its own front door</h3>
-        <p>One in five visitors is overseas and they read the fewest pages of anyone. A dedicated export and diaspora landing page, linked from the homepage, serves an audience the site already earns and currently loses.</p>
-      </div></li>
-      <li><div>
-        <h3>Hold a monthly publishing rhythm</h3>
-        <p>One nutrition or corporate story a month, published on schedule. The content is already good; it needs to keep arriving so search engines and AI systems have a reason to keep coming back.</p>
-      </div></li>
-    </ol>
-  </section>
-
   <footer>
-    <p><b>Sources and method.</b> Traffic, geography, device and change-log figures were pulled directly from the site platform's analytics API on 18 August 2026 for the period 1 August 2025 – 31 July 2026, and cross-checked against the platform dashboard (147,421 visits by API against 147,512 reported — a 0.06% variance). AI crawler counts and the 614 lead total come from the platform's own AI-visibility and lead reporting for the same period. robots.txt, llms.txt, sitemap.xml, page markup and the under-construction page were checked live on the published site on 18 August 2026. AI crawler visits are counted separately by the platform and are <em>not</em> included in the human visitor totals shown here. Geographic shares are of geo-resolved visitors (n = 144,337); 2.0% could not be resolved to a country. The February 2024 traffic drop is reported as an observed pattern — its cause has not been confirmed.</p>
+    <p><b>Sources and method.</b> Traffic, geography, device and change-log figures were pulled directly from the site's analytics API on 18 August 2026 for the period 1 August 2025 – 31 July 2026, and cross-checked against the site's reporting dashboard (147,421 visits by API against 147,512 reported — a 0.06% variance). AI crawler counts and the 614 lead total come from the site's own AI-visibility and lead reporting for the same period. robots.txt, llms.txt, sitemap.xml and page markup were checked live on the published site on 18 August 2026. AI crawler visits are counted separately and are <em>not</em> included in the human visitor totals shown here. Geographic shares are of geo-resolved visitors (n = 144,337); 2.0% could not be resolved to a country. The February 2024 traffic drop is reported as an observed pattern — its cause has not been confirmed.</p>
     <p style="margin-top:12px"><b>Confidential.</b> Prepared by POST205 for San Miguel Foods. This page is unlisted and excluded from search engines. The San Miguel Foods logo is the property of San Miguel Food and Beverage, Inc. and is used here for identification only.</p>
   </footer>
 
