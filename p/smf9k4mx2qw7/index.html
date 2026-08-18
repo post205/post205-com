@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>San Miguel Foods — Website Performance Report | Aug 2025 – Jul 2026</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Twelve months of traffic, audience and AI visibility for www.sanmiguelfoods.com. Prepared by POST205.">
+<meta property="og:title" content="San Miguel Foods — Website Performance Report">
+<meta property="og:description" content="Twelve months of traffic, audience and AI visibility for www.sanmiguelfoods.com.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* San Miguel Foods brand: blue #0056B8, red #D81818, green #30A824 */
+    --smb:#0056B8; --smb-deep:#003B7E; --smb-tint:#E7F0FB;
+    --smr:#D81818; --smg:#2E8F27;
+
+    --ground:#F4F6F9; --surface:#FFFFFF; --surface-2:#EDF1F6;
+    --ink:#131A24; --ink-2:#39434F; --muted:#6B7683;
+    --line:#DBE2EA; --line-2:#C3CDD9;
+    --accent:var(--smb); --good:var(--smg); --warn:#B0740A; --bad:var(--smr);
+
+    --head:"Montserrat",system-ui,sans-serif;
+    --body:"Source Sans 3",system-ui,-apple-system,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --smb:#5EA3F0; --smb-deep:#0C2440; --smb-tint:#16243A;
+      --smr:#F2635C; --smg:#6DC062;
+      --ground:#0D131B; --surface:#151D28; --surface-2:#1D2734;
+      --ink:#E9EEF5; --ink-2:#BFC9D6; --muted:#8794A3;
+      --line:#26313F; --line-2:#33404F;
+      --accent:var(--smb); --good:var(--smg); --warn:#D9A63E; --bad:var(--smr);
+    }
+  }
+  :root[data-theme="dark"]{
+    --smb:#5EA3F0; --smb-deep:#0C2440; --smb-tint:#16243A;
+    --smr:#F2635C; --smg:#6DC062;
+    --ground:#0D131B; --surface:#151D28; --surface-2:#1D2734;
+    --ink:#E9EEF5; --ink-2:#BFC9D6; --muted:#8794A3;
+    --line:#26313F; --line-2:#33404F;
+    --accent:var(--smb); --good:var(--smg); --warn:#D9A63E; --bad:var(--smr);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{
+    background:var(--ground); color:var(--ink);
+    font-family:var(--body); font-size:17px; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px; margin:0 auto; padding:0 24px 100px}
+
+  /* ---------- brand bar ---------- */
+  /* White plate in both themes so the mark keeps its own colours */
+  .brandbar{background:#FFFFFF; border-bottom:4px solid #0056B8}
+  .brandbar .inner{
+    max-width:980px; margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+  }
+  .brandbar img{height:46px; width:auto; display:block}
+  .brandbar .by{
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:#5A6773;
+  }
+
+  /* ---------- masthead ---------- */
+  .mast{padding:52px 0 26px; border-bottom:3px solid var(--smb); margin-bottom:44px}
+  .eyebrow{
+    font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--smb); margin-bottom:18px;
+  }
+  h1{
+    font-family:var(--head); font-weight:700; font-size:clamp(32px,5.6vw,50px);
+    line-height:1.08; letter-spacing:-.02em; text-wrap:balance; color:var(--ink);
+  }
+  .mast .sub{margin-top:16px; font-size:19px; color:var(--ink-2); max-width:58ch}
+  .meta{
+    display:flex; flex-wrap:wrap; gap:8px 26px; margin-top:24px;
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--muted);
+  }
+  .meta b{color:var(--ink-2); font-weight:500}
+
+  /* ---------- sections ---------- */
+  section{margin-bottom:60px}
+  .shead{
+    display:flex; align-items:baseline; gap:16px; flex-wrap:wrap;
+    border-bottom:1px solid var(--line-2); padding-bottom:9px; margin-bottom:24px;
+  }
+  h2{
+    font-family:var(--head); font-weight:600; font-size:25px; letter-spacing:-.015em;
+    flex:1 1 240px; color:var(--ink); text-wrap:balance;
+  }
+  .tag{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--muted);
+  }
+  p{margin-bottom:15px; max-width:68ch; color:var(--ink-2)}
+  p.lead{color:var(--ink); font-size:19px; line-height:1.5}
+  strong{color:var(--ink); font-weight:600}
+  em{font-style:italic}
+
+  /* ---------- stats ---------- */
+  .stats{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+    gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:20px;
+  }
+  .stat{background:var(--surface); padding:18px}
+  .stat .n{
+    font-family:var(--mono); font-variant-numeric:tabular-nums; font-weight:500;
+    font-size:30px; letter-spacing:-.035em; line-height:1.1; color:var(--smb);
+  }
+  .stat .l{font-size:14px; color:var(--ink-2); margin-top:6px; line-height:1.35}
+  .stat .d{font-family:var(--mono); font-size:11px; margin-top:9px; letter-spacing:.03em; line-height:1.4}
+  .up{color:var(--good)} .flat{color:var(--muted)}
+
+  /* ---------- chart ---------- */
+  figure{background:var(--surface); border:1px solid var(--line); padding:22px 18px 14px; margin-bottom:12px}
+  .chart-wrap{overflow-x:auto}
+  svg{display:block; max-width:100%; height:auto}
+  figcaption{font-size:14px; color:var(--muted); margin-top:12px; line-height:1.5}
+  .legend{
+    display:flex; flex-wrap:wrap; gap:6px 22px; margin-top:14px;
+    font-family:var(--mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted);
+  }
+  .legend i{display:inline-block; width:18px; height:2px; vertical-align:middle; margin-right:7px}
+
+  /* ---------- tables ---------- */
+  .tbl-wrap{overflow-x:auto; border:1px solid var(--line); background:var(--surface)}
+  table{border-collapse:collapse; width:100%; min-width:460px; font-size:15px}
+  th,td{padding:11px 14px; text-align:left; border-bottom:1px solid var(--line)}
+  thead th{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); font-weight:500; background:var(--surface-2); border-bottom:1px solid var(--line-2);
+  }
+  tbody tr:last-child td{border-bottom:none}
+  td.num,th.num{text-align:right; font-family:var(--mono); font-variant-numeric:tabular-nums}
+  td.barcell{padding:0 14px 0 0; width:32%}
+  .track{display:block; background:var(--surface-2); height:20px}
+  .fill{display:block; height:20px; background:var(--smb)}
+  .fill.mut{background:var(--line-2)}
+
+  /* ---------- findings ---------- */
+  .finds{display:grid; gap:1px; background:var(--line); border:1px solid var(--line)}
+  .find{background:var(--surface); padding:20px; display:grid; grid-template-columns:auto 1fr; gap:0 16px}
+  .sev{
+    align-self:start; margin-top:5px; font-family:var(--mono); font-size:10px; letter-spacing:.1em;
+    text-transform:uppercase; padding:3px 9px; border:1px solid currentColor; white-space:nowrap;
+  }
+  .sev.fix{color:var(--bad)} .sev.watch{color:var(--warn)} .sev.win{color:var(--good)}
+  .find h3{font-family:var(--head); font-size:17px; font-weight:600; color:var(--ink); margin-bottom:7px; letter-spacing:-.01em}
+  .find p{margin:0; font-size:15.5px; max-width:62ch}
+  .find .ev{
+    grid-column:2; margin-top:10px; font-family:var(--mono); font-size:11.5px;
+    color:var(--muted); letter-spacing:.02em; line-height:1.5;
+  }
+
+  /* ---------- steps ---------- */
+  ol.steps{counter-reset:s; list-style:none; display:grid; gap:1px; background:var(--line); border:1px solid var(--line)}
+  ol.steps li{background:var(--surface); padding:18px 20px; display:grid; grid-template-columns:36px 1fr; gap:0 12px}
+  ol.steps li::before{
+    counter-increment:s; content:counter(s,decimal-leading-zero);
+    font-family:var(--mono); font-size:12px; color:var(--smb); padding-top:4px;
+  }
+  ol.steps h3{font-family:var(--head); font-size:16.5px; font-weight:600; color:var(--ink); margin-bottom:5px}
+  ol.steps p{margin:0; font-size:15.5px}
+
+  .note{
+    border-left:4px solid var(--smb); background:var(--surface); padding:15px 18px;
+    font-size:15.5px; color:var(--ink-2); margin-top:20px;
+  }
+  .note b{color:var(--ink); font-weight:600}
+
+  footer{border-top:1px solid var(--line-2); padding-top:20px; margin-top:8px}
+  footer p{font-size:13.5px; color:var(--muted); max-width:74ch; line-height:1.6}
+  footer b{color:var(--ink-2)}
+  a{color:var(--smb)}
+  a:focus-visible{outline:2px solid var(--smb); outline-offset:2px}
+
+  @media (max-width:560px){
+    body{font-size:16px}
+    .find{grid-template-columns:1fr}
+    .find .ev{grid-column:1}
+    .sev{justify-self:start; margin:0 0 10px}
+  }
+</style>
+</head>
+<body>
+
+<div class="brandbar">
+  <div class="inner">
+    <img src="assets/smf-logo.png" alt="San Miguel Foods">
+    <span class="by">Report prepared by POST205</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">Website Performance Review &nbsp;·&nbsp; 18 August 2026</p>
+    <h1>Twelve months of www.sanmiguelfoods.com</h1>
+    <p class="sub">What the traffic recovery actually looks like, who is reading the site, how AI systems are using it — and the four things currently leaking value.</p>
+    <div class="meta">
+      <span>Period <b>1 Aug 2025 – 31 Jul 2026</b></span>
+      <span>Pages live <b>88</b></span>
+      <span>Status <b>Published · HTTPS</b></span>
+      <span>Confidential <b>Client copy</b></span>
+    </div>
+  </header>
+
+  <section>
+    <div class="shead"><h2>The year at a glance</h2><span class="tag">vs. Aug 2024 – Jul 2025</span></div>
+    <div class="stats">
+      <div class="stat"><div class="n">143,910</div><div class="l">Unique visitors</div><div class="d up">▲ 143% year on year</div></div>
+      <div class="stat"><div class="n">247,315</div><div class="l">Page views</div><div class="d up">▲ 128% year on year</div></div>
+      <div class="stat"><div class="n">1.68</div><div class="l">Pages per visit</div><div class="d flat">Shallow — see finding 03</div></div>
+      <div class="stat"><div class="n">614</div><div class="l">Leads captured</div><div class="d flat">0.42% of visits</div></div>
+      <div class="stat"><div class="n">50,092</div><div class="l">AI &amp; LLM crawler visits</div><div class="d up">34% the size of human traffic</div></div>
+    </div>
+    <p class="lead">The site served <strong>2.4&times; the visitors it served the year before</strong>. That is not a seasonal bump — it is a level change that happened in July 2025 and has held for thirteen straight months.</p>
+  </section>
+
+  <section>
+    <div class="shead"><h2>The shape of the recovery</h2><span class="tag">Monthly visitors · Mar 2023 – Aug 2026</span></div>
+    <figure>
+      <div class="chart-wrap"><svg id="chart" viewBox="0 0 900 320" role="img" aria-label="Monthly unique visitors from March 2023 to August 2026, showing a fall in February 2024 to about 4,000 per month and a recovery in July 2025 to about 12,000 per month."></svg></div>
+      <div class="legend">
+        <span><i style="background:var(--smb)"></i>Unique visitors</span>
+        <span><i style="background:var(--line-2)"></i>Partial month (1–18 Aug 2026)</span>
+      </div>
+      <figcaption>Two structural breaks, not a smooth curve. Traffic fell from roughly 13,000 a month to roughly 4,000 in February 2024 and stayed flat there for seventeen months. It returned to roughly 12,000 in July 2025 and has held.</figcaption>
+    </figure>
+    <p>The averages tell it cleanly. Through the flat period the site averaged <strong>4,023 visitors a month</strong>. Over the last twelve months it averaged <strong>11,992</strong> — three times as many. August 2026 is tracking to roughly 10,600, its normal level for the month.</p>
+    <div class="note"><b>Worth chasing down:</b> nothing in the site's own change log explains the February 2024 drop — no republish, no domain change, no pages deleted that month. The likeliest causes sit outside the site: a search ranking shift, or a change to analytics or tag setup. If your team can tell us what changed on your side in early 2024, we can confirm the cause and make sure it does not repeat.</div>
+  </section>
+
+  <section>
+    <div class="shead"><h2>Who is actually visiting</h2><span class="tag">Share of geo-resolved visitors</span></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Market</th><th class="num">Visitors</th><th class="num">Share</th><th class="barcell">&nbsp;</th><th class="num">Pages / visit</th></tr></thead>
+        <tbody>
+          <tr><td>Philippines</td><td class="num">83,265</td><td class="num">57.7%</td><td class="barcell"><span class="track"><span class="fill" style="width:100%"></span></span></td><td class="num">1.70</td></tr>
+          <tr><td>United States</td><td class="num">31,188</td><td class="num">21.6%</td><td class="barcell"><span class="track"><span class="fill" style="width:37.5%"></span></span></td><td class="num">1.49</td></tr>
+          <tr><td>Norway</td><td class="num">4,963</td><td class="num">3.4%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:6%"></span></span></td><td class="num">1.74</td></tr>
+          <tr><td>Singapore</td><td class="num">3,509</td><td class="num">2.4%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:4.2%"></span></span></td><td class="num">1.56</td></tr>
+          <tr><td>India</td><td class="num">2,526</td><td class="num">1.8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:3%"></span></span></td><td class="num">1.87</td></tr>
+          <tr><td>Japan</td><td class="num">1,797</td><td class="num">1.2%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:2.2%"></span></span></td><td class="num">1.82</td></tr>
+          <tr><td>Canada</td><td class="num">1,203</td><td class="num">0.8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:1.4%"></span></span></td><td class="num">1.86</td></tr>
+          <tr><td>China</td><td class="num">1,138</td><td class="num">0.8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:1.4%"></span></span></td><td class="num">1.57</td></tr>
+          <tr><td>Australia</td><td class="num">818</td><td class="num">0.6%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:1%"></span></span></td><td class="num">1.81</td></tr>
+          <tr><td>Hong Kong</td><td class="num">776</td><td class="num">0.5%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:0.9%"></span></span></td><td class="num">1.91</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:18px"><strong>More than one in five visitors is in the United States</strong>, and the tail runs through Singapore, Japan, Canada, Australia, Hong Kong and the UAE — the same map the Exports business already sells into. Yet Export Operations sits one page deep in a sub-menu, and American visitors read fewer pages per visit than any other market at 1.49. They arrive, they do not find their path, they leave.</p>
+    <p>Norway at 4,963 visitors is the outlier worth a second look. It ranks above Singapore and ahead of every other European market. That is either a real audience nobody is serving, or a single traffic source worth identifying.</p>
+  </section>
+
+  <section>
+    <div class="shead"><h2>How they read it</h2><span class="tag">Device &amp; engagement</span></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Platform</th><th class="num">Share of visitors</th><th class="barcell">&nbsp;</th><th class="num">Pages / visit</th></tr></thead>
+        <tbody>
+          <tr><td>Windows desktop</td><td class="num">34.8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:100%"></span></span></td><td class="num">1.87</td></tr>
+          <tr><td>Android phone</td><td class="num">27.4%</td><td class="barcell"><span class="track"><span class="fill" style="width:79%"></span></span></td><td class="num">1.63</td></tr>
+          <tr><td>iPhone / iPad</td><td class="num">20.0%</td><td class="barcell"><span class="track"><span class="fill" style="width:57%"></span></span></td><td class="num">1.49</td></tr>
+          <tr><td>Linux</td><td class="num">9.4%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:27%"></span></span></td><td class="num">1.35</td></tr>
+          <tr><td>Mac</td><td class="num">6.6%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:19%"></span></span></td><td class="num">1.74</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:18px"><strong>47% of visitors are on a phone, and they are the least engaged group on the site.</strong> A desktop visitor reads 1.87 pages; an iPhone visitor reads 1.49. Chrome accounts for 73.5% of all traffic. Nearly half the audience meets San Miguel Foods on a small screen, and most of them leave from the page they landed on.</p>
+  </section>
+
+  <section>
+    <div class="shead"><h2>The machine audience</h2><span class="tag">AI crawlers &amp; answer engines</span></div>
+    <p class="lead">50,092 AI crawler visits in twelve months. For every three people who visited the site, an AI system read it once.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Crawler</th><th>Reads the site for</th><th class="num">Share</th><th class="barcell">&nbsp;</th></tr></thead>
+        <tbody>
+          <tr><td>ChatGPT</td><td>Answering questions inside ChatGPT</td><td class="num">74%</td><td class="barcell"><span class="track"><span class="fill" style="width:100%"></span></span></td></tr>
+          <tr><td>Bytespider</td><td>ByteDance / TikTok AI</td><td class="num">8%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:11%"></span></span></td></tr>
+          <tr><td>facebookexternalhit</td><td>Meta link previews and indexing</td><td class="num">7%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:9%"></span></span></td></tr>
+          <tr><td>Amazonbot</td><td>Alexa and Amazon AI</td><td class="num">3%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:4%"></span></span></td></tr>
+          <tr><td>Applebot</td><td>Siri and Apple Intelligence</td><td class="num">2%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:3%"></span></span></td></tr>
+          <tr><td>OpenAI Search</td><td>ChatGPT web search results</td><td class="num">2%</td><td class="barcell"><span class="track"><span class="fill mut" style="width:3%"></span></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:18px">Twenty-three further crawlers make up the remainder. The site already does the basics right: <strong>robots.txt explicitly permits AI reading</strong>, and a machine-readable <strong>llms.txt summary is live</strong> — which is a large part of why ChatGPT reads this site as often as it does.</p>
+    <p>The gap is what those crawlers find once they arrive. There is <strong>no structured data on the homepage</strong> — no organisation record, no brand list, no contact block, and no article markup on the fifty-plus nutrition and news stories. AI systems are reading San Miguel Foods in prose and inferring the facts. Companies that publish structured data get quoted with their facts intact.</p>
+  </section>
+
+  <section>
+    <div class="shead"><h2>What is leaking</h2><span class="tag">Four findings</span></div>
+    <div class="finds">
+
+      <div class="find">
+        <span class="sev fix">Fix</span>
+        <div>
+          <h3>614 leads arrived and none of them left a record</h3>
+          <p>The platform counts 614 leads for the year, but the site's form records are empty — every one of those leads is a phone tap or an email click that goes straight to a mailbox, untracked and unrouted. Business Opportunities carries six programmes: Chick-n-Juicy franchise, three reseller programmes, broiler contract growing and cassava assembly. Not one has a form that records who asked, for what, and whether anyone replied.</p>
+          <div class="ev">Platform form submissions: 0 records · leads reported: 614 · conversion 0.42%</div>
+        </div>
+      </div>
+
+      <div class="find">
+        <span class="sev fix">Fix</span>
+        <div>
+          <h3>An "Under Construction" page is live, indexable and listed for AI</h3>
+          <p>www.sanmiguelfoods.com/under-construction returns a normal page, carries no no-index instruction, sits in the public sitemap and is named in llms.txt. Google can serve it and ChatGPT can cite it. It is a two-minute fix.</p>
+          <div class="ev">HTTP 200 · in sitemap.xml · in llms.txt · no robots meta tag</div>
+        </div>
+      </div>
+
+      <div class="find">
+        <span class="sev watch">Watch</span>
+        <div>
+          <h3>Visitors read 1.68 pages and stop</h3>
+          <p>Across 147,421 visits the site averages under two pages. There are 88 pages live, roughly fifty of them substantial nutrition and corporate stories, and almost nobody reaches a second one. This is a navigation and internal-linking problem, and it is worst on mobile, where nearly half the audience is.</p>
+          <div class="ev">1.68 pages/visit sitewide · 1.49 on iPhone · 1.87 on Windows desktop</div>
+        </div>
+      </div>
+
+      <div class="find">
+        <span class="sev watch">Watch</span>
+        <div>
+          <h3>The site was published eight times in twelve months</h3>
+          <p>Eight publishes across the year, with a five-month gap between December 2025 and April 2026. Meanwhile the nutrition content that does exist is genuinely strong — food reformulation, sodium reduction, fortification standards — and it is exactly the material AI answer engines quote. Publishing this rarely leaves the site's strongest asset idle.</p>
+          <div class="ev">Site change log, Aug 2025 – Aug 2026 · 8 publish events</div>
+        </div>
+      </div>
+
+      <div class="find">
+        <span class="sev win">Working</span>
+        <div>
+          <h3>The foundations are sound</h3>
+          <p>HTTPS enforced with a valid certificate, GA4 installed, a clean sitemap, page titles and social preview cards present across the site, and llms.txt already published — ahead of most Philippine corporate sites. The recovery since July 2025 is real and it has held for thirteen months.</p>
+          <div class="ev">Certificate complete · force HTTPS on · GA4 active · 88 URLs in sitemap</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><h2>What we would do next</h2><span class="tag">In order</span></div>
+    <ol class="steps">
+      <li><div>
+        <h3>Put a real inquiry form on every business opportunity</h3>
+        <p>Six programmes, one form each, routed to the right desk with an automatic acknowledgement to the sender. Turns 614 anonymous taps a year into a named, trackable pipeline the business development team can work.</p>
+      </div></li>
+      <li><div>
+        <h3>Clear the under-construction page and tighten the sitemap</h3>
+        <p>No-index or remove it, then re-submit. Quick, and it stops a placeholder from representing the brand in search results and in AI answers.</p>
+      </div></li>
+      <li><div>
+        <h3>Add structured data across the site</h3>
+        <p>Organisation and contact markup on the homepage, brand records on the brand pages, article markup on the fifty-plus stories. This is what turns "an AI read the page" into "an AI quoted San Miguel Foods correctly". At 50,092 crawler visits a year, the leverage is immediate.</p>
+      </div></li>
+      <li><div>
+        <h3>Fix the mobile reading path</h3>
+        <p>Related-story links, a clear route from any landing page into Brands and Business Opportunities, and a menu that works with one thumb. Moving 1.68 pages per visit to 2.2 is roughly 79,000 additional page views a year at current traffic.</p>
+      </div></li>
+      <li><div>
+        <h3>Give Exports its own front door</h3>
+        <p>One in five visitors is overseas and they read the fewest pages of anyone. A dedicated export and diaspora landing page, linked from the homepage, serves an audience the site already earns and currently loses.</p>
+      </div></li>
+      <li><div>
+        <h3>Hold a monthly publishing rhythm</h3>
+        <p>One nutrition or corporate story a month, published on schedule. The content is already good; it needs to keep arriving so search engines and AI systems have a reason to keep coming back.</p>
+      </div></li>
+    </ol>
+  </section>
+
+  <footer>
+    <p><b>Sources and method.</b> Traffic, geography, device and change-log figures were pulled directly from the site platform's analytics API on 18 August 2026 for the period 1 August 2025 – 31 July 2026, and cross-checked against the platform dashboard (147,421 visits by API against 147,512 reported — a 0.06% variance). AI crawler counts and the 614 lead total come from the platform's own AI-visibility and lead reporting for the same period. robots.txt, llms.txt, sitemap.xml, page markup and the under-construction page were checked live on the published site on 18 August 2026. AI crawler visits are counted separately by the platform and are <em>not</em> included in the human visitor totals shown here. Geographic shares are of geo-resolved visitors (n = 144,337); 2.0% could not be resolved to a country. The February 2024 traffic drop is reported as an observed pattern — its cause has not been confirmed.</p>
+    <p style="margin-top:12px"><b>Confidential.</b> Prepared by POST205 for San Miguel Foods. This page is unlisted and excluded from search engines. The San Miguel Foods logo is the property of San Miguel Food and Beverage, Inc. and is used here for identification only.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var data = [
+    ["2023-03",110],["2023-04",34],["2023-05",230],["2023-06",618],["2023-07",9489],["2023-08",10298],
+    ["2023-09",11816],["2023-10",13052],["2023-11",14203],["2023-12",10898],["2024-01",13086],["2024-02",3981],
+    ["2024-03",4947],["2024-04",4698],["2024-05",4831],["2024-06",4292],["2024-07",4949],["2024-08",4869],
+    ["2024-09",5155],["2024-10",4428],["2024-11",4028],["2024-12",3611],["2025-01",3986],["2025-02",3765],
+    ["2025-03",3707],["2025-04",3209],["2025-05",3582],["2025-06",3908],["2025-07",14964],["2025-08",17116],
+    ["2025-09",14586],["2025-10",14952],["2025-11",11986],["2025-12",9450],["2026-01",11812],["2026-02",10475],
+    ["2026-03",10263],["2026-04",9965],["2026-05",10623],["2026-06",10859],["2026-07",11823],["2026-08",6129]
+  ];
+  var W=900,H=320,L=54,R=14,T=24,B=42;
+  var iw=W-L-R, ih=H-T-B, max=18000;
+  function x(i){return L + i*(iw/(data.length-1));}
+  function y(v){return T + ih - (v/max)*ih;}
+  var ns="http://www.w3.org/2000/svg";
+  var svg=document.getElementById("chart");
+  function el(n,a){var e=document.createElementNS(ns,n);for(var k in a){e.setAttribute(k,a[k]);}return e;}
+
+  [0,4500,9000,13500,18000].forEach(function(v){
+    svg.appendChild(el("line",{x1:L,x2:W-R,y1:y(v),y2:y(v),stroke:"var(--line)","stroke-width":1}));
+    var t=el("text",{x:L-10,y:y(v)+4,"text-anchor":"end",fill:"var(--muted)","font-size":11,"font-family":"var(--mono)"});
+    t.textContent = v===0 ? "0" : (v/1000)+"k";
+    svg.appendChild(t);
+  });
+
+  var solid=data.slice(0,data.length-1);
+  var pts=solid.map(function(d,i){return x(i)+","+y(d[1]);}).join(" ");
+  svg.appendChild(el("path",{d:"M"+x(0)+","+y(0)+" L"+pts.split(" ").join(" L")+" L"+x(solid.length-1)+","+y(0)+" Z",fill:"var(--smb)","fill-opacity":0.10}));
+  svg.appendChild(el("polyline",{points:pts,fill:"none",stroke:"var(--smb)","stroke-width":2.3,"stroke-linejoin":"round","stroke-linecap":"round"}));
+
+  var n=data.length;
+  svg.appendChild(el("polyline",{points:x(n-2)+","+y(data[n-2][1])+" "+x(n-1)+","+y(data[n-1][1]),fill:"none",stroke:"var(--line-2)","stroke-width":2.3,"stroke-dasharray":"4 4"}));
+  svg.appendChild(el("circle",{cx:x(n-1),cy:y(data[n-1][1]),r:3.5,fill:"var(--surface)",stroke:"var(--line-2)","stroke-width":2}));
+
+  [[11,"Feb 2024 — drop"],[28,"Jul 2025 — recovery"]].forEach(function(m){
+    var i=m[0];
+    svg.appendChild(el("line",{x1:x(i),x2:x(i),y1:T,y2:T+ih,stroke:"var(--muted)","stroke-width":1,"stroke-dasharray":"3 4"}));
+    svg.appendChild(el("circle",{cx:x(i),cy:y(data[i][1]),r:3.8,fill:"var(--smb)"}));
+    var t=el("text",{x:x(i)+(i>20?-8:8),y:T+12,"text-anchor":i>20?"end":"start",fill:"var(--muted)","font-size":11,"font-family":"var(--mono)"});
+    t.textContent=m[1];
+    svg.appendChild(t);
+  });
+
+  data.forEach(function(d,i){
+    var mm=d[0].slice(5);
+    if(mm!=="01" && i!==0 && i!==data.length-1){return;}
+    var t=el("text",{x:x(i),y:H-16,"text-anchor":i===0?"start":(i===data.length-1?"end":"middle"),fill:"var(--muted)","font-size":11,"font-family":"var(--mono)"});
+    t.textContent = (i===0?"Mar '23":(i===data.length-1?"Aug '26":"Jan '"+d[0].slice(2,4)));
+    svg.appendChild(t);
+  });
+})();
+</script>
+</body>
+</html>
