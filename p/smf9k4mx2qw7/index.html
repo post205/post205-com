@@ -274,19 +274,19 @@
   </header>
 
   <section>
-    <div class="shead"><h2>The year at a glance</h2><span class="tag">vs. Aug 2024 – Jul 2025</span></div>
+    <div class="shead"><h2>The year at a glance</h2><span class="tag">1 Aug 2025 – 31 Jul 2026</span></div>
     <div class="stats">
-      <div class="stat"><div class="n">143,910</div><div class="l">Unique visitors</div><div class="d up">▲ 143% year on year</div></div>
-      <div class="stat"><div class="n">247,315</div><div class="l">Page views</div><div class="d up">▲ 128% year on year</div></div>
+      <div class="stat"><div class="n">143,910</div><div class="l">Unique visitors</div><div class="d flat">11,992 a month, in line with 2023</div></div>
+      <div class="stat"><div class="n">247,315</div><div class="l">Page views</div><div class="d flat">20,610 a month</div></div>
       <div class="stat"><div class="n">1.68</div><div class="l">Pages per visit</div><div class="d flat">Most visits stop at one page</div></div>
       <div class="stat"><div class="n">614</div><div class="l">Leads captured</div><div class="d flat">0.42% of visits</div></div>
       <div class="stat"><div class="n">50,092</div><div class="l">AI &amp; LLM crawler visits</div><div class="d up">34% the size of human traffic</div></div>
     </div>
-    <p class="lead">The site served <strong>2.4&times; the visitors it served the year before</strong>. The step up happened in July 2025 and has held for thirteen straight months, so this is a change in level rather than a seasonal peak.</p>
+    <p class="lead">The site averaged <strong>11,992 visitors a month</strong>. Through the second half of 2023, before any of the changes described below, it averaged 11,626. Traffic today is <strong>within 3% of where it stood two years ago</strong>.</p>
   </section>
 
   <section>
-    <div class="shead"><h2>The shape of the recovery</h2><span class="tag">Monthly visitors · Mar 2023 – Aug 2026</span></div>
+    <div class="shead"><h2>A gap in the record</h2><span class="tag">Monthly visitors · Mar 2023 – Aug 2026</span></div>
     <figure>
       <div class="chart-wrap"><svg id="chart" viewBox="0 0 900 320" role="img" aria-label="Monthly unique visitors from March 2023 to August 2026, showing a fall in February 2024 to about 4,000 per month and a recovery in July 2025 to about 12,000 per month."></svg></div>
       <div class="legend">
@@ -294,10 +294,12 @@
         <span><i style="background:var(--line-2)"></i>Partial month (1–18 Aug 2026)</span>
       </div>
       <p class="hint">Swipe the chart to see all months &rarr;</p>
-      <figcaption>The line moves in two steps. Traffic fell from roughly 13,000 a month to roughly 4,000 in February 2024 and stayed flat there for seventeen months. It returned to roughly 12,000 in July 2025 and has held.</figcaption>
+      <figcaption>The line has two vertical steps, both of them single days. Recorded traffic fell from roughly 12,000 a month to roughly 4,200 on 26 January 2024, held flat for seventeen months, and returned to roughly 12,000 on 1 July 2025.</figcaption>
     </figure>
     <p>Through the flat period the site averaged <strong>4,023 visitors a month</strong>. Over the last twelve months it averaged <strong>11,992</strong> — three times as many. August 2026 is tracking to roughly 10,600, its normal level for the month.</p>
-    <div class="note"><b>Worth chasing down:</b> nothing in the site's own change log explains the February 2024 drop — no republish, no domain change, no pages deleted that month. The likeliest causes sit outside the site: a search ranking shift, or a change to analytics or tag setup. If your team can tell us what changed on your side in early 2024, we can confirm the cause and make sure it does not repeat.</div>
+    <div class="note"><b>What we think this is.</b> On the evidence above, the seventeen-month dip reads as a change in how visits were counted rather than a loss of visitors. Two further checks point the same way. No Google ranking update was rolling out on 26 January 2024: that date sits in a documented gap between the November 2023 update, which finished on 7 December, and the March 2024 core update, which began on 5 March. A ranking change of that size also arrives over days or weeks, not between one day and the next.
+    <br><br>
+    <b>How to settle it in an afternoon.</b> Two counters ran alongside this one and neither depends on it: Google Analytics 4, which is installed on the site, and Google Search Console. If either shows steady traffic across 26 January 2024, the audience never went anywhere and the record simply has a gap in it. If both show the same cliff, the drop was real and worth a closer look. We are glad to run that check with whoever holds the access.</div>
   </section>
 
   <section>
@@ -436,7 +438,7 @@
   svg.appendChild(el("polyline",{points:x(n-2)+","+y(data[n-2][1])+" "+x(n-1)+","+y(data[n-1][1]),fill:"none",stroke:"var(--line-2)","stroke-width":2.3,"stroke-dasharray":"4 4"}));
   svg.appendChild(el("circle",{cx:x(n-1),cy:y(data[n-1][1]),r:3.5,fill:"var(--surface)",stroke:"var(--line-2)","stroke-width":2}));
 
-  [[11,"Feb 2024 — drop"],[28,"Jul 2025 — recovery"]].forEach(function(m){
+  [[10,"26 Jan 2024"],[28,"1 Jul 2025"]].forEach(function(m){
     var i=m[0];
     svg.appendChild(el("line",{x1:x(i),x2:x(i),y1:T,y2:T+ih,stroke:"var(--muted)","stroke-width":1,"stroke-dasharray":"3 4"}));
     svg.appendChild(el("circle",{cx:x(i),cy:y(data[i][1]),r:3.8,fill:"var(--smb)"}));
