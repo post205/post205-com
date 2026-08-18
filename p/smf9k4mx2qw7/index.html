@@ -150,8 +150,9 @@
   .finds{display:grid; gap:1px; background:var(--line); border:1px solid var(--line)}
   .find{background:var(--surface); padding:20px; display:grid; grid-template-columns:92px 1fr; gap:0 16px}
   .sev{
-    align-self:start; margin-top:5px; font-family:var(--mono); font-size:10px; letter-spacing:.1em;
-    text-transform:uppercase; padding:3px 9px; border:1px solid currentColor; white-space:nowrap;
+    align-self:start; justify-self:start; margin-top:5px; font-family:var(--mono); font-size:10px;
+    letter-spacing:.1em; text-transform:uppercase; padding:3px 9px; border:1px solid currentColor;
+    white-space:nowrap;
   }
   .sev.fix{color:var(--bad)} .sev.watch{color:var(--warn)} .sev.win{color:var(--good)}
   .find h3{font-family:var(--head); font-size:17px; font-weight:600; color:var(--ink); margin-bottom:7px; letter-spacing:-.01em}
@@ -355,7 +356,7 @@
         </tbody>
       </table>
     </div>
-    <p style="margin-top:18px">Twenty-three further crawlers make up the remainder. The site already does the basics right: <strong>robots.txt explicitly permits AI reading</strong>, and a machine-readable <strong>llms.txt summary is live</strong> — which is a large part of why ChatGPT reads this site as often as it does.</p>
+    <p style="margin-top:18px">Twenty-three further crawlers make up the remainder. The site already does the basics right: <strong>robots.txt explicitly permits AI reading</strong>, and a machine-readable <strong>llms.txt summary is live</strong>, which is what gives those crawlers a clean description to read.</p>
     <p>The gap is what those crawlers find once they arrive. There is <strong>no structured data on the homepage</strong> — no organisation record, no brand list, no contact block, and no article markup on the fifty-plus nutrition and news stories. That leaves AI systems to infer the company's details from running prose instead of reading them from a declared record.</p>
   </section>
 
