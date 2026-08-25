@@ -15,9 +15,12 @@
   html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
   body {
     background:var(--ground); color:var(--text); font-family:var(--sans);
-    min-height:100dvh; display:flex; flex-direction:column;
+    /* a fixed viewport box, not a minimum: with min-height the notes grow the
+       page and push Prev/Next below the fold, which on a 390x844 phone put the
+       Next button 74px off-screen on the longest-notes slide */
+    height:100dvh; max-height:100dvh; display:flex; flex-direction:column;
     padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));
-    -webkit-font-smoothing:antialiased; overflow-x:clip;
+    -webkit-font-smoothing:antialiased; overflow:hidden;
   }
   button, input { touch-action:manipulation; font-family:inherit; }
 
@@ -42,15 +45,15 @@
   #err { color:#ff9a86; font-size:15px; margin-top:14px; min-height:1.4em; }
 
   /* presenter */
-  #view { display:none; flex-direction:column; flex:1; gap:14px; }
+  #view { display:none; flex-direction:column; flex:1 1 auto; min-height:0; gap:14px; }
   #view.on { display:flex; }
   .top { display:flex; justify-content:space-between; align-items:baseline; }
   .now-lesson { color:var(--accent); font-family:var(--mono); font-size:13px; letter-spacing:0.12em; text-transform:uppercase; }
   .now-title { font-size:21px; font-weight:800; line-height:1.2; letter-spacing:-0.02em; margin-top:5px; }
   #notes {
-    flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
     border-top:1px solid var(--border); border-bottom:1px solid var(--border);
-    padding:14px 0; margin-top:4px; min-height:120px;
+    padding:14px 0; margin-top:4px;
   }
   #notes p { font-size:19px; line-height:1.5; color:var(--text); }
   #notes p + p { margin-top:13px; }
@@ -62,9 +65,9 @@
   #notes .cue { font-family:var(--mono); font-size:13px; letter-spacing:0.1em;
     text-transform:uppercase; color:var(--text-3); display:block; margin-bottom:8px; }
   #notes:empty::before { content:'No notes on this slide.'; color:var(--text-3); font-size:17px; }
-  .next-box { padding-top:10px; }
+  .next-box { padding-top:10px; flex:0 0 auto; }
   .next-title { color:var(--text-2); font-size:17px; line-height:1.3; margin-top:4px; }
-  .btns { display:grid; grid-template-columns:1fr 1.7fr; gap:10px; }
+  .btns { display:grid; grid-template-columns:1fr 1.7fr; gap:10px; flex:0 0 auto; }
   .btns button {
     border:1px solid var(--border-2); background:var(--surface); color:var(--text);
     font-family:var(--mono); font-size:17px; font-weight:700; letter-spacing:0.08em;
@@ -72,7 +75,7 @@
   }
   .btns button:active { background:var(--border); }
   #next { background:var(--accent); color:#021616; border-color:var(--accent); }
-  .foot-row { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:2px; }
+  .foot-row { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:2px; flex:0 0 auto; }
   select {
     background:var(--surface); color:var(--text); border:1px solid var(--border-2);
     font-family:var(--mono); font-size:14px; padding:11px 10px; border-radius:0; max-width:62%;
