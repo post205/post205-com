@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>POST205 · Three minutes</title>
+<meta name="robots" content="noindex, nofollow">
+<script>
+/* runs before anything else so it can catch a failing module */
+window.__deckErr = function (m) {
+  try {
+    var d = document.getElementById('jserr');
+    if (!d) {
+      d = document.createElement('div');
+      d.id = 'jserr';
+      d.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:99;background:#3a0f0f;color:#ffd9d2;'
+        + 'font:12px ui-monospace,monospace;padding:10px 14px;white-space:pre-wrap;max-height:42vh;overflow:auto';
+      (document.body || document.documentElement).appendChild(d);
+    }
+    d.textContent += m + '\n';
+  } catch (e) {}
+};
+window.addEventListener('error', function (e) {
+  window.__deckErr('JS ERROR: ' + (e.message || e.type) + (e.filename ? '  @' + e.filename.split('/').pop() + ':' + e.lineno : ''));
+});
+window.addEventListener('unhandledrejection', function (e) {
+  window.__deckErr('PROMISE REJECTED: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+});
+</script>
+<style>
+  :root {
+    /* on-dark field. Teal Strike is the only accent; hardcoded light inks per DESIGN.md */
+    --ground:     #071717;
+    --surface:    #0F2727;
+    --surface-2:  #143434;
+    --border:     #1d4747;
+    --border-2:   #2a5f5f;
+    --text:       #f2f9f9;
+    --text-2:     #b6d0ce;
+    --text-3:     #7aacac;
+    --accent:     #3BD1D3;
+    --good:       #4ad9a0;
+    --bad:        #ff9a86;
+    --mono: ui-monospace, monospace;
+    --sans: system-ui, -apple-system, sans-serif;
+    --bar-h: 56px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  html { overflow: hidden; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  html, body { overscroll-behavior: none; }
+  button, .nav-btn, .slide { touch-action: manipulation; }
+  body {
+    background: var(--ground);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 20px;
+    line-height: 1.6;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  strong { font-weight: 700; color: var(--text); }
+
+  /* ── Deck shell ───────────────────────────────────────── */
+  #deck { position: fixed; inset: 0 0 var(--bar-h) 0; }
+  .slide {
+    position: absolute; inset: 0;
+    display: none; align-items: center; justify-content: center;
+    padding: 40px 72px 28px;
+  }
+  /* until the script says it is ready, slide 1 shows on its own, so a
+     failed or blocked script still leaves something on the screen */
+  .slide.active, body:not(.ready) .slide:first-of-type { display: flex; }
+  .frame { width: 100%; max-width: 1320px; max-height: 100%; overflow-y: auto; scrollbar-width: none; }
+  .frame::-webkit-scrollbar { display: none; }
+  .slide-lattice { position: absolute; inset: 0; pointer-events: none; }
+
+  /* ── Type — sized to be read from the back of a room ──── */
+  .eyebrow {
+    font-family: var(--mono); font-size: 16px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 26px;
+  }
+  .lesson {
+    display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 24px;
+  }
+  .lesson .ln {
+    font-family: var(--mono); font-weight: 700; font-size: clamp(20px, 2vw, 30px);
+    color: var(--accent); letter-spacing: 0.01em; flex: none;
+  }
+  .lesson .lt {
+    font-family: var(--mono); font-size: 15px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--text-3);
+  }
+
+  .part {
+    font-family: var(--mono); font-size: 16px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 22px;
+  }
+  h1.display {
+    text-wrap: balance;
+    font-weight: 800; font-size: clamp(52px, 7.6vw, 124px); line-height: 1.02;
+    letter-spacing: -0.025em; margin-bottom: 34px; max-width: 17ch;
+  }
+  .slide h2 {
+    text-wrap: balance;
+    font-weight: 800; font-size: clamp(38px, 5vw, 74px); line-height: 1.05;
+    letter-spacing: -0.02em; margin-bottom: 26px; max-width: 20ch;
+  }
+  .slide h3 { font-weight: 700; font-size: 26px; letter-spacing: -0.01em; margin-bottom: 8px; }
+  .lede { text-wrap: pretty; color: var(--text-2); max-width: 42ch; font-size: clamp(21px, 1.9vw, 29px); line-height: 1.5; }
+  .lede p + p { margin-top: 20px; }
+  .lede strong { color: var(--text); }
+  .foot { text-wrap: pretty; color: var(--text-3); margin-top: 34px; font-size: 19px; max-width: 62ch; }
+
+  /* the single huge line — used where one sentence carries the slide */
+  .mono-huge {
+    text-wrap: balance;
+    font-weight: 800; font-size: clamp(40px, 5.6vw, 88px); line-height: 1.08;
+    letter-spacing: -0.02em; max-width: 22ch;
+  }
+  .mono-huge em { font-style: normal; color: var(--accent); }
+
+  .quote {
+    font-weight: 800; font-size: clamp(44px, 6.4vw, 104px); line-height: 1.05;
+    letter-spacing: -0.025em; max-width: 15ch; color: var(--text);
+  }
+
+  /* ── Blocks ───────────────────────────────────────────── */
+  .tag {
+    font-family: var(--mono); font-size: 14px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 10px;
+  }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 30px 32px;
+  }
+  .card-row.two .card { padding: 40px 36px; }
+  .card-row.two h3 { font-size: clamp(24px, 2.4vw, 34px); }
+  .card p { color: var(--text-2); font-size: 19px; line-height: 1.5; }
+  .card.key { border-color: var(--accent); }
+  .card.key .tag { color: var(--accent); }
+
+  .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 46px; align-items: start; }
+  .cols > * { min-width: 0; }
+  .card-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
+  .card-row > * { min-width: 0; }
+  .card-row.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* numbered moves */
+  .moves { list-style: none; display: grid; gap: 22px; margin-top: 34px; }
+  .moves li { display: flex; gap: 22px; align-items: baseline; }
+  .moves .num {
+    font-family: var(--mono); font-size: 15px; color: var(--accent);
+    border: 1px solid var(--border-2); border-radius: 5px;
+    width: 36px; height: 36px; flex: none;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .moves h3 { margin-bottom: 2px; }
+  .moves p { color: var(--text-2); font-size: 19px; line-height: 1.45; }
+
+  /* the five layers */
+  .layers { list-style: none; display: grid; gap: 2px; margin-top: 30px; }
+  .layers li {
+    display: grid; grid-template-columns: 54px auto minmax(0, 1fr);
+    gap: 30px; align-items: baseline;
+    padding: 17px 0; border-bottom: 1px solid var(--border);
+  }
+  .layers li:first-child { border-top: 1px solid var(--border); }
+  .layers .n { font-family: var(--mono); font-size: 15px; color: var(--text-3); }
+  .layers .name {
+    font-weight: 800; font-size: clamp(24px, 2.5vw, 38px); letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+  .layers .what { color: var(--text-2); font-size: 20px; line-height: 1.4; }
+  .layers li.hot .what strong { color: var(--text); }
+
+  /* steps */
+  .steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; }
+  .steps li { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 28px 26px; }
+  .steps .n {
+    font-family: var(--mono); font-size: 15px; letter-spacing: 0.12em;
+    color: var(--accent); display: block; margin-bottom: 14px;
+  }
+  .steps h3 { font-size: 28px; margin-bottom: 8px; }
+  .steps p { color: var(--text-2); font-size: 18px; line-height: 1.45; }
+  .steps code { font-family: var(--mono); font-size: 15px; color: var(--accent); word-break: break-all; }
+
+  /* rhythm rows */
+  .rhythm { list-style: none; display: grid; gap: 2px; margin-top: 30px; }
+  .rhythm li {
+    display: grid; grid-template-columns: minmax(0, 7ch) minmax(0, 11ch) minmax(0, 1fr);
+    gap: 26px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--border);
+  }
+  .rhythm li:first-child { border-top: 1px solid var(--border); }
+  .rhythm .when { font-family: var(--mono); font-size: 15px; color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; }
+  .rhythm .cmd { font-family: var(--mono); font-size: clamp(18px, 1.8vw, 24px); color: var(--accent); font-weight: 700; }
+  .rhythm .does { color: var(--text-2); font-size: 19px; line-height: 1.45; }
+
+  /* referral triggers on the close slide: a spoken sentence, then what it means.
+     Not .rhythm — that column is sized for one-word slash commands. */
+  .triggers { list-style: none; display: grid; gap: 2px; margin-top: 26px; }
+  .triggers li {
+    display: grid; grid-template-columns: minmax(0, 6ch) minmax(0, 1fr);
+    gap: 26px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid var(--border);
+  }
+  .triggers li:first-child { border-top: 1px solid var(--border); }
+  .triggers .when { font-family: var(--mono); font-size: 15px; color: var(--text-3);
+    letter-spacing: .08em; text-transform: uppercase; }
+  .triggers .quote { display: block; font-size: clamp(21px, 2.1vw, 31px); font-weight: 700;
+    color: var(--accent); letter-spacing: -.01em; text-wrap: balance; }
+  .triggers .does { display: block; color: var(--text-2); font-size: 18px;
+    line-height: 1.45; margin-top: 7px; text-wrap: pretty; }
+
+  /* live reasoning stream: what the model looks like while it works */
+  .think { display: grid; gap: 9px; align-content: center; min-height: 58vh; }
+  .think i {
+    display: block; height: 9px; border-radius: 2px;
+    background: var(--text-3); opacity: 0; transform: translateX(-10px);
+    transition: opacity .28s ease, transform .28s ease;
+  }
+  .think i.on { opacity: .28; transform: none; }
+  .think i.hot { background: var(--accent); }
+  .think i.hot.on { opacity: 1; box-shadow: 0 0 22px rgba(59,209,211,.45); }
+  .think i.cur { opacity: .85; background: var(--accent); }
+  @media (max-width: 860px) { .think { min-height: 34vh; gap: 7px; } .think i { height: 7px; } }
+
+  /* generated art, blended onto the field */
+  .split { display: grid; grid-template-columns: 1.05fr 1fr; gap: 54px; align-items: center; }
+  .split > * { min-width: 0; }
+  .art { margin: 0; }
+  .art img {
+    width: 100%; height: auto; display: block;
+    /* the art shares the deck's ground, so screen drops it and the lattice runs behind;
+       the soft edge stops the frame reading as a pasted rectangle */
+    /* transparent PNGs: the object floats straight on the field, no panel, no mask */
+    filter: drop-shadow(0 22px 46px rgba(0, 0, 0, 0.55));
+    animation: artIn 1.5s cubic-bezier(.22,1,.36,1) both;
+  }
+  @keyframes artIn { from { opacity: 0; transform: translateY(16px) scale(.97); }
+                     to   { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .art img { animation: none; }
+  }
+  /* ── screenshots ──────────────────────────────────────────────────────────
+     The .art rules above are tuned for transparent 3D PNGs floating on the
+     field. A screenshot is an opaque rectangle, so it gets a deliberate frame
+     instead: a hairline, a radius and a deep shadow, so it reads as a captured
+     screen and not as a pasted block.
+
+     This deck is screenshot-led, so most slides use .showcase: a compact
+     headline row on top and the capture given the rest of the slide. A wide
+     16:9 capture dropped into a .split column renders far too small to read
+     from the back of a room. */
+  .frame-tall { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+  .showcase { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; gap: 22px; }
+  .showcase .head { flex: 0 0 auto; }
+  .showcase .head h2 { font-size: clamp(30px, 3.1vw, 50px); margin-bottom: 0; }
+  .showcase .shot { flex: 1 1 auto; min-height: 0; display: flex; justify-content: center; }
+
+  .shot { margin: 0; }
+  .shot img {
+    display: block; max-width: 100%; height: auto;
+    border-radius: 10px; border: 1px solid var(--border-2);
+    box-shadow: 0 28px 64px rgba(0, 0, 0, 0.62);
+    animation: artIn 1.5s cubic-bezier(.22,1,.36,1) both;
+  }
+  /* inside a showcase the capture is bounded by the space left over, so it can
+     never spill past the fold however tall the source image is */
+  .showcase .shot img { max-height: 100%; width: auto; object-fit: contain; }
+  /* in a split column the capture still needs a ceiling, or a tall portrait
+     capture pushes the headline off the slide */
+  .split .shot img { width: 100%; max-height: 68vh; object-fit: contain; }
+  @media (prefers-reduced-motion: reduce) { .shot img { animation: none; } }
+
+  /* three phone captures side by side, for a step-by-step flow */
+  .shot-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px; margin-top: 26px; align-items: start; justify-items: center;
+    flex: 1 1 auto; min-height: 0; }
+  .shot-row figure { margin: 0; display: flex; flex-direction: column;
+    align-items: center; min-height: 0; max-height: 100%; }
+  .shot-row img {
+    max-width: 100%; min-height: 0; height: auto; max-height: calc(100% - 34px);
+    width: auto; display: block; border-radius: 8px;
+    border: 1px solid var(--border-2); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+    animation: artIn 1.4s cubic-bezier(.22,1,.36,1) both;
+  }
+  .shot-row figcaption { font-family: var(--mono); font-size: 15px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--text-3); margin-top: 12px; text-align: center; }
+
+  /* a slide whose screenshot Toffer still has to drop in */
+  .gap { border: 2px dashed var(--border-2); border-radius: 12px; padding: 52px 44px;
+    background: rgba(15, 39, 39, .55); }
+  .gap b { display: block; font-family: var(--mono); font-size: 16px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  .gap span { display: block; color: var(--text-2); font-size: 21px; line-height: 1.5; }
+  .gap code { font-family: var(--mono); color: var(--text); font-size: .92em; }
+
+  .split h1.display, .split .slide h2 { max-width: 14ch; }
+  .split .mono-huge { max-width: 15ch; font-size: clamp(30px, 3.3vw, 54px); }
+  .split h2 { font-size: clamp(32px, 3.6vw, 58px); }
+
+  /* diagram */
+  .diagram { margin: 40px 0 0; }
+  .diagram svg {
+    display: block; width: 100%; max-width: 100%; height: auto;
+    stroke: var(--accent); stroke-width: 3; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  .diagram .dlabel {
+    stroke: none; fill: var(--text-2);
+    font-family: var(--sans); font-size: 19px; font-weight: 700; letter-spacing: -0.01em;
+  }
+  .diagram .dsub {
+    stroke: none; fill: var(--text-3);
+    font-family: var(--mono); font-size: 14px; letter-spacing: 0.1em;
+  }
+
+  /* title slide */
+  .title-cols { display: grid; grid-template-columns: 1.5fr 1fr; gap: 64px; align-items: end; }
+  .meta { border-top: 1px solid var(--border-2); }
+  .meta div { border-bottom: 1px solid var(--border-2); padding: 15px 0; }
+  .meta dt {
+    font-family: var(--mono); font-size: 14px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 4px;
+  }
+  .meta dd { font-family: var(--mono); font-size: 15px; color: var(--text-2); line-height: 1.5; }
+
+  /* close */
+  .sendoff { margin-top: 40px; }
+  .sendoff strong { color: var(--accent); font-size: clamp(26px, 2.6vw, 40px); font-weight: 800; letter-spacing: -0.02em; }
+  .repo {
+    display: inline-block; margin-top: 30px;
+    font-family: var(--mono); font-size: clamp(16px, 1.7vw, 23px); color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 5px; padding: 15px 26px;
+    text-decoration: none; word-break: break-all;
+  }
+  .repo:hover { background: var(--accent); color: #021616; }
+  .repo.big { font-size: clamp(24px, 3.2vw, 48px); padding: 20px 34px; margin-top: 22px; font-weight: 700; }
+  .repo:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+  /* ── Pairing overlay ──────────────────────────────────── */
+  #pair {
+    position: fixed; inset: 0; z-index: 20;
+    background: rgba(4, 14, 14, 0.94);
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  #pair[hidden] { display: none; }
+  .pair-card { text-align: center; max-width: 640px; }
+  .pair-label {
+    font-family: var(--mono); font-size: 16px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 24px;
+  }
+  .pair-code {
+    font-family: var(--mono); font-weight: 700; color: var(--accent);
+    font-size: clamp(72px, 15vw, 190px); line-height: 1; letter-spacing: 0.12em;
+  }
+  .pair-url {
+    font-family: var(--mono); font-size: clamp(18px, 2.2vw, 30px);
+    color: var(--text); margin-top: 26px; word-break: break-all;
+  }
+  .pair-status {
+    font-family: var(--mono); font-size: 15px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent); margin-top: 22px;
+  }
+  .pair-hint { color: var(--text-3); font-size: 17px; margin-top: 14px; }
+  #pdone {
+    margin-top: 26px; background: transparent; border: 1px solid var(--border-2);
+    color: var(--text-2); font-family: var(--mono); font-size: 13px; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 13px 26px; cursor: pointer; border-radius: 0;
+  }
+  #pdone:hover { color: var(--accent); border-color: var(--accent); }
+  #livedot {
+    position: fixed; right: 26px; bottom: calc(var(--bar-h) / 2 - 4px);
+    width: 8px; height: 8px; background: var(--accent); z-index: 6;
+  }
+  #livedot[hidden] { display: none; }
+
+  /* ── Bottom bar ───────────────────────────────────────── */
+  #bar {
+    position: fixed; left: 0; right: 0; bottom: 0; height: var(--bar-h);
+    display: flex; align-items: center; gap: 22px; padding: 0 28px;
+    background: transparent; z-index: 5;
+  }
+  #counter {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em;
+    color: var(--text-3); opacity: 0.7; flex: none; min-width: 68px;
+  }
+  #pips { flex: 1; display: flex; justify-content: center; gap: 8px; }
+  .pip {
+    width: 6px; height: 6px; padding: 0; border: 0; border-radius: 1px;
+    background: rgba(59, 209, 211, 0.2); cursor: pointer;
+  }
+  .pip.on { background: var(--accent); }
+  .pip:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  #present {
+    background: transparent; border: 1px solid var(--border-2); color: var(--text-3);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 9px 13px; cursor: pointer; flex: none; border-radius: 0; opacity: 0.8;
+  }
+  #present:hover { color: var(--accent); border-color: var(--accent); opacity: 1; }
+  #present:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #present.live { color: var(--accent); border-color: var(--accent); opacity: 1; }
+
+  .nav-btn {
+    background: transparent; border: 0; color: var(--text-3);
+    font-size: 22px; line-height: 1; padding: 13px 15px; cursor: pointer; flex: none; opacity: 0.75;
+  }
+  .nav-btn:hover { color: var(--accent); opacity: 1; transition: color 0.15s, opacity 0.15s; }
+  .nav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* projector heights: 768-820px is where the big type starts running past the fold */
+  @media (max-height: 860px) and (min-width: 861px) {
+    .slide { padding: 24px 72px 18px; }
+    h1.display { font-size: clamp(44px, 6.2vw, 92px); margin-bottom: 22px; }
+    .slide h2 { font-size: clamp(32px, 4.1vw, 58px); margin-bottom: 18px; }
+    .mono-huge { font-size: clamp(34px, 4.5vw, 68px); }
+    .lede { font-size: clamp(19px, 1.7vw, 25px); }
+    .lede p + p { margin-top: 14px; }
+    .foot { margin-top: 22px; }
+    .lesson { margin-bottom: 18px; }
+    .card-row, .moves, .layers, .rhythm, .steps { margin-top: 22px; }
+    .card { padding: 20px 22px; }
+    .layers li { padding: 12px 0; }
+    .rhythm li { padding: 13px 0; }
+    .moves { gap: 16px; }
+    .diagram { margin-top: 22px; }
+    .split { gap: 34px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ── Mobile ───────────────────────────────────────────── */
+  @media (max-width: 860px) {
+    body { font-size: 17px; }
+    .slide { padding: 24px 22px 16px; align-items: flex-start; }
+    .frame { padding-top: 6px; }
+    h1.display { font-size: clamp(38px, 10vw, 60px); margin-bottom: 22px; }
+    .slide h2 { font-size: clamp(30px, 8vw, 46px); margin-bottom: 18px; }
+    .quote { font-size: clamp(34px, 9.6vw, 56px); }
+    .mono-huge { font-size: clamp(30px, 8vw, 48px); }
+    .lede { font-size: 19px; max-width: none; }
+    .lesson .ln { font-size: 20px; }
+    .lesson .lt { font-size: 13px; }
+    .cols, .card-row, .card-row.two, .title-cols, .steps, .split { grid-template-columns: minmax(0, 1fr); }
+    .split { gap: 22px; }
+    .art { order: 2; }
+    .cols { gap: 22px; }
+    .title-cols { gap: 30px; align-items: start; }
+    .card-row { margin-top: 20px; gap: 12px; }
+    .card { padding: 20px 22px; }
+    .layers li { grid-template-columns: 34px minmax(0, 1fr); gap: 8px 14px; padding: 14px 0; }
+    .layers .what { grid-column: 2; font-size: 17px; }
+    .layers .name { font-size: 26px; }
+    .rhythm li { grid-template-columns: minmax(0, 6ch) minmax(0, 1fr); gap: 6px 16px; }
+    .rhythm .does { grid-column: 2; font-size: 17px; }
+    .moves li { gap: 14px; }
+    .moves p { font-size: 17px; }
+    .steps li { padding: 20px 22px; }
+    .diagram { overflow-x: auto; }
+    .diagram svg { min-width: 700px; }
+    #bar {
+      height: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px));
+      padding: 0 14px env(safe-area-inset-bottom, 0px); gap: 14px;
+    }
+    #deck { inset: 0 0 calc(var(--bar-h) + env(safe-area-inset-bottom, 0px)) 0; }
+    .nav-btn { padding: 16px 17px; }
+    #pips { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<main id="deck" aria-label="Slides">
+<!-- 01 -->
+<section class="slide slide-title" data-title="Title">
+  <template class="notes"><span class="cue">Open</span>
+    <p class="lead">You all know roughly what I do. Today I want you to <strong>actually see it</strong>.</p><p>Three projects. All of them are <strong>running right now</strong>, and I have screenshots of every one.</p><p><em>Say the number out loud so they know it is short: three things, three minutes.</em></p></template>
+  <div class="frame">
+    <p class="eyebrow rise" id="boot">POST205 &middot; THREE MINUTES</p>
+    <h1 class="display rise">Let me show you three things I built.</h1>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="slide" data-title="Raffle">
+  <template class="notes"><span class="cue">One &middot; the raffle</span>
+    <p class="lead">First one. A raffle for the <strong>Ateneo High School batch 2001</strong> homecoming.</p><p>A thousand pesos a ticket. The car is a <strong>BYD Sealion 6</strong>, and it gets drawn on <strong>5 December</strong> at the homecoming itself. Smaller prizes go out every week until then.</p><p>Every prize on that page was <strong>donated</strong>. Sales opened on the twenty-first of August.</p></template>
+  <div class="frame frame-tall">
+    <div class="showcase">
+      <div class="head">
+        <p class="lesson rise"><span class="ln">One</span><span class="lt">A raffle</span></p>
+        <h2 class="rise">The first one is a raffle for a car.</h2>
+      </div>
+      <figure class="shot rise"><img src="img/raffle-hero.jpg" alt="" loading="lazy"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="slide" data-title="Buyer flow">
+  <template class="notes"><span class="cue">One &middot; what the buyer does</span>
+    <p class="lead">Here is the whole thing from the <strong>buyer&rsquo;s side</strong>.</p><p>They scan a QR code. They type their name, their email and how many tickets. The <strong>GCash details</strong> come up on the next screen. They pay, then they <strong>upload the receipt</strong> right there.</p><p>That is it. About two minutes, all on the phone, and nobody has to be at a table collecting cash.</p></template>
+  <div class="frame frame-tall">
+    <div class="showcase">
+      <div class="head">
+        <p class="lesson rise"><span class="ln">One</span><span class="lt">A raffle</span></p>
+        <h2 class="rise">You buy a ticket on your phone in two minutes.</h2>
+      </div>
+      <div class="shot-row">
+        <figure class="rise"><img src="img/flow-1.jpg" alt="" loading="lazy"><figcaption>01 &middot; Register</figcaption></figure>
+        <figure class="rise"><img src="img/flow-2.jpg" alt="" loading="lazy"><figcaption>02 &middot; Pay and upload</figcaption></figure>
+        <figure class="rise"><img src="img/flow-3.jpg" alt="" loading="lazy"><figcaption>03 &middot; Codes issued</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 -->
+<section class="slide" data-title="Verification">
+  <template class="notes"><span class="cue">One &middot; verification</span>
+    <p class="lead">Now the part people always ask about. <strong>How do you know they really paid?</strong></p><p>The moment that receipt is uploaded, it lands in a <strong>Telegram group</strong> with the photo attached. The treasurer opens it on her phone, checks it against the bank, and taps verify.</p><p>Only then do the <strong>ticket codes get emailed</strong> to the buyer. And the codes never appear in Telegram, so nobody in that group can read someone else's numbers.</p><p><em>This is the trust part. Slow down here.</em></p></template>
+  <div class="frame">
+    <div class="split">
+      <div>
+    <p class="lesson rise"><span class="ln">One</span><span class="lt">A raffle</span></p>
+    <h2 class="rise">Every payment is checked by a person.</h2>
+      </div>
+      <div class="gap rise">
+        <b>Screenshot to drop in</b>
+        <span>The Telegram verify group &mdash; one order with the receipt photo attached, and the verify tap. Save it as <code>img/telegram.jpg</code>.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 -->
+<section class="slide" data-title="Dashboard">
+  <template class="notes"><span class="cue">One &middot; the dashboard</span>
+    <p class="lead">And everything that happens lands on <strong>one dashboard</strong>.</p><p>How many tickets went out, who is still waiting to be verified, what has been rejected and why. The treasurer works straight out of that page.</p><p>Before this, a batch fundraiser like that ran on a <strong>spreadsheet and a group chat</strong>, and somebody had to remember who paid.</p><p><em>Bridge: that is one kind of work. Here is a different kind.</em></p></template>
+  <div class="frame">
+    <div class="split">
+      <div>
+    <p class="lesson rise"><span class="ln">One</span><span class="lt">A raffle</span></p>
+    <h2 class="rise">The sales show up on a dashboard.</h2>
+      </div>
+      <div class="gap rise">
+        <b>Screenshot to drop in</b>
+        <span>The admin dashboard signed in &mdash; tickets sold, orders waiting to be verified, and the verified group. Save it as <code>img/dashboard.jpg</code>.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 -->
+<section class="slide" data-title="Ask Ivan">
+  <template class="notes"><span class="cue">Two &middot; the one they know</span>
+    <p class="lead">Second one. Most of you have <strong>already used this</strong>.</p><p>It is on the members hub. You ask Dr. Misner a question and you get an answer, and it tells you <strong>which episodes</strong> it came from.</p><p>Behind it are <strong>nine hundred and sixty</strong> podcast transcripts. It only answers from those. It cannot make something up, because there is nowhere else for it to look.</p></template>
+  <div class="frame">
+    <div class="split">
+      <div>
+        <p class="lesson rise"><span class="ln">Two</span><span class="lt">A knowledge base</span></p>
+        <h2 class="rise">The second one, you have already used.</h2>
+      </div>
+      <figure class="shot rise"><img src="img/ivan.jpg" alt="" loading="lazy"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section class="slide" data-title="Ask OI">
+  <template class="notes"><span class="cue">Two &middot; the same thing for a company</span>
+    <p class="lead">Same idea, pointed at <strong>a company&rsquo;s own work</strong>.</p><p>This is a consulting firm I am pitching right now. Eighteen published case studies, five practices, over forty people. The answer to most questions already exists somewhere in the firm &mdash; <strong>someone just has to remember that it does</strong>.</p><p>Watch the bottom of the answer. It shows <strong>where it came from</strong>. And when you ask it something it does not have, like a budget, it says so instead of <strong>inventing a number</strong> in front of a client.</p></template>
+  <div class="frame frame-tall">
+    <div class="showcase">
+      <div class="head">
+        <p class="lesson rise"><span class="ln">Two</span><span class="lt">A knowledge base</span></p>
+        <h2 class="rise">Same idea, reading a company&rsquo;s own work.</h2>
+      </div>
+      <figure class="shot rise"><img src="img/oi-demo.jpg" alt="" loading="lazy"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 08 -->
+<section class="slide" data-title="Privacy">
+  <template class="notes"><span class="cue">Two &middot; the point</span>
+    <p class="lead">Here is why I keep building these instead of just <strong>reselling somebody's software</strong>.</p><p>There are plenty of products that do this. You upload your files to them, and your work now lives on <strong>their servers</strong>, under their rules, priced per person.</p><p>The ones I build sit inside the business, reading <strong>your own drive, under the permissions your people already have</strong>. If you stop paying me, the files are still yours and they never moved.</p><p><em>Ask the room: how much of your business is sitting in somebody else's account right now?</em></p></template>
+  <div class="frame">
+    <p class="lesson rise"><span class="ln">Two</span><span class="lt">A knowledge base</span></p>
+    <p class="mono-huge rise">No SaaS lets you keep it <em>inside your own business.</em></p>
+  </div>
+</section>
+
+<!-- 09 -->
+<section class="slide" data-title="Happy WiFi">
+  <template class="notes"><span class="cue">Three &middot; the WiFi</span>
+    <p class="lead">Third one, and this is the one I am <strong>building right now</strong>.</p><p>Free WiFi at the <strong>MRT</strong>. You connect at the station, an ad plays while you are being connected, and you are online.</p><p>The station gets WiFi it does not pay for. The advertiser gets people who are <strong>standing still with nothing to do</strong> &mdash; and at Taft that wait is long.</p></template>
+  <div class="frame frame-tall">
+    <div class="showcase">
+      <div class="head">
+        <p class="lesson rise"><span class="ln">Three</span><span class="lt">Selling through media</span></p>
+        <h2 class="rise">The third one is free WiFi at the MRT.</h2>
+      </div>
+      <figure class="shot rise"><img src="img/hw-portal.jpg" alt="" loading="lazy"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-title="Advertiser view">
+  <template class="notes"><span class="cue">Three &middot; how the data is shared</span>
+    <p class="lead">And this is <strong>how the data is actually shared</strong>.</p><p>The advertiser logs in and sees their own campaign. How many people they reached, what it cost, which station worked hardest.</p><p>What they <strong>cannot</strong> see is a single person. No names, no numbers, no raw log, and nothing from another advertiser. They get their campaign <strong>totalled up</strong>, and the database blocks the rest row by row.</p><p><em>Bridge: that is the three. Now what to listen for.</em></p></template>
+  <div class="frame frame-tall">
+    <div class="showcase">
+      <div class="head">
+        <p class="lesson rise"><span class="ln">Three</span><span class="lt">Selling through media</span></p>
+        <h2 class="rise">The advertiser only ever sees totals.</h2>
+      </div>
+      <figure class="shot rise"><img src="img/hw-advertiser.jpg" alt="" loading="lazy"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="slide slide-close" data-title="Close">
+  <template class="notes"><span class="cue">Close &middot; the ask</span>
+    <p class="lead">So that is what I do, in three pictures.</p><p>You do not have to explain any of this. You only have to <strong>recognise it</strong>. If someone in your network says one of those three sentences, that is my referral.</p><p><strong>Send them to me and I will build the thing first, then show it to them.</strong> That is how all three of these started.</p><p><em>Leave this slide up. Read the three lines slowly, then stop talking.</em></p></template>
+  <div class="frame">
+    <p class="part rise">Close</p>
+    <h2 class="rise">If you hear one of these, that is me.</h2>
+    <ul class="triggers">
+      <li class="rise"><span class="when">One</span><span><span class="quote">&ldquo;We are collecting payments by hand.&rdquo;</span><span class="does">A fundraiser, a raffle, an event taking money on chat.</span></span></li>
+      <li class="rise"><span class="when">Two</span><span><span class="quote">&ldquo;Nobody can find our old work.&rdquo;</span><span class="does">Years of files, and only one person knows where anything is.</span></span></li>
+      <li class="rise"><span class="when">Three</span><span><span class="quote">&ldquo;We have the foot traffic already.&rdquo;</span><span class="does">People waiting somewhere, and nothing being sold to them.</span></span></li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+
+
+
+<div id="pair" hidden>
+  <div class="pair-card">
+    <p class="pair-label">PRESENTER REMOTE</p>
+    <p class="pair-code" id="pcode">----</p>
+    <p class="pair-url">post205.com/p/3m/r</p>
+    <p class="pair-status" id="pstat">Opening room...</p>
+    <p class="pair-hint">Open that page on your phone and enter the code.</p>
+    <button id="pdone">Hide this</button>
+  </div>
+</div>
+
+<div id="livedot" hidden></div>
+<div id="bar">
+  <span id="counter">01 / 11</span>
+  <div id="pips" aria-hidden="true"></div>
+  <button id="present" aria-label="Open presenter remote" title="Presenter remote (P)">Remote</button>
+  <button class="nav-btn" id="prev" aria-label="Previous slide">&lsaquo;</button>
+  <button class="nav-btn" id="next" aria-label="Next slide">&rsaquo;</button>
+</div>
+
+<script type="module">
+let animate, createTimeline, stagger;
+let still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+try {
+  const A = await import('/js/vendor/anime.esm.min.js');
+  animate = A.animate; createTimeline = A.createTimeline; stagger = A.stagger;
+} catch (e) {
+  /* slow network, blocked request, bad MIME: present without motion */
+  window.__deckErr('animation library did not load, running without motion');
+  still = true;
+  animate = () => ({}); createTimeline = () => { const t = { add: () => t }; return t; }; stagger = () => 0;
+}
+
+/* the 15x5 logo bitmap — same matrix as the homepage, the email logo, and /in/mapping */
+const M = ['001011101110111', '100000101010100', '010011101010111', '000010001010001', '100011101110111'];
+const seedRand = (i) => { const x = Math.sin((i + 1) * 127.1) * 43758.5453; return x - Math.floor(x); };
+const DPR2 = Math.min(window.devicePixelRatio || 1, 2);
+/* on-dark palette: Teal Strike, with a cooler partner so the field has grain */
+const TEAL = [59, 209, 211], MUTE = [26, 122, 130];
+
+/* breathing lattice behind every slide; the logo lives bright inside it, top-right */
+function slideLattice(host) {
+  const cv = document.createElement('canvas');
+  cv.className = 'slide-lattice';
+  cv.setAttribute('aria-hidden', 'true');
+  host.insertBefore(cv, host.firstChild);
+  const ctx = cv.getContext('2d');
+  let W = 0, H = 0, P = 26, D = 18, cells = [];
+  function build() {
+    W = host.clientWidth; H = host.clientHeight;
+    if (!W || !H) return false;
+    cv.width = Math.round(W * DPR2); cv.height = Math.round(H * DPR2);
+    cv.style.width = W + 'px'; cv.style.height = H + 'px';
+    ctx.setTransform(DPR2, 0, 0, DPR2, 0, 0);
+    P = W < 860 ? 20 : 26;
+    D = P - Math.max(4, Math.round(P / 3));
+    const cols = Math.ceil(W / P), rows = Math.ceil(H / P);
+    const bx = Math.max(2, cols - 15 - 3), by = 2;
+    cells = [];
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const i = r * cols + c;
+      const s = seedRand(i * 3 + 2), m = seedRand(i * 7 + 4);
+      const br = r - by, bc = c - bx;
+      const inLogo = br >= 0 && br < 5 && bc >= 0 && bc < 15 && M[br][bc] === '1';
+      cells.push({
+        x: c * P, y: r * P, inLogo,
+        r: TEAL[0] + (MUTE[0] - TEAL[0]) * m,
+        g: TEAL[1] + (MUTE[1] - TEAL[1]) * m,
+        b: TEAL[2] + (MUTE[2] - TEAL[2]) * m,
+        base: 0.025 + 0.075 * s,
+        freq: inLogo ? 1.1 : 0.8 + 1.2 * seedRand(i * 5 + 9),
+        phase: s * Math.PI * 2
+      });
+    }
+    return true;
+  }
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    for (const k of cells) {
+      const al = k.inLogo
+        ? (t === null ? 0.5 : 0.4 + 0.24 * Math.sin(t * k.freq + k.phase))
+        : (t === null ? k.base : k.base + 0.055 * Math.sin(t * k.freq + k.phase));
+      if (al <= 0) continue;
+      ctx.fillStyle = k.inLogo
+        ? 'rgba(' + TEAL[0] + ',' + TEAL[1] + ',' + TEAL[2] + ',' + al.toFixed(3) + ')'
+        : 'rgba(' + (k.r | 0) + ',' + (k.g | 0) + ',' + (k.b | 0) + ',' + al.toFixed(3) + ')';
+      ctx.fillRect(k.x + 1.5, k.y + 1.5, D, D);
+    }
+  }
+  build();
+  let rz;
+  window.addEventListener('resize', () => {
+    clearTimeout(rz);
+    rz = setTimeout(() => { if ((host.clientWidth !== W || host.clientHeight !== H) && build()) draw(still ? null : 0); }, 200);
+  });
+  return { draw };
+}
+
+/* decode-in: text resolves out of glyphs, the homepage move */
+function decodeIn(el, delay) {
+  const final = el.textContent;
+  const GL = '01·▪▫/|\\<>#+';
+  const obj = { p: 0 };
+  el.textContent = '';
+  animate(obj, {
+    p: 1, duration: 750, ease: 'outExpo', delay,
+    onUpdate: () => {
+      const n = Math.floor(obj.p * final.length);
+      let out = final.slice(0, n);
+      for (let k = n; k < final.length; k++) {
+        const ch = final[k];
+        out += ch === ' ' ? ' ' : (seedRand(k * 13 + ((obj.p * 60) | 0)) > 0.5 ? GL[(seedRand(k + ((obj.p * 90) | 0)) * GL.length) | 0] : ch);
+      }
+      el.textContent = out;
+    },
+    onComplete: () => { el.textContent = final; }
+  });
+}
+
+/* ── Deck ────────────────────────────────────────────────── */
+const deck = document.getElementById('deck');
+const slides = [...deck.querySelectorAll('.slide')];
+const counter = document.getElementById('counter');
+const pipsHost = document.getElementById('pips');
+const pips = slides.map((_, k) => {
+  const b = document.createElement('button');
+  b.className = 'pip';
+  b.setAttribute('aria-label', 'Go to slide ' + (k + 1));
+  b.addEventListener('click', () => show(k));
+  pipsHost.appendChild(b);
+  return b;
+});
+let i = 0;
+
+const lattice = slideLattice(deck);
+if (still) {
+  lattice.draw(null);
+} else {
+  let lastB = 0;
+  const loopBg = (now) => {
+    requestAnimationFrame(loopBg);
+    if (document.hidden || now - lastB < 66) return;   /* 15fps is plenty for a shimmer */
+    lastB = now;
+    lattice.draw(now / 1000);
+  };
+  requestAnimationFrame(loopBg);
+}
+
+const pad = (n) => String(n).padStart(2, '0');
+
+const enter = (slide, dir) => createTimeline({ defaults: { ease: 'outExpo', duration: 520 } })
+  .add(slide, { opacity: [0, 1], translateX: [(dir || 1) * 36, 0] })
+  .add(slide.querySelectorAll('.rise'), {
+    opacity: [0, 1], translateY: [10, 0], delay: stagger(52)
+  }, '<-=380');
+
+/* the build-order diagram draws itself, marker order */
+const drawShapes = (slide) => {
+  const paths = slide.querySelectorAll('.draw');
+  /* narrative diagrams unfold at speaking pace, so the picture arrives
+     with the sentence instead of a second after the slide */
+  const beat = parseInt(slide.dataset.pace || '0', 10);
+  const gap = beat || (paths.length > 10 ? 90 : 150);
+  const dur = beat ? Math.min(beat + 260, 900) : 700;
+  paths.forEach((p) => {
+    const len = p.getTotalLength();
+    p.style.strokeDasharray = len;
+    p.style.strokeDashoffset = len;
+  });
+  animate(paths, {
+    strokeDashoffset: 0, duration: dur, ease: 'inOutCirc',
+    delay: stagger(gap, { start: beat ? 500 : 260 })
+  });
+  const labels = slide.querySelectorAll('.dlabel, .dsub');
+  if (labels.length) {
+    labels.forEach((l) => { l.style.opacity = 0; });
+    animate(labels, {
+      opacity: [0, 1], duration: 420, ease: 'outExpo',
+      delay: stagger(beat ? Math.round(gap * 0.9) : 40, { start: beat ? 800 : 900 })
+    });
+  }
+};
+
+const setCounter = (final) => {
+  if (still) { counter.textContent = final; return; }
+  const obj = { p: 0 };
+  animate(obj, {
+    p: 1, duration: 240, ease: 'linear',
+    onUpdate: () => {
+      counter.textContent = obj.p >= 1 ? final
+        : final.replace(/\d/g, (d) => (obj.p > 0.5 && Math.random() > 0.5) ? d : String((Math.random() * 10) | 0));
+    },
+    onComplete: () => { counter.textContent = final; }
+  });
+};
+
+function show(n) {
+  const target = Math.max(0, Math.min(slides.length - 1, n));
+  const dir = target >= i ? 1 : -1;
+  const prev = slides[i];
+  i = target;
+  const slide = slides[i];
+  setCounter(`${pad(i + 1)} / ${pad(slides.length)}`);
+  pips.forEach((b, k) => b.classList.toggle('on', k === i));
+  slide.querySelector('.frame').scrollTop = 0;
+  history.replaceState(null, '', '#' + (i + 1));   /* deep-link: jump straight to a slide mid-talk */
+  if (still) {
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    return;
+  }
+  if (prev !== slide && prev.classList.contains('active')) {
+    animate(prev, {
+      opacity: [1, 0], translateX: [0, -dir * 28], duration: 260, ease: 'outQuad',
+      onComplete: () => { prev.classList.remove('active'); prev.style.opacity = ''; prev.style.transform = ''; }
+    });
+  }
+  slide.style.opacity = ''; slide.style.transform = '';
+  slide.classList.add('active');
+  enter(slide, dir);
+  if (slide.querySelector('.draw')) drawShapes(slide);
+  if (window.__think) (slide.querySelector('.think') ? window.__think.start() : window.__think.stop());
+  if (typeof pushState === 'function') pushState();
+}
+
+document.getElementById('next').addEventListener('click', () => show(i + 1));
+document.getElementById('prev').addEventListener('click', () => show(i - 1));
+
+/* scroll advances the deck — one gesture, one slide; inner content scrolls first */
+let lock = false, acc = 0;
+const advance = (dir) => {
+  if (lock) return;
+  lock = true; acc = 0;
+  show(i + dir);
+  setTimeout(() => { lock = false; }, 620);
+};
+document.addEventListener('wheel', (e) => {
+  const f = slides[i].querySelector('.frame');
+  if (Math.abs(e.deltaY) >= Math.abs(e.deltaX)) {
+    if (e.deltaY > 0 && f.scrollTop + f.clientHeight < f.scrollHeight - 2) return;
+    if (e.deltaY < 0 && f.scrollTop > 2) return;
+  }
+  e.preventDefault();
+  if (lock) return;
+  const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+  if (d === 0) return;
+  if ((acc > 0) !== (d > 0)) acc = 0;
+  acc += d;
+  if (Math.abs(acc) > 90) advance(acc > 0 ? 1 : -1);
+}, { passive: false });
+
+let tx = 0, ty = 0;
+document.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+document.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) advance(dx < 0 ? 1 : -1);
+}, { passive: true });
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  else if (e.key === 'Home') { e.preventDefault(); show(0); }
+  else if (e.key === 'End') { e.preventDefault(); show(slides.length - 1); }
+});
+
+/* ── Presenter remote ─────────────────────────────────────
+   Phone and display each dial out to Supabase Realtime and meet
+   in a room. No shared network needed; both just need internet.
+   Survives iOS discarding the tab: the room is restored on load
+   and the socket reconnects on its own. */
+const RT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpa3VoY2FheHhzYWRsd2VwYmxmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNTc0MzMsImV4cCI6MjA5MjYzMzQzM30.yV2uutaX523kPtCKMea6dH-Hk4DkX5_ZwHAjCNXx610';
+const RT_URL = 'wss://dikuhcaaxxsadlwepblf.supabase.co/realtime/v1/websocket?apikey=' + RT_KEY + '&vsn=1.0.0';
+const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';   /* no O/0/I/1 */
+/* Safari throws on storage in private browsing / lockdown mode. A dead
+   remote must never take the slides down with it. */
+let memRoom = null;
+const roomGet = () => { try { return sessionStorage.getItem('deckRoom') || memRoom; } catch { return memRoom; } };
+const roomSet = (v) => { memRoom = v; try { sessionStorage.setItem('deckRoom', v); } catch {} };
+
+const pair = document.getElementById('pair');
+const pcode = document.getElementById('pcode');
+const pstat = document.getElementById('pstat');
+const presentBtn = document.getElementById('present');
+let sock = null, room = null, refN = 0, beat = 0, pulse = 0, retry = 0, giveUp = false, phoneOn = false;
+
+function newCode() {
+  let c = '';
+  const r = new Uint8Array(4);
+  crypto.getRandomValues(r);
+  for (const b of r) c += ALPHABET[b % ALPHABET.length];
+  return c;
+}
+
+function slideInfo(n) {
+  const s = slides[n];
+  if (!s) return null;
+  const lesson = s.querySelector('.lesson');
+  const h = s.querySelector('h1, h2, .mono-huge');
+  return {
+    n: n + 1,
+    total: slides.length,
+    title: (h ? h.textContent : (s.dataset.title || '')).trim().slice(0, 90),
+    notes: (s.querySelector('template.notes') || {}).innerHTML || '',
+    lesson: lesson ? [...lesson.children].map(x => x.textContent.trim()).join(' \u00b7 ')
+                   : ((s.querySelector('.part') || {}).textContent || '').trim()
+  };
+}
+
+function pushState() {
+  if (!sock || sock.readyState !== 1) return;
+  sock.send(JSON.stringify({
+    topic: 'realtime:' + room, event: 'broadcast',
+    payload: { type: 'broadcast', event: 'state', payload: { now: slideInfo(i), next: slideInfo(i + 1) } },
+    ref: String(++refN)
+  }));
+}
+
+function setStat(t) { if (pstat) pstat.textContent = t; }
+
+function openRoom(silent) {
+  giveUp = false;
+  const code = roomGet() || (() => { const c = newCode(); roomSet(c); return c; })();
+  room = 'deck-' + code;
+  pcode.textContent = code;
+  if (!silent) setStat('Opening room...');
+  try { sock = new WebSocket(RT_URL); } catch { setStat('Could not open a connection.'); return; }
+
+  sock.onopen = () => {
+    retry = 0;
+    sock.send(JSON.stringify({
+      topic: 'realtime:' + room, event: 'phx_join',
+      payload: { config: { broadcast: { self: false, ack: false } } }, ref: String(++refN)
+    }));
+    clearInterval(beat);
+    beat = setInterval(() => {
+      if (sock && sock.readyState === 1)
+        sock.send(JSON.stringify({ topic: 'phoenix', event: 'heartbeat', payload: {}, ref: String(++refN) }));
+    }, 20000);
+    /* a late-joining phone picks the deck up without having to ask */
+    clearInterval(pulse);
+    pulse = setInterval(pushState, 3000);
+  };
+
+  sock.onmessage = (e) => {
+    const m = JSON.parse(e.data);
+    if (m.event === 'phx_reply' && m.payload.status === 'ok' && !phoneOn) {
+      setStat('Room open. Waiting for phone.');
+    }
+    if (m.event !== 'broadcast') return;
+    const p = m.payload.payload || {};
+    if (p.hello) {
+      phoneOn = true;
+      setStat('Phone connected.');
+      document.getElementById('livedot').hidden = false;
+      presentBtn.classList.add('live');
+      pair.hidden = true;
+      pushState();
+      return;
+    }
+    /* any command is proof the phone is there, even after a tab reload */
+    if (!phoneOn) {
+      phoneOn = true;
+      setStat('Phone connected.');
+      document.getElementById('livedot').hidden = false;
+      presentBtn.classList.add('live');
+    }
+    if (p.go === 'next') show(i + 1);
+    else if (p.go === 'prev') show(i - 1);
+    else if (typeof p.goto === 'number') show(p.goto - 1);
+    pushState();
+  };
+
+  const dropped = () => {
+    clearInterval(beat); clearInterval(pulse);
+    phoneOn = false;
+    document.getElementById('livedot').hidden = true;
+    presentBtn.classList.remove('live');
+    if (giveUp) return;
+    retry++;
+    const wait = Math.min(1000 * retry, 8000);
+    setStat('Reconnecting...');
+    setTimeout(() => { if (!giveUp) openRoom(true); }, wait);
+  };
+  sock.onclose = dropped;
+  sock.onerror = () => { setStat('Trouble reaching the room.'); };
+}
+
+/* iOS discards background tabs; rejoin the same room on the way back */
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  try { if (roomGet() && (!sock || sock.readyState > 1)) openRoom(true); } catch {}
+});
+
+function togglePair() {
+  if (!sock || sock.readyState > 1) { pair.hidden = false; openRoom(); }
+  else pair.hidden = !pair.hidden;
+}
+presentBtn.addEventListener('click', togglePair);
+document.getElementById('pdone').addEventListener('click', () => { pair.hidden = true; });
+pair.addEventListener('click', (e) => { if (e.target === pair) pair.hidden = true; });
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'p' && e.key !== 'P') return;
+  if (e.metaKey || e.ctrlKey) return;
+  e.preventDefault();
+  togglePair();
+});
+
+/* slide 2 draws a reasoning trace as it happens, so the room sees the thing
+   he is describing instead of a picture of it */
+(function thinkStream() {
+  const host = document.getElementById('think');
+  if (!host) return;
+  const ROWS = 22, bars = [];
+  for (let k = 0; k < ROWS; k++) {
+    const b = document.createElement('i');
+    b.style.width = (34 + Math.round(seedRand(k * 7 + 1) * 58)) + '%';
+    if (k === 4 || k === 9 || k === 14 || k === 19) b.classList.add('hot');
+    host.appendChild(b); bars.push(b);
+  }
+  let t = null;
+  function run() {
+    bars.forEach(b => b.classList.remove('on', 'cur'));
+    if (still) { bars.forEach(b => b.classList.add('on')); return; }
+    let k = 0;
+    const step = () => {
+      if (k >= ROWS) { t = setTimeout(run, 2600); return; }
+      bars[k].classList.add('on', 'cur');
+      if (k > 0) bars[k - 1].classList.remove('cur');
+      k++;
+      t = setTimeout(step, bars[k - 1] && bars[k - 1].classList.contains('hot') ? 340 : 130);
+    };
+    step();
+  }
+  window.__think = { start: () => { clearTimeout(t); run(); }, stop: () => clearTimeout(t) };
+})();
+
+const start = Math.max(0, (parseInt(location.hash.slice(1), 10) || 1) - 1);
+show(start);
+window.addEventListener('hashchange', () => {
+  const n = (parseInt(location.hash.slice(1), 10) || 1) - 1;
+  if (n !== i) show(n);
+});
+document.body.classList.add('ready');
+if (!still && start === 0) decodeIn(document.getElementById('boot'), 220);
+
+/* Slides are up. Only now do we touch the remote, and never fatally. */
+try { if (roomGet()) openRoom(true); } catch (e) { setStat('Remote unavailable.'); }
+</script>
+</body>
+</html>

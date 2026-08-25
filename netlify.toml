@@ -35,6 +35,12 @@
     X-Frame-Options = "ALLOWALL"
     Content-Security-Policy = "frame-ancestors 'self' https://post205.com"
 
+# Presentation decks under /p/ are unlisted (robots.txt disallows /p/ too)
+[[headers]]
+  for = "/p/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
 # Keep the shareable AIOS links page out of search engines
 [[headers]]
   for = "/aios"

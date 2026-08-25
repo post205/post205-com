@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Run sheet · Three minutes</title>
+<style>
+  :root{--ground:#071717;--surface:#0F2727;--border:#1d4747;--border-2:#2a5f5f;
+    --text:#f2f9f9;--text-2:#b6d0ce;--text-3:#7aacac;--accent:#3BD1D3;
+    --mono:ui-monospace,monospace;--sans:system-ui,-apple-system,sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--ground);color:var(--text);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;padding:0 20px 90px;overflow-x:clip}
+  .wrap{max-width:940px;margin:0 auto}
+  header{padding:38px 0 22px;border-bottom:1px solid var(--border);margin-bottom:8px;
+    position:sticky;top:0;background:var(--ground);z-index:5}
+  .lbl{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3)}
+  h1{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:8px 0 4px}
+  .meta{color:var(--text-3);font-size:14px}
+  .row{display:grid;grid-template-columns:60px 1fr;gap:20px;padding:26px 0;border-bottom:1px solid var(--border)}
+  .num{font-family:var(--mono);font-size:15px;color:var(--text-3);padding-top:4px}
+  .les{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+  .say{font-size:25px;font-weight:800;letter-spacing:-.02em;line-height:1.2;margin-bottom:14px}
+  .cue{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:10px}
+  .notes p{font-size:17px;line-height:1.55;color:var(--text-2)}
+  .notes p+p{margin-top:11px}
+  .notes p.lead{font-size:19px;font-weight:700;color:var(--text)}
+  .notes strong{color:var(--accent);font-weight:700}
+  .notes em{font-style:normal;color:var(--text-3)}
+  .art{margin-top:14px;max-width:210px;opacity:.85}
+  .art img{width:100%;display:block}
+  @media print{body{background:#fff;color:#000}.notes p,.say{color:#000}}
+  @media(max-width:640px){.row{grid-template-columns:1fr;gap:6px}.num{padding:0}.say{font-size:21px}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <p class="lbl">POST205 · THREE MINUTES</p>
+    <h1>Run sheet</h1>
+    <p class="meta" id="count">Loading…</p>
+  </header>
+  <div id="list"></div>
+</div>
+
+<script>
+load();
+
+/* read the deck itself, so this page can never drift out of sync with it */
+function load(){
+  fetch('../index.html').then(r=>r.text()).then(html=>{
+    var doc=new DOMParser().parseFromString(html,'text/html');
+    var slides=[...doc.querySelectorAll('.slide')], out='';
+    slides.forEach(function(s,i){
+      var les=s.querySelector('.lesson,.part');
+      var h=s.querySelector('h1,h2,.mono-huge');
+      var t=s.querySelector('template.notes');
+      var img=s.querySelector('.art img');
+      out+='<div class="row"><div class="num">'+String(i+1).padStart(2,'0')+'</div><div>'
+        +(les?'<div class="les">'+les.textContent.replace(/\s+/g,' ').trim()+'</div>':'')
+        +'<div class="say">'+(h?h.textContent.trim():'')+'</div>'
+        +'<div class="notes">'+(t?t.innerHTML:'<p><em>No notes on this slide.</em></p>')+'</div>'
+        +(img?'<figure class="art"><img src="'+img.getAttribute('src').replace('img/','../img/')+'" alt=""></figure>':'')
+        +'</div></div>';
+    });
+    document.getElementById('list').innerHTML=out;
+    document.getElementById('count').textContent=slides.length+' slides · read straight through, or scan the bold';
+  }).catch(function(){document.getElementById('count').textContent='Could not load the deck.';});
+}
+</script>
+</body>
+</html>
