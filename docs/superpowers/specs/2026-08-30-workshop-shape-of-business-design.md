@@ -67,7 +67,7 @@ The second is the section's thesis.
 | 182 distinct business model patterns catalogued across 22 collections; 194-element hierarchy needed to make them usable | Springer, *Electronic Markets* (2018), "A hierarchical taxonomy of business model patterns" | High — primary |
 | 125,257 formal establishments in PH wholesale & retail trade | PSA, 2022 ASPBI | High — primary |
 | MSMEs are ~99.5% of PH establishments; micro are ~90% of those; MSMEs are ~63% of employment | Triangulated: 2019 DTI-derived figures (99.5% / 89%) and Vilar et al., "Understanding economic contributions of MSMEs among Philippine Regions" (99.58% / 90.54% / 62.66%) | High as a **rounded** claim — say "about 99 in 100" and "about 9 in 10", never a decimal |
-| ~~1,241,476 establishments; 99.63%; 90.66%; 66.58% (2024)~~ | Traceable only to a study guide citing PSA | **RETIRED 2026-08-30.** Do not use. PSA's own pages are JS-rendered and could not be scraped; the LOE URLs are shells. Precise figures without a primary source will not survive a paying room |
+| 1,241,476 establishments; 1,236,908 (99.63%) MSMEs; 90.66% micro, 8.60% small, 0.37% medium; MSMEs 66.58% of employment | DTI, *2024 Philippine MSME Statistics* (dti.gov.ph knowledge hub), on the PSA 2024 List of Establishments | **REINSTATED 2026-08-31.** Retired on 2026-08-30 when only a study guide could be found; a later pass located DTI's own published series. Micro/small/medium percentages are shares of **total establishments**, not of MSMEs. 2023 comparatives: 1,246,373 establishments, 66.97% of employment |
 | ~~PH MSME sector split ("retail is ~46%")~~ | — | **RETIRED 2026-08-30.** Never located in any source. Do not use |
 
 The 182-patterns finding is load-bearing: it is the defence for teaching a small
@@ -405,9 +405,13 @@ Per `~/.claude/CLAUDE.md` and the project CLAUDE.md: loading it is part of done.
 
 ## 6. Open items
 
-1. ~~Re-verify the PSA 2024 MSME figures.~~ **Closed 2026-08-30 — retired.** PSA's own
-   pages are JS-rendered and unscrapeable; the precise 2024 figures had no primary
-   source. Replaced by the rounded triangulated claim in §2.
+1. ~~Re-verify the PSA 2024 MSME figures.~~ **Closed 2026-08-31 — reinstated.** First
+   retired when only a study guide could be found, then located in DTI's own published
+   2024 series (on the PSA 2024 List of Establishments). The precise figures are usable.
+   Caution: a lens agent cited them to DTI's *2023* brief, which reports different
+   numbers (1,246,373 establishments; 66.97% of employment) — the citation, not the
+   figures, was the problem. Also retired here: a claimed ~97% MSME employment share in
+   "other services". That sector is 99.91%; 97.06% is Accommodation and Food Service.
 2. ~~The PH MSME sector split.~~ **Closed 2026-08-30 — retired**, never located.
 3. ~~Passphrase and QR target.~~ **Partially closed 2026-08-30.** Access model decided:
    one passphrase per cohort, normalised, unrelated to the workshop's name. The QR in
