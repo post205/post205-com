@@ -213,6 +213,16 @@
     .shape figcaption { margin-top: 0; }
   }
 
+  /* Evidence status per shape. A reader must be able to tell a sourced
+     constraint from one we have only reasoned to. */
+  .shape figcaption .ev {
+    display: block; width: fit-content; margin: -4px 0 10px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+    text-transform: uppercase; padding: 2px 7px; border-radius: 3px;
+  }
+  .ev-ok { color: var(--good, #198a4c); background: rgba(25,138,76,.09); }
+  .ev-pend { color: var(--text-3); background: transparent; border: 1px dashed var(--border-2); }
+
   .cite { font-size: 15px; color: var(--accent); }
   .refs { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--border); }
   .refs h2 { font-size: 19px; margin: 0 0 12px; }
