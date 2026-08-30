@@ -110,7 +110,14 @@ if (existsSync(PAGE)) {
   assert.ok(
     page.includes('<!--SLUG:'), `${PAGE} must parse the same slug marker`
   );
-  console.log(`  cross-checked contract against ${PAGE}`);
+  // The normalise() implementations MUST match character for character. If the
+  // builder and the page disagree, every payload becomes unopenable and the only
+  // symptom is "wrong passphrase" for a passphrase that is correct.
+  const NORM = 's.toLowerCase().replace(/\\s+/g, \'\')';
+  const builder = readFileSync('tools/build-lib.mjs', 'utf8');
+  assert.ok(builder.includes(NORM), 'tools/build-lib.mjs must normalise as ' + NORM);
+  assert.ok(page.includes(NORM), `${PAGE} must normalise identically to the builder`);
+  console.log(`  cross-checked DELIM, slug marker and normalise() against ${PAGE}`);
 } else {
   console.log(`  NOTE: ${PAGE} does not exist yet — contract cross-check SKIPPED`);
 }

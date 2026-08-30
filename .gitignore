@@ -10,3 +10,4 @@ tmp/
 .superpowers/
 temp/
 tools/lib-src/
+tools/lib-verify-src/

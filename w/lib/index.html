@@ -210,18 +210,30 @@
 </div>
 
 <script type="module">
-/* ── Contract with tools/test-lib-roundtrip.mjs and tools/encrypt-deck.mjs.
+/* ── Contract with tools/build-lib.mjs and tools/test-lib-roundtrip.mjs.
    If you change either literal, change it in all three places. ── */
 const DELIM = '\n<!--PAGE-->\n';
 const SLUG_RE = /^<!--SLUG:([a-z0-9-]+)-->\n?/;
+
+/* One passphrase per cohort: same content, re-encrypted per run of the workshop,
+   so a leaked passphrase burns one cohort rather than the whole library.
+   The QR shown at the end of the session carries ?c=<cohort>. */
+const COHORT = (new URLSearchParams(location.search).get('c') || '').trim();
+const PAYLOAD = /^[a-z0-9-]+$/.test(COHORT) ? `./lib.${COHORT}.enc.json` : './lib.enc.json';
+
+/* CONTRACT with tools/build-lib.mjs, which normalises identically before
+   deriving the key. Thirty people typing on phones will capitalise the first
+   letter and disagree about spaces; none of that should keep a buyer out. */
+const normalise = (s) => s.toLowerCase().replace(/\s+/g, '');
 
 /* ── Storage: Safari private/lockdown mode THROWS on sessionStorage. An
    unguarded access at module top level once killed an entire deck, so every
    read and write is wrapped with an in-memory fallback. ── */
 let memPass = null;
-const passGet = () => { try { return sessionStorage.getItem('libPass') || memPass; } catch { return memPass; } };
-const passSet = (v) => { memPass = v; try { sessionStorage.setItem('libPass', v); } catch {} };
-const passClear = () => { memPass = null; try { sessionStorage.removeItem('libPass'); } catch {} };
+const SKEY = 'libPass:' + (COHORT || 'default');
+const passGet = () => { try { return sessionStorage.getItem(SKEY) || memPass; } catch { return memPass; } };
+const passSet = (v) => { memPass = v; try { sessionStorage.setItem(SKEY, v); } catch {} };
+const passClear = () => { memPass = null; try { sessionStorage.removeItem(SKEY); } catch {} };
 
 const $ = (id) => document.getElementById(id);
 const gate = $('gate'), shell = $('shell'), err = $('gate-err'), passEl = $('pass');
@@ -234,7 +246,7 @@ let META = [];
 async function unlock(passphrase) {
   let res;
   try {
-    res = await fetch('./lib.enc.json', { cache: 'no-store' });
+    res = await fetch(PAYLOAD, { cache: 'no-store' });
   } catch {
     throw new Error('NETWORK');
   }
@@ -242,7 +254,7 @@ async function unlock(passphrase) {
   const { salt, iv, ct } = await res.json();
   const b = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
   const base = await crypto.subtle.importKey(
-    'raw', new TextEncoder().encode(passphrase), 'PBKDF2', false, ['deriveKey']
+    'raw', new TextEncoder().encode(normalise(passphrase)), 'PBKDF2', false, ['deriveKey']
   );
   const key = await crypto.subtle.deriveKey(
     { name: 'PBKDF2', salt: b(salt), iterations: 250000, hash: 'SHA-256' },
@@ -345,7 +357,11 @@ function reveal(plain) {
 function explain(e) {
   const m = String((e && e.message) || e);
   if (m === 'NETWORK') return 'Could not reach the library. Check your connection and try again.';
-  if (m.startsWith('PAYLOAD_')) return 'The library file did not load (' + m.slice(8) + '). Tell Toffer.';
+  if (m.startsWith('PAYLOAD_')) {
+    return COHORT
+      ? 'No library found for this link (' + m.slice(8) + '). Check the QR or ask Toffer.'
+      : 'The library file did not load (' + m.slice(8) + '). Tell Toffer.';
+  }
   return 'That passphrase did not open it. Check for stray spaces, then try again.';
 }
 

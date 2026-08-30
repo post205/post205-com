@@ -10,11 +10,12 @@ that killed an entire deck once before.
 
 Default base_url is a local server this script starts itself.
 """
-import sys, subprocess, threading, http.server, socketserver, functools, time, os
+import sys, subprocess, threading, http.server, socketserver, functools, time, os, json, shutil
 from playwright.sync_api import sync_playwright
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PASS = "temporary-dummy-pass"
+PASS = "Verify  Dummy PASS"   # deliberately mixed case + double space: exercises normalise()
+COHORT = "verifytest"
 PORT = 8899
 
 results = []
@@ -45,29 +46,40 @@ DUMMY = """<!--SLUG:probe-one-->
 <p>Second page. The hub above should show two cards under a PROBE heading.</p>
 """
 
-LIVE_PAYLOAD = os.path.join(ROOT, "w", "lib", "lib.enc.json")
+LIVE_PAYLOAD = os.path.join(ROOT, "w", "lib", f"lib.{COHORT}.enc.json")
+
+
+DUMMY_SRC = os.path.join(ROOT, "tools", "lib-verify-src")
 
 
 def build_dummy():
-    """Write a throwaway payload, preserving any real one. Returns the backup bytes."""
+    """Build a throwaway payload from a throwaway source dir.
+
+    Never reads or writes tools/lib-src/, so it cannot disturb the real pages or
+    their manifest. Returns the backup bytes of any payload it displaces.
+    """
     backup = None
     if os.path.exists(LIVE_PAYLOAD):
         with open(LIVE_PAYLOAD, "rb") as f:
             backup = f.read()
-    src = os.path.join(ROOT, "tools", "lib-src", "_verify_dummy.html")
-    os.makedirs(os.path.dirname(src), exist_ok=True)
-    with open(src, "w") as f:
-        f.write(DUMMY)
-    out = subprocess.run(["node", "tools/encrypt-deck.mjs", PASS, src],
-                         cwd=ROOT, capture_output=True, text=True, check=True).stdout
-    with open(LIVE_PAYLOAD, "w") as f:
-        f.write(out)
-    os.remove(src)
+    os.makedirs(DUMMY_SRC, exist_ok=True)
+    pages = DUMMY.split("\n<!--PAGE-->\n")
+    slugs = []
+    for chunk in pages:
+        slug = chunk.split("-->")[0].replace("<!--SLUG:", "").strip()
+        slugs.append(slug)
+        with open(os.path.join(DUMMY_SRC, slug + ".html"), "w") as f:
+            f.write(chunk.split("-->", 1)[1].lstrip("\n"))
+    with open(os.path.join(DUMMY_SRC, "_manifest.json"), "w") as f:
+        json.dump({"pages": slugs}, f)
+    subprocess.run(["node", "tools/build-lib.mjs", COHORT, PASS, "tools/lib-verify-src"],
+                   cwd=ROOT, capture_output=True, text=True, check=True)
     return backup
 
 
 def restore(backup):
-    """Put the real payload back, or remove the dummy if there wasn't one."""
+    """Put the real payload back, remove the dummy, and delete the temp source."""
+    shutil.rmtree(DUMMY_SRC, ignore_errors=True)
     if backup is None:
         if os.path.exists(LIVE_PAYLOAD):
             os.remove(LIVE_PAYLOAD)
@@ -85,7 +97,7 @@ def main():
         httpd = serve()
         base = f"http://127.0.0.1:{PORT}"
         time.sleep(0.4)
-    url = base.rstrip("/") + "/w/lib/"
+    url = base.rstrip("/") + f"/w/lib/?c={COHORT}"
     print(f"Testing {url}\n")
 
     errors = []
