@@ -35,6 +35,14 @@ Three deliverables:
 
 ## 2. Research foundation
 
+> **Revised 2026-08-31 — the framework was re-derived from primary sources.**
+> The section no longer cites or quotes Alex Hormozi. He is himself a secondary
+> source: the constraint argument is Goldratt's, the pattern discipline is the
+> business-model literature's. Building directly on those is both more honest and
+> more defensible in a paid room, because a challenged category is answered from
+> the principle rather than from an authority. What follows is the current spine;
+> the original Hormozi framing is kept below it only as build history.
+
 ### Primary source
 
 Alex Hormozi, "Use the Shape of Your Business to Scale," *The Game*, Ep. 1005,
@@ -66,7 +74,34 @@ The 182-patterns finding is load-bearing: it is the defence for teaching a small
 number. The scholarly answer to "how many shapes are there" is 182, and it is
 useless in a room.
 
-### The taxonomy: seven shapes
+### The spine (as built)
+
+Goldratt, *The Goal* (1984): every system has exactly one constraint at a time, and
+strengthening any other link adds weight without adding strength. If that holds, the
+useful way to sort businesses is **by which constraint they get** — which is the
+derivation the seven shapes now come from, rather than from anyone's list.
+
+The organising question on the page: *what is the scarce thing that caps this
+business, no matter how well it is run?*
+
+| Scarce thing | Shape | Sourced to |
+|---|---|---|
+| Capital consumed by each sale | Product | Cash conversion cycle (J.P. Morgan) |
+| Hours you can hire and train | Service | **needs a source — storm** |
+| Audience you must keep replacing | Info / Education | **needs a source — storm** |
+| Time before it works at all | Software | **needs a source — storm** |
+| Utilisation of capital you keep | Asset / Rental | **needs a source — storm** |
+| Transaction flow | Brokerage | **needs a source — storm** |
+| Physical throughput | Manufacturing | Goldratt / TOC |
+
+**Correction made during the build:** owner self-blame is **not** the fundamental
+attribution error. FAE describes how people judge *others*; self-attribution runs the
+other way, and a 2006 meta-analysis undercuts one of its forms. Citing it would have
+been exactly the borrowed authority this revision removes. The page instead argues
+that owners lack a **base rate** — they cannot see inside other businesses of the same
+shape — and marks that as our reading rather than a finding.
+
+### Original framing (build history)
 
 A shape earns its place only if it has a **distinct primary constraint**. If a
 candidate's constraint is already covered, it is a variant, not a shape.
@@ -149,10 +184,22 @@ Attribution is visible on-slide: the four Hormozi shapes and the three POST205 s
 are marked differently. This is a strength, not an apology — it is the difference
 between doing the work and repackaging a podcast.
 
-**M4 — The reveal (2 slides).** Read your paper again. Then the "feature, not a bug"
-quote, held alone on screen. **This moment is the entire section.** Everything before
-it is setup. If M3 runs long the reveal loses its charge, so M3 slides stay tight and
-the notes carry the detail.
+**M4 — The reveal (2 slides). Revised 2026-08-31.** Read your paper again. The slide
+shows the complaint table — seven sentences owners say, each against its shape — and
+they find the thing they wrote privately in M1 printed on the wall next to a model.
+
+The line that carries it is the base-rate point: you have never once seen inside
+another business shaped like yours, so there was no way to know this came with the
+model rather than with you.
+
+This replaces the quoted "feature, not a bug" beat, which went with the
+re-derivation. The replacement is better suited to the room: it is about the person
+who wrote the sentence rather than about an authority they may never have heard of,
+and it needs no name to land.
+
+**This moment is still the entire section.** Everything before it is setup. If M3
+runs long the reveal loses its charge, so M3 slides stay tight and the notes carry
+the detail.
 
 **M5 — The seam (3 slides).** For everyone whose frustration spanned two shapes. Most
 real SMEs are two shapes bolted together — the restaurant is Service plus Product, the
@@ -254,8 +301,11 @@ long-form reading on a dark field is a real cost.
 Every page marks each claim as one of three kinds, visually distinct:
 
 - **Sourced** — citation with a link. Mandatory for anything with a number.
-- **Hormozi says** — his claim, marked as his.
-- **Our read** — POST205's argument.
+- **Our read** — POST205's argument, in a marked box so it cannot be mistaken for a
+  finding.
+
+*(A third "Hormozi says" tier existed until 2026-08-31 and was removed with the
+re-derivation. No secondary-source quotation remains.)*
 
 This exists because the failure mode of the whole project is Hormozi's authority
 quietly stretching to cover claims he never made. `the-seam` is nearly all "our read"
@@ -273,7 +323,7 @@ and must not look like research.
 | `shape-asset` | Utilization, not inventory | **storm** |
 | `shape-brokerage` | Deal flow as the only constraint | **storm** |
 | `shape-manufacturing` | Throughput at the bottleneck | **storm** |
-| `feature-not-bug` | Why owners read structural cost as personal failure | **storm** |
+| `base-rates` | Why a constraint is invisible from inside one business | **storm** |
 | `constraints` | One constraint at a time (Goldratt; credited by Hormozi) | **storm** |
 | `the-seam` | Hybrids carry two constraints | **storm** |
 
