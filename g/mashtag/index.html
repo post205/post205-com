@@ -126,11 +126,23 @@
   header.top { padding: clamp(2.6rem, 7vw, 4.6rem) 0 clamp(1.8rem, 4vw, 2.8rem); border-bottom: 1px solid var(--border); }
   header.top .label { margin-bottom: 1rem; }
   header.top h1 { margin-bottom: .75rem; }
-  .meta {
-    display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; margin-top: 1.9rem;
-    font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--text-3);
+  /* a short note from a person, rather than a row of metadata fields */
+  .hello {
+    margin-top: 2rem;
+    max-width: var(--measure);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 1.1rem 1.25rem 1.15rem;
+    display: flex; flex-direction: column; gap: .6rem;
   }
-  .meta b { color: var(--text-2); font-weight: 400; }
+  .hello p { color: var(--text-2); }
+  .hello .sig { color: var(--text-3); font-size: 14px; }
+  .hello a { color: var(--accent-text); text-underline-offset: 2px; }
+  .stamp {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .04em;
+    color: var(--text-3); margin-top: 1.5rem;
+  }
 
   section { padding: clamp(2.4rem, 5.5vw, 3.8rem) 0; border-bottom: 1px solid var(--border); }
   section:last-of-type { border-bottom: 0; }
@@ -254,19 +266,21 @@
     <p class="label">mashtag.org &middot; for the ELM Planning team</p>
     <h1>Adding conference photos</h1>
     <p class="lede col">The photo galleries are live on the site, and they&rsquo;re yours to
-      keep going. This walks you through adding to them &mdash; it takes about five minutes
-      once you&rsquo;ve done it once, and adding photos only ever adds. The agenda, faculty
-      and sponsor pages can&rsquo;t be disturbed by anything here.</p>
-    <div class="meta">
-      <span>Written for <b>Karla &amp; Michele</b></span>
-      <span>Updated <b>30 August 2026</b></span>
-      <span>Questions &rarr; <b>toffer@post205.com</b></span>
+      keep going. This walks you through adding to them &mdash; about five minutes once
+      you&rsquo;ve done it the first time. And adding photos only ever adds: the agenda,
+      faculty and sponsor pages can&rsquo;t be disturbed by anything in here.</p>
+    <div class="hello">
+      <p>Hi Karla, hi Michele &mdash; I&rsquo;ve put the whole thing in one place so you
+        don&rsquo;t have to wait on me for the next batch. If a screen doesn&rsquo;t look
+        like the picture, or something won&rsquo;t behave, just email me and I&rsquo;ll
+        sort it out.</p>
+      <p class="sig">Toffer &middot; <a href="mailto:toffer@post205.com">toffer@post205.com</a></p>
     </div>
   </header>
 
   <section>
     <div class="sec-head rise">
-      <p class="label">Where things stand</p>
+      <p class="label">The good news first</p>
       <h2>Eight years are already up</h2>
       <p class="col" style="color:var(--text-2)">These were sitting in the system from
         previous years and simply never had a page to appear on. They went live this week,
@@ -290,7 +304,7 @@
 
   <section>
     <div class="sec-head rise">
-      <p class="label">First things first</p>
+      <p class="label">Before you start</p>
       <h2>Getting in</h2>
     </div>
     <div class="col rise" style="display:flex; flex-direction:column; gap:.75rem;">
@@ -401,7 +415,7 @@
   <section>
     <div class="sec-head rise">
       <p class="label">Good to know</p>
-      <h2>A few small things</h2>
+      <h2>A few things worth knowing</h2>
     </div>
     <dl class="rules rise">
       <div>
@@ -430,11 +444,13 @@
   </section>
 
   <div class="closer rise">
-    <h3>Stuck anywhere?</h3>
-    <p>Send me the year and what you were up to and I&rsquo;ll sort it &mdash;
-      <a href="mailto:toffer@post205.com">toffer@post205.com</a>. If you&rsquo;d rather hand
-      the photos over and have me load them, that&rsquo;s always fine too.</p>
+    <h3>If you get stuck</h3>
+    <p>Send me the year and what you were doing and I&rsquo;ll take it from there &mdash;
+      <a href="mailto:toffer@post205.com">toffer@post205.com</a>. And if you&rsquo;d rather
+      just hand the photos over and have me load them, that&rsquo;s genuinely no trouble.</p>
   </div>
+
+  <p class="stamp">Last updated 30 August 2026</p>
 
 </div>
 
