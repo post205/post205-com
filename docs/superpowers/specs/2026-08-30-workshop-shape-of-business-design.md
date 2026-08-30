@@ -58,8 +58,9 @@ The second is the section's thesis.
 |---|---|---|
 | 182 distinct business model patterns catalogued across 22 collections; 194-element hierarchy needed to make them usable | Springer, *Electronic Markets* (2018), "A hierarchical taxonomy of business model patterns" | High — primary |
 | 125,257 formal establishments in PH wholesale & retail trade | PSA, 2022 ASPBI | High — primary |
-| 1,241,476 PH establishments; 99.63% MSME; 90.66% micro; 66.58% of employment | PSA 2024, reached via secondary source | **Medium — must be re-verified against PSA/DTI directly before it appears on a slide** |
-| PH MSME sector split (e.g. "retail is ~46%") | — | **Unverified. Must not be used until confirmed.** |
+| MSMEs are ~99.5% of PH establishments; micro are ~90% of those; MSMEs are ~63% of employment | Triangulated: 2019 DTI-derived figures (99.5% / 89%) and Vilar et al., "Understanding economic contributions of MSMEs among Philippine Regions" (99.58% / 90.54% / 62.66%) | High as a **rounded** claim — say "about 99 in 100" and "about 9 in 10", never a decimal |
+| ~~1,241,476 establishments; 99.63%; 90.66%; 66.58% (2024)~~ | Traceable only to a study guide citing PSA | **RETIRED 2026-08-30.** Do not use. PSA's own pages are JS-rendered and could not be scraped; the LOE URLs are shells. Precise figures without a primary source will not survive a paying room |
+| ~~PH MSME sector split ("retail is ~46%")~~ | — | **RETIRED 2026-08-30.** Never located in any source. Do not use |
 
 The 182-patterns finding is load-bearing: it is the defence for teaching a small
 number. The scholarly answer to "how many shapes are there" is 182, and it is
@@ -291,9 +292,10 @@ Per `~/.claude/CLAUDE.md` and the project CLAUDE.md: loading it is part of done.
 
 ## 6. Open items
 
-1. **Re-verify the PSA 2024 MSME figures** against a primary source before they appear
-   anywhere. Currently held at medium confidence via a secondary citation.
-2. **The PH MSME sector split is unverified** and must not be used until confirmed.
+1. ~~Re-verify the PSA 2024 MSME figures.~~ **Closed 2026-08-30 — retired.** PSA's own
+   pages are JS-rendered and unscrapeable; the precise 2024 figures had no primary
+   source. Replaced by the rounded triangulated claim in §2.
+2. ~~The PH MSME sector split.~~ **Closed 2026-08-30 — retired**, never located.
 3. **Passphrase and QR target** for `/w/lib/` — Toffer to choose the passphrase; it is
    spoken aloud in M6, so it must be easy to say and hard to mistype.
 4. **Later sections** reuse `/w/lib/` and the deck shell. Their arcs are out of scope
