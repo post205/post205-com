@@ -296,6 +296,38 @@ Individual concept pages use the site's existing pattern: dark masthead over a l
 reading field with `#0e9a9d`. These pages are read for forty minutes, not projected;
 long-form reading on a dark field is a real cost.
 
+### Philippine sourcing (standing requirement, added 2026-08-31)
+
+The audience is Philippine SME owners paying to be in the room. A page whose evidence
+is entirely US journals and US market data is weaker for them regardless of how good
+the journals are.
+
+**Every shape page must carry at least one credible Philippine source**, and the page
+must say plainly where a mechanism is established abroad but unverified locally.
+
+Credible, in descending order:
+
+1. **Official statistics and regulators** — PSA, Bangko Sentral ng Pilipinas (RPPI,
+   lending rates, Financial Inclusion Survey), DTI, DHSUD/NHSB, Insurance Commission,
+   DMW, SEC Philippines, BIR.
+2. **Philippine research institutions** — PIDS (Philippine Institute for Development
+   Studies) discussion papers and the *Philippine Journal of Development*; UP School of
+   Economics discussion papers; Ateneo and DLSU research; ADB working papers on PH.
+3. **Named private research, labelled as such** — Colliers, Leechiu, JLL. Usable for
+   market data that no government body publishes, but must be marked as a brokerage
+   estimate rather than official data, and never placed alongside PSA/BSP figures as
+   though equivalent.
+
+**Not credible on their own:** paywalled market-research vendors with no published
+methodology, aggregator sites, and law-firm commentary blogs. A commentary blog may
+point at a primary issuance; cite the issuance, not the blog.
+
+**Statutes and regulations must be read, not summarised.** Two research runs produced
+fabricated or mis-stated Philippine legal claims: a wrong RESA section, an invented
+escrow figure, a placement-fee cap attributed to the wrong law, and a rent-control
+threshold that was the superseded statutory version rather than the operative one. If
+a section number cannot be found in the primary text, do not cite a section number.
+
 ### Three-tier attribution
 
 Every page marks each claim as one of three kinds, visually distinct:
