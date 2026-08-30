@@ -195,8 +195,39 @@ w/
 
 ### Gate
 
-Reuse `/in/mapping`'s implementation exactly: PBKDF2-SHA256 at 250,000 iterations,
-AES-GCM, wrong passphrase throws. No new crypto is written for this.
+Same crypto as `/in/mapping`: PBKDF2-SHA256 at 250,000 iterations, AES-GCM, wrong
+passphrase throws. No new crypto is written for this.
+
+**One passphrase per cohort** (decided 2026-08-30). Each run of the workshop gets its
+own encrypted payload over the same content:
+
+```
+/w/lib/?c=<cohort>  ->  w/lib/lib.<cohort>.enc.json
+node tools/build-lib.mjs <cohort> "<passphrase>"
+```
+
+A leaked passphrase therefore burns one cohort, not the library. Session storage is
+keyed per cohort so one device can hold two cohorts without collision, and a missing
+cohort payload reports that specifically rather than reading as a bad passphrase.
+
+**Passphrases are normalised on both sides** — lowercased, all whitespace stripped —
+so `Araw Bato Tubig`, `araw bato tubig` and `arawbatotubig` all open it. Thirty people
+typing on phones will disagree about capitals and spaces, and none of that should
+keep a buyer out mid-session.
+
+**The passphrase does not name the workshop or its content** (decided 2026-08-30). It
+rotates per cohort, so it is an access token, not a title. Naming it after Section 1
+would also be wrong on its face: the library spans every section.
+
+**`tools/build-lib.mjs`, not `encrypt-deck.mjs`.** The existing tool is shared with
+`/in/mapping`, whose page does not normalise; adding normalisation there would
+silently break that deck on its next rebuild. The new builder also concatenates pages
+in `_manifest.json` order, which the library needs anyway.
+
+The `normalise()` implementation is a contract across `tools/build-lib.mjs`,
+`w/lib/index.html` and `tools/test-lib-roundtrip.mjs`. A mismatch makes every payload
+unopenable, and the only symptom is "wrong passphrase" for a correct passphrase, so
+the test cross-checks all three.
 
 **One gate for the whole library, not one per page.** A person unlocks `/w/lib/` once;
 the decrypted payload holds every concept, routed by hash (`/w/lib/#shape-brokerage`).
@@ -296,7 +327,9 @@ Per `~/.claude/CLAUDE.md` and the project CLAUDE.md: loading it is part of done.
    pages are JS-rendered and unscrapeable; the precise 2024 figures had no primary
    source. Replaced by the rounded triangulated claim in §2.
 2. ~~The PH MSME sector split.~~ **Closed 2026-08-30 — retired**, never located.
-3. **Passphrase and QR target** for `/w/lib/` — Toffer to choose the passphrase; it is
-   spoken aloud in M6, so it must be easy to say and hard to mistype.
+3. ~~Passphrase and QR target.~~ **Partially closed 2026-08-30.** Access model decided:
+   one passphrase per cohort, normalised, unrelated to the workshop's name. The QR in
+   M6 must carry `?c=<cohort>`. **Still open:** the actual passphrase for the first
+   cohort, and the cohort slug.
 4. **Later sections** reuse `/w/lib/` and the deck shell. Their arcs are out of scope
    for this spec.
