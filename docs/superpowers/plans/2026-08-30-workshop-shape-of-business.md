@@ -462,10 +462,15 @@ anything that came out weaker than hoped. Do not start Task 8.
 
 **Gated on Task 7 approval.** Six require storm research; four are firecrawl-only.
 
-### Task 8: Storm the six remaining research-heavy pages
+### Task 8: Storm the research-heavy pages
+
+**Revised 2026-08-31.** With the framework re-derived from primary sources, nothing
+borrows authority any more, so these runs are load-bearing rather than reinforcing.
+Five of the seven shapes currently have a reasoned constraint and no citation:
+Service, Info/Education, Software, Asset/Rental and Brokerage. Those come first.
 
 **Files:**
-- Create: `storm-reports/{shape-product,shape-asset,shape-brokerage,shape-manufacturing,feature-not-bug,constraints,the-seam}-briefing.html`
+- Create: `storm-reports/{shape-service,shape-info,shape-software,shape-asset,shape-brokerage,base-rates,the-seam}-briefing.html`
 
 - [ ] **Step 1: Run storm per page, one at a time**
 
@@ -475,7 +480,7 @@ changes the taxonomy:
 1. `shape-brokerage` — will be read by actual insurance and real-estate agents
 2. `shape-asset` — the utilization-vs-inventory distinction must hold up
 3. `shape-manufacturing` — throughput/TOC
-4. `feature-not-bug` — attribution theory; must be real psychology, not metaphor
+4. `base-rates` — our own argument. Do NOT dress it in a named cognitive bias: self-blame is not the fundamental attribution error (see spec §2)
 5. `constraints` — Goldratt directly, not blogs about Goldratt
 6. `the-seam` — POST205's own argument, so it needs the most adversarial review
 7. `shape-product` — cash conversion cycle mechanics
@@ -499,7 +504,7 @@ writing problem.
 ### Task 9: Write the ten remaining pages
 
 **Files:**
-- Create: `tools/lib-src/{shape-product,shape-service,shape-info,shape-software,shape-asset,shape-brokerage,shape-manufacturing,feature-not-bug,constraints,the-seam}.html`
+- Create: `tools/lib-src/{shape-product,shape-service,shape-info,shape-software,shape-asset,shape-brokerage,shape-manufacturing,base-rates,constraints,the-seam}.html`
 
 - [ ] **Step 1–10: One page per step, each from its briefing, not from memory**
 
