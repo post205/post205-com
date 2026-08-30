@@ -47,6 +47,12 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
+# Paid workshop material — link + passphrase only
+[[headers]]
+  for = "/w/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
 # Keep the shareable AIOS links page out of search engines
 [[headers]]
   for = "/aios"

@@ -3,5 +3,6 @@ Allow: /
 Disallow: /p/
 Disallow: /sa/
 Disallow: /g/
+Disallow: /w/
 
 Sitemap: https://post205.com/sitemap.xml
