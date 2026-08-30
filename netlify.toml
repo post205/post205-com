@@ -41,6 +41,12 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
+# Client how-to guides under /g/ are shared by link only (robots.txt disallows /g/ too)
+[[headers]]
+  for = "/g/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
 # Keep the shareable AIOS links page out of search engines
 [[headers]]
   for = "/aios"
