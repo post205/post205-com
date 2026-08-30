@@ -90,7 +90,7 @@ Bricks-and-mortar retail (fails: Product with a location). Franchise (fails: inh
 the franchise's shape). Agriculture (borderline; treat as Manufacturing with
 uncontrolled throughput).
 
-**Accepted cost of seven over four:** the section runs ~60 minutes instead of ~45,
+**Accepted cost of seven over four:** the section runs to its full one-hour ceiling rather than ~45 minutes,
 and self-identification becomes *sorting* rather than *recognition*, which is a
 colder mental act. Accepted because a landlord or insurance agent sitting through
 four shapes that do not describe them has paid to learn nothing.
@@ -106,9 +106,19 @@ unchanged. Do not re-derive any of it.
 
 ### Arc: pain first, shape second
 
-~27 slides, ~60 minutes, six movements.
+**19 slides, ~39 minutes of content, budgeted to land at 50–55 minutes in a real
+room. One hour is a hard ceiling, so the design targets 50.** Six movements.
 
-**M1 — The commitment (3 slides).** Attendees write, on paper, the one thing about
+| Movement | Slides | Budget |
+|---|---|---|
+| M1 Commitment | 2 | 4 min |
+| M2 The claim | 2 | 3 min |
+| M3 The map + seven shapes | 8 | 18 min |
+| M4 The reveal | 2 | 5 min |
+| M5 The seam | 3 | 6 min |
+| M6 Close | 2 | 3 min |
+
+**M1 — The commitment (2 slides).** Attendees write, on paper, the one thing about
 their business that has frustrated them for years — the thing they have decided means
 they are bad at this. Nobody shares. The privacy is what makes M4 land rather than
 turn into a performance.
@@ -117,13 +127,20 @@ turn into a performance.
 did not choose it — you chose a product and the shape came attached. Includes the
 182-patterns finding as the reason the number is small.
 
-**M3 — The seven shapes (14 slides, two per shape).** Same two beats each, same
-order, so the pattern becomes predictable and attendees self-sort before the end:
+**M3 — The map, then the seven shapes (8 slides: 1 overview + 1 per shape).** The
+overview slide shows all seven at once so attendees know the shape of the next
+eighteen minutes and can start self-sorting immediately. Then one slide per shape,
+each carrying the same two beats in the same order so the pattern becomes predictable:
+what your week actually looks like, and the constraint, named.
 
-- Slide A: what it is, and what your week actually looks like
-- Slide B: the constraint, named
+At roughly two minutes per shape the **notes are doing nearly all the work here**.
+This makes the run sheet and the read-aloud pass more important than elsewhere in the
+deck, not less.
 
-Service carries one extra beat inside its notes (not a third slide): it is the least
+**If rehearsal overruns, the cut is to merge Info and Software onto one slide** — the
+two rarest shapes in a Philippine SME room. Never cut M4 or M5.
+
+Service carries one extra beat inside its notes (not a second slide): it is the least
 risky of the seven — it can cut back to solo and stay profitable — and the price it
 can charge is the owner's scoreboard, not a fixed market condition.
 
@@ -136,7 +153,7 @@ quote, held alone on screen. **This moment is the entire section.** Everything b
 it is setup. If M3 runs long the reveal loses its charge, so M3 slides stay tight and
 the notes carry the detail.
 
-**M5 — The seam (4 slides).** For everyone whose frustration spanned two shapes. Most
+**M5 — The seam (3 slides).** For everyone whose frustration spanned two shapes. Most
 real SMEs are two shapes bolted together — the restaurant is Service plus Product, the
 clinic sells consultations plus supplements, the agency runs retainers plus a course.
 Two constraints, not one. The specific failure: funding one side from the other and
