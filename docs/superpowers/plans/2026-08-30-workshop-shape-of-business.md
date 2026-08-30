@@ -73,7 +73,7 @@ outcome of this project.
 **Files:**
 - Modify: `docs/superpowers/specs/2026-08-30-workshop-shape-of-business-design.md:55-66`
 
-- [ ] **Step 1: Fetch the PSA/DTI primary sources**
+- [x] **Step 1: Fetch the PSA/DTI primary sources**
 
 ```bash
 cd /Users/toffer/Documents/2026/Claude/Projects/post205
@@ -82,7 +82,7 @@ firecrawl search "PSA 2024 List of Establishments total establishments MSME micr
   --scrape --limit 8 -o .firecrawl/psa-verify.json --json
 ```
 
-- [ ] **Step 2: Confirm or reject each figure**
+- [x] **Step 2: Confirm or reject each figure**
 
 For each of: 1,241,476 establishments · 99.63% MSME · 90.66% micro · 66.58% of
 employment · the sector split — record the primary URL and the exact publication that
@@ -93,7 +93,7 @@ Expected outcomes, all acceptable:
 - **Different number found** → use the primary figure, note the discrepancy.
 - **Not findable** → mark "DO NOT USE" in the spec and design the slide without it.
 
-- [ ] **Step 3: Commit the verification result**
+- [x] **Step 3: Commit the verification result**
 
 ```bash
 git add docs/superpowers/specs/2026-08-30-workshop-shape-of-business-design.md
@@ -110,7 +110,7 @@ git commit -m "docs: verify (or retire) the PSA MSME figures against primary sou
 - Create: `w/lib/index.html`, `w/lib/assets/.gitkeep`, `tools/lib-src/_manifest.json`
 - Modify: `netlify.toml`, `robots.txt`, `.gitignore`
 
-- [ ] **Step 1: Add the noindex header and robots rule**
+- [x] **Step 1: Add the noindex header and robots rule**
 
 In `netlify.toml`, beside the existing `/p/*` and `/g/*` blocks:
 
@@ -128,7 +128,7 @@ In `robots.txt`, after `Disallow: /g/`:
 Disallow: /w/
 ```
 
-- [ ] **Step 2: Gitignore the authoring source**
+- [x] **Step 2: Gitignore the authoring source**
 
 Append to `.gitignore`:
 
@@ -136,7 +136,7 @@ Append to `.gitignore`:
 tools/lib-src/
 ```
 
-- [ ] **Step 3: Verify the ignore actually takes**
+- [x] **Step 3: Verify the ignore actually takes**
 
 ```bash
 mkdir -p tools/lib-src && echo test > tools/lib-src/probe.html
@@ -150,7 +150,7 @@ continuing, because a leaked source file defeats the entire gate.
 rm tools/lib-src/probe.html
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add netlify.toml robots.txt .gitignore
@@ -166,7 +166,7 @@ The one piece of genuine logic. Test it before the page exists.
 **Files:**
 - Create: `tools/lib-src/_manifest.json`, `tools/test-lib-roundtrip.mjs`
 
-- [ ] **Step 1: Write the failing round-trip test**
+- [x] **Step 1: Write the failing round-trip test**
 
 `tools/test-lib-roundtrip.mjs`:
 
@@ -223,7 +223,7 @@ await assert.rejects(
 console.log('OK: payload round-trip, delimiter split, unicode, wrong-key rejection');
 ```
 
-- [ ] **Step 2: Run it and watch it fail**
+- [x] **Step 2: Run it and watch it fail**
 
 ```bash
 node tools/test-lib-roundtrip.mjs
@@ -232,12 +232,12 @@ node tools/test-lib-roundtrip.mjs
 Expected: FAIL — the delimiter/slug convention isn't established yet, or `encrypt-deck.mjs`
 output shape differs. Read the actual error before changing anything.
 
-- [ ] **Step 3: Make it pass**
+- [x] **Step 3: Make it pass**
 
 `tools/encrypt-deck.mjs` should need **no changes** — it encrypts an arbitrary file.
 If the test fails, the fault is in the test's assumptions, not the tool. Fix the test.
 
-- [ ] **Step 4: Run it green**
+- [x] **Step 4: Run it green**
 
 ```bash
 node tools/test-lib-roundtrip.mjs
@@ -245,7 +245,7 @@ node tools/test-lib-roundtrip.mjs
 
 Expected: `OK: payload round-trip, delimiter split, unicode, wrong-key rejection`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add tools/test-lib-roundtrip.mjs
@@ -259,12 +259,12 @@ git commit -m "test: library payload round-trip, delimiter split and wrong-key r
 **Files:**
 - Create: `w/lib/index.html`
 
-- [ ] **Step 1: Build the gate**
+- [x] **Step 1: Build the gate**
 
 Lift `unlock()` from `in/mapping/index.html:355-368` verbatim — same PBKDF2 iterations,
 same AES-GCM, same throw-on-wrong-key. Change only the fetch target to `./lib.enc.json`.
 
-- [ ] **Step 2: Add the payload splitter and hash router**
+- [x] **Step 2: Add the payload splitter and hash router**
 
 ```javascript
 const DELIM = '\n<!--PAGE-->\n';
@@ -288,7 +288,7 @@ function route() {
 window.addEventListener('hashchange', route);
 ```
 
-- [ ] **Step 3: Persist the unlock for the session, guarded**
+- [x] **Step 3: Persist the unlock for the session, guarded**
 
 Per playbook §2 failure mode 4 — Safari in private/lockdown mode **throws** on storage,
 and an unguarded access at module top level killed an entire deck. Every access wrapped:
@@ -299,12 +299,12 @@ const passGet = () => { try { return sessionStorage.getItem('libPass') || memPas
 const passSet = (v) => { memPass = v; try { sessionStorage.setItem('libPass', v); } catch {} };
 ```
 
-- [ ] **Step 4: Make failure legible**
+- [x] **Step 4: Make failure legible**
 
 The gate must say which thing went wrong — wrong passphrase, payload failed to load,
 or no network. Silent failure is the documented worst case from the AIOS build.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add w/lib/index.html
@@ -317,7 +317,7 @@ git commit -m "feat: library gate, payload splitter and hash router"
 
 **Files:** none created; this is verification.
 
-- [ ] **Step 1: Encrypt a two-page dummy payload**
+- [x] **Step 1: Encrypt a two-page dummy payload**
 
 ```bash
 node tools/encrypt-deck.mjs "temporary-dummy-pass" tools/lib-src/_dummy.html > w/lib/lib.enc.json
@@ -325,7 +325,7 @@ git add w/lib/lib.enc.json && git commit -m "chore: dummy library payload for ga
 git push
 ```
 
-- [ ] **Step 2: Wait for deploy, then load the real URL**
+- [x] **Step 2: Wait for deploy, then load the real URL**
 
 ```bash
 sleep 45 && curl -sS -o /dev/null -w "%{http_code}\n" https://post205.com/w/lib/
@@ -333,7 +333,7 @@ sleep 45 && curl -sS -o /dev/null -w "%{http_code}\n" https://post205.com/w/lib/
 
 Expected: `200`
 
-- [ ] **Step 3: Confirm the ciphertext is genuinely opaque**
+- [x] **Step 3: Confirm the ciphertext is genuinely opaque**
 
 ```bash
 curl -sS https://post205.com/w/lib/lib.enc.json | head -c 300
@@ -341,7 +341,7 @@ curl -sS https://post205.com/w/lib/lib.enc.json | head -c 300
 
 Expected: base64 only. **If any English prose is visible, stop — the gate is not working.**
 
-- [ ] **Step 4: Exercise all four paths in a real browser, and look at each**
+- [x] **Step 4: Exercise all four paths in a real browser, and look at each**
 
 Open `https://post205.com/w/lib/` and verify by eye:
 1. Wrong passphrase → a readable error, page still usable
@@ -353,7 +353,7 @@ Open `https://post205.com/w/lib/` and verify by eye:
 Screenshot the unlocked hub on a phone-width viewport and **view the image**. Numeric
 fit is not evidence.
 
-- [ ] **Step 5: Commit any fixes, then remove the dummy**
+- [x] **Step 5: Commit any fixes, then remove the dummy**
 
 ```bash
 git rm w/lib/lib.enc.json tools/lib-src/_dummy.html 2>/dev/null
@@ -767,6 +767,32 @@ Close items 1–3 in spec §6, or record why they remain open.
 ```bash
 git add -A && git commit -m "docs: close out shape-of-business section 1"
 ```
+
+---
+
+## Phase 0 completion note (2026-08-30)
+
+Phase 0 done and verified live at `https://post205.com/w/lib/`.
+
+Deviations from the plan, all deliberate:
+
+- **No `build.mjs` written.** `tools/encrypt-deck.mjs` already did the job.
+- **The dummy payload was never deployed.** The plan called for pushing it to
+  production to test the gate; instead the shell shipped alone, which tests
+  everything the live environment adds (Netlify headers, real URL) and exercises
+  the missing-payload error path for real, without placeholder content on the
+  live site. The dummy lives inside `tools/verify-lib-gate.py`.
+- **Task 3 passed on the first run**, so it never acted as a red-green gate.
+  Mutation testing then showed it was vacuous on the delimiter — writing and
+  splitting with the same constant proved nothing about the browser. Both
+  literals are now pinned and cross-checked against `w/lib/index.html`.
+- **One visual bug the assertions missed**: hub card titles and blurbs were
+  inline spans and ran together on one line. Caught only by viewing the render.
+
+Verified live: `X-Robots-Tag: noindex, nofollow` on `/w/*`, `Disallow: /w/` in
+robots.txt, `tools/lib-src/` unreachable (404) and untracked (0 files), no
+plaintext in the deployed shell, and the missing-payload path reporting
+"The library file did not load (404). Tell Toffer."
 
 ---
 
