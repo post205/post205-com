@@ -19,7 +19,7 @@ as their own failure is a structural property of the model they chose.
 Three deliverables:
 
 1. **The deck** — `/w/shape/`, driven from a phone remote, with spoken notes.
-2. **The run sheet** — `/w/script/`, for rehearsal without pairing a device.
+2. **The run sheet** — `/w/shape/script/`, for rehearsal without pairing a device.
 3. **The library** — `/w/lib/`, a gated, researched concept page per idea. This is a
    paid asset that outlives the workshop and spans all future sections.
 
