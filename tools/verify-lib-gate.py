@@ -35,9 +35,9 @@ def serve():
 
 
 DUMMY = """<!--SLUG:probe-one-->
-<h1 data-blurb="A probe page to prove the gate works." data-group="Probe" data-tier="hormozi">Probe one</h1>
+<h1 data-blurb="A probe page to prove the gate works." data-group="Probe" data-tier="">Probe one</h1>
 <p>If you can read this, the gate opened and the router resolved a slug.</p>
-<p class="c-hormozi">This paragraph should render with a HORMOZI label and a solid teal rule.</p>
+<blockquote>A sourced quotation renders as a blockquote with a teal rule.</blockquote>
 <p class="c-ours">This paragraph should render with a dashed border and an OUR READ &middot; NOT SOURCED label.</p>
 <p>Unicode check: &#8369;1,241,476 &middot; 66.58% &mdash; &ldquo;curly quotes&rdquo;</p>
 <table><tr><th>Shape</th><th>Constraint</th></tr><tr><td>Product</td><td>Cash locked in inventory</td></tr><tr><td>Brokerage</td><td>Deal flow</td></tr></table>
@@ -141,7 +141,6 @@ def main():
         hub_text = pg.inner_text("#hub")
         check("hub lists both probe pages",
               "Probe one" in hub_text and "Probe two" in hub_text)
-        check("tier badge renders on the hub", pg.locator(".tier-h").count() > 0)
         # Title and blurb must be on separate lines. They were spans (inline) and ran
         # together; every assertion passed and the render was wrong. Compare boxes.
         tb = pg.eval_on_selector(".card .card-t", "e=>e.getBoundingClientRect().bottom")
@@ -156,12 +155,12 @@ def main():
         art = pg.inner_text("#page")
         check("slug route renders the page", "Probe one" in art)
         check("unicode survived to the DOM", "₱1,241,476" in art and "66.58%" in art)
-        check("hormozi tier marker rendered", pg.locator("p.c-hormozi").count() == 1)
+        check("sourced quotation renders", pg.locator("#page blockquote").count() == 1)
         check("ours tier marker rendered", pg.locator("p.c-ours").count() == 1)
-        # The two tiers MUST be visually distinct, not just semantically tagged.
-        h = pg.eval_on_selector("p.c-hormozi", "e=>getComputedStyle(e).borderLeftStyle+'/'+getComputedStyle(e).borderLeftColor")
+        # A sourced quotation and our own reading MUST look different, not just be tagged.
+        q = pg.eval_on_selector("#page blockquote", "e=>getComputedStyle(e).borderLeftStyle+'/'+getComputedStyle(e).borderLeftColor")
         o = pg.eval_on_selector("p.c-ours", "e=>getComputedStyle(e).borderTopStyle+'/'+getComputedStyle(e).borderTopColor")
-        check("hormozi and ours are visually distinct", h != o, f"{h} vs {o}")
+        check("sourced and ours are visually distinct", q != o, f"{q} vs {o}")
 
         # 6. Reload keeps the unlock (session persistence).
         pg.reload(wait_until="networkidle")

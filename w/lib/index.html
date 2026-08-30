@@ -110,7 +110,6 @@
     text-transform: uppercase; padding: 2px 7px; border-radius: 3px;
     vertical-align: middle; margin-left: 9px; white-space: nowrap;
   }
-  .tier-h { background: rgba(59,209,211,.14); color: var(--accent-bright); }
   .tier-o { background: rgba(240,247,247,.10); color: #cfe3e2; border: 1px dashed #3f6b6a; }
 
   /* ── Concept page (light reading field) ── */
@@ -141,18 +140,9 @@
   /* wide content scrolls inside itself; the page body never scrolls sideways */
   .scrollx { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
-  /* ── Three-tier attribution ──
-     The failure mode of this whole project is Hormozi's authority quietly
-     stretching over claims he never made. These MUST look different. */
-  .c-hormozi {
-    border-left: 3px solid var(--accent); padding: 14px 18px;
-    background: var(--surface); margin-bottom: 18px;
-  }
-  .c-hormozi::before {
-    content: 'HORMOZI'; display: block;
-    font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--accent);
-    margin-bottom: 6px;
-  }
+  /* ── Marking what is ours ──
+     Sourced claims carry an inline citation; a claim that is our own reading
+     gets this box, so nobody mistakes an argument for a finding. */
   .c-ours {
     border: 1px dashed var(--border-2); border-radius: 5px;
     padding: 14px 18px; background: transparent; margin-bottom: 18px;
@@ -162,6 +152,45 @@
     font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--text-3);
     margin-bottom: 6px;
   }
+  /* ── Article furniture ── */
+  .standfirst {
+    font-size: 22px; line-height: 1.45; color: var(--text-2);
+    margin-bottom: 30px; text-wrap: pretty;
+  }
+  .pull {
+    font-size: 21px; line-height: 1.4; font-weight: 700; color: var(--text);
+    border-left: 3px solid var(--accent); padding: 2px 0 2px 18px;
+    margin: 26px 0; text-wrap: balance;
+  }
+  .refs .note { font-size: 15px; color: var(--text-3); margin-top: 14px; }
+
+  /* meta strip under the title: reading time + how many sources back it */
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--text-3);
+    margin: -6px 0 26px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+  }
+
+  /* on-page contents, built from the h2s */
+  .toc { margin: 0 0 34px; padding: 16px 18px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 6px; }
+  .toc p { font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--text-3); margin: 0 0 8px; }
+  .toc ol { margin: 0 0 0 18px; }
+  .toc li { margin-bottom: 4px; font-size: 16px; }
+  .toc a { text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* shape name + its constraint, as a labelled pair */
+  .shape figcaption .sh { display: block; font-size: 19px; margin-bottom: 3px; }
+  .shape figcaption .con {
+    display: inline-block; margin-bottom: 9px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--accent);
+    background: rgba(14,154,157,.08); border-radius: 3px; padding: 3px 8px;
+  }
+
   /* ── Growth-curve diagrams ──
      The shape IS the argument on these pages, so the curve gets real weight and
      the plateau is drawn thicker than the climb — the flat stretch is the point. */
@@ -315,13 +344,12 @@ function renderHub() {
   $('hub-body').innerHTML =
     '<h1>The shape of your business.</h1>' +
     '<p class="lede">Everything behind the session, with the research it stands on. ' +
-    'Each page marks what is sourced, what is Hormozi’s, and what is ours.</p>' +
+    'Every claim is either cited to its source or marked as our own reading.</p>' +
     groups.map((g) =>
       '<p class="grp">' + esc(g) + '</p>' +
       META.filter((m) => m.group === g).map((m) =>
         '<a class="card" href="#' + m.slug + '">' +
           '<span class="card-t">' + esc(m.title) +
-            (m.tier === 'hormozi' ? '<span class="tier tier-h">Hormozi</span>' : '') +
             (m.tier === 'ours' ? '<span class="tier tier-o">Our read</span>' : '') +
           '</span>' +
           (m.blurb ? '<span class="card-d">' + esc(m.blurb) + '</span>' : '') +
@@ -337,6 +365,44 @@ function renderPage(slug, html) {
   $('mh-title').textContent = meta ? meta.title : slug;
   $('page-body').innerHTML = html +
     '<a class="backlink" href="#">← All concepts</a>';
+
+  const body = $('page-body');
+
+  // Reading time and source count, measured from the rendered page rather than
+  // written by hand, so they cannot drift as a page is edited.
+  const words = (body.innerText || '').trim().split(/\s+/).length;
+  const mins = Math.max(1, Math.round(words / 220));
+  const srcs = body.querySelectorAll('.refs li').length;
+  const bits = [mins + ' min read'];
+  if (srcs) bits.push(srcs + (srcs === 1 ? ' source' : ' sources'));
+  const h1 = body.querySelector('h1');
+  if (h1) {
+    const m = document.createElement('div');
+    m.className = 'meta';
+    m.innerHTML = bits.map((b) => '<span>' + b + '</span>').join('');
+    h1.insertAdjacentElement('afterend', m);
+  }
+
+  // Contents, built from the h2s. Only worth showing on a long page.
+  const hs = [...body.querySelectorAll('h2')].filter((h) => !h.closest('.refs'));
+  if (hs.length >= 4) {
+    hs.forEach((h, i) => { if (!h.id) h.id = 's' + i; });
+    const nav = document.createElement('nav');
+    nav.className = 'toc';
+    nav.innerHTML = '<p>On this page</p><ol>' +
+      hs.map((h) => '<li><a href="#" data-to="' + h.id + '">' +
+        esc(h.textContent) + '</a></li>').join('') + '</ol>';
+    const anchor = body.querySelector('.standfirst') || h1;
+    if (anchor) anchor.insertAdjacentElement('afterend', nav);
+    // Scroll by hand: letting the href change the hash would re-route the page.
+    nav.addEventListener('click', (ev) => {
+      const a = ev.target.closest('a[data-to]');
+      if (!a) return;
+      ev.preventDefault();
+      const t = document.getElementById(a.dataset.to);
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
   // Wrap wide tables so the page body never scrolls sideways on a phone.
   $('page-body').querySelectorAll('table').forEach((t) => {
     if (t.parentElement && t.parentElement.classList.contains('scrollx')) return;
