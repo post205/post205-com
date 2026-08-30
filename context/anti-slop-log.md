@@ -23,6 +23,36 @@ shape is recognizable next time.
 
 ## Log (newest first)
 
+### 2026-08-31 · workshop library, seven-shapes page (`w/lib`, encrypted payload)
+
+Written *after* reading the style guide and this log, and it still shipped nine
+slop shapes. Reading the guide first is necessary and not sufficient.
+
+| Shipped | Why it's slop | Fixed to | Rule it broke |
+|---|---|---|---|
+| "Not by industry, and not by what it says on the permit. By the answer to one question." | Textbook negative parallelism, double negation into a reveal. Written the same day the ban was re-read. | "Industry is the wrong axis here, because two businesses in the same trade often get different constraints." | Hard Bans → negative parallelism |
+| "The reason is not a failure of intelligence. It is that you cannot see inside anyone else's business." | "Not X. It is Y." | "Owners usually know something is capping them, and naming which thing is the harder part, because you cannot see inside anyone else's business." | Hard Bans → negative parallelism |
+| "They are not slumps, and they are not evidence that the owner lost their touch." | Negation stacked twice to make a point that has a positive form. | "They arrive on schedule for the model, whoever happens to be running it." | Hard Bans → negative parallelism |
+| "A dead month is a property of the model and not a verdict on the person." | Negative parallelism *and* a quotable drop in one sentence. | "A month with no closings looks identical from the inside whether you worked it hard or not." | negative parallelism; cut quotables |
+| "Work on the wrong link and you have spent money and time buying nothing." | Aphorism standing in for the mechanism. The source says something more concrete and more useful. | "Work anywhere else and you add weight to the chain without adding strength." | cut quotables; say the working sentence |
+| "The flat opening is the whole risk." / "The only explanation within reach is about you." | One-liner drops closing a paragraph for drama. | "That opening stretch carries most of the risk in the model." / "That leaves your own judgement as the only explanation available." | cut quotables |
+| "Hiring takes months, training takes longer, and someone leaving takes capacity with them." | Three-item list, written while re-reading the three-item-list ban. | "Both move slowly, because hiring takes months and the person who leaves takes their capacity with them." | three-item-list tell |
+| "a good month can leave you with less cash than a **quiet** one" / "It also settles a **quieter** question" / "What is **actually** missing here" | Banned intensifiers, three of them, in copy written to a brief that named them. | "a slow one" / "a question sitting underneath that one" / "What is missing here" | banned intensifiers: land / kind / actually / quiet(ly) |
+| "The difficulty is the price of the model, and it was in the price when you picked it." | Sentimental closer with a neat echo. Ends on the feeling rather than the fact. | "All seven shapes come with a difficulty, and this is the one that came with yours." | sentimental closers; end on the real point |
+| "a room full of owners comparing notes supplies one faster than any framework does." | Comparative flourish that is quietly a pitch for the workshop, inside a research page. | "a room of owners comparing notes supplies one." | don't sell inside the argument |
+
+**Two process findings, both worth more than the individual fixes:**
+
+- **The regex scan came back completely clean** after the first pass. Every one of
+  the shapes above was caught only by dumping the page to plain prose and reading it
+  end to end. Pattern-matching for banned words finds banned words; it does not find
+  negative parallelism, drops, or a triplet wearing different punctuation.
+- **The first fix pass introduced a new defect** — "strengthening any other link"
+  repeated in consecutive sentences — and a duplicated argument about industry being
+  the wrong axis appeared in two separate sections. This log already records that
+  fixing one slop shape can introduce another; it happened again. Re-read the whole
+  thing after fixing, not just the lines you touched.
+
 ### 2026-07-30 · internal mapping deck (`in/mapping`, encrypted payload)
 
 | Shipped | Why it's slop | Fixed to | Rule it broke |
