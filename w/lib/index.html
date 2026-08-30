@@ -162,6 +162,26 @@
     font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--text-3);
     margin-bottom: 6px;
   }
+  /* ── Growth-curve diagrams ──
+     The shape IS the argument on these pages, so the curve gets real weight and
+     the plateau is drawn thicker than the climb — the flat stretch is the point. */
+  .shapes { margin: 28px 0 8px; }
+  .shape { margin: 0 0 30px; }
+  .shape svg { display: block; width: 100%; max-width: 380px; height: auto; }
+  .shape .axis { stroke: var(--border-2); stroke-width: 1.5; fill: none; }
+  .shape .curve { stroke: var(--accent); stroke-width: 2.5; fill: none;
+    stroke-linecap: round; stroke-linejoin: round; }
+  .shape .flat { stroke: var(--text); stroke-width: 4; fill: none; stroke-linecap: round; }
+  .shape .ceiling { stroke: var(--text-3); stroke-width: 1.5; fill: none;
+    stroke-dasharray: 5 5; }
+  .shape figcaption { margin-top: 10px; color: var(--text-2); font-size: 16px;
+    text-wrap: pretty; }
+  .shape figcaption strong { color: var(--text); }
+  @media (min-width: 720px) {
+    .shape { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: start; }
+    .shape figcaption { margin-top: 0; }
+  }
+
   .cite { font-size: 15px; color: var(--accent); }
   .refs { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--border); }
   .refs h2 { font-size: 19px; margin: 0 0 12px; }
