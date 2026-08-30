@@ -33,10 +33,55 @@ def serve():
     return httpd
 
 
+DUMMY = """<!--SLUG:probe-one-->
+<h1 data-blurb="A probe page to prove the gate works." data-group="Probe" data-tier="hormozi">Probe one</h1>
+<p>If you can read this, the gate opened and the router resolved a slug.</p>
+<p class="c-hormozi">This paragraph should render with a HORMOZI label and a solid teal rule.</p>
+<p class="c-ours">This paragraph should render with a dashed border and an OUR READ &middot; NOT SOURCED label.</p>
+<p>Unicode check: &#8369;1,241,476 &middot; 66.58% &mdash; &ldquo;curly quotes&rdquo;</p>
+<table><tr><th>Shape</th><th>Constraint</th></tr><tr><td>Product</td><td>Cash locked in inventory</td></tr><tr><td>Brokerage</td><td>Deal flow</td></tr></table>
+\n<!--PAGE-->\n<!--SLUG:probe-two-->
+<h1 data-blurb="A second probe, to prove the hub lists more than one." data-group="Probe" data-tier="ours">Probe two</h1>
+<p>Second page. The hub above should show two cards under a PROBE heading.</p>
+"""
+
+LIVE_PAYLOAD = os.path.join(ROOT, "w", "lib", "lib.enc.json")
+
+
+def build_dummy():
+    """Write a throwaway payload, preserving any real one. Returns the backup bytes."""
+    backup = None
+    if os.path.exists(LIVE_PAYLOAD):
+        with open(LIVE_PAYLOAD, "rb") as f:
+            backup = f.read()
+    src = os.path.join(ROOT, "tools", "lib-src", "_verify_dummy.html")
+    os.makedirs(os.path.dirname(src), exist_ok=True)
+    with open(src, "w") as f:
+        f.write(DUMMY)
+    out = subprocess.run(["node", "tools/encrypt-deck.mjs", PASS, src],
+                         cwd=ROOT, capture_output=True, text=True, check=True).stdout
+    with open(LIVE_PAYLOAD, "w") as f:
+        f.write(out)
+    os.remove(src)
+    return backup
+
+
+def restore(backup):
+    """Put the real payload back, or remove the dummy if there wasn't one."""
+    if backup is None:
+        if os.path.exists(LIVE_PAYLOAD):
+            os.remove(LIVE_PAYLOAD)
+    else:
+        with open(LIVE_PAYLOAD, "wb") as f:
+            f.write(backup)
+
+
 def main():
     base = sys.argv[1] if len(sys.argv) > 1 else None
     httpd = None
+    backup = None
     if not base:
+        backup = build_dummy()   # only ever touches the local tree, never a deploy
         httpd = serve()
         base = f"http://127.0.0.1:{PORT}"
         time.sleep(0.4)
@@ -140,6 +185,8 @@ def main():
 
     if httpd:
         httpd.shutdown()
+    if not sys.argv[1:]:
+        restore(backup)   # never leave a dummy payload in the working tree
 
     failed = [r for r in results if not r[1]]
     print(f"\n{len(results) - len(failed)}/{len(results)} passed")
