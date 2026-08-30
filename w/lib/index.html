@@ -184,8 +184,10 @@
 
   /* shape name + its constraint, as a labelled pair */
   .shape figcaption .sh { display: block; font-size: 19px; margin-bottom: 3px; }
+  /* block + fit-content, not inline-block: as inline-block the caption prose
+     flowed straight on after the chip and the two ran together */
   .shape figcaption .con {
-    display: inline-block; margin-bottom: 9px;
+    display: block; width: fit-content; margin-bottom: 10px;
     font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
     text-transform: uppercase; color: var(--accent);
     background: rgba(14,154,157,.08); border-radius: 3px; padding: 3px 8px;

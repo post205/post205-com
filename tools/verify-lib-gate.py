@@ -147,6 +147,9 @@ def main():
         db = pg.eval_on_selector(".card .card-d", "e=>e.getBoundingClientRect().top")
         check("card blurb sits below the title, not beside it", db >= tb - 1,
               f"title bottom {tb:.0f}, blurb top {db:.0f}")
+        # Same class of bug as the cards: an inline-block chip lets the caption
+        # prose flow on after it, so the label and the sentence run together.
+        pg.goto(url + "#probe-one", wait_until="networkidle"); pg.wait_for_timeout(400)
 
         # 5. Routing to a real slug.
         pg.goto(url + "#probe-one", wait_until="networkidle")
