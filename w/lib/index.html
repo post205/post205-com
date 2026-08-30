@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>The Shape of Your Business · POST205 Workshop</title>
+<style>
+  :root {
+    --ground: #e7efee;           /* light reading field */
+    --surface: #f7fcfc;
+    --surface-2: #dce8e7;
+    --surface-deep: #0D2828;     /* masthead / gate / hub */
+    --accent: #0e9a9d;           /* Body Teal — light-field accent */
+    --accent-bright: #3BD1D3;    /* Teal Strike — on-dark only */
+    --border: #c7d9d7;
+    --border-2: #b1c8c5;
+    --text: #0b1b1b;
+    --text-2: #41585a;
+    --text-3: #5a7473;
+    --mono: ui-monospace, monospace;
+    --sans: system-ui, -apple-system, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body {
+    background: var(--ground); color: var(--text);
+    font-family: var(--sans); font-size: 17px; line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  strong { font-weight: 700; }
+  a { color: var(--accent); }
+
+  /* ── Gate ── on-dark: hardcoded inks, Teal Strike accent ── */
+  #gate {
+    position: fixed; inset: 0; z-index: 20;
+    background: var(--surface-deep);
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  #gate[hidden] { display: none; }
+  .gate-card { max-width: 420px; width: 100%; position: relative; z-index: 1; }
+  .gate-label {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #7aacac; margin-bottom: 18px;
+  }
+  .gate-card h1 {
+    font-weight: 800; font-size: clamp(34px, 4vw, 48px); line-height: 1.1;
+    letter-spacing: -0.01em; color: #f0f7f7; margin-bottom: 12px;
+    text-wrap: balance;
+  }
+  .gate-sub { color: #a9c3c1; margin-bottom: 26px; text-wrap: pretty; }
+  .gate-row { display: flex; gap: 10px; }
+  #pass {
+    min-width: 0; flex: 1;
+    background: #123434; border: 1px solid #1e4a4a; border-radius: 4px;
+    color: #f0f7f7; font-family: var(--mono);
+    font-size: 16px; /* unconditional: under 16px iOS zooms on focus at any width */
+    letter-spacing: 0.09em; padding: 11px 14px;
+  }
+  #pass::placeholder { color: #4d7472; font-size: 12px; letter-spacing: 0.12em; }
+  #pass:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 1px; }
+  #open {
+    background: var(--accent-bright); color: #021616; border: 0; border-radius: 4px;
+    font-family: var(--mono); font-size: 12px; font-weight: 700;
+    letter-spacing: 0.09em; text-transform: uppercase; padding: 11px 22px; cursor: pointer;
+  }
+  #open:hover { opacity: 0.85; transition: opacity 0.15s; }
+  #open:focus-visible { outline: 2px solid #f0f7f7; outline-offset: 2px; }
+  #open[aria-busy="true"] { opacity: 0.6; cursor: progress; }
+  #gate-err { color: #ffb3a7; margin-top: 14px; min-height: 1.7em; font-size: 15px; }
+
+  /* ── Masthead ── */
+  .masthead {
+    background: var(--surface-deep); color: #f0f7f7;
+    padding: 14px 22px; display: flex; align-items: center; gap: 16px;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .masthead a { color: var(--accent-bright); text-decoration: none;
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .masthead a:hover { text-decoration: underline; }
+  .masthead .mh-title {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #7aacac; margin-left: auto;
+  }
+
+  /* ── Hub (dark, continuous with the deck) ── */
+  #hub { background: var(--surface-deep); color: #f0f7f7; min-height: 100vh; }
+  #hub .wrap { max-width: 760px; margin: 0 auto; padding: 56px 22px 80px; }
+  #hub h1 {
+    font-weight: 800; font-size: clamp(34px, 5vw, 56px); line-height: 1.06;
+    letter-spacing: -0.01em; margin-bottom: 14px; color: #f0f7f7; text-wrap: balance;
+  }
+  #hub .lede { color: #a9c3c1; font-size: 19px; margin-bottom: 44px; max-width: 54ch; text-wrap: pretty; }
+  #hub .grp {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #7aacac;
+    margin: 36px 0 14px; padding-bottom: 8px; border-bottom: 1px solid #1e4a4a;
+  }
+  .card {
+    display: block; text-decoration: none; color: inherit;
+    padding: 16px 0; border-bottom: 1px solid #163c3c;
+  }
+  .card:hover .card-t { color: var(--accent-bright); }
+  .card-t { font-weight: 700; font-size: 20px; line-height: 1.3; color: #f0f7f7; }
+  .card-d { color: #a9c3c1; font-size: 16px; margin-top: 3px; text-wrap: pretty; }
+  .tier {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 2px 7px; border-radius: 3px;
+    vertical-align: middle; margin-left: 9px; white-space: nowrap;
+  }
+  .tier-h { background: rgba(59,209,211,.14); color: var(--accent-bright); }
+  .tier-o { background: rgba(240,247,247,.10); color: #cfe3e2; border: 1px dashed #3f6b6a; }
+
+  /* ── Concept page (light reading field) ── */
+  #page { display: none; }
+  #page.on { display: block; }
+  #hub.off { display: none; }
+  .art { max-width: 720px; margin: 0 auto; padding: 40px 22px 96px; }
+  .art h1 {
+    font-weight: 800; font-size: clamp(32px, 4.6vw, 50px); line-height: 1.08;
+    letter-spacing: -0.015em; margin-bottom: 18px; text-wrap: balance;
+  }
+  .art h2 {
+    font-weight: 800; font-size: clamp(23px, 2.6vw, 30px); line-height: 1.2;
+    margin: 44px 0 14px; text-wrap: balance;
+  }
+  .art p { margin-bottom: 18px; text-wrap: pretty; }
+  .art ul, .art ol { margin: 0 0 18px 22px; }
+  .art li { margin-bottom: 8px; text-wrap: pretty; }
+  .art img { max-width: 100%; height: auto; display: block; margin: 24px auto; }
+  .art blockquote {
+    margin: 24px 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent);
+    color: var(--text-2); font-size: 19px;
+  }
+  .art table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 16px; }
+  .art th, .art td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  .art th { font-family: var(--mono); font-size: 12px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--text-3); }
+  /* wide content scrolls inside itself; the page body never scrolls sideways */
+  .scrollx { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* ── Three-tier attribution ──
+     The failure mode of this whole project is Hormozi's authority quietly
+     stretching over claims he never made. These MUST look different. */
+  .c-hormozi {
+    border-left: 3px solid var(--accent); padding: 14px 18px;
+    background: var(--surface); margin-bottom: 18px;
+  }
+  .c-hormozi::before {
+    content: 'HORMOZI'; display: block;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .c-ours {
+    border: 1px dashed var(--border-2); border-radius: 5px;
+    padding: 14px 18px; background: transparent; margin-bottom: 18px;
+  }
+  .c-ours::before {
+    content: 'OUR READ · NOT SOURCED'; display: block;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--text-3);
+    margin-bottom: 6px;
+  }
+  .cite { font-size: 15px; color: var(--accent); }
+  .refs { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .refs h2 { font-size: 19px; margin: 0 0 12px; }
+  .refs li { font-size: 15px; color: var(--text-2); }
+
+  .backlink {
+    display: inline-block; margin-top: 48px;
+    font-family: var(--mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase;
+  }
+
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .gate-row { flex-direction: column; }
+    #open { width: 100%; }
+  }
+  @media print {
+    #gate, .masthead { display: none !important; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <form class="gate-card" id="gate-form">
+    <p class="gate-label">POST205 · WORKSHOP</p>
+    <h1>The shape of your business.</h1>
+    <p class="gate-sub">Your passphrase was given in the room. If you have lost it, ask Toffer.</p>
+    <div class="gate-row">
+      <input id="pass" type="password" name="password" autocomplete="current-password"
+             aria-label="Passphrase" placeholder="PASSPHRASE"
+             autocapitalize="none" spellcheck="false" autofocus>
+      <button id="open" type="submit">Open</button>
+    </div>
+    <p id="gate-err" aria-live="polite"></p>
+  </form>
+</div>
+
+<div id="shell" hidden>
+  <header class="masthead">
+    <a href="#" id="mh-home">POST205</a>
+    <span class="mh-title" id="mh-title">The Shape of Your Business</span>
+  </header>
+  <main id="hub"><div class="wrap" id="hub-body"></div></main>
+  <article id="page"><div class="art" id="page-body"></div></article>
+</div>
+
+<script type="module">
+/* ── Contract with tools/test-lib-roundtrip.mjs and tools/encrypt-deck.mjs.
+   If you change either literal, change it in all three places. ── */
+const DELIM = '\n<!--PAGE-->\n';
+const SLUG_RE = /^<!--SLUG:([a-z0-9-]+)-->\n?/;
+
+/* ── Storage: Safari private/lockdown mode THROWS on sessionStorage. An
+   unguarded access at module top level once killed an entire deck, so every
+   read and write is wrapped with an in-memory fallback. ── */
+let memPass = null;
+const passGet = () => { try { return sessionStorage.getItem('libPass') || memPass; } catch { return memPass; } };
+const passSet = (v) => { memPass = v; try { sessionStorage.setItem('libPass', v); } catch {} };
+const passClear = () => { memPass = null; try { sessionStorage.removeItem('libPass'); } catch {} };
+
+const $ = (id) => document.getElementById(id);
+const gate = $('gate'), shell = $('shell'), err = $('gate-err'), passEl = $('pass');
+const hub = $('hub'), page = $('page');
+
+let PAGES = new Map();
+let META = [];
+
+/* ── Gate: AES-GCM decrypt. A wrong key THROWS — it cannot yield garbage. ── */
+async function unlock(passphrase) {
+  let res;
+  try {
+    res = await fetch('./lib.enc.json', { cache: 'no-store' });
+  } catch {
+    throw new Error('NETWORK');
+  }
+  if (!res.ok) throw new Error('PAYLOAD_' + res.status);
+  const { salt, iv, ct } = await res.json();
+  const b = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+  const base = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(passphrase), 'PBKDF2', false, ['deriveKey']
+  );
+  const key = await crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: b(salt), iterations: 250000, hash: 'SHA-256' },
+    base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
+  );
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b(iv) }, key, b(ct));
+  return new TextDecoder().decode(plain);
+}
+
+function loadPayload(plain) {
+  PAGES = new Map();
+  META = [];
+  for (const chunk of plain.split(DELIM)) {
+    const m = chunk.match(SLUG_RE);
+    if (!m) continue;
+    const slug = m[1];
+    const html = chunk.slice(m[0].length);
+    PAGES.set(slug, html);
+    const t = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+    const d = html.match(/data-blurb="([^"]*)"/i);
+    const g = html.match(/data-group="([^"]*)"/i);
+    const tier = html.match(/data-tier="([^"]*)"/i);
+    META.push({
+      slug,
+      title: t ? t[1].replace(/<[^>]+>/g, '').trim() : slug,
+      blurb: d ? d[1] : '',
+      group: g ? g[1] : 'Concepts',
+      tier: tier ? tier[1] : '',
+    });
+  }
+}
+
+function renderHub() {
+  hub.classList.remove('off');
+  page.classList.remove('on');
+  $('mh-title').textContent = 'The Shape of Your Business';
+  const groups = [...new Set(META.map((m) => m.group))];
+  $('hub-body').innerHTML =
+    '<h1>The shape of your business.</h1>' +
+    '<p class="lede">Everything behind the session, with the research it stands on. ' +
+    'Each page marks what is sourced, what is Hormozi’s, and what is ours.</p>' +
+    groups.map((g) =>
+      '<p class="grp">' + esc(g) + '</p>' +
+      META.filter((m) => m.group === g).map((m) =>
+        '<a class="card" href="#' + m.slug + '">' +
+          '<span class="card-t">' + esc(m.title) +
+            (m.tier === 'hormozi' ? '<span class="tier tier-h">Hormozi</span>' : '') +
+            (m.tier === 'ours' ? '<span class="tier tier-o">Our read</span>' : '') +
+          '</span>' +
+          (m.blurb ? '<span class="card-d">' + esc(m.blurb) + '</span>' : '') +
+        '</a>'
+      ).join('')
+    ).join('');
+}
+
+function renderPage(slug, html) {
+  hub.classList.add('off');
+  page.classList.add('on');
+  const meta = META.find((m) => m.slug === slug);
+  $('mh-title').textContent = meta ? meta.title : slug;
+  $('page-body').innerHTML = html +
+    '<a class="backlink" href="#">← All concepts</a>';
+  // Wrap wide tables so the page body never scrolls sideways on a phone.
+  $('page-body').querySelectorAll('table').forEach((t) => {
+    if (t.parentElement && t.parentElement.classList.contains('scrollx')) return;
+    const w = document.createElement('div');
+    w.className = 'scrollx';
+    t.parentNode.insertBefore(w, t);
+    w.appendChild(t);
+  });
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
+function route() {
+  const slug = location.hash.replace(/^#/, '');
+  if (!slug) return renderHub();
+  const html = PAGES.get(slug);
+  if (!html) return renderHub();      // unknown slug falls back; never blanks
+  renderPage(slug, html);
+  window.scrollTo(0, 0);              // hash nav must not inherit the old scroll
+}
+window.addEventListener('hashchange', route);
+
+function reveal(plain) {
+  loadPayload(plain);
+  if (!PAGES.size) {
+    err.textContent = 'The library opened but looks empty. Tell Toffer.';
+    return false;
+  }
+  gate.hidden = true;
+  shell.hidden = false;
+  route();
+  return true;
+}
+
+/* ── Failure must be legible. Silent failure was the worst bug of the last build. ── */
+function explain(e) {
+  const m = String((e && e.message) || e);
+  if (m === 'NETWORK') return 'Could not reach the library. Check your connection and try again.';
+  if (m.startsWith('PAYLOAD_')) return 'The library file did not load (' + m.slice(8) + '). Tell Toffer.';
+  return 'That passphrase did not open it. Check for stray spaces, then try again.';
+}
+
+$('gate-form').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const v = passEl.value.trim();
+  err.textContent = '';
+  if (!v) { err.textContent = 'Enter the passphrase from the room.'; passEl.focus(); return; }
+  const btn = $('open');
+  btn.setAttribute('aria-busy', 'true');
+  btn.textContent = 'Opening';
+  try {
+    const plain = await unlock(v);
+    passSet(v);
+    reveal(plain);
+  } catch (e) {
+    passClear();
+    err.textContent = explain(e);
+    passEl.select();
+  } finally {
+    btn.removeAttribute('aria-busy');
+    btn.textContent = 'Open';
+  }
+});
+
+/* Silent re-unlock on reload. Runs AFTER the gate is interactive, so a failure
+   here can never stop the page from working. */
+(async () => {
+  const saved = passGet();
+  if (!saved) return;
+  try { reveal(await unlock(saved)); } catch { passClear(); }
+})();
+</script>
+</body>
+</html>
