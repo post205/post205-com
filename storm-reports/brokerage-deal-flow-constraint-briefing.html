@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Storm Research: Is deal flow the binding constraint in brokerage?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --blue: #2563eb; --blue-dark: #1e3a8a; --ink: #16203a; --muted: #5b6677; --line: #e4e9f2;
+    --bg-soft: #f6f8fc; --green: #15803d; --green-bg: #e9f6ee; --amber: #b45309; --amber-bg: #fdf3e7;
+    --slate: #475569; --slate-bg: #eef1f6; --red: #b91c1c; --red-bg: #fdecec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', system-ui, sans-serif; color: var(--ink); background: #eef1f6; line-height: 1.62; font-weight: 400; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 900px; margin: 0 auto; background: #fff; padding: 64px 72px 80px; box-shadow: 0 1px 40px rgba(22,32,58,0.08); }
+  .eyebrow { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+  h1 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 40px; line-height: 1.12; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; }
+  .lede { font-size: 17px; color: var(--muted); max-width: 640px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 26px; padding-top: 22px; border-top: 2px solid var(--line); font-family: 'Roboto Mono', monospace; font-size: 12px; color: var(--muted); }
+  .meta-row b { color: var(--ink); font-weight: 600; }
+  .verify-banner { margin-top: 22px; background: var(--green-bg); border: 1px solid #bfe3cc; border-radius: 8px; padding: 13px 18px; font-size: 13px; color: #14532d; display: flex; gap: 10px; align-items: baseline; }
+  .verify-banner b { font-weight: 700; }
+  .verify-banner .tag { font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: var(--green); color: #fff; padding: 3px 8px; border-radius: 4px; flex-shrink: 0; }
+  .howto { margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; padding: 18px 22px; background: var(--bg-soft); }
+  .howto h4 { font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .howto ul { list-style: none; }
+  .howto li { font-size: 13.5px; color: #2b3950; margin-bottom: 7px; padding-left: 16px; position: relative; }
+  .howto li::before { content: "›"; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+  .section { margin-top: 56px; }
+  .section-num { font-family: 'Roboto Mono', monospace; font-size: 13px; font-weight: 600; color: var(--blue); letter-spacing: 0.05em; }
+  h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 25px; letter-spacing: -0.01em; color: var(--ink); margin: 6px 0 18px; line-height: 1.2; }
+  h2 .bar { display: inline-block; width: 38px; height: 4px; background: var(--blue); border-radius: 2px; vertical-align: middle; margin-right: 14px; }
+  p { margin-bottom: 14px; }
+  p.body-lg { font-size: 16.5px; }
+  .ceo { background: var(--bg-soft); border-left: 5px solid var(--blue); padding: 26px 30px; border-radius: 4px; font-size: 16.5px; }
+  .ceo strong { font-weight: 700; color: var(--blue-dark); }
+  .finding { border: 1px solid var(--line); border-radius: 10px; padding: 24px 26px; margin-bottom: 18px; position: relative; }
+  .finding-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 12px; }
+  .finding-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; line-height: 1.3; color: var(--ink); flex: 1; }
+  .finding-rank { font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: 13px; color: #fff; background: var(--ink); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .finding p { font-size: 15px; color: #283449; margin-bottom: 14px; }
+  .rel-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .rel { display: inline-flex; align-items: center; gap: 9px; font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 12px; border-radius: 20px; }
+  .rel.high { background: #e7f0fe; color: var(--blue); }
+  .rel.medhigh { background: var(--green-bg); color: var(--green); }
+  .rel.medium { background: var(--amber-bg); color: var(--amber); }
+  .rel.low { background: var(--red-bg); color: var(--red); }
+  .score { font-family: 'Roboto Mono', monospace; font-size: 13px; font-weight: 600; color: var(--ink); }
+  .score b { font-size: 17px; }
+  .score span { color: var(--muted); font-weight: 400; }
+  .chips { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+  .chip-row { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; font-size: 13.5px; }
+  .chip-label { font-family: 'Roboto Mono', monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+  .chip-label.sup { background: var(--green-bg); color: var(--green); }
+  .chip-label.chal { background: var(--red-bg); color: var(--red); }
+  .chip-label.fix { background: var(--amber-bg); color: var(--amber); }
+  .chip-row span.who { color: #2b3950; }
+  .chip-row span.who b { font-weight: 600; }
+  .contested { border: 1px dashed var(--amber); background: #fffaf2; border-radius: 10px; padding: 22px 26px; margin-bottom: 18px; }
+  .contested .tag { font-family: 'Roboto Mono', monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); }
+  .contested h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 16px; color: var(--ink); margin: 6px 0 10px; }
+  .contested p { font-size: 14px; color: #4a3a22; margin-bottom: 0; }
+  .connection { background: linear-gradient(135deg, #16203a 0%, #1e3a8a 100%); color: #eaf0fb; border-radius: 12px; padding: 34px 38px; }
+  .connection h2 { color: #fff; }
+  .connection h2 .bar { background: #6ea8ff; }
+  .connection .section-num { color: #9ec1ff; }
+  .connection p { color: #d3def3; font-size: 16px; }
+  .connection .punch { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 18px; color: #fff; line-height: 1.4; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.18); }
+  .assume { border: 1px solid var(--line); border-left: 5px solid var(--amber); border-radius: 6px; padding: 24px 28px; background: #fffdf9; }
+  .assume h3 { font-family: 'Montserrat', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+  .assume p { font-size: 15px; color: #3a3320; }
+  .assume p:last-child { margin-bottom: 0; }
+  .action-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .action-item:last-child { border-bottom: none; }
+  .action-mark { font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: 13px; color: var(--blue); flex-shrink: 0; width: 34px; }
+  .action-item .do { font-weight: 600; color: var(--ink); }
+  .action-item p { font-size: 14.5px; margin-bottom: 0; color: #2b3950; }
+  .frontier { border: 2px dashed var(--blue); border-radius: 12px; padding: 30px 34px; background: var(--bg-soft); }
+  .frontier .q { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.32; color: var(--blue-dark); margin-bottom: 16px; }
+  .frontier p { font-size: 15px; color: #2b3950; }
+  .oncam { margin-top: 18px; }
+  .oncam-col { border-radius: 10px; padding: 20px 24px; margin-bottom: 14px; }
+  .oncam-col.safe { background: var(--green-bg); border: 1px solid #bfe3cc; }
+  .oncam-col.caveat { background: var(--amber-bg); border: 1px solid #f0d9b5; }
+  .oncam-col.avoid { background: var(--red-bg); border: 1px solid #f3c9c9; }
+  .oncam-col h4 { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+  .oncam-col.safe h4 { color: var(--green); }
+  .oncam-col.caveat h4 { color: var(--amber); }
+  .oncam-col.avoid h4 { color: var(--red); }
+  .oncam-col ul { list-style: none; }
+  .oncam-col li { font-size: 14px; color: #233; margin-bottom: 8px; padding-left: 16px; position: relative; line-height: 1.5; }
+  .oncam-col li::before { content: "•"; position: absolute; left: 0; font-weight: 700; }
+  .oncam-col.safe li::before { color: var(--green); }
+  .oncam-col.caveat li::before { color: var(--amber); }
+  .oncam-col.avoid li::before { color: var(--red); }
+  .refs { margin-top: 56px; padding-top: 26px; border-top: 2px solid var(--line); }
+  .refs h3 { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .refs ul { list-style: none; }
+  .refs li { font-size: 12.5px; color: var(--muted); margin-bottom: 11px; padding-left: 16px; position: relative; line-height: 1.5; }
+  .refs li::before { content: "›"; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+  .refs a { color: #34507e; text-decoration: none; }
+  .refs a:hover { text-decoration: underline; }
+  .refs .vstat { font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; margin-right: 6px; }
+  .vstat.ok { background: var(--green-bg); color: var(--green); }
+  .vstat.part { background: var(--amber-bg); color: var(--amber); }
+  .vstat.weak { background: var(--red-bg); color: var(--red); }
+  .footer { margin-top: 40px; font-family: 'Roboto Mono', monospace; font-size: 11px; color: #9aa6b8; text-align: center; }
+  @media (max-width: 640px) { .page { padding: 40px 24px 56px; } h1 { font-size: 30px; } }
+  @media print { body { background: #fff; } .page { box-shadow: none; max-width: 100%; padding: 0; } .connection, .oncam-col { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="eyebrow">Storm Research &middot; v2 (verified)</div>
+    <h1>Is deal flow the binding constraint in a brokerage?</h1>
+    <p class="lede">A five-lens synthesis: practitioner, academic, skeptic, economist, and historian. Every claim independently checked against its primary source before publication.</p>
+    <div class="meta-row">
+      <span><b>Date</b> &nbsp;31 August 2026</span>
+      <span><b>Method</b> &nbsp;5 author-built expert lenses + contradiction map</span>
+      <span><b>Audience</b> &nbsp;Philippine SME owner-operator in a commission business</span>
+    </div>
+    <div class="verify-banner">
+      <span class="tag">Verified</span>
+      <span>All 24 citations independently checked against primary sources on 31 Aug 2026. <b>Result: 3 false, 11 corrected, 4 untraceable, 3 demoted to non-evidence.</b> Confidence scores reflect post-verification evidence quality.</span>
+    </div>
+    <div class="howto">
+      <h4>How to read this</h4>
+      <ul>
+        <li><b>The panel was author-constructed.</b> All five lenses share one framing, so where they agree, treat it as a strong hypothesis, not independent proof.</li>
+        <li><b>Confidence is scored 1-10</b> on evidence quality: peer-reviewed causal work &gt; official policy/financial data &gt; single commissioned survey &gt; analogy &gt; preprint.</li>
+        <li><b>Roughly half the specific numbers the lenses produced did not survive verification.</b> The direction of the finding did. Read the strike-throughs as a warning about industry benchmarks generally.</li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="section-num">01</div>
+    <h2><span class="bar"></span>The 60-Second Summary</h2>
+    <div class="ceo">
+      <p style="margin-bottom:0;">All five lenses reject the proposition, and the peer-reviewed tier rejects it on theory as well as evidence: under a fixed percentage commission with free entry, deal flow <em>cannot</em> be the binding constraint at equilibrium, because entry competes flow away until per-agent profit reaches zero. Hsieh and Moretti (<em>JPE</em>, 2003) find that when house prices rise, more brokers enter, houses sold per agent falls, and the typical agent&rsquo;s real wage does not move. Barwick and Pathak (<em>RAND</em>, 2015) find agent entry raises neither sale probability nor speed. <b>What binds a brokerage is whatever about it cannot be replicated by the next entrant &mdash; the relationship, the information, or the closed side of the market &mdash; and volume is the visible symptom of holding or losing that.</b> The contested part is what to do about it: the practitioner and economist lenses put conversion capacity and working-capital float ahead of access, and those operate on a shorter clock. The one claim that should not be repeated is that a dead month is structural; the evidence points the other way, and saying so converts a measurable conversion failure into an alibi.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">02</div>
+    <h2><span class="bar"></span>Five Key Findings, Ranked by Reliability</h2>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Free entry dissipates the rent: more agents, less output each, unchanged wages</div>
+        <div class="finding-rank">1</div>
+      </div>
+      <div class="rel-row">
+        <div class="rel ok">Reliability: Peer-reviewed, published</div>
+        <div class="score"><b>9</b><span>/10</span></div>
+      </div>
+      <p>Across US cities, when land prices rise the broker share of the workforce rises, houses sold per agent falls, and the typical agent&rsquo;s real wage is roughly constant. The extra commission pool is competed away in entry rather than converted into more transactions. Barwick and Pathak add that early-2000s house-price appreciation explains 24% of entry and a 31% fall in houses sold per agent. <b>Verified caveat: both are correlational or structural, not experimental &mdash; Hsieh and Moretti is a cross-city design.</b></p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Academic (Hsieh &amp; Moretti 2003, <em>JPE</em> 111(5); Barwick &amp; Pathak 2015, <em>RAND</em> 46(1)); Skeptic</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">No one</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Adding agents does not raise sale probability or cut time-to-sale</div>
+        <div class="finding-rank">2</div>
+      </div>
+      <div class="rel-row">
+        <div class="rel ok">Reliability: Peer-reviewed, published</div>
+        <div class="score"><b>9</b><span>/10</span></div>
+      </div>
+      <p>Greater Boston, 1998&ndash;2007: entry lowers experienced agents&rsquo; market share and average service quality without improving outcomes for sellers. <b>Correction applied: the widely-quoted &ldquo;40% fewer agents, 73% more transactions per agent, savings of 23% of industry revenue&rdquo; figures are counterfactual simulations from the authors&rsquo; structural entry model, not direct empirical estimates.</b> The NBER working-paper version states the saving as approximately $2 billion.</p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Academic (Barwick &amp; Pathak 2015)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">Practitioner, who argues licensed headcount is itself capped &mdash; a claim that did not survive verification (see 04b)</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">Simulation figures relabelled as model output, not measurement</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Income tracks tenure, not market flow &mdash; a tenfold gradient in one market</div>
+        <div class="finding-rank">3</div>
+      </div>
+      <div class="rel-row">
+        <div class="rel part">Reliability: Industry association survey, self-reported</div>
+        <div class="score"><b>7</b><span>/10</span></div>
+      </div>
+      <p>NAR&rsquo;s 2025 Member Profile: median gross income of $58,100 on 10 transaction sides in 2024, against $8,100 for members with two years or less and $78,900 for those with 16 years or more. Same market, same available flow, same hours in the week. If flow were the cap, this spread could not exist. <b>Verified caveat: self-reported, n=4,947, fielded March 2025, published by a body with an interest in the professional-value narrative.</b></p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Economist, Skeptic (NAR 2025 Member Profile)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">No one, though the mechanism is disputed: accumulated referral stock, selection effects, or survivorship</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">The house monetises agent-months, not deals &mdash; about 82% passes straight through</div>
+        <div class="finding-rank">4</div>
+      </div>
+      <div class="rel-row">
+        <div class="rel ok">Reliability: SEC filing, ties to the cent</div>
+        <div class="score"><b>8</b><span>/10</span></div>
+      </div>
+      <p>Compass paid $1,139.3M in commissions and related expense on $1,380.4M of revenue in Q4 2024 &mdash; 82.53% &mdash; against full-year revenue of $5,629.1M and adjusted EBITDA of $126.0M. eXp: $4.568B revenue across 82,980 agents, roughly $55,000 per agent. Because most of gross commission leaves immediately, brokerage margin is a thin residual on gross flow, which is why the real models are agent fees and float. <b>Corrections: 82.53% is the Q4 figure (full year is 82.3%); eXp revenue is $4.568B not $4.6B; eXp&rsquo;s $16,000 cap and $220M revenue-share figures are company marketing, absent from the 10-K.</b></p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Economist (Compass 8-K/10-K; eXp 10-K FY2024)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">No one</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">Period label, revenue figure, and two marketing numbers removed</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Intermediaries keep the segments where matching needs judgment</div>
+        <div class="finding-rank">5</div>
+      </div>
+      <div class="rel-row">
+        <div class="rel part">Reliability: Industry report on AM Best data; historical cases documented</div>
+        <div class="score"><b>7</b><span>/10</span></div>
+      </div>
+      <p>US independent agencies wrote 39.0% of personal-lines premium in 2024 but 87.2% of commercial lines. The channel lost the half a quote engine can handle and kept the half that still requires a person to assemble the match. The historical pattern runs the same way: Lloyd&rsquo;s underwriting grew around a shipping-intelligence business decades before the Society formalised in 1771; US travel agency establishments fell about 45% from 1997 to 2013 as the GDS opened to consumers, while bookings kept growing. Hendel, Nevo and Ortalo-Magn&eacute; give the mechanism directly: off-MLS prices are no lower, but off-MLS selling is slower and less likely to complete. The intermediary&rsquo;s measurable value is matching, not price and not reach. <b>Corrections: the travel decline is 45% (29,452 to 16,235 establishments), not the 59% widely repeated; overall P&amp;C independent share slipped to 61.5% from 62.2%.</b></p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Historian, Academic (Big &ldquo;I&rdquo; 2025 Market Share Report; Census CBP; Hendel et al. 2009, <em>AER</em> 99(5))</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">Skeptic, who notes disintermediation is the weakest leg: US buyer-agent commissions round-tripped to 2.43% by Q2 2025</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">Travel-agency decline recomputed from Census source files</span></div>
+      </div>
+    </div>
+
+    <div class="contested">
+      <div class="tag">Contested signal &middot; monitor, do not assert &middot; confidence 5/10</div>
+      <h4>That working-capital float, rather than access, is the true binding constraint</h4>
+      <p>The practitioner and economist lenses both argue the real ceiling is cash: brokers and forwarders do the work months before payment arrives. The documented case is real &mdash; Surge Transportation, roughly $150M gross revenue in 2022, filed Chapter 11 on 25 July 2023 owing about $12M to more than 5,000 carriers, with 16 of its top 20 creditors being factoring companies. But this is one firm, in US freight, and no causal study establishes float as the general constraint. The supporting staffing benchmarks came from vendor marketing and did not survive verification. Treat float as a real short-run constraint that can kill a solvent business, not as the answer to what caps the model.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="connection">
+      <div class="section-num">03</div>
+      <h2><span class="bar"></span>The Hidden Connection</h2>
+      <p>The academic lens says entry competes away any excess return until per-agent profit reaches zero. The historian says every intermediary that lost privileged access to the match was destroyed on schedule. Read separately, one is an equilibrium argument and the other is a story about technology.</p>
+      <p>They are the same statement. Entry is the mechanism by which anything replicable stops being valuable. Access to the match was simply the thing that could not be replicated &mdash; until MLS, the GDS and direct writers replicated it, at which point the protection vanished and the equilibrium asserted itself. This is why deal flow reads as the problem in every one of these episodes without ever being the cause: flow is the last visible thing to go.</p>
+      <p class="punch">Volume peaked immediately before each collapse. More travel was booked, more shares traded, more homes sold than ever &mdash; and the intermediaries read record volume as health and hired against it. Rising flow with falling per-deal economics is the terminal symptom of an access advantage already gone.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="assume">
+      <h3>The assumption this briefing rests on (and the missing 6th lens)</h3>
+      <p>Every lens reasoned about firms with a salesforce. Compass, eXp, NAR&rsquo;s membership, Reagan&rsquo;s benchmarks and both structural papers all describe multi-agent brokerages where entry, dilution and producer payroll are meaningful variables. <b>The missing lens is the solo operator</b> &mdash; the one-person insurance agent or two-person forwarder who is most of the Philippine SME market. For a firm with no agents, &ldquo;entry dissipates rent&rdquo; happens outside the business rather than inside it, and the internal constraint may simply be the owner&rsquo;s own hours, which none of the five lenses modelled.</p>
+      <p>There is also no causal evidence from the Philippines at all. Every identified study is US real estate; insurance brokerage, freight forwarding and recruitment have descriptive work only. The regulatory environment differs materially, and one attempt to lean on Philippine statute in this very briefing produced three wrong claims. A Philippine-specific study could invert the conclusions without contradicting a single citation here.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">04</div>
+    <h2><span class="bar"></span>What To Actually Do Differently</h2>
+    <p class="body-lg" style="color:var(--muted);">For an owner-operator of a Philippine commission business who believes their problem is not enough leads.</p>
+
+    <div class="action-item">
+      <div class="action-mark">01</div>
+      <div><span class="do">Produce the denominator before spending on leads.</span><p>Count inquiries that arrived 90 days ago and were never contacted a second time. &ldquo;Deal flow is my constraint&rdquo; is only a claim if you can state how many opportunities entered and what share closed. Without that number, a dead month is unmeasured rather than structural.</p></div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-mark">02</div>
+      <div><span class="do">Watch revenue per deal, not deals.</span><p>Rising volume alongside falling per-deal economics is the pattern that preceded every historical collapse in this section. It reads as growth on the way down.</p></div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-mark">03</div>
+      <div><span class="do">Name the thing a new entrant cannot copy this year.</span><p>If the honest answer is &ldquo;nothing,&rdquo; the equilibrium result applies to you and more leads will not change it. If it is a carrier appointment, a closed side of the market, or twenty years of referrals, that is the asset to defend and the reason tenure outearns effort tenfold.</p></div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-mark">04</div>
+      <div><span class="do">Treat the cash gap as a separate problem with its own answer.</span><p>Float can end a business whose matching is fine. It is not the same constraint as access, it runs on a shorter clock, and it needs a financing answer rather than a strategy answer.</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">04b</div>
+    <h2><span class="bar"></span>What&rsquo;s Safe to Assert</h2>
+    <div class="oncam">
+      <div class="oncam-col safe">
+        <h4>&#10003; Safe &mdash; verified against primary source</h4>
+        <ul>
+          <li>More agents entering does not raise sale probability or cut time-to-sale (Barwick &amp; Pathak, <em>RAND</em> 2015).</li>
+          <li>When prices rise, brokers multiply, output per broker falls, real wages hold (Hsieh &amp; Moretti, <em>JPE</em> 2003).</li>
+          <li>Off-MLS prices are no lower; MLS wins on speed and probability of sale (Hendel et al., <em>AER</em> 2009).</li>
+          <li>Compass paid 82.53% of Q4 2024 revenue out in commissions (SEC filing).</li>
+          <li>US independent agencies: 39.0% of personal lines, 87.2% of commercial lines, 2024.</li>
+          <li>SEC Rule 19b-3 ended 183 years of fixed commissions on 1 May 1975.</li>
+          <li>Philippine real-estate commissions are customary; RA 9646 sets no rate.</li>
+        </ul>
+      </div>
+      <div class="oncam-col caveat">
+        <h4>&#9888; Say with a caveat</h4>
+        <ul>
+          <li>NAR income figures &mdash; attribute as a self-reported association survey.</li>
+          <li>The 40%/73%/23% entry figures &mdash; say &ldquo;the authors&rsquo; model implies,&rdquo; not &ldquo;research shows.&rdquo;</li>
+          <li>Post-settlement commissions &mdash; &ldquo;returned to pre-settlement levels&rdquo;; source is a market participant.</li>
+          <li>Philippine 2024 premiums of &#8369;440.39B &mdash; unaudited, 128 of 137 insurers, from the IC press release rather than the Key Data annex.</li>
+          <li>Licensed ordinary agents: 154,751 in 2024 (145,298 was 2023).</li>
+          <li>Working-capital float &mdash; real, documented in one bankruptcy, not established as the general constraint.</li>
+        </ul>
+      </div>
+      <div class="oncam-col avoid">
+        <h4>&#10005; Don&rsquo;t assert</h4>
+        <ul>
+          <li><b>&ldquo;RESA Section 29 caps a broker at 20 salespersons.&rdquo;</b> It is Section 32(a), and it is a minimum broker-to-salesperson ratio, not a cap.</li>
+          <li><b>&ldquo;~15% of agents remain after four years.&rdquo;</b> The source illustrates ~9%, as a worked example rather than a finding.</li>
+          <li><b>&ldquo;40% fill rate against 85% SLAs.&rdquo;</b> Vendor marketing; the 85% figure exists nowhere.</li>
+          <li><b>&ldquo;35 brokerages vanished after May Day.&rdquo;</b> Untraceable to any primary source.</li>
+          <li><b>&ldquo;Travel agencies fell 59% to under 10,000.&rdquo;</b> Census data give 45%, to 16,235.</li>
+          <li><b>&#8369;2M/&#8369;5M recruitment escrow.</b> It is &#8369;1M for both land- and sea-based.</li>
+          <li><b>&ldquo;A dead month is a property of the model.&rdquo;</b> The evidence points the other way, and it functions as an alibi.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">05</div>
+    <h2><span class="bar"></span>The Frontier Question</h2>
+    <div class="frontier">
+      <div class="q">In a Philippine SME brokerage, what share of inquiries that arrive is never contacted a second time?</div>
+      <p>Every lens argued about what constrains these firms, and not one could cite the number that would settle it. If most arriving demand dies inside the business, the constraint is conversion and the framework should say so plainly. If almost all of it is worked and still does not close, access is the answer and the model needs defending rather than feeding. The number is cheap to measure and nobody measures it, because the pipeline lives in individual agents&rsquo; Messenger and Viber threads and disappears when they leave. That is also why the question has stayed open: the data is destroyed by the same behaviour that causes the problem.</p>
+    </div>
+  </section>
+
+  <div class="refs">
+    <h3>Evidence base &middot; verification status</h3>
+    <ul>
+      <li><span class="vstat ok">Confirmed</span> Hsieh, C.-T. &amp; Moretti, E. (2003). &ldquo;Can Free Entry Be Inefficient? Fixed Commissions and Social Waste in the Real Estate Industry.&rdquo; <em>Journal of Political Economy</em> 111(5), 1076&ndash;1122. Cross-city, correlational. <a href="https://www.journals.uchicago.edu/doi/10.1086/376953">journals.uchicago.edu</a></li>
+      <li><span class="vstat part">Corrected</span> Barwick, P. J. &amp; Pathak, P. A. (2015). &ldquo;The costs of free entry: an empirical study of real estate agents in Greater Boston.&rdquo; <em>RAND Journal of Economics</em> 46(1), 103&ndash;145. Entry finding is empirical; the 40%/73%/23% figures are counterfactual simulation. <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/1756-2171.12082">wiley.com</a></li>
+      <li><span class="vstat ok">Confirmed</span> Hendel, I., Nevo, A. &amp; Ortalo-Magn&eacute;, F. (2009). &ldquo;The Relative Performance of Real Estate Marketing Platforms: MLS versus FSBOMadison.com.&rdquo; <em>AER</em> 99(5), 1878&ndash;98. One city, one platform; endogenous seller sorting. <a href="https://www.aeaweb.org/articles?id=10.1257/aer.99.5.1878">aeaweb.org</a></li>
+      <li><span class="vstat part">Partly verified</span> Petrongolo, B. &amp; Pissarides, C. A. (2001). &ldquo;Looking into the Black Box: A Survey of the Matching Function.&rdquo; <em>JEL</em> 39(2), 390&ndash;431. Constant returns confirmed from the abstract; the 0.5&ndash;0.7 elasticity could not be checked against the full text and individual estimates range ~0.3&ndash;0.9. <a href="https://www.aeaweb.org/articles?id=10.1257/jel.39.2.390">aeaweb.org</a></li>
+      <li><span class="vstat part">Corrected</span> Misra, S. &amp; Nair, H. S. (2011). &ldquo;A structural model of sales-force compensation dynamics.&rdquo; <em>QME</em> 9(3), 211&ndash;257. ~9% revenue lift confirmed; removal covered quotas, ceilings <em>and</em> ratcheting; firm-wide before/after with no control group; &ldquo;same leads&rdquo; is not a claim in the paper. <a href="https://doi.org/10.1007/s11129-011-9096-1">doi.org</a></li>
+      <li><span class="vstat ok">Confirmed</span> NAR 2025 Member Profile (6 Aug 2025): $58,100 median gross income, 10 sides, $2.5M volume; $8,100 at &le;2 years; $78,900 at 16+ years. Self-reported survey, n=4,947. <a href="https://www.nar.realtor/newsroom/realtors-show-strong-commitment-to-profession-amid-market-headwinds-new-nar-report-finds">nar.realtor</a></li>
+      <li><span class="vstat ok">Confirmed</span> Compass Inc. Q4/FY2024 results: $1,139.3M commissions on $1,380.4M Q4 revenue (82.53%); FY revenue $5,629.1M; adjusted EBITDA $126.0M. <a href="https://www.sec.gov/Archives/edgar/data/1563190/000156319025000033/exhibit9918-k4q24pr.htm">sec.gov</a></li>
+      <li><span class="vstat part">Corrected</span> eXp World Holdings 10-K FY2024: revenue $4.568B across 82,980 agents (~$55.0K/agent). The $16,000 cap and $220M revenue-share figures are marketing, not filings. <a href="https://www.sec.gov/Archives/edgar/data/1495932/000155837025001223/expi-20241231x10k.htm">sec.gov</a></li>
+      <li><span class="vstat ok">Confirmed</span> Big &ldquo;I&rdquo; 2025 Market Share Report (AM Best data): independent agencies 39.0% personal lines, 87.2% commercial lines, 61.5% overall P&amp;C in 2024. Industry-published. <a href="https://www.insurancejournal.com/news/national/2025/07/23/832819.htm">insurancejournal.com</a></li>
+      <li><span class="vstat ok">Confirmed</span> Redfin: buyer-agent commissions 2.43% (Q1 2024) &rarr; 2.37% &rarr; 2.40% (Q1 2025) &rarr; 2.43% (Q2 2025). Source is a market participant. <a href="https://www.redfin.com/news/real-estate-commissions-may-2025/">redfin.com</a></li>
+      <li><span class="vstat part">Corrected</span> RA 9646 (RESA) &sect;32(a): at least one licensed broker per twenty accredited salespersons &mdash; a minimum ratio for partnerships/corporations. &sect;29 concerns unauthorized practice and contains no such number. <a href="https://lawphil.net/statutes/repacts/ra2009/ra_9646_2009.html">lawphil.net</a></li>
+      <li><span class="vstat part">Corrected</span> Placement-fee cap of one month&rsquo;s basic salary is Rule V &sect;51 of the 2016 POEA Rules, not RA 8042/10022 &mdash; the phrase appears nowhere in either statute. Exemptions are domestic workers and destination-based rules. Escrow is &#8369;1M for both land- and sea-based, not &#8369;2M/&#8369;5M. <a href="https://dmw.gov.ph/">dmw.gov.ph</a></li>
+      <li><span class="vstat part">Corrected</span> Insurance Commission PH: total premiums &#8369;440.39B at Q4 2024 (unaudited, 128 of 137 insurers, from the 12 Feb 2025 press release); licensed ordinary agents 154,751 in 2024, 145,298 in 2023. <a href="https://www.insurance.gov.ph/">insurance.gov.ph</a></li>
+      <li><span class="vstat part">Corrected</span> US travel agency establishments: 29,452 (1997) &rarr; 16,235 (2013), a 45% decline computed from Census County Business Patterns. The 59%/23,000/&ldquo;under 10,000&rdquo; figures are wrong. Airline commission cuts began 9 Feb 1995. <a href="https://www2.census.gov/programs-surveys/cbp/datasets/">census.gov</a></li>
+      <li><span class="vstat ok">Confirmed</span> SEC Rule 19b-3, adopted 23 Jan 1975, effective 1 May 1975, ending 183 years of fixed commissions. <a href="https://www.sechistorical.org/museum/galleries/rev/rev02c.php">sechistorical.org</a></li>
+      <li><span class="vstat part">Corrected</span> Lloyd&rsquo;s: coffee house from 1686; <em>Lloyd&rsquo;s News</em> ran only 1696 to Feb 1697; <em>Lloyd&rsquo;s List</em> from 1734; the Society of Lloyd&rsquo;s formalised 1771. <a href="https://www.lloyds.com/about-lloyds/history/coffee-and-commerce">lloyds.com</a></li>
+      <li><span class="vstat ok">Confirmed</span> Surge Transportation: ~$150M 2022 gross revenue; Chapter 11 filed 25 July 2023 owing ~$12M to 5,000+ carriers; 16 of top 20 creditors were factoring companies. <a href="https://www.freightwaves.com/news/breaking-freight-broker-surge-transportation-files-for-bankruptcy">freightwaves.com</a></li>
+      <li><span class="vstat weak">False</span> &ldquo;~15% of financial professionals remain after four years&rdquo; (LIMRA/LOMA). The article illustrates ~9%, and as a worked example rather than a survey finding. Gated trade-association content. <a href="https://www.loma.org/en/news/marketfacts/2025/increasing-agent-retention-a-leadership-driven-approach/">loma.org</a></li>
+      <li><span class="vstat weak">Demoted</span> &ldquo;40% fill rate vs 85% enterprise SLA.&rdquo; Vendor marketing from an AI recruitment platform; the 40% is unattributed and the 85% could not be found in any source. <a href="https://www.carv.com/blog/staffing-industry-benchmarks">carv.com</a></li>
+      <li><span class="vstat weak">Demoted</span> Philippine freight forwarding USD 2.33B (2025), 6.03% CAGR. Paywalled commercial estimate, no published methodology; 2025 is a forecast, not an observation. <a href="https://www.mordorintelligence.com/industry-reports/philippines-freight-forwarding-market">mordorintelligence.com</a></li>
+      <li><span class="vstat weak">Unverified</span> &ldquo;~35 brokerage firms vanished by end-1975&rdquo;; &ldquo;airline commissions were ~60% of agency revenue&rdquo;; Reagan Consulting&rsquo;s &ldquo;sales talent is the constraint&rdquo; framing (the 2026 update shows NUPP <em>below</em> the healthy band, reversing the implied polarity).</li>
+    </ul>
+  </div>
+
+  <div class="footer">Storm Research v2 &middot; 24/24 citations independently verified against primary sources, 31 Aug 2026 &middot; 3 false, 11 corrected, 4 untraceable, 3 demoted &middot; Reliability = evidence quality, not author confidence</div>
+
+</div>
+</body>
+</html>
