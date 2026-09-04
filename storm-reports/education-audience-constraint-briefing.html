@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Storm Research: Is audience replacement the binding constraint in an education business?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --blue: #2563eb; --blue-dark: #1e3a8a; --ink: #16203a; --muted: #5b6677; --line: #e4e9f2;
+    --bg-soft: #f6f8fc; --green: #15803d; --green-bg: #e9f6ee; --amber: #b45309; --amber-bg: #fdf3e7;
+    --slate: #475569; --slate-bg: #eef1f6; --red: #b91c1c; --red-bg: #fdecec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', system-ui, sans-serif; color: var(--ink); background: #eef1f6; line-height: 1.62; font-weight: 400; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 900px; margin: 0 auto; background: #fff; padding: 64px 72px 80px; box-shadow: 0 1px 40px rgba(22,32,58,0.08); }
+  .eyebrow { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+  h1 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 40px; line-height: 1.12; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; }
+  .lede { font-size: 17px; color: var(--muted); max-width: 640px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 26px; padding-top: 22px; border-top: 2px solid var(--line); font-family: 'Roboto Mono', monospace; font-size: 12px; color: var(--muted); }
+  .meta-row b { color: var(--ink); font-weight: 600; }
+  .verify-banner { margin-top: 22px; background: var(--green-bg); border: 1px solid #bfe3cc; border-radius: 8px; padding: 13px 18px; font-size: 13px; color: #14532d; display: flex; gap: 10px; align-items: baseline; }
+  .verify-banner b { font-weight: 700; }
+  .verify-banner .tag { font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: var(--green); color: #fff; padding: 3px 8px; border-radius: 4px; flex-shrink: 0; }
+  .howto { margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; padding: 18px 22px; background: var(--bg-soft); }
+  .howto h4 { font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .howto ul { list-style: none; }
+  .howto li { font-size: 13.5px; color: #2b3950; margin-bottom: 7px; padding-left: 16px; position: relative; }
+  .howto li::before { content: "›"; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+  .section { margin-top: 56px; }
+  .section-num { font-family: 'Roboto Mono', monospace; font-size: 13px; font-weight: 600; color: var(--blue); letter-spacing: 0.05em; }
+  h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 25px; letter-spacing: -0.01em; color: var(--ink); margin: 6px 0 18px; line-height: 1.2; }
+  h2 .bar { display: inline-block; width: 38px; height: 4px; background: var(--blue); border-radius: 2px; vertical-align: middle; margin-right: 14px; }
+  p { margin-bottom: 14px; }
+  p.body-lg { font-size: 16.5px; }
+  .ceo { background: var(--bg-soft); border-left: 5px solid var(--blue); padding: 26px 30px; border-radius: 4px; font-size: 16.5px; }
+  .ceo strong { font-weight: 700; color: var(--blue-dark); }
+  .finding { border: 1px solid var(--line); border-radius: 10px; padding: 24px 26px; margin-bottom: 18px; position: relative; }
+  .finding-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 12px; }
+  .finding-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; line-height: 1.3; color: var(--ink); flex: 1; }
+  .finding-rank { font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: 13px; color: #fff; background: var(--ink); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .finding p { font-size: 15px; color: #283449; margin-bottom: 14px; }
+  .rel-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .rel { display: inline-flex; align-items: center; gap: 9px; font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 12px; border-radius: 20px; }
+  .rel.high { background: #e7f0fe; color: var(--blue); }
+  .rel.medhigh { background: var(--green-bg); color: var(--green); }
+  .rel.medium { background: var(--amber-bg); color: var(--amber); }
+  .rel.low { background: var(--red-bg); color: var(--red); }
+  .score { font-family: 'Roboto Mono', monospace; font-size: 13px; font-weight: 600; color: var(--ink); }
+  .score b { font-size: 17px; }
+  .score span { color: var(--muted); font-weight: 400; }
+  .chips { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+  .chip-row { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; font-size: 13.5px; }
+  .chip-label { font-family: 'Roboto Mono', monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+  .chip-label.sup { background: var(--green-bg); color: var(--green); }
+  .chip-label.chal { background: var(--red-bg); color: var(--red); }
+  .chip-label.fix { background: var(--amber-bg); color: var(--amber); }
+  .chip-row span.who { color: #2b3950; }
+  .chip-row span.who b { font-weight: 600; }
+  .contested { border: 1px dashed var(--amber); background: #fffaf2; border-radius: 10px; padding: 22px 26px; margin-bottom: 18px; }
+  .contested .tag { font-family: 'Roboto Mono', monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); }
+  .contested h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 16px; color: var(--ink); margin: 6px 0 10px; }
+  .contested p { font-size: 14px; color: #4a3a22; margin-bottom: 0; }
+  .connection { background: linear-gradient(135deg, #16203a 0%, #1e3a8a 100%); color: #eaf0fb; border-radius: 12px; padding: 34px 38px; }
+  .connection h2 { color: #fff; }
+  .connection h2 .bar { background: #6ea8ff; }
+  .connection .section-num { color: #9ec1ff; }
+  .connection p { color: #d3def3; font-size: 16px; }
+  .connection .punch { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 18px; color: #fff; line-height: 1.4; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.18); }
+  .assume { border: 1px solid var(--line); border-left: 5px solid var(--amber); border-radius: 6px; padding: 24px 28px; background: #fffdf9; }
+  .assume h3 { font-family: 'Montserrat', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+  .assume p { font-size: 15px; color: #3a3320; }
+  .assume p:last-child { margin-bottom: 0; }
+  .action-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .action-item:last-child { border-bottom: none; }
+  .action-mark { font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: 13px; color: var(--blue); flex-shrink: 0; width: 34px; }
+  .action-item .do { font-weight: 600; color: var(--ink); }
+  .action-item p { font-size: 14.5px; margin-bottom: 0; color: #2b3950; }
+  .frontier { border: 2px dashed var(--blue); border-radius: 12px; padding: 30px 34px; background: var(--bg-soft); }
+  .frontier .q { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.32; color: var(--blue-dark); margin-bottom: 16px; }
+  .frontier p { font-size: 15px; color: #2b3950; }
+  .oncam { margin-top: 18px; }
+  .oncam-col { border-radius: 10px; padding: 20px 24px; margin-bottom: 14px; }
+  .oncam-col.safe { background: var(--green-bg); border: 1px solid #bfe3cc; }
+  .oncam-col.caveat { background: var(--amber-bg); border: 1px solid #f0d9b5; }
+  .oncam-col.avoid { background: var(--red-bg); border: 1px solid #f3c9c9; }
+  .oncam-col h4 { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+  .oncam-col.safe h4 { color: var(--green); }
+  .oncam-col.caveat h4 { color: var(--amber); }
+  .oncam-col.avoid h4 { color: var(--red); }
+  .oncam-col ul { list-style: none; }
+  .oncam-col li { font-size: 14px; color: #233; margin-bottom: 8px; padding-left: 16px; position: relative; line-height: 1.5; }
+  .oncam-col li::before { content: "•"; position: absolute; left: 0; font-weight: 700; }
+  .oncam-col.safe li::before { color: var(--green); }
+  .oncam-col.caveat li::before { color: var(--amber); }
+  .oncam-col.avoid li::before { color: var(--red); }
+  .refs { margin-top: 56px; padding-top: 26px; border-top: 2px solid var(--line); }
+  .refs h3 { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .refs ul { list-style: none; }
+  .refs li { font-size: 12.5px; color: var(--muted); margin-bottom: 11px; padding-left: 16px; position: relative; line-height: 1.5; }
+  .refs li::before { content: "›"; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+  .refs a { color: #34507e; text-decoration: none; }
+  .refs a:hover { text-decoration: underline; }
+  .refs .vstat { font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; margin-right: 6px; }
+  .vstat.ok { background: var(--green-bg); color: var(--green); }
+  .vstat.part { background: var(--amber-bg); color: var(--amber); }
+  .vstat.weak { background: var(--red-bg); color: var(--red); }
+  .footer { margin-top: 40px; font-family: 'Roboto Mono', monospace; font-size: 11px; color: #9aa6b8; text-align: center; }
+  @media (max-width: 640px) { .page { padding: 40px 24px 56px; } h1 { font-size: 30px; } }
+  @media print { body { background: #fff; } .page { box-shadow: none; max-width: 100%; padding: 0; } .connection, .oncam-col { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="eyebrow">Storm Research &middot; v2 (verified)</div>
+    <h1>Is &ldquo;the audience you must keep replacing&rdquo; the binding constraint in an education business?</h1>
+    <p class="lede">A five-lens synthesis: practitioner, academic, skeptic, economist, and historian. Every claim independently checked against its primary source before publication.</p>
+    <div class="meta-row">
+      <span><b>Date</b> &nbsp;4 September 2026</span>
+      <span><b>Method</b> &nbsp;5 author-built expert lenses + contradiction map</span>
+      <span><b>Audience</b> &nbsp;Philippine SME owner running a review centre, training provider or coaching business</span>
+    </div>
+    <div class="verify-banner">
+      <span class="tag">Verified</span>
+      <span>18 citation clusters independently checked against primary sources. <b>Result: 4 false, 8 corrected, 2 untraceable.</b> <b>The central interpretive claim of the first draft was falsified by verification</b> and rewritten &mdash; see the Hidden Connection.</span>
+    </div>
+    <div class="howto">
+      <h4>How to read this</h4>
+      <ul>
+        <li><b>The panel was author-constructed.</b> Where all five lenses agree, treat it as a strong hypothesis, not independent proof.</li>
+        <li><b>Two claims on our own published page were falsified here</b> &mdash; that each buyer is consumed by the sale, and that graduates become competitors. Both are corrected below.</li>
+        <li><b>The mechanism changed under verification.</b> The draft argued that publishing outcomes kills bad providers. It does not. A gatekeeper controlling money or licensure has to act, and measurement is what enables them.</li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="section-num">01</div>
+    <h2><span class="bar"></span>The 60-Second Summary</h2>
+    <div class="ceo">
+      <p style="margin-bottom:0;">All five lenses reject audience replacement, and one filing settles the premise: Coursera earned <b>$290.6M of its $398.1M consumer revenue in 2024 from learners who had already registered</b> &mdash; 73%, an 80% revenue retention. A business whose buyers are consumed by the sale cannot produce that number. The real problem is that nobody can evaluate teaching before buying it, and often not after. A r&eacute;sum&eacute; audit found for-profit health certificates drew <b>57% fewer callbacks</b> for jobs with no licence requirement, and <b>no significant penalty at all</b> where the job required a licence &mdash; the same credential, judged differently depending on whether a third party vouched. <b>The constraint is proof someone else will vouch for.</b> The historian&rsquo;s correction, which verification upheld, is that an operator cannot mint that proof alone: verification arrives as an industry institution, formed after a collapse, and the available move is to borrow a gatekeeper&rsquo;s standing until one exists.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">02</div>
+    <h2><span class="bar"></span>Five Key Findings, Ranked by Reliability</h2>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">The buyer is not consumed by the sale</div>
+        <div class="finding-rank">1</div>
+      </div>
+      <div class="rel-row"><div class="rel ok">Reliability: SEC filing, verified to the dollar</div><div class="score"><b>9</b><span>/10</span></div></div>
+      <p>Coursera FY2024: consumer revenue <b>$398.094M</b>, of which only $107.5M came from learners registering after 31 December 2023. The remaining <b>$290.6M &mdash; 73% &mdash; came from people who had already bought</b>, which the filing describes as an 80% retention of revenue. <b>This falsifies the premise printed on our own live page.</b> Where a product supports renewal, cohorts, advanced tiers or community, the replacement treadmill does not exist.</p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Skeptic, Economist (Coursera 10-K, filed 24 Feb 2025)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">No one</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">Our published claim that each buyer is consumed by the sale</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Where a third party vouches, institution identity stops mattering</div>
+        <div class="finding-rank">2</div>
+      </div>
+      <div class="rel-row"><div class="rel ok">Reliability: Peer-reviewed field experiment</div><div class="score"><b>9</b><span>/10</span></div></div>
+      <p>A r&eacute;sum&eacute; audit across five metro areas, 10,492 applications: for-profit <em>certificates</em> received <b>57% fewer callbacks</b> for health jobs with no certificate requirement, but <b>no significant sector difference</b> for jobs requiring a certificate and a valid licence. The authors read this as the licence signalling competence, so the school stops mattering. <b>Corrections applied: the separate 22% degree penalty is a 2-point drop off a 9.1% baseline and applies only to <em>large online</em> for-profits &mdash; brick-and-mortar for-profits showed no significant penalty. The outcome measured is a callback, not an offer or a wage, and it captures employer perception rather than skill.</b></p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Academic (Deming, Yuchtman, Abulafi, Goldin &amp; Katz, <em>AER</em> 106(3), 2016)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">No one</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">The licensing result sits in certificates and health occupations, not in the business-degree penalty</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Operators pay to acquire proof, not students</div>
+        <div class="finding-rank">3</div>
+      </div>
+      <div class="rel-row"><div class="rel ok">Reliability: Primary &mdash; the provider&rsquo;s own published pricing</div><div class="score"><b>8</b><span>/10</span></div></div>
+      <p>A major Philippine CPA review school publishes four tiers: first timer <b>&#8369;10,000</b>, former student or transferee <b>&#8369;8,000</b>, <b>Latin honour awardee &#8369;5,000</b>, conditional <b>&#8369;2,500</b>. The students most likely to place in the top twenty pay half what a first-timer pays. That is the acquisition cost of an advertising asset, not a discount to fill a room. The same site states a cumulative total of <b>1,637 topnotchers</b> &mdash; and the category advertises almost nothing else. <b>Verified from the centre&rsquo;s own pages rather than the aggregator blogs that repeat them; confirmed for one centre only.</b></p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Practitioner (CPAR published rates and claims)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">Single-provider evidence; tiers at other centres not confirmed</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Nobody audits the proof, because nobody has jurisdiction</div>
+        <div class="finding-rank">4</div>
+      </div>
+      <div class="rel-row"><div class="rel ok">Reliability: Supreme Court decision + PRC publication practice</div><div class="score"><b>8</b><span>/10</span></div></div>
+      <p>In <em>Review Center Association of the Philippines v. Ermita</em> (2 April 2009) the Court declared Executive Order 566 and the corresponding CHED order <b>void for being unconstitutional</b>: CHED has no jurisdiction over non-degree-granting review centres, and the Court noted PRC&rsquo;s mandate does not reach them either. PRC publishes verified performance data <b>by school</b> &mdash; a sole top-performing school requires 50 or more examinees and at least 80% passing &mdash; and publishes <b>nothing for review centres</b>. So a centre&rsquo;s headline number is self-reported and unaudited. <b>The absence of a successor regime is a negative finding from search, not a primary document.</b></p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Skeptic, Practitioner (G.R. No. 180046; PRC top-performing school criteria)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">TESDA&rsquo;s UTPRAS <em>is</em> a real gate for TVET programmes &mdash; registration is compulsory before accepting enrollees</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Free audiences are effectively infinite and worth almost nothing</div>
+        <div class="finding-rank">5</div>
+      </div>
+      <div class="rel-row"><div class="rel part">Reliability: Peer-reviewed, but the headline figures are widely mis-stated</div><div class="score"><b>7</b><span>/10</span></div></div>
+      <p>Across 565 course iterations at HarvardX and MITx: <b>12.67M course registrations from 5.63M unique learners</b>, of which <b>52% never entered the courseware</b>, with second-year retention falling from 38% in the first cohort to 7% by 2016&ndash;17. <b>Corrections: 12.67M is registrations, not participants &mdash; a distinction three secondary accounts get wrong. The often-quoted 3.13% completion is the 2017&ndash;18 <em>participant</em> cohort, and verified-track completion was far higher, around 50% in earlier years.</b> The honest reading is not that education cannot work, but that free registrants and paying learners are different populations.</p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Academic, Skeptic, Economist (Reich &amp; Ruip&eacute;rez-Valiente, <em>Science</em> 363(6423), 2019)</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">Population labels and the completion figure, which had been applied to the wrong denominator</span></div>
+      </div>
+    </div>
+
+    <div class="contested">
+      <div class="tag">Contested signal &middot; monitor, do not assert &middot; confidence 4/10</div>
+      <h4>That Philippine licensing rules guarantee recurring demand</h4>
+      <p>RA 10912 &sect;10 does make continuing professional development a mandatory requirement for renewing a Professional Identification Card, and that is verified in the statute text. But PRC has extended acceptance of a <b>CPD Undertaking</b> &mdash; an affidavit in lieu of completed units &mdash; <b>to 31 December 2026</b>. So in practice a licensed professional can renew today without completing anything. Treat mandatory CPD as a structural opportunity, not a guaranteed revenue stream, and expect anyone in the room who holds a licence to know this better than you do.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="connection">
+      <div class="section-num">03</div>
+      <h2><span class="bar"></span>The Hidden Connection</h2>
+      <p>The first draft of this briefing argued that these businesses die when an independent party checks and publishes their outcomes. Verification was briefed to attack that claim, and <b>falsified it.</b></p>
+      <p>Corinthian and ITT died of cash, not reputation: ITT&rsquo;s board closed the company <b>twelve days</b> after the Department of Education barred new federally-aided enrolments and demanded a $247M letter of credit. Corinthian had traded for years after government reports, attorney-general actions and press exposure. The Flexner Report published outcomes, but the schools closed because state licensing boards and the profession stopped recognising their graduates. And International Correspondence Schools never died at all &mdash; the damning 1926 Carnegie study was followed by industry growth, and it survives today as Penn Foster.</p>
+      <p class="punch">Measurement is not the kill switch. A gatekeeper who controls money or licensure is, and measurement is what lets them pull it. Which is why a review centre advertises PRC results rather than its own: PRC controls the licence, so only PRC&rsquo;s numbers carry weight.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="assume">
+      <h3>The assumption this briefing rests on (and the missing 6th lens)</h3>
+      <p>Every lens assumed the buyer wants an outcome that someone else will check &mdash; a passing rate, a job, a licence. <b>The missing lens is the buyer who wants the experience itself</b>: the hobby class, the parenting seminar, the faith-based course, the leisure workshop. For those, there is no third party to vouch and none is wanted, and the entire proof argument evaporates. That is a large share of what Philippine training providers actually sell, and no lens addressed it.</p>
+      <p>There is also no Philippine causal evidence here at all. The r&eacute;sum&eacute; audit is American, the administrative-data study is American, the MOOC data is from two US universities. What is genuinely local is regulatory and commercial: the Supreme Court decision, PRC&rsquo;s publication practice, TESDA registration, and one review school&rsquo;s price list.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">04</div>
+    <h2><span class="bar"></span>What To Actually Do Differently</h2>
+    <p class="body-lg" style="color:var(--muted);">For a Philippine owner selling training, review or coaching who believes the problem is finding students.</p>
+
+    <div class="action-item"><div class="action-mark">01</div><div><span class="do">Borrow a gatekeeper&rsquo;s standing; do not try to mint proof yourself.</span><p>History says verification arrives as an institution, formed after a collapse, never built by one seller. The available move is smaller and older: a board result, a licence, a named employer who will testify, an accreditation you can qualify for. Find whoever controls the gate in your market and get them to vouch.</p></div></div>
+
+    <div class="action-item"><div class="action-mark">02</div><div><span class="do">Measure your own outcomes before anyone forces you to.</span><p>Nobody audits review centres in this country. That is an opportunity rather than a shield: the provider who publishes a checkable number first, and keeps publishing it in bad years, is buying a position no marketing budget can replicate.</p></div></div>
+
+    <div class="action-item"><div class="action-mark">03</div><div><span class="do">Count what share of revenue comes from people who already bought.</span><p>The premise that each buyer is consumed by the sale is false in general and testable in your business. If the share is near zero, the fix is a second thing to sell the same person, not more advertising.</p></div></div>
+
+    <div class="action-item"><div class="action-mark">04</div><div><span class="do">Treat mandatory CPD as an opening, not an annuity.</span><p>It is a statutory requirement whose enforcement is currently suspended by an affidavit route running to the end of 2026. Build for the requirement, price for the reality.</p></div></div>
+
+    <div class="action-item"><div class="action-mark">05</div><div><span class="do">If you teach for enjoyment rather than outcome, ignore most of this.</span><p>Where nobody wants a third party to certify the result, proof is not the constraint and the audience argument may well hold. Know which business you are in.</p></div></div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">04b</div>
+    <h2><span class="bar"></span>What&rsquo;s Safe to Assert</h2>
+    <div class="oncam">
+      <div class="oncam-col safe">
+        <h4>&#10003; Safe &mdash; verified against primary source</h4>
+        <ul>
+          <li>Coursera FY2024: $290.6M of $398.1M consumer revenue came from already-registered learners &mdash; 73%, an 80% revenue retention.</li>
+          <li>For-profit health certificates drew 57% fewer callbacks where no licence was required, and no significant penalty where one was.</li>
+          <li>Over a million students in administrative data: for-profit certificate holders 1.5 points less likely employed, earning ~11% less.</li>
+          <li>CPAR&rsquo;s published tiers: &#8369;10,000 / &#8369;8,000 / &#8369;5,000 (Latin honour) / &#8369;2,500, and a claimed 1,637 topnotchers.</li>
+          <li>EO 566 and CHED Memorandum Order 30 were declared void for being unconstitutional, 2 April 2009.</li>
+          <li>PRC publishes school performance (50+ examinees, 80%+ passing for sole top-performing school) and no review-centre data.</li>
+          <li>TESDA programmes must be registered before accepting enrollees; graduates of unregistered programmes cannot be certificated.</li>
+          <li>RA 10912 &sect;10 makes CPD mandatory for PIC renewal.</li>
+          <li>ITT: enrolment bar 25 Aug 2016, closure 6 Sep 2016, 136 campuses, 38 states, ~35,000 students.</li>
+        </ul>
+      </div>
+      <div class="oncam-col caveat">
+        <h4>&#9888; Say with a caveat</h4>
+        <ul>
+          <li>The PSA 1.6% surplus &mdash; the category also contains driving schools, language and religious instruction. Not a review-centre figure.</li>
+          <li>Mandatory CPD &mdash; add that the CPD Undertaking route runs to 31 December 2026.</li>
+          <li>MOOC figures &mdash; say registrations or unique learners, and note verified-track learners behave differently.</li>
+          <li>Corinthian&rsquo;s fine &mdash; &ldquo;nearly $30 million&rdquo; ($29.665M).</li>
+          <li>The 22% degree penalty &mdash; large online for-profits only, and it is a callback, not a job.</li>
+          <li>The &ldquo;anti-lemons&rdquo; model &mdash; a theoretical paper with no original empirics. Cite it as a framework.</li>
+        </ul>
+      </div>
+      <div class="oncam-col avoid">
+        <h4>&#10005; Don&rsquo;t assert</h4>
+        <ul>
+          <li><b>&ldquo;Each buyer is consumed by the sale.&rdquo;</b> Falsified by Coursera&rsquo;s own filing. This is currently on our live page and must be removed.</li>
+          <li><b>&ldquo;Your students become your competitors.&rdquo;</b> No study, Philippine or otherwise, measures this. Folklore. Also on our live page.</li>
+          <li><b>&ldquo;Publishing outcomes is what kills bad providers.&rdquo;</b> Falsified: the kill switch is a funding or licensing gatekeeper.</li>
+          <li><b>&ldquo;Flexner closed 148 medical schools down to 66.&rdquo;</b> Untraceable in any source, for the second time in this project.</li>
+          <li><b>&ldquo;Corinthian paid temp agencies to employ graduates for two days.&rdquo;</b> The two-day detail could not be sourced.</li>
+          <li><b>&ldquo;ICS was founded in 1888.&rdquo;</b> 1888 is the magazine column; the school dates to 1890&ndash;91.</li>
+          <li><b>Any claim that review centres are regulated or accredited nationally.</b> They are not.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">05</div>
+    <h2><span class="bar"></span>The Frontier Question</h2>
+    <div class="frontier">
+      <div class="q">If one Philippine review centre published audited pass rates, would it win?</div>
+      <p>The whole argument predicts yes, and nobody has tested it. There is no regulator to compel disclosure, no PRC dataset by centre, and no competitive pressure to volunteer &mdash; so every provider advertises self-reported topnotchers and buyers have no way to compare. A single centre submitting to an independent audit would either capture the market or prove the theory wrong, and either outcome is worth more than another season of tarpaulins. The reason it has not happened is that the first mover bears the cost of a standard everyone else free-rides on, which is precisely why history says the institution forms after the collapse rather than before it.</p>
+    </div>
+  </section>
+
+  <div class="refs">
+    <h3>Evidence base &middot; verification status</h3>
+    <ul>
+      <li><span class="vstat ok">Confirmed</span> Coursera, Inc. FY2024 Form 10-K (filed 24 Feb 2025): consumer revenue $398.094M; $107.5M from post-2023 registrants; $290.6M from prior registrants, &ldquo;an 80% retention of revenue&rdquo;; total revenue $694.674M; sales &amp; marketing $234.908M (33.8%). <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001651562">sec.gov</a></li>
+      <li><span class="vstat part">Corrected</span> Deming, Yuchtman, Abulafi, Goldin &amp; Katz (2016), <em>AER</em> 106(3): 778&ndash;806. 10,492 r&eacute;sum&eacute;s, 8.2% callback, five metro areas, 2014. Health certificates: 57% fewer callbacks without a licence requirement, no significant difference with one. The 22% degree penalty is a 2pp drop off a 9.1% baseline, large online for-profits only. Measures perception, not skill. <a href="https://doi.org/10.1257/aer.20141757">doi.org</a></li>
+      <li><span class="vstat ok">Confirmed</span> Cellini &amp; Turner (2019), <em>Journal of Human Resources</em> 54(2): 342&ndash;370. ED and IRS population data, &gt;1M students: certificate-seekers 1.5pp less likely employed, 11% lower earnings; worst for majority-online and multicampus chains. <a href="https://doi.org/10.3368/jhr.54.2.1016.8302R1">doi.org</a></li>
+      <li><span class="vstat part">Corrected</span> Reich &amp; Ruip&eacute;rez-Valiente (2019), <em>Science</em> 363(6423): 130&ndash;131. 12.67M registrations from 5.63M unique learners across 565 iterations; 52% never entered the courseware; second-year retention 38% &rarr; 7%. The 3.13% completion is the 2017&ndash;18 participant cohort; verified-track completion was far higher. <a href="https://doi.org/10.1126/science.aav7958">doi.org</a></li>
+      <li><span class="vstat part">Corrected</span> MacLeod &amp; Urquiola (2015), <em>AER</em> 105(11): 3471&ndash;3488. The &ldquo;anti-lemons&rdquo; result is a <b>purely theoretical model</b> &mdash; no data, no estimation, no calibration. Cite as a framework, not as evidence. <a href="https://doi.org/10.1257/aer.20130332">doi.org</a></li>
+      <li><span class="vstat part">Corrected</span> Clark &amp; Martorell (2014), <em>JPE</em> 122(2): 282&ndash;318. Reports an <b>upper bound</b>: pooled, it rejects signalling values above 5&ndash;6%; point estimates near zero. &ldquo;Under 10%&rdquo; understates what the paper shows. <a href="https://doi.org/10.1086/675238">doi.org</a></li>
+      <li><span class="vstat ok">Confirmed</span> <em>Review Center Association of the Philippines v. Ermita</em>, G.R. No. 180046 (En Banc, Carpio J., 2 April 2009): EO 566 and CHED Memorandum Order No. 30 s.2007 declared void for being unconstitutional; CHED has no jurisdiction over non-degree-granting review centres.</li>
+      <li><span class="vstat ok">Confirmed</span> PRC: sole top-performing school requires 50 or more examinees and at least 80% passing. PRC publishes school performance only; no review-centre performance data exists. <a href="https://www.prc.gov.ph/">prc.gov.ph</a></li>
+      <li><span class="vstat part">Corrected</span> RA 10912 &sect;10 makes CPD mandatory for PIC renewal &mdash; but PRC has extended acceptance of the CPD Undertaking, an affidavit in lieu of completed units, <b>to 31 December 2026</b>. <a href="https://lawphil.net/statutes/repacts/ra2016/ra_10912_2016.html">lawphil.net</a></li>
+      <li><span class="vstat ok">Confirmed</span> TESDA UTPRAS: &ldquo;Register the program with TESDA prior to acceptance of enrollees. Registration is compulsory with or without Training Regulations.&rdquo; Graduates of unregistered programmes cannot be certificated. <a href="https://www.tesda.gov.ph/About/TESDA/42">tesda.gov.ph</a></li>
+      <li><span class="vstat ok">Confirmed</span> CPAR published rates and claims: &#8369;10,000 / &#8369;8,000 / &#8369;5,000 (Latin honour) / &#8369;2,500; &ldquo;a total of 1,637 topnotchers.&rdquo; Taken from the provider&rsquo;s own pages, not aggregators. One provider only.</li>
+      <li><span class="vstat part">Corrected</span> PSA 2020 ASPBI: other education services &#8369;11.80B revenue against &#8369;11.61B expense, a 1.6% surplus. <b>The PSIC category also contains driving and flying schools, language, computer and religious instruction &mdash; it is not a review-centre line item.</b> The 1.17 revenue-per-expense ratio belongs to higher education; other education services is 1.13. <a href="https://psa.gov.ph/">psa.gov.ph</a></li>
+      <li><span class="vstat part">Corrected</span> Corinthian Colleges: fined <b>$29.665M</b> on 14 April 2015 over 947 misstated Heald placement rates; closed 28 campuses 27 April 2015, ~16,000 students. The &ldquo;two days&rdquo; temp-employment detail could not be sourced.</li>
+      <li><span class="vstat ok">Confirmed</span> ITT Educational Services: ED barred new federally-aided enrolments 25 August 2016 and raised the letter of credit to $247M; operations ceased 6 September 2016 &mdash; 136 campuses, 38 states, ~35,000 students. Confirmed exactly by Congressional Research Service. <a href="https://www.everycrsreport.com/reports/IN10577.html">everycrsreport.com</a></li>
+      <li><span class="vstat part">Corrected</span> International Correspondence Schools: ~900,000 cumulative enrolments by 1906, sold by ~1,200 salesmen; Noffsinger&rsquo;s 1926 Carnegie study found non-starts were more profitable than completers. <b>&ldquo;Founded 1888&rdquo; is the magazine column; the school dates to 1890&ndash;91. The enrolment figures are company self-reported and travel as a block through one secondary chain.</b> ICS survives today as Penn Foster.</li>
+      <li><span class="vstat part">Corrected</span> National Home Study Council founded 1926 in response to the Carnegie study; accreditation standards 1955; federal recognition 1959. Sourced from the successor organisation&rsquo;s own history &mdash; attribute accordingly.</li>
+      <li><span class="vstat weak">False</span> &ldquo;Flexner closed 148 medical schools down to 66.&rdquo; Untraceable in any source. The commonly cited series (160 in 1904, 85 by 1920, 66 by 1935) traces to a single secondary textbook via Wikipedia rather than the profession&rsquo;s own records.</li>
+      <li><span class="vstat weak">Folklore</span> &ldquo;Your students become your competitors.&rdquo; No study, Philippine or otherwise, measures this. Two independent lenses searched and found nothing. The observed alumni effect in credence goods runs the other way, toward referral.</li>
+    </ul>
+  </div>
+
+  <div class="footer">Storm Research v2 &middot; 18 citation clusters independently verified against primary sources, 4 Sep 2026 &middot; 4 false, 8 corrected, 2 untraceable &middot; The central interpretive claim was falsified by verification and rewritten &middot; Reliability = evidence quality, not author confidence</div>
+
+</div>
+</body>
+</html>
