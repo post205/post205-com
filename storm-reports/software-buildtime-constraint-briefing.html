@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Storm Research: Is build time the binding constraint in a software business?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --blue: #2563eb; --blue-dark: #1e3a8a; --ink: #16203a; --muted: #5b6677; --line: #e4e9f2;
+    --bg-soft: #f6f8fc; --green: #15803d; --green-bg: #e9f6ee; --amber: #b45309; --amber-bg: #fdf3e7;
+    --slate: #475569; --slate-bg: #eef1f6; --red: #b91c1c; --red-bg: #fdecec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', system-ui, sans-serif; color: var(--ink); background: #eef1f6; line-height: 1.62; font-weight: 400; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 900px; margin: 0 auto; background: #fff; padding: 64px 72px 80px; box-shadow: 0 1px 40px rgba(22,32,58,0.08); }
+  .eyebrow { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+  h1 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 40px; line-height: 1.12; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; }
+  .lede { font-size: 17px; color: var(--muted); max-width: 640px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 26px; padding-top: 22px; border-top: 2px solid var(--line); font-family: 'Roboto Mono', monospace; font-size: 12px; color: var(--muted); }
+  .meta-row b { color: var(--ink); font-weight: 600; }
+  .verify-banner { margin-top: 22px; background: var(--green-bg); border: 1px solid #bfe3cc; border-radius: 8px; padding: 13px 18px; font-size: 13px; color: #14532d; display: flex; gap: 10px; align-items: baseline; }
+  .verify-banner b { font-weight: 700; }
+  .verify-banner .tag { font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: var(--green); color: #fff; padding: 3px 8px; border-radius: 4px; flex-shrink: 0; }
+  .howto { margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; padding: 18px 22px; background: var(--bg-soft); }
+  .howto h4 { font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .howto ul { list-style: none; }
+  .howto li { font-size: 13.5px; color: #2b3950; margin-bottom: 7px; padding-left: 16px; position: relative; }
+  .howto li::before { content: "›"; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+  .section { margin-top: 56px; }
+  .section-num { font-family: 'Roboto Mono', monospace; font-size: 13px; font-weight: 600; color: var(--blue); letter-spacing: 0.05em; }
+  h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 25px; letter-spacing: -0.01em; color: var(--ink); margin: 6px 0 18px; line-height: 1.2; }
+  h2 .bar { display: inline-block; width: 38px; height: 4px; background: var(--blue); border-radius: 2px; vertical-align: middle; margin-right: 14px; }
+  p { margin-bottom: 14px; }
+  p.body-lg { font-size: 16.5px; }
+  .ceo { background: var(--bg-soft); border-left: 5px solid var(--blue); padding: 26px 30px; border-radius: 4px; font-size: 16.5px; }
+  .ceo strong { font-weight: 700; color: var(--blue-dark); }
+  .finding { border: 1px solid var(--line); border-radius: 10px; padding: 24px 26px; margin-bottom: 18px; position: relative; }
+  .finding-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 12px; }
+  .finding-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; line-height: 1.3; color: var(--ink); flex: 1; }
+  .finding-rank { font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: 13px; color: #fff; background: var(--ink); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .finding p { font-size: 15px; color: #283449; margin-bottom: 14px; }
+  .rel-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .rel { display: inline-flex; align-items: center; gap: 9px; font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 12px; border-radius: 20px; }
+  .rel.high { background: #e7f0fe; color: var(--blue); }
+  .rel.medhigh { background: var(--green-bg); color: var(--green); }
+  .rel.medium { background: var(--amber-bg); color: var(--amber); }
+  .rel.low { background: var(--red-bg); color: var(--red); }
+  .score { font-family: 'Roboto Mono', monospace; font-size: 13px; font-weight: 600; color: var(--ink); }
+  .score b { font-size: 17px; }
+  .score span { color: var(--muted); font-weight: 400; }
+  .chips { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+  .chip-row { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; font-size: 13.5px; }
+  .chip-label { font-family: 'Roboto Mono', monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+  .chip-label.sup { background: var(--green-bg); color: var(--green); }
+  .chip-label.chal { background: var(--red-bg); color: var(--red); }
+  .chip-label.fix { background: var(--amber-bg); color: var(--amber); }
+  .chip-row span.who { color: #2b3950; }
+  .chip-row span.who b { font-weight: 600; }
+  .contested { border: 1px dashed var(--amber); background: #fffaf2; border-radius: 10px; padding: 22px 26px; margin-bottom: 18px; }
+  .contested .tag { font-family: 'Roboto Mono', monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); }
+  .contested h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 16px; color: var(--ink); margin: 6px 0 10px; }
+  .contested p { font-size: 14px; color: #4a3a22; margin-bottom: 0; }
+  .connection { background: linear-gradient(135deg, #16203a 0%, #1e3a8a 100%); color: #eaf0fb; border-radius: 12px; padding: 34px 38px; }
+  .connection h2 { color: #fff; }
+  .connection h2 .bar { background: #6ea8ff; }
+  .connection .section-num { color: #9ec1ff; }
+  .connection p { color: #d3def3; font-size: 16px; }
+  .connection .punch { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 18px; color: #fff; line-height: 1.4; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.18); }
+  .assume { border: 1px solid var(--line); border-left: 5px solid var(--amber); border-radius: 6px; padding: 24px 28px; background: #fffdf9; }
+  .assume h3 { font-family: 'Montserrat', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+  .assume p { font-size: 15px; color: #3a3320; }
+  .assume p:last-child { margin-bottom: 0; }
+  .action-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .action-item:last-child { border-bottom: none; }
+  .action-mark { font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: 13px; color: var(--blue); flex-shrink: 0; width: 34px; }
+  .action-item .do { font-weight: 600; color: var(--ink); }
+  .action-item p { font-size: 14.5px; margin-bottom: 0; color: #2b3950; }
+  .frontier { border: 2px dashed var(--blue); border-radius: 12px; padding: 30px 34px; background: var(--bg-soft); }
+  .frontier .q { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.32; color: var(--blue-dark); margin-bottom: 16px; }
+  .frontier p { font-size: 15px; color: #2b3950; }
+  .oncam { margin-top: 18px; }
+  .oncam-col { border-radius: 10px; padding: 20px 24px; margin-bottom: 14px; }
+  .oncam-col.safe { background: var(--green-bg); border: 1px solid #bfe3cc; }
+  .oncam-col.caveat { background: var(--amber-bg); border: 1px solid #f0d9b5; }
+  .oncam-col.avoid { background: var(--red-bg); border: 1px solid #f3c9c9; }
+  .oncam-col h4 { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+  .oncam-col.safe h4 { color: var(--green); }
+  .oncam-col.caveat h4 { color: var(--amber); }
+  .oncam-col.avoid h4 { color: var(--red); }
+  .oncam-col ul { list-style: none; }
+  .oncam-col li { font-size: 14px; color: #233; margin-bottom: 8px; padding-left: 16px; position: relative; line-height: 1.5; }
+  .oncam-col li::before { content: "•"; position: absolute; left: 0; font-weight: 700; }
+  .oncam-col.safe li::before { color: var(--green); }
+  .oncam-col.caveat li::before { color: var(--amber); }
+  .oncam-col.avoid li::before { color: var(--red); }
+  .refs { margin-top: 56px; padding-top: 26px; border-top: 2px solid var(--line); }
+  .refs h3 { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .refs ul { list-style: none; }
+  .refs li { font-size: 12.5px; color: var(--muted); margin-bottom: 11px; padding-left: 16px; position: relative; line-height: 1.5; }
+  .refs li::before { content: "›"; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+  .refs a { color: #34507e; text-decoration: none; }
+  .refs a:hover { text-decoration: underline; }
+  .refs .vstat { font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; margin-right: 6px; }
+  .vstat.ok { background: var(--green-bg); color: var(--green); }
+  .vstat.part { background: var(--amber-bg); color: var(--amber); }
+  .vstat.weak { background: var(--red-bg); color: var(--red); }
+  .footer { margin-top: 40px; font-family: 'Roboto Mono', monospace; font-size: 11px; color: #9aa6b8; text-align: center; }
+  @media (max-width: 640px) { .page { padding: 40px 24px 56px; } h1 { font-size: 30px; } }
+  @media print { body { background: #fff; } .page { box-shadow: none; max-width: 100%; padding: 0; } .connection, .oncam-col { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="eyebrow">Storm Research &middot; v2 (verified)</div>
+    <h1>Is &ldquo;the time before it works at all&rdquo; the binding constraint in a software business?</h1>
+    <p class="lede">A five-lens synthesis: practitioner, academic, skeptic, economist, and historian. Every claim independently checked against its primary source before publication.</p>
+    <div class="meta-row">
+      <span><b>Date</b> &nbsp;4 September 2026</span>
+      <span><b>Method</b> &nbsp;5 author-built expert lenses + contradiction map</span>
+      <span><b>Audience</b> &nbsp;Philippine SME owner building software to sell</span>
+    </div>
+    <div class="verify-banner">
+      <span class="tag">Verified</span>
+      <span>16 citation clusters independently checked against primary sources. <b>Result: 2 false, 7 corrected, 1 untraceable.</b> The decisive test &mdash; sales and marketing versus R&amp;D in public filings &mdash; was confirmed to the cent across three companies.</span>
+    </div>
+    <div class="howto">
+      <h4>How to read this</h4>
+      <ul>
+        <li><b>The panel was author-constructed.</b> Where all five lenses agree, treat it as a strong hypothesis, not independent proof.</li>
+        <li><b>Widely-quoted startup statistics were excluded on purpose.</b> &ldquo;90% of startups fail&rdquo; has no methodological source, and the standard software-project failure figures were shown two decades ago not to reflect reality. Neither appears in the findings.</li>
+        <li><b>This shape may not describe the room.</b> See the missing 6th lens: most Philippine software firms bill for delivery rather than sell a product.</li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="section-num">01</div>
+    <h2><span class="bar"></span>The 60-Second Summary</h2>
+    <div class="ceo">
+      <p style="margin-bottom:0;">Duration is not a scarce quantity, and we have the natural experiment to prove it: the cost and time of building software collapsed over two decades and failure rates did not fall. When cloud infrastructure cut the cost of a first experiment, investors wrote <b>15&ndash;27% smaller first cheques, took 14% fewer board seats, and the firms they funded became <em>more</em> likely to fail</b> &mdash; the signature of an information problem, not a time problem. Meanwhile the money in working software companies goes somewhere the founder&rsquo;s intuition does not expect: <b>Salesforce spent 34.5% of revenue on sales and marketing against 14.4% on R&amp;D; HubSpot 44.1% against 28.9%; Asana 51.5% against 38.1%, still losing $189M a year on a product that has worked for a decade.</b> Building is a fixed cost paid once. Distribution is a recurring cost paid per customer forever, and it is the larger number. <b>The constraint is the cost of being found, and the runway to pay it.</b> For a Philippine firm with almost no venture capital and MSME lending at 4.52% of bank portfolios, that runway is the whole question.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">02</div>
+    <h2><span class="bar"></span>Five Key Findings, Ranked by Reliability</h2>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Working software companies spend more on being found than on building</div>
+        <div class="finding-rank">1</div>
+      </div>
+      <div class="rel-row"><div class="rel ok">Reliability: Three SEC filings, verified to the cent</div><div class="score"><b>9</b><span>/10</span></div></div>
+      <p>Sales and marketing against research and development, as a share of revenue: <b>Salesforce FY2026 34.5% vs 14.4%</b> ($14.345B against $5.993B on $41.525B). <b>HubSpot FY2025 44.05% vs 28.9%</b>, on an 83.76% gross margin &mdash; most of that margin goes to acquisition. <b>Asana FY2026 51.5% vs 38.1%</b>, with a net loss of $189.024M on a product that has shipped for a decade. Distribution is not a phase after building; it is the larger and permanent cost.</p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Economist, Historian (Salesforce, HubSpot and Asana annual filings; fiscal periods verified)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">No one. These are mature venture-funded firms; a bootstrapped SME&rsquo;s ratios will differ</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Cheaper building produced more failure, not less</div>
+        <div class="finding-rank">2</div>
+      </div>
+      <div class="rel-row"><div class="rel ok">Reliability: Peer-reviewed, identified natural experiment</div><div class="score"><b>9</b><span>/10</span></div></div>
+      <p>Using the arrival of cloud infrastructure in 2006 as a shock across 8,961 venture-backed firms and 2,815 investors: first-round capital in affected segments fell <b>15&ndash;27%</b> (roughly $670k to $1.3M), funds made about <b>1.5 more investments every two years</b>, board-seat probability dropped <b>14%</b> &mdash; and affected firms were <b>less likely to receive follow-on funding and more likely to fail ultimately.</b> If build time were binding, relaxing it would have raised survival. It lowered it. What the collapse in build cost bought was more shots and faster abandonment, which is what an information constraint looks like.</p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Academic (Ewens, Nanda &amp; Rhodes-Kropf, <em>Journal of Financial Economics</em> 128(3), 2018)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">No one</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">A finished product with no channel dies anyway</div>
+        <div class="finding-rank">3</div>
+      </div>
+      <div class="rel-row"><div class="rel ok">Reliability: Court findings and a settlement, both primary</div><div class="score"><b>8</b><span>/10</span></div></div>
+      <p>The <em>United States v. Microsoft</em> findings of fact state it directly: pre-installation by manufacturers and bundling by internet providers &ldquo;lead most efficiently to browser usage,&rdquo; and <b>&ldquo;no other distribution channel for browsing software even approaches the efficiency&rdquo;</b> of them. BeOS was technically admired and technically finished; Be&rsquo;s claim was that manufacturers were barred from dual-booting it, and Microsoft paid <b>$23,250,000 net of fees</b> to settle in September 2003. The company did not survive. In the other direction, DOOM shipped its first episode free for anyone to copy in December 1993 and sold the rest by mail order &mdash; the distribution mechanism was the business, the engine was the product.</p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Historian (US v. Microsoft Findings of Fact &para;144; Microsoft&ndash;Be settlement announcement)</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">$23.25M is net to Be after attorneys&rsquo; fees, not the gross settlement</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Tooling has not made the build stretch the answer</div>
+        <div class="finding-rank">4</div>
+      </div>
+      <div class="rel-row"><div class="rel part">Reliability: One small RCT plus an inconclusive follow-up</div><div class="score"><b>6</b><span>/10</span></div></div>
+      <p>Sixteen experienced open-source developers working 246 real tasks in their own mature repositories were <b>19% slower</b> with AI assistance (confidence interval +2% to +39%) while estimating afterwards that they had been 20% faster. <b>Corrections: the 24% figure often quoted is the pre-study forecast, not the post-hoc estimate. And the follow-up must not be cited as established speedup &mdash; with 57 developers it reported &minus;18% and &minus;4%, but both confidence intervals cross zero, and the authors themselves call the results unreliable and are redesigning the experiment.</b> The authors also do not claim AI fails to help developers generally. The argument does not need it to: an input that is getting cheaper cannot be the thing that binds.</p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Skeptic, Practitioner (METR, 2025 and 2026)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">Its own follow-up, and by the small sample</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">Forecast-versus-post-hoc figures, and the strength of the follow-up</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">A Philippine firm cannot fund a long pre-revenue stretch</div>
+        <div class="finding-rank">5</div>
+      </div>
+      <div class="rel-row"><div class="rel part">Reliability: Official lending data; industry funding reports</div><div class="score"><b>7</b><span>/10</span></div></div>
+      <p>As of June 2024, banks lent <b>4.52% of a &#8369;10.8 trillion portfolio &mdash; &#8369;488.13B &mdash; to MSMEs</b>, against a 10% statutory allocation whose mandate has since lapsed. Venture capital is thin and definitionally contested. Median SaaS payback on customer acquisition runs about <b>16 months</b>. A firm with neither equity nor credit is funding that gap from its own cash, which in practice means services revenue. <b>Correction of a comparison I nearly published: Philippine startup funding of $1.12B for 2024 and $120M for 2025 are not a collapse. The first counts all private-capital deals above $5M including growth and buyout; the second counts disclosed equity only. Different universes.</b></p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Economist, Practitioner (BSP lending data; BCG&ndash;Foxmont and Kickstart&ndash;DealStreetAsia reports)</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">The funding &ldquo;collapse&rdquo; was a definitional artefact; the MSME mandate lapsed in 2025</span></div>
+      </div>
+    </div>
+
+    <div class="contested">
+      <div class="tag">Contested signal &middot; monitor, do not assert &middot; confidence 4/10</div>
+      <h4>That Philippine SMEs do not buy software</h4>
+      <p>A Philippine government baseline survey put advanced digital tool use among MSMEs at around 6%, with 23% reporting no digitalisation at all and about half using only basic tools. If that holds, a local software firm faces a market that has to be created before it can be sold to. But the figures come from a survey of 400 firms conducted in 2021, and this briefing initially attributed them to an entirely different publication &mdash; a multi-country brief which, on extraction, contains neither number. Directionally plausible, weakly sourced, and four years old in a market that moved through a pandemic. Do not build an argument on the precise percentages.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="connection">
+      <div class="section-num">03</div>
+      <h2><span class="bar"></span>The Hidden Connection</h2>
+      <p>The economist says distribution is the recurring cost and building is the fixed one. The historian says the constraint has moved in one direction across every era of the industry &mdash; building cheaper, distribution more contested. The academic says cheaper experiments produced more abandonment. Three different methods, one shape.</p>
+      <p>App stores are the cleanest demonstration. They removed the gatekeeper and collapsed distribution cost to nearly nothing, and demand did not follow: the overwhelming majority of apps became findable only by someone who already knew the name. Shelf space became infinite; attention did not. Every technology that made building or shipping cheaper has increased the number of finished products competing for a quantity of attention that did not grow.</p>
+      <p class="punch">Which means the founder who says &ldquo;it just needs to be finished&rdquo; is naming the one input that fifty years of progress has already relieved, and ignoring the one that has been getting harder the whole time.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="assume">
+      <h3>The assumption this briefing rests on (and the missing 6th lens)</h3>
+      <p>Every lens assumed a firm building a product to sell repeatedly. <b>In the Philippines that is the rare case.</b> IT and software services is roughly a sixth of the IT-BPM sector &mdash; billed delivery, not licensed product &mdash; and local firms typically fund a product out of services cash rather than instead of it. That removes the shape&rsquo;s premise: the pre-revenue stretch is subsidised, so it is not unfunded, so it does not bind. What binds instead is the founder&rsquo;s week, because paid client work always outranks unpaid product work, and the same person does both.</p>
+      <p><b>The missing lens is the services firm with a product on the side</b>, which is what most Philippine software SMEs actually are. For them the useful question is not how long the build takes but how many hours a week survive contact with billable work &mdash; a Service-shape question wearing a Software label. It is entirely possible that Software is a shape almost nobody in a Philippine SME room genuinely has.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">04</div>
+    <h2><span class="bar"></span>What To Actually Do Differently</h2>
+    <p class="body-lg" style="color:var(--muted);">For a Philippine owner building software who believes the problem is finishing it.</p>
+
+    <div class="action-item"><div class="action-mark">01</div><div><span class="do">Decide whether you are a product business at all.</span><p>If services revenue funds the build and the same person sells both, you are running a service business with a product attached. The constraint is your calendar, not your codebase, and the Service page is the one to read.</p></div></div>
+
+    <div class="action-item"><div class="action-mark">02</div><div><span class="do">Price the cost of being found before you finish building.</span><p>Mature software companies spend a third to a half of revenue on it, permanently. If you have not costed acquisition, you have costed the cheap half of the business.</p></div></div>
+
+    <div class="action-item"><div class="action-mark">03</div><div><span class="do">Count runway in customers, not months.</span><p>At around 16 months&rsquo; median payback on acquisition, the question is not whether you can finish but whether you can fund the gap between spending to win a customer and being repaid by them &mdash; with almost no local venture capital and MSME lending at 4.52% of bank portfolios.</p></div></div>
+
+    <div class="action-item"><div class="action-mark">04</div><div><span class="do">Sell it before it works.</span><p>The evidence says the scarce input is information about who pays, and that it can be bought before the build rather than after. A signed intent from a paying customer is worth more than a finished feature, and it arrives sooner.</p></div></div>
+
+    <div class="action-item"><div class="action-mark">05</div><div><span class="do">Distrust the failure statistics, including ours.</span><p>&ldquo;90% of startups fail&rdquo; has no methodological source. The standard software-project failure figures were shown two decades ago to be built on definitions that do not reflect reality. Product-market fit has no validated instrument at all. Anyone quoting precise numbers at you about why software companies die is repeating folklore.</p></div></div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">04b</div>
+    <h2><span class="bar"></span>What&rsquo;s Safe to Assert</h2>
+    <div class="oncam">
+      <div class="oncam-col safe">
+        <h4>&#10003; Safe &mdash; verified against primary source</h4>
+        <ul>
+          <li>Salesforce FY2026: sales and marketing 34.5% of revenue, R&amp;D 14.4%.</li>
+          <li>HubSpot FY2025: 44.05% versus 28.9%, on an 83.76% gross margin.</li>
+          <li>Asana FY2026: 51.5% versus 38.1%, net loss $189.024M.</li>
+          <li>Cheaper experimentation cut first-round cheques 15&ndash;27% and board seats 14%, and raised ultimate failure.</li>
+          <li>&ldquo;No other distribution channel for browsing software even approaches the efficiency of OEM pre-installation and IAP bundling&rdquo; &mdash; US v. Microsoft findings of fact.</li>
+          <li>Microsoft paid Be Inc. $23,250,000 net of fees, September 2003.</li>
+          <li>DOOM released 10 December 1993, first episode free and freely redistributable.</li>
+          <li>Philippine banks lent 4.52% (&#8369;488.13B) of a &#8369;10.8T portfolio to MSMEs as of June 2024.</li>
+          <li>Sixteen experienced developers were 19% slower with AI assistance on 246 real tasks.</li>
+        </ul>
+      </div>
+      <div class="oncam-col caveat">
+        <h4>&#9888; Say with a caveat</h4>
+        <ul>
+          <li>The 10% MSME lending mandate &mdash; it lapsed in 2025; do not describe it as a live obligation.</li>
+          <li>Median CAC payback of 16 months &mdash; from an industry benchmark survey, n=342.</li>
+          <li>The METR result &mdash; small sample, and the authors do not claim AI fails to help generally.</li>
+          <li>Philippine startup funding &mdash; always say which definition; the two published figures count different things.</li>
+          <li>&ldquo;Zombie&rdquo; app shares &mdash; the metric rises mechanically as the store grows against fixed top-list slots.</li>
+          <li>Product-market fit &mdash; say &ldquo;no standard operationalisation and no validated instrument,&rdquo; not &ldquo;no validated construct.&rdquo;</li>
+        </ul>
+      </div>
+      <div class="oncam-col avoid">
+        <h4>&#10005; Don&rsquo;t assert</h4>
+        <ul>
+          <li><b>&ldquo;IBM unbundled software in 1969.&rdquo;</b> Operating-system code stayed free with the hardware; only services, education and application programs were unbundled.</li>
+          <li><b>&ldquo;Philippine startup funding collapsed from $1.12B to $120M.&rdquo;</b> A definitional gap, not a trend.</li>
+          <li><b>&ldquo;90% of startups fail.&rdquo;</b> No methodological source exists.</li>
+          <li><b>&ldquo;42% fail from no market need.&rdquo;</b> Self-reported post-mortems from a self-selected sample, not a failure rate.</li>
+          <li><b>The standard software-project success and failure rates.</b> Shown in 2010, against 5,457 forecasts on 1,211 projects, not to reflect reality.</li>
+          <li><b>&ldquo;The 40% rule tells you when you have product-market fit.&rdquo;</b> Never validated in peer-reviewed research.</li>
+          <li><b>&ldquo;Only 6% of Philippine MSMEs use advanced digital tools&rdquo; as a current fact.</b> A 400-firm survey from 2021, and we mis-attributed it once already.</li>
+          <li><b>The CAC payback figures by contract size.</b> Sub-$5K is 11 months, not 8; $50&ndash;100K is 22, not 24.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">05</div>
+    <h2><span class="bar"></span>The Frontier Question</h2>
+    <div class="frontier">
+      <div class="q">How many Philippine software SMEs are actually product businesses, and how many are services firms with a product on the side?</div>
+      <p>Nobody has counted. The distinction decides everything: a services firm with a product is constrained by the founder&rsquo;s week, a product firm by runway against acquisition cost, and the advice diverges completely. National statistics record the sector by revenue and headcount, not by business model, and the firms themselves have an incentive to describe services work as product work when raising money or recruiting. Until someone counts, a workshop teaching seven shapes to a Philippine room is guessing about which one these owners are in &mdash; and on the evidence here, the honest answer may be that Software belongs in the deck mainly so the two or three people who genuinely have it can find themselves.</p>
+    </div>
+  </section>
+
+  <div class="refs">
+    <h3>Evidence base &middot; verification status</h3>
+    <ul>
+      <li><span class="vstat ok">Confirmed</span> Salesforce FY2026 (year ended 31 Jan 2026): revenue $41.525B, sales &amp; marketing $14.345B (34.5%), R&amp;D $5.993B (14.4%). Verified via SEC XBRL company facts. <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001108524">sec.gov</a></li>
+      <li><span class="vstat ok">Confirmed</span> HubSpot FY2025 (calendar year): revenue $3.1313B, S&amp;M $1.37938B (44.05%), R&amp;D $0.90594B (28.9%), gross margin 83.76%. <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001404655">sec.gov</a></li>
+      <li><span class="vstat ok">Confirmed</span> Asana FY2026 (year ended 31 Jan 2026): revenue $790.806M, S&amp;M $406.952M (51.5%), R&amp;D $301.496M (38.1%), net loss $189.024M. <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001477720">sec.gov</a></li>
+      <li><span class="vstat ok">Confirmed</span> Ewens, Nanda &amp; Rhodes-Kropf (2018), &ldquo;Cost of Experimentation and the Evolution of Venture Capital,&rdquo; <em>JFE</em> 128(3): 422&ndash;442. 8,961 firms, 2,815 investors, 16,944 observations, 2002&ndash;2010; first-round capital 15&ndash;27% lower, board-seat probability 14% lower, ~1.5 extra investments per fund per two years, treated firms less likely to get follow-on and more likely to fail. <a href="https://www.nber.org/papers/w24523">nber.org</a></li>
+      <li><span class="vstat ok">Confirmed</span> Eveleens &amp; Verhoef (2010), &ldquo;The Rise and Fall of the Chaos Report Figures,&rdquo; <em>IEEE Software</em> 27(1): 30&ndash;36. 5,457 forecasts of 1,211 real-world projects; the definitions are &ldquo;misleading, one-sided&rdquo; and the resulting figures &ldquo;don&rsquo;t reflect the reality.&rdquo; <a href="https://doi.org/10.1109/MS.2009.154">doi.org</a></li>
+      <li><span class="vstat ok">Confirmed</span> Gompers, Gornall, Kaplan &amp; Strebulaev (2020), <em>JFE</em> 135(1): 169&ndash;190. 885 VCs at 681 firms; team cited by 95% and named most important by 47%, above product and technology. <a href="https://www.nber.org/papers/w22587">nber.org</a></li>
+      <li><span class="vstat part">Partly verified</span> Camuffo, Cordova, Gambardella &amp; Spina (2020), <em>Management Science</em> 66(2): 564&ndash;586, n=116; replication Camuffo et al. (2024), <em>SMJ</em> 45(6): 1209&ndash;1237, 759 firms across four RCTs. Venues and samples confirmed; <b>effect sizes not read (paywalled)</b>. <a href="https://doi.org/10.1287/mnsc.2018.3249">doi.org</a></li>
+      <li><span class="vstat part">Corrected</span> METR (2025), &ldquo;Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity,&rdquo; arXiv:2507.09089. 16 developers, 246 tasks; AI increased completion time 19% (CI +2% to +39%). The 24% figure is the pre-study forecast; 20% is the post-hoc estimate. <b>The Feb 2026 follow-up (57 developers) reports &minus;18% and &minus;4% with both intervals crossing zero, and METR calls it unreliable &mdash; do not cite it as established speedup.</b> <a href="https://arxiv.org/abs/2507.09089">arxiv.org</a></li>
+      <li><span class="vstat ok">Confirmed</span> <em>United States v. Microsoft</em>, Findings of Fact (Jackson J., 5 Nov 1999), &para;144: &ldquo;No other distribution channel for browsing software even approaches the efficiency of OEM pre-installation and IAP bundling.&rdquo; <a href="https://www.justice.gov/atr/us-v-microsoft-courts-findings-fact">justice.gov</a></li>
+      <li><span class="vstat ok">Confirmed</span> Microsoft and Be Inc. settlement, 5 September 2003: Be received $23,250,000 <b>after attorneys&rsquo; fees</b>; no admission of wrongdoing. <a href="https://news.microsoft.com/source/2003/09/05/microsoft-corp-and-be-inc-reach-agreement-to-settle-litigation/">news.microsoft.com</a></li>
+      <li><span class="vstat ok">Confirmed</span> DOOM uploaded shortly after midnight, 10 December 1993; Episode 1 free and freely redistributable, Episodes 2&ndash;3 sold by mail order in the registered version.</li>
+      <li><span class="vstat part">Corrected</span> IBM&rsquo;s 23 June 1969 pricing announcement (effective 1 Jan 1970) unbundled systems engineering, customer education, field maintenance and <b>application</b> program products. <b>Operating-system code remained supplied free with hardware &mdash; software was not fully unbundled.</b> <a href="https://dl.acm.org/doi/10.1109/85.988583">Grad, IEEE Annals 24(1), 2002</a></li>
+      <li><span class="vstat part">Corrected</span> &ldquo;Zombie&rdquo; apps: just under 91% in 2016, defined as not appearing on any of 39,171 App Store top lists on at least two of three days in a month. <b>The 70% for 2013 cannot be traced to a 2013 publication, contemporaneous figures conflict (83% in early 2015, &ldquo;up from 74%&rdquo;), and the metric rises mechanically as the store grew from ~890k to 2.1m apps against fixed top-list slots. Directional only.</b></li>
+      <li><span class="vstat ok">Confirmed</span> BSP data: banks lent 4.52% (&#8369;488.13B) of a &#8369;10.8T portfolio to MSMEs as of end-June 2024, against a 10% allocation under RA 6977 as amended by RA 9501. <b>The mandatory allocation lapsed in 2025.</b> Verified across two outlets, not against a BSP release page.</li>
+      <li><span class="vstat part">Corrected</span> Philippine startup funding: $1.12B for 2024 (BCG&ndash;Foxmont; all private-capital deals above $5M including growth and buyout; Foxmont has since cited a revised $1.5B) versus $120M disclosed equity for 2025 (Kickstart&ndash;DealStreetAsia). <b>Not a collapse &mdash; different universes. The &minus;54% deal-volume figure traces to a different report and could not be confirmed.</b></li>
+      <li><span class="vstat part">Corrected</span> CAC payback: median 16 months in 2025, 18 in 2024 (n=342). <b>Sub-$5K contracts are 11 months, not 8; $50&ndash;100K are 22, not 24 &mdash; the 24 was a bottom-quartile threshold misread as a band.</b></li>
+      <li><span class="vstat weak">Weakly sourced</span> Philippine MSME digitalisation: ~6% using advanced digital tools, 23% with none, ~51% basic only. From a DTI baseline survey of 400 firms, 2021. <b>Originally attributed here to a multi-country brief which, on full-text extraction, contains neither figure.</b></li>
+      <li><span class="vstat weak">Rejected</span> &ldquo;90% of startups fail&rdquo; &mdash; no methodological source. &ldquo;42% fail from no market need&rdquo; &mdash; self-reported post-mortems of a self-selected venture-backed sample, not a sampled failure rate. Neither is used in this briefing.</li>
+      <li><span class="vstat weak">No validated measure</span> Product-market fit has no standard operationalisation and no validated psychometric instrument; the 40% threshold has never been validated in peer-reviewed research. An applied-psychometrics review found no peer-reviewed papers using the item at all.</li>
+    </ul>
+  </div>
+
+  <div class="footer">Storm Research v2 &middot; 16 citation clusters independently verified against primary sources, 4 Sep 2026 &middot; 2 false, 7 corrected, 1 untraceable &middot; Reliability = evidence quality, not author confidence</div>
+
+</div>
+</body>
+</html>
