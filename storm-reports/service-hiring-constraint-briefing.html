@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Storm Research: Is hiring capacity the binding constraint in a service business?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --blue: #2563eb; --blue-dark: #1e3a8a; --ink: #16203a; --muted: #5b6677; --line: #e4e9f2;
+    --bg-soft: #f6f8fc; --green: #15803d; --green-bg: #e9f6ee; --amber: #b45309; --amber-bg: #fdf3e7;
+    --slate: #475569; --slate-bg: #eef1f6; --red: #b91c1c; --red-bg: #fdecec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', system-ui, sans-serif; color: var(--ink); background: #eef1f6; line-height: 1.62; font-weight: 400; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 900px; margin: 0 auto; background: #fff; padding: 64px 72px 80px; box-shadow: 0 1px 40px rgba(22,32,58,0.08); }
+  .eyebrow { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+  h1 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 40px; line-height: 1.12; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 18px; }
+  .lede { font-size: 17px; color: var(--muted); max-width: 640px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 26px; padding-top: 22px; border-top: 2px solid var(--line); font-family: 'Roboto Mono', monospace; font-size: 12px; color: var(--muted); }
+  .meta-row b { color: var(--ink); font-weight: 600; }
+  .verify-banner { margin-top: 22px; background: var(--green-bg); border: 1px solid #bfe3cc; border-radius: 8px; padding: 13px 18px; font-size: 13px; color: #14532d; display: flex; gap: 10px; align-items: baseline; }
+  .verify-banner b { font-weight: 700; }
+  .verify-banner .tag { font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: var(--green); color: #fff; padding: 3px 8px; border-radius: 4px; flex-shrink: 0; }
+  .howto { margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; padding: 18px 22px; background: var(--bg-soft); }
+  .howto h4 { font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .howto ul { list-style: none; }
+  .howto li { font-size: 13.5px; color: #2b3950; margin-bottom: 7px; padding-left: 16px; position: relative; }
+  .howto li::before { content: "›"; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+  .section { margin-top: 56px; }
+  .section-num { font-family: 'Roboto Mono', monospace; font-size: 13px; font-weight: 600; color: var(--blue); letter-spacing: 0.05em; }
+  h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 25px; letter-spacing: -0.01em; color: var(--ink); margin: 6px 0 18px; line-height: 1.2; }
+  h2 .bar { display: inline-block; width: 38px; height: 4px; background: var(--blue); border-radius: 2px; vertical-align: middle; margin-right: 14px; }
+  p { margin-bottom: 14px; }
+  p.body-lg { font-size: 16.5px; }
+  .ceo { background: var(--bg-soft); border-left: 5px solid var(--blue); padding: 26px 30px; border-radius: 4px; font-size: 16.5px; }
+  .ceo strong { font-weight: 700; color: var(--blue-dark); }
+  .finding { border: 1px solid var(--line); border-radius: 10px; padding: 24px 26px; margin-bottom: 18px; position: relative; }
+  .finding-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 12px; }
+  .finding-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; line-height: 1.3; color: var(--ink); flex: 1; }
+  .finding-rank { font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: 13px; color: #fff; background: var(--ink); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .finding p { font-size: 15px; color: #283449; margin-bottom: 14px; }
+  .rel-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .rel { display: inline-flex; align-items: center; gap: 9px; font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 12px; border-radius: 20px; }
+  .rel.high { background: #e7f0fe; color: var(--blue); }
+  .rel.medhigh { background: var(--green-bg); color: var(--green); }
+  .rel.medium { background: var(--amber-bg); color: var(--amber); }
+  .rel.low { background: var(--red-bg); color: var(--red); }
+  .score { font-family: 'Roboto Mono', monospace; font-size: 13px; font-weight: 600; color: var(--ink); }
+  .score b { font-size: 17px; }
+  .score span { color: var(--muted); font-weight: 400; }
+  .chips { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+  .chip-row { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; font-size: 13.5px; }
+  .chip-label { font-family: 'Roboto Mono', monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+  .chip-label.sup { background: var(--green-bg); color: var(--green); }
+  .chip-label.chal { background: var(--red-bg); color: var(--red); }
+  .chip-label.fix { background: var(--amber-bg); color: var(--amber); }
+  .chip-row span.who { color: #2b3950; }
+  .chip-row span.who b { font-weight: 600; }
+  .contested { border: 1px dashed var(--amber); background: #fffaf2; border-radius: 10px; padding: 22px 26px; margin-bottom: 18px; }
+  .contested .tag { font-family: 'Roboto Mono', monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); }
+  .contested h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 16px; color: var(--ink); margin: 6px 0 10px; }
+  .contested p { font-size: 14px; color: #4a3a22; margin-bottom: 0; }
+  .connection { background: linear-gradient(135deg, #16203a 0%, #1e3a8a 100%); color: #eaf0fb; border-radius: 12px; padding: 34px 38px; }
+  .connection h2 { color: #fff; }
+  .connection h2 .bar { background: #6ea8ff; }
+  .connection .section-num { color: #9ec1ff; }
+  .connection p { color: #d3def3; font-size: 16px; }
+  .connection .punch { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 18px; color: #fff; line-height: 1.4; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.18); }
+  .assume { border: 1px solid var(--line); border-left: 5px solid var(--amber); border-radius: 6px; padding: 24px 28px; background: #fffdf9; }
+  .assume h3 { font-family: 'Montserrat', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+  .assume p { font-size: 15px; color: #3a3320; }
+  .assume p:last-child { margin-bottom: 0; }
+  .action-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .action-item:last-child { border-bottom: none; }
+  .action-mark { font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: 13px; color: var(--blue); flex-shrink: 0; width: 34px; }
+  .action-item .do { font-weight: 600; color: var(--ink); }
+  .action-item p { font-size: 14.5px; margin-bottom: 0; color: #2b3950; }
+  .frontier { border: 2px dashed var(--blue); border-radius: 12px; padding: 30px 34px; background: var(--bg-soft); }
+  .frontier .q { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.32; color: var(--blue-dark); margin-bottom: 16px; }
+  .frontier p { font-size: 15px; color: #2b3950; }
+  .oncam { margin-top: 18px; }
+  .oncam-col { border-radius: 10px; padding: 20px 24px; margin-bottom: 14px; }
+  .oncam-col.safe { background: var(--green-bg); border: 1px solid #bfe3cc; }
+  .oncam-col.caveat { background: var(--amber-bg); border: 1px solid #f0d9b5; }
+  .oncam-col.avoid { background: var(--red-bg); border: 1px solid #f3c9c9; }
+  .oncam-col h4 { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+  .oncam-col.safe h4 { color: var(--green); }
+  .oncam-col.caveat h4 { color: var(--amber); }
+  .oncam-col.avoid h4 { color: var(--red); }
+  .oncam-col ul { list-style: none; }
+  .oncam-col li { font-size: 14px; color: #233; margin-bottom: 8px; padding-left: 16px; position: relative; line-height: 1.5; }
+  .oncam-col li::before { content: "•"; position: absolute; left: 0; font-weight: 700; }
+  .oncam-col.safe li::before { color: var(--green); }
+  .oncam-col.caveat li::before { color: var(--amber); }
+  .oncam-col.avoid li::before { color: var(--red); }
+  .refs { margin-top: 56px; padding-top: 26px; border-top: 2px solid var(--line); }
+  .refs h3 { font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .refs ul { list-style: none; }
+  .refs li { font-size: 12.5px; color: var(--muted); margin-bottom: 11px; padding-left: 16px; position: relative; line-height: 1.5; }
+  .refs li::before { content: "›"; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+  .refs a { color: #34507e; text-decoration: none; }
+  .refs a:hover { text-decoration: underline; }
+  .refs .vstat { font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; margin-right: 6px; }
+  .vstat.ok { background: var(--green-bg); color: var(--green); }
+  .vstat.part { background: var(--amber-bg); color: var(--amber); }
+  .vstat.weak { background: var(--red-bg); color: var(--red); }
+  .footer { margin-top: 40px; font-family: 'Roboto Mono', monospace; font-size: 11px; color: #9aa6b8; text-align: center; }
+  @media (max-width: 640px) { .page { padding: 40px 24px 56px; } h1 { font-size: 30px; } }
+  @media print { body { background: #fff; } .page { box-shadow: none; max-width: 100%; padding: 0; } .connection, .oncam-col { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="eyebrow">Storm Research &middot; v2 (verified)</div>
+    <h1>Is hiring capacity the binding constraint in a service business?</h1>
+    <p class="lede">A five-lens synthesis: practitioner, academic, skeptic, economist, and historian. Every claim independently checked against its primary source before publication.</p>
+    <div class="meta-row">
+      <span><b>Date</b> &nbsp;31 August 2026</span>
+      <span><b>Method</b> &nbsp;5 author-built expert lenses + contradiction map</span>
+      <span><b>Audience</b> &nbsp;Philippine SME owner-operator selling labour and skill</span>
+    </div>
+    <div class="verify-banner">
+      <span class="tag">Verified</span>
+      <span>26 citation clusters independently checked against primary sources on 31 Aug 2026. <b>Result: 3 false, 12 corrected, 4 untraceable.</b> One retired figure was reinstated after a better source was found. <b>The verification pass was briefed adversarially against this briefing&rsquo;s own conclusion</b> &mdash; see section 04b.</span>
+    </div>
+    <div class="howto">
+      <h4>How to read this</h4>
+      <ul>
+        <li><b>The panel was author-constructed.</b> All five lenses share one framing, so where they agree, treat it as a strong hypothesis, not independent proof.</li>
+        <li><b>Confidence is scored 1-10</b> on evidence quality: peer-reviewed causal work &gt; official policy/financial data &gt; single commissioned survey &gt; analogy &gt; vendor content.</li>
+        <li><b>The commissioning party sells business-systems consulting.</b> A finding of &ldquo;you need better systems&rdquo; would be self-serving, so the verifiers were instructed to attack that conclusion specifically. They did, and it did not fully survive. That result is in the briefing rather than buried.</li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="section-num">01</div>
+    <h2><span class="bar"></span>The 60-Second Summary</h2>
+    <div class="ceo">
+      <p style="margin-bottom:0;">All five lenses reject hiring capacity as the binding constraint, and the reason is the same one that sank the two shapes examined before it: headcount is what an owner counts, not what limits them. The decisive evidence is dispersion &mdash; within narrow industries the 90th-percentile firm produces roughly <b>1.92&times;</b> the output of the 10th from the same measured inputs, so identical staffing cannot be the cap. Meanwhile a US lawyer bills about <b>37%</b> of an eight-hour day, which means most service firms are sitting on unsold capacity they already pay for. <b>What binds is sold hours: demand converted into scheduled, paid work.</b> The uncomfortable half of this briefing is what the evidence does <em>not</em> support. The case that management systems relieve the constraint rests on two randomised trials &mdash; seventeen textile firms in India and 432 SMEs in one Mexican city &mdash; neither in services, neither in Southeast Asia, one with a null first-year employment result. The diagnosis is well founded. The cure is not, and this briefing declines to pretend otherwise.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">02</div>
+    <h2><span class="bar"></span>Five Key Findings, Ranked by Reliability</h2>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Identical inputs, near-double output &mdash; dispersion rules headcount out</div>
+        <div class="finding-rank">1</div>
+      </div>
+      <div class="rel-row">
+        <div class="rel ok">Reliability: Peer-reviewed survey of a large literature</div>
+        <div class="score"><b>8</b><span>/10</span></div>
+      </div>
+      <p>Within four-digit US industries, the average gap in logged total factor productivity between the 90th and 10th percentile plant is 0.651 &mdash; a ratio of <b>1.92&times; output from the same measured inputs</b>. In China and India the average 90-10 ratio exceeds 5:1. If labour were the binding constraint, output conditional on headcount would cluster; it does the opposite. <b>Two verified caveats that must travel with this number: the estimate is defined on manufacturing plants, and service-sector dispersion is measured far less well. The measure is also revenue-based TFP, so it partly captures demand and price rather than pure capability.</b></p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Academic, Skeptic (Syverson, <em>JEL</em> 49(2), 2011)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">Its own scope &mdash; manufacturing, not services</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">Reframed from &ldquo;capability gap&rdquo; to &ldquo;dispersion including demand and price effects&rdquo;</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Most of the day you already pay for is never sold</div>
+        <div class="finding-rank">2</div>
+      </div>
+      <div class="rel-row">
+        <div class="rel part">Reliability: Large proprietary datasets, vendor-published</div>
+        <div class="score"><b>7</b><span>/10</span></div>
+      </div>
+      <p>Two measures, reconciled rather than averaged. Against a fixed eight-hour day, US lawyers bill <b>37%</b> &mdash; about 2.9 hours, roughly 1,693 billable hours a year &mdash; in a dataset skewed to solo and small firms. Against available hours of delivery staff only, mid-to-large professional services firms average <b>66.4%</b>, the lowest in that benchmark&rsquo;s history, versus a 75% high-performer level. <b>These are different denominators and must never be presented as the same metric.</b> For a small firm the 37% figure is the honest frame: adding a person buys eight hours of cost and about three hours of revenue.</p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Economist, Practitioner (Clio 2024 Legal Trends; SPI 18th PS Maturity Benchmark, 403 firms)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">Neither dataset includes Philippine firms; both are vendor-distributed</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">Two figures that appeared contradictory were shown to measure different populations</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Hiring follows capability rather than causing growth</div>
+        <div class="finding-rank">3</div>
+      </div>
+      <div class="rel-row">
+        <div class="rel part">Reliability: Two RCTs, both small and outside services</div>
+        <div class="score"><b>6</b><span>/10</span></div>
+      </div>
+      <p>Subsidised consulting to 432 SMEs in Puebla, Mexico produced no first-year employment effect but <b>+57% employees and +72% wage bill</b> over 2010&ndash;14. A companion trial raised adoption of 38 management practices from 25.6% to 63.4% and productivity by about 17% in year one. Both point the same way: capability moves first, headcount follows. <b>Corrections applied: the widely-quoted &ldquo;about 50%&rdquo; is the abstract&rsquo;s rounding of +57%/+72%; only 57% of firms matched into administrative records; and the claim that headcount was &ldquo;unchanged&rdquo; overstates a null result (point estimate &minus;1.28, standard error 6.19) in a sample of seventeen firms.</b></p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Academic (Bruhn, Karlan &amp; Schoar, <em>JPE</em> 126(2), 2018; Bloom et al., <em>QJE</em> 128(1), 2013)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">Sample size, single-city and single-country design, imprecise year-to-year estimates</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">Headline percentages, match rate, and the headcount characterisation</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">In the Philippines, a hire is the most expensive way to add capacity</div>
+        <div class="finding-rank">4</div>
+      </div>
+      <div class="rel-row">
+        <div class="rel ok">Reliability: Primary regulatory sources, read directly</div>
+        <div class="score"><b>9</b><span>/10</span></div>
+      </div>
+      <p>Statutory loading on a &#8369;25,000 monthly salary comes to <b>&#8369;5,438, or 21.75%</b>, before rent, tools, supervision or a single idle hour: SSS employer share 10% of the Monthly Salary Credit, an Employees&rsquo; Compensation premium, PhilHealth&rsquo;s 2.5% employer half of the 5% premium, Pag-IBIG 2% capped at &#8369;200, and 13th month pay at 8.33% annualised. The loading is not flat &mdash; SSS caps at a &#8369;35,000 MSC and Pag-IBIG at &#8369;10,000, so the percentage falls as pay rises. <b>Critical currency correction: the NCR non-agriculture floor is &#8369;695 under Wage Order NCR-26. The &#8369;755 rate under NCR-27 is enjoined by the Pasig RTC and is not in force.</b></p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Practitioner, Economist (SSS Circular 2024-006; PhilHealth Advisory 2025-0002; HDMF Circular 460; NWPC)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">No one</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">Wage order status; 13th month re-cited as PD 851 <em>as amended by MO 28</em> and its implementing rules</span></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head">
+        <div class="finding-title">Professions industrialised training, then used it as a gate</div>
+        <div class="finding-rank">5</div>
+      </div>
+      <div class="rel-row">
+        <div class="rel part">Reliability: One verbatim primary source; the firm histories are softer</div>
+        <div class="score"><b>6</b><span>/10</span></div>
+      </div>
+      <p>Apprenticeship is one instrument pointed either way. Structured training manufactured supply for the large law firms; guild rules withheld it &mdash; in seventeenth-century Paris, a city of nearly half a million, the metal-engravers&rsquo; guild permitted a maximum of 20 masters and the clockmakers 72. Medical school closures after 1910 cut US schools from roughly 160 to about 70, and closures within 300 miles reduced physicians per capita by about 4%. So &ldquo;we can&rsquo;t find people&rdquo; invites a prior question: who benefits from this scarcity? <b>Corrections: the widely-repeated &ldquo;148 to 66&rdquo; school count is untraceable; McKinsey adopted up-or-out in 1954, not 1951; and &ldquo;leverage&rdquo; is a 1991 analytic label applied to the Cravath system, not Cravath&rsquo;s stated rationale &mdash; no primary source has him describing selling junior labour at a margin.</b></p>
+      <div class="chips">
+        <div class="chip-row"><span class="chip-label sup">Supported by</span><span class="who">Historian (Ogilvie, <em>The European Guilds</em>; NBER w33937)</span></div>
+        <div class="chip-row"><span class="chip-label chal">Challenged by</span><span class="who">Verification &mdash; the firm-history mechanism is weaker than the lens presented it</span></div>
+        <div class="chip-row"><span class="chip-label fix">Corrected</span><span class="who">Two dates, one untraceable count, and the central mechanism relabelled as later interpretation</span></div>
+      </div>
+    </div>
+
+    <div class="contested">
+      <div class="tag">Contested signal &middot; monitor, do not assert &middot; confidence 4/10</div>
+      <h4>That the constraint is work trapped in one senior person&rsquo;s head, and that systematising it is the fix</h4>
+      <p>This is the historian&rsquo;s and practitioner&rsquo;s reading, and it is the most commercially convenient conclusion available to whoever commissioned this research. It should therefore clear a higher bar, and it does not. The Cravath mechanism turns out to be a later scholarly interpretation rather than a documented rationale. The two intervention trials are outside services, outside Southeast Asia, and small. Nothing located here measures service-sector management consulting in a comparable economy. The claim may well be true; it is currently an argument, not a finding, and the page built from this briefing marks it accordingly.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="connection">
+      <div class="section-num">03</div>
+      <h2><span class="bar"></span>The Hidden Connection</h2>
+      <p>The economist says small service firms are largely price-takers, so raising price is not freely available. The academic says demand accumulation, not capacity, explains why young firms grow slowly. Read separately, one is about pricing power and the other about customer bases.</p>
+      <p>Together they close the exits. A service firm has three levers: hire more, charge more, or sell more of the hours it already owns. Hiring adds cost immediately and revenue slowly. Price is constrained by competition. That leaves the third, and it is the one nobody measures &mdash; because unsold hours generate no invoice, no complaint, and no line in any report.</p>
+      <p class="punch">The constraint is invisible precisely because it produces nothing. An empty hour leaves no trace, so the owner counts the thing that does: people.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="assume">
+      <h3>The assumption this briefing rests on (and the missing 6th lens)</h3>
+      <p>Every lens assumed a firm that <em>wants</em> to grow. The skeptic surfaced the strongest challenge to that: the typical small business is non-innovative, plans to stay small, and was founded for non-pecuniary reasons. <b>The missing lens is the owner who has already chosen enough</b> &mdash; for whom a 37% billable day is not waste but the margin that makes the business livable. For that owner every finding here is technically correct and practically irrelevant, and a workshop that treats their choice as a defect is insulting them.</p>
+      <p>There is also no Philippine causal evidence in this briefing at all. The dispersion work is US manufacturing, the trials are India and Mexico, the utilisation data is US, and the historical cases are American and European. What is genuinely Philippine here is regulatory and statistical &mdash; wage orders, contribution rates, establishment counts. The mechanism is imported; only the cost floor is local.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">04</div>
+    <h2><span class="bar"></span>What To Actually Do Differently</h2>
+    <p class="body-lg" style="color:var(--muted);">For a Philippine owner-operator selling labour who believes they need to hire.</p>
+
+    <div class="action-item">
+      <div class="action-mark">01</div>
+      <div><span class="do">Run the free-staff test before you hire anyone.</span><p>Ask what would happen if five trained people arrived tomorrow at no cost. If revenue would not rise, the constraint is demand. If revenue rises but profit does not, it is price. If it rises and then decays within six months, it is your own management capacity. Hiring only answers the case where none of those is true.</p></div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-mark">02</div>
+      <div><span class="do">Measure sold hours as a share of paid hours, for one month.</span><p>Most firms have never calculated it. If a US lawyer bills 2.9 hours of eight, the number in your business is probably lower than you would guess, and moving it costs no wages at all.</p></div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-mark">03</div>
+      <div><span class="do">Price the hire fully before deciding it is affordable.</span><p>Basic pay plus roughly 21.75% statutory loading, against payroll clearing every fifteen days while clients pay far later. Each hire is about two months of wages funded from your own working capital before any of it returns.</p></div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-mark">04</div>
+      <div><span class="do">Treat &ldquo;we can&rsquo;t find people&rdquo; as a claim to be tested.</span><p>Firms in the same city drawing on the same applicant pool run very different retention. Before concluding the market is empty, check what the offer looks like from the applicant&rsquo;s side.</p></div>
+    </div>
+
+    <div class="action-item">
+      <div class="action-mark">05</div>
+      <div><span class="do">Be sceptical of anyone selling the fix, including us.</span><p>The evidence that management systems relieve this constraint comes from two trials outside services and outside this region, one with a null first-year result. That is a reason to try things and measure them, not a reason to buy a programme on the strength of the research.</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">04b</div>
+    <h2><span class="bar"></span>What&rsquo;s Safe to Assert</h2>
+    <div class="oncam">
+      <div class="oncam-col safe">
+        <h4>&#10003; Safe &mdash; verified against primary source</h4>
+        <ul>
+          <li>Within four-digit US manufacturing industries, the 90th-percentile plant produces about 1.92&times; the output of the 10th from the same measured inputs.</li>
+          <li>US lawyers bill about 37% of an eight-hour day (~2.9 hours; ~1,693 hours a year).</li>
+          <li>Mid-to-large professional services firms average 66.4% billable utilisation of delivery staff, against a 75% high-performer level.</li>
+          <li>PH statutory loading is about 21.75% on a &#8369;25,000 salary; SSS employer share 10% of MSC (&#8369;5,000&ndash;&#8369;35,000), PhilHealth employer 2.5%, Pag-IBIG 2% capped &#8369;200.</li>
+          <li>The NCR non-agriculture minimum wage is &#8369;695 under Wage Order NCR-26.</li>
+          <li>Philippines 2024: 1,241,476 establishments, 1,236,908 (99.63%) MSMEs, 90.66% micro, MSMEs 66.58% of employment.</li>
+          <li>IT-BPM 2025: US$40.3B revenue, 1.89M FTEs; 2028 targets cut to $43.3&ndash;50.5B and 1.85&ndash;2.14M.</li>
+          <li>Seventeenth-century Paris capped metal-engravers at 20 masters and clockmakers at 72.</li>
+        </ul>
+      </div>
+      <div class="oncam-col caveat">
+        <h4>&#9888; Say with a caveat</h4>
+        <ul>
+          <li>The 1.92&times; dispersion figure &mdash; manufacturing, revenue-based TFP, and services are measured worse.</li>
+          <li>The consulting trials &mdash; name the countries and the sample sizes, or they sound like general evidence.</li>
+          <li>&ldquo;+57% employees over five years&rdquo; &mdash; single city, 57% administrative match rate, imprecisely estimated.</li>
+          <li>Utilisation figures &mdash; always say which denominator, and that neither dataset includes PH firms.</li>
+          <li>Arthur Andersen&rsquo;s ~85,000 staff &mdash; press-sourced; and the conviction was reversed on defective jury instructions, not innocence.</li>
+        </ul>
+      </div>
+      <div class="oncam-col avoid">
+        <h4>&#10005; Don&rsquo;t assert</h4>
+        <ul>
+          <li><b>&ldquo;The minimum wage is &#8369;755.&rdquo;</b> NCR-27 is enjoined; &#8369;695 remains enforceable.</li>
+          <li><b>&ldquo;IT-BPM attrition runs 30&ndash;40%.&rdquo;</b> No primary source. Every trace is SEO or vendor content.</li>
+          <li><b>&ldquo;McDonald&rsquo;s cut waits from 30 minutes to 30 seconds.&rdquo;</b> Marketing, blog citing blog. No primary source gives any service-time figure.</li>
+          <li><b>&ldquo;Flexner closed 148 medical schools down to 66.&rdquo;</b> Untraceable; the paper says roughly 160 to 70.</li>
+          <li><b>&ldquo;McKinsey adopted up-or-out in 1951.&rdquo;</b> It was 1954.</li>
+          <li><b>&ldquo;Cravath invented leverage.&rdquo;</b> A 1991 scholarly label, not his rationale.</li>
+          <li><b>&ldquo;Bill 3&times; your loaded cost.&rdquo;</b> One consultancy&rsquo;s rule of thumb with no disclosed sample.</li>
+          <li><b>&ldquo;Research shows management systems fix this.&rdquo;</b> Two trials, neither in services, neither in Southeast Asia.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">05</div>
+    <h2><span class="bar"></span>The Frontier Question</h2>
+    <div class="frontier">
+      <div class="q">In a Philippine service SME, what share of paid hours is actually sold &mdash; and would the owner change anything if they knew?</div>
+      <p>The number does not exist. No Philippine dataset reports billable utilisation for small service firms, and the two international figures available measure different things in different countries. Yet everything here turns on it: if a typical firm sells 40% of what it pays for, the entire hiring conversation is misplaced. The measurement is cheap &mdash; one month of honest timekeeping &mdash; and almost nobody does it, because unsold hours produce no invoice to notice. Answering it for even fifty Philippine firms would be a genuine contribution, and it would tell us whether this framework describes the local market or merely imports one.</p>
+    </div>
+  </section>
+
+  <div class="refs">
+    <h3>Evidence base &middot; verification status</h3>
+    <ul>
+      <li><span class="vstat part">Corrected</span> Syverson, C. (2011). &ldquo;What Determines Productivity?&rdquo; <em>Journal of Economic Literature</em> 49(2): 326&ndash;65. 90-10 log TFP gap 0.651 (ratio 1.92); China and India above 5:1. Defined on US manufacturing; revenue-based TFP partly captures demand and price. <a href="https://doi.org/10.1257/jel.49.2.326">doi.org</a></li>
+      <li><span class="vstat ok">Confirmed</span> Foster, Haltiwanger &amp; Syverson (2016). &ldquo;The Slow Growth of New Plants: Learning about Demand?&rdquo; <em>Economica</em> 83(329): 91&ndash;129. Size gaps reflect demand-side fundamentals rather than productivity; active accumulation dominates passive. US Census data on commodity-like manufacturing &mdash; not a service result. <a href="https://doi.org/10.1111/ecca.12172">doi.org</a></li>
+      <li><span class="vstat part">Corrected</span> Bloom, Eifert, Mahajan, McKenzie &amp; Roberts (2013). &ldquo;Does Management Matter? Evidence from India.&rdquo; <em>QJE</em> 128(1): 1&ndash;51. Practice adoption 25.6% &rarr; 63.4%; productivity +17% in year one. <b>17 firms, 28 plants, woven-cotton textiles near Mumbai.</b> Employment estimate &minus;1.28 (SE 6.19) is a null, not a demonstrated constant; authors state results are valid only for firms that selected in. <a href="https://doi.org/10.1093/qje/qjs044">doi.org</a></li>
+      <li><span class="vstat part">Corrected</span> Bruhn, Karlan &amp; Schoar (2018). <em>JPE</em> 126(2): 635&ndash;87. Published estimates are <b>+57% employees, +72% wage bill</b> over 2010&ndash;14 (abstract rounds to &ldquo;about 50 percent&rdquo;); no first-year effect; 432 SMEs in Puebla only; 57% matched into administrative records; year-to-year changes imprecisely estimated. <a href="https://doi.org/10.1086/696154">doi.org</a></li>
+      <li><span class="vstat part">Corrected</span> Garicano &amp; Hubbard (2007). &ldquo;Managerial Leverage Is Limited by the Extent of the Market.&rdquo; <em>Journal of Law and Economics</em> 50(1): 1&ndash;43. DOI is 10.1086/508313. Cross-sectional and correlational. <a href="https://doi.org/10.1086/508313">doi.org</a></li>
+      <li><span class="vstat part">Corrected</span> Hurst &amp; Pugsley (2011). &ldquo;What Do Small Businesses Do?&rdquo; <em>Brookings Papers on Economic Activity</em> 2011(2): 73&ndash;142 &mdash; a conference volume, not a standard peer-reviewed journal. Most small firms have little desire to grow or innovate. <a href="https://www.nber.org/papers/w17041">nber.org</a></li>
+      <li><span class="vstat part">Corrected</span> Clio, <em>2024 Legal Trends Report</em>: 37% utilisation, ~2.9 billable hours per eight-hour day, ~1,693 hours a year. US law firms, skewed solo and small; billable hours over a fixed eight-hour day. Vendor-published on real platform data. <a href="https://www.clio.com/resources/legal-trends/2024-report/">clio.com</a></li>
+      <li><span class="vstat part">Corrected</span> SPI Research, <em>18th Annual Professional Services Maturity Benchmark</em> (Feb 2025): billable utilisation 66.4%, down from 68.9%, against a 75% level; 403 firms, North-America weighted, delivery staff only. Commercial benchmark, vendor-distributed. <a href="https://spiresearch.com/2025/02/12/the-18th-annual-professional-services-maturity-benchmark-report-is-out-now/">spiresearch.com</a></li>
+      <li><span class="vstat ok">Confirmed</span> SSS Circular No. 2024-006: 15% total contribution from January 2025 &mdash; employer 10%, employee 5% &mdash; MSC &#8369;5,000&ndash;&#8369;35,000, plus an Employees&rsquo; Compensation premium of &#8369;10 or &#8369;30. <a href="https://www.sss.gov.ph/">sss.gov.ph</a></li>
+      <li><span class="vstat ok">Confirmed</span> PhilHealth Advisory No. 2025-0002: premium 5.0% for CY2025, floor &#8369;10,000, ceiling &#8369;100,000, split equally &mdash; employer 2.5% of monthly basic salary. <a href="https://www.philhealth.gov.ph/advisories/2025/PA2025-0002.pdf">philhealth.gov.ph</a></li>
+      <li><span class="vstat ok">Confirmed</span> HDMF Circular No. 460: Maximum Fund Salary raised to &#8369;10,000 from February 2024; employer rate 2%, so employer cost caps at &#8369;200/month. <a href="https://www.dbm.gov.ph/wp-content/uploads/Issuances/2024/Circular-Letter/CIRCULAR-LETTER-NO-2024-2-DATED-FEBRUARY-01-2024.pdf">dbm.gov.ph</a></li>
+      <li><span class="vstat part">Corrected</span> 13th month pay: PD 851 (1975) <b>as amended by Memorandum Order No. 28 (1986)</b> and its implementing rules. The decree itself covers only employees earning &#8369;1,000/month or less, and the one-twelfth formula is in the rules, not the decree. <a href="https://lawphil.net/statutes/presdecs/pd1975/pd_851_1975.html">lawphil.net</a></li>
+      <li><span class="vstat weak">False as reported</span> Wage Order NCR-27 (&#8369;755 from 25 July 2026) is <b>enjoined</b> by the Pasig City RTC, confirmed by NWPC&rsquo;s own statement; the matter was elevated to the Supreme Court. <b>&#8369;695 under NCR-26 (effective 18 July 2025) remains the enforceable floor.</b> <a href="https://nwpc.dole.gov.ph/nwpcs-official-statement-on-the-injunction-order-issued-by-the-pasig-city-regional-trial-court/">nwpc.dole.gov.ph</a></li>
+      <li><span class="vstat ok">Reinstated</span> DTI, <em>2024 Philippine MSME Statistics</em>, on the PSA 2024 List of Establishments: 1,241,476 establishments; 1,236,908 (99.63%) MSMEs; micro 90.66%, small 8.60%, medium 0.37% (shares of total establishments); MSMEs 66.58% of employment. Previously retired when only a study guide could be found. 2023 comparatives differ &mdash; 1,246,373 and 66.97%. <a href="https://www.dti.gov.ph/dti-knowledge-hub/dti-statistics/dti-msme-statistics">dti.gov.ph</a></li>
+      <li><span class="vstat part">Corrected</span> IBPAP, <em>2026 Philippine IT-BPM Industry Overview</em>: 2025 revenue US$40.3B on 1.89M FTEs; 2024 $38.0B on 1.82M. This is industry revenue, not a customs export figure. 2028 targets cut from $59B/2.5M to $43.3&ndash;50.5B and 1.85&ndash;2.14M. <a href="https://ibpap.org/">ibpap.org</a></li>
+      <li><span class="vstat ok">Confirmed</span> Ogilvie, <em>The European Guilds</em>, ch. 1: seventeenth-century Paris permitted a maximum of 20 metal-engraver masters and 72 clockmakers. Verbatim. <a href="https://assets.press.princeton.edu/chapters/s13307.pdf">princeton.edu</a></li>
+      <li><span class="vstat part">Corrected</span> Clay, Miller, Portnykh &amp; Schmick (2025), NBER w33937: medical school closures within 300 miles reduced physicians per capita by about 4%; schools fell from roughly 160 (1900) to about 70. <b>The commonly repeated &ldquo;148 to 66&rdquo; is untraceable.</b> <a href="https://www.nber.org/papers/w33937">nber.org</a></li>
+      <li><span class="vstat part">Corrected</span> McKinsey: up-or-out adopted <b>1954</b> (explored from 1950, first partner eased out 1952), HBS recruiting from 1954; Bower became managing partner in 1950. Bhidé, HBS 95-010. <a href="https://www.hbs.edu/ris/Publication%20Files/95-010_a0b1e5db-f200-470a-aa97-7f38c7b10986.pdf">hbs.edu</a></li>
+      <li><span class="vstat weak">Contested</span> The Cravath system (dated 1906 by the firm&rsquo;s own historian): rotation, salaried associates, promotion from within &mdash; all confirmed. But &ldquo;leverage&rdquo; as its mechanism is Galanter &amp; Palay&rsquo;s 1991 analytic label. <b>No primary source has Cravath describing selling junior labour at a margin.</b> <a href="https://www.cravath.com/the-cravath-system/the-system-s-history.html">cravath.com</a></li>
+      <li><span class="vstat part">Corrected</span> Arthur Andersen: indicted 14 March 2002, convicted 15 June, surrendered its licences 31 August, conviction reversed unanimously 31 May 2005 on defective jury instructions. The ~85,000 staff figure is press-sourced, not from any court or regulatory document. <a href="https://www.law.cornell.edu/supct/html/04-368.ZO.html">law.cornell.edu</a></li>
+      <li><span class="vstat weak">Rejected</span> &ldquo;IT-BPM attrition 30&ndash;40%&rdquo; &mdash; no IBPAP or primary publication states it; every trace is SEO or vendor content, some of which simultaneously attributes a contradictory 15&ndash;22% to IBPAP without citation. Do not publish a sector attrition figure.</li>
+      <li><span class="vstat weak">Rejected</span> &ldquo;McDonald&rsquo;s Speedee cut waits from ~30 minutes to ~30 seconds&rsquo; &mdash; every trace is a blog citing another blog. The Library of Congress confirms the 1948 reorganisation and gives no service-time figure.</li>
+      <li><span class="vstat weak">Demoted</span> The &ldquo;3&times; loaded cost&rdquo; billing rule, 50%+ delivery margin and 65&ndash;85% delivery utilisation are one agency-profitability consultancy&rsquo;s published heuristics with no disclosed sample. Vendor marketing, not research.</li>
+    </ul>
+  </div>
+
+  <div class="footer">Storm Research v2 &middot; 26 citation clusters independently verified against primary sources, 31 Aug 2026 &middot; 3 false, 12 corrected, 4 untraceable, 1 reinstated &middot; Verification briefed adversarially against this briefing&rsquo;s own conclusion &middot; Reliability = evidence quality, not author confidence</div>
+
+</div>
+</body>
+</html>
