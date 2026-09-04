@@ -78,9 +78,13 @@
   .masthead a { color: var(--accent-bright); text-decoration: none;
     font-family: var(--mono); font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
   .masthead a:hover { text-decoration: underline; }
+  /* One line always: long page titles wrapped to two lines on a phone and made
+     the sticky bar taller, which then hid more of the page beneath it. */
   .masthead .mh-title {
     font-family: var(--mono); font-size: 13px; letter-spacing: 0.14em;
     text-transform: uppercase; color: #7aacac; margin-left: auto;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-width: 58%; flex: 0 1 auto;
   }
 
   /* ── Hub (dark, continuous with the deck) ── */
@@ -124,6 +128,7 @@
   .art h2 {
     font-weight: 800; font-size: clamp(23px, 2.6vw, 30px); line-height: 1.2;
     margin: 44px 0 14px; text-wrap: balance;
+    scroll-margin-top: 64px;   /* clear the sticky masthead on contents jumps */
   }
   .art p { margin-bottom: 18px; text-wrap: pretty; }
   .art ul, .art ol { margin: 0 0 18px 22px; }
